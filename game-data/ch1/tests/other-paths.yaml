@@ -2,8 +2,8 @@ tests:
   - name: wrong fix, then the retry rewinds 1830
     url: scene=landing
     steps:
-      - setup: {flags: [present.returned, known.ogee, known.agent, known.volunteer, 1830.arrived], money: 100}
-      - {cmd: pay agent, expect: [Whose name goes on the paper, Take my arm], money: 0}
+      - setup: {flags: [present.returned, known.ogee, known.agent, known.volunteer, known.asa, 1830.arrived, 1830.rope_strung, 1830.wagon_free]}
+      - {cmd: ask asa to pay agent, expect: [Whose name goes on the paper, "Not mine", Take my arm]}
       - {cmd: take arm, room: wateredge}
       - {cmd: go to museum, room: museum}
       - {cmd: read panel, expect: newcomer whose name was not recorded}
@@ -76,11 +76,11 @@ tests:
       - setup: {items: [pole]}
       - {cmd: lever wagon with pole, expect: Brush under the wheels first, money: 0}
 
-  - name: Dixon wants the full hundred
-    url: scene=camp
+  - name: you can't pay the agent yourself
+    url: scene=landing
     steps:
-      - setup: {money: 40}
-      - {cmd: give dixon 40, expect: "The man wants a hundred", money: 40}
+      - setup: {flags: [1830.arrived, known.agent], money: 1}
+      - {cmd: pay agent, expect: not a coin less, money: 1}
 
   - name: clarifications use display names
     url: scene=landing
@@ -235,11 +235,15 @@ tests:
       - {cmd: put brush under wheels, expect: Now the lever}
       - {cmd: help, expect: Lever the wagon out}
 
-  - name: Rolette's agent turns down Dixon's paper
+  - name: Asa wants to hear what Dixon is short of before he pays
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, 1830.has_order], items: [order]}
-      - {cmd: sell order to agent, expect: [Mr. Rolette wants silver, bound for Galena], not: "can't think how"}
+      - setup: {flags: [1830.arrived, known.ogee, known.asa, known.agent, 1830.rope_strung, 1830.wagon_free]}
+      - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
+      - {cmd: ask agent about asa, expect: reasons to want this boat}
+      - {cmd: tell asa about dixon, expect: what he's short of, not: season of crossings}
+      - setup: {flags: [1830.dixon_short, known.dixon]}
+      - {cmd: ask asa about dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm]}
 
   - name: while you're still dazed, help and save work but don't use up the moment
     url: scene=wateredge
@@ -304,9 +308,9 @@ tests:
       - setup: {items: [phone, axe]}
       - {cmd: take willow brush, expect: hack down an armful of willow}
 
-  - name: Dixon's seventy-two dollars is paper, not silver
+  - name: Dixon's pay is paper, not silver
     url: scene=camp
     steps:
       - setup: {flags: [1830.arrived, known.dixon]}
       - {cmd: ask dixon about lease, expect: [rent goes against Rolette's notes, "haven't a coin of silver"]}
-      - {cmd: ask dixon about paper, expect: [seventy-two dollars, nobody will give a dollar of silver]}
+      - {cmd: ask dixon about paper, expect: [mail pay, good money in Vandalia]}

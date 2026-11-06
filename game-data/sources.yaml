@@ -65,3 +65,4 @@ claims:
   C25: {status: needs-source, rooms: [landing], sources: [], claim: "Boat seams were caulked by packing oakum (old rope picked into fiber) and sealing it with hot pine tar or pitch, worked in with a swab."}
   C26: {status: invented, rooms: [cabin], sources: [], claim: "A spare canoe paddle under the cabin eaves that belonged to Madeline's father."}
   C27: {status: guess, rooms: [camp, landing], sources: [S1], claim: "The terms of the 1830 lease: that Dixon's first payment went to the overdue installment on Rolette's notes and the rent after it toward the rest. The record has the lease and the notes but not the terms."}
+  C28: {status: guess, rooms: [landing], sources: [], claim: "A Galena freighter paying a ferry a hundred dollars in advance for a season of crossings. No ferry rates for Dixon's crossing in 1830 are cited; the 1838 Staten Island ferry charged 12 1/2 cents a person."}

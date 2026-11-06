@@ -95,12 +95,12 @@ actions:
     when: [has:pole, 1830.brush_placed, not 1830.wagon_free]
     do:
       - set: [1830.wagon_free, 1830.shoe_lost]
-      - money: 40
+      - money: 1
       - say: >-
           You set the pole under the axle and heave while {asa} hollers the oxen
           up. The brush bites, and with a sound like a cork leaving a bottle the
-          wagon lurches out onto firm ground. {asa} counts forty dollars in
-          silver into your hand. "Earned," he says, and drives on toward the
+          wagon lurches out onto firm ground. {asa} presses a silver dollar
+          into your hand. "For your trouble," he says, and drives on toward the
           landing. When you pull the pole out it comes up lighter than it went
           in, because its iron shoe is gone, somewhere down in the mud.
     else:

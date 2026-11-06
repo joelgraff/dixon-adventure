@@ -49,7 +49,6 @@ nouns:
 
   paper:
     name: folded paper
-    when: [not 1830.has_order, not 1830.order_cashed]
     aliases: [folded paper, order, government order, document, seal]
     look: It's a folded paper with a state seal on it, worn soft at the creases from being turned over and over, and whatever it says, it isn't making him any happier.
     verbs:
@@ -80,10 +79,7 @@ npcs:
     unknown: a tall man in a dark coat
     ref: the tall man
     aliases: [dixon, john, john dixon, tall man, man in dark coat, man]
-    room_line:
-      - when: [not 1830.has_order, not 1830.order_cashed]
-        text: "[dixon] stands looking down toward the river, turning a folded [paper] over in his hands."
-      - text: "[dixon] stands looking down toward the river."
+    room_line: "[dixon] stands looking down toward the river, turning a folded [paper] over in his hands."
     look: He is a tall man in his forties, in a dark coat, with a careful face, and he looks like a man doing sums he doesn't like the answer to.
     talk:
       - when: [not known.dixon]
@@ -95,16 +91,12 @@ npcs:
           at the wagon. "If you mean to help Ogee across that river, though,
           there's rope on the tailboard. I meant to run her on a line."
         do: [{set: known.dixon}]
-      - when: [1830.has_order, not 1830.order_cashed]
-        text: "\"Have you had any luck with that paper?\""
-      - when: [money>=100]
-        text: "{dixon's} eyes go to your pocket and then politely away again."
       - when: [1830.dixon_short]
-        text: "\"Bring me a hundred in silver, and the lease is signed by dark.\""
+        text: "\"If you hear of a hundred in silver going spare, I'd be glad to know of it.\""
       - text: "{dixon} nods to you. \"I'm still waiting on Rolette's man, and he's in no hurry.\""
     topics:
       - keys: [lease, ferry, ogee, buy, money, silver, hundred, waiting, short, trouble, terms]
-        say: "\"Ogee and I have come to terms. I lease the ferry from him, and the rent goes against Rolette's notes, so Rolette is paid in time and Ogee keeps a roof over his family. But the first of it has to be a hundred in silver, today, or Rolette's man takes the boat, and that's the trouble.\" He turns the folded paper over in his hands. \"I haven't a coin of silver to my name. What I have is the governor's own paper.\""
+        say: "\"Ogee and I have come to terms. I lease the ferry from him, and the rent goes against Rolette's notes, so Rolette is paid in time and Ogee keeps a roof over his family. But the first of it has to be a hundred in silver, today, or Rolette's man takes the boat, and that's the trouble.\" He turns the folded paper over in his hands. \"I haven't a coin of silver to my name. My mail pay comes as paper on the governor, and nobody on this riverbank will cash it.\""
         do: [{set: 1830.dixon_short}]
       - keys: [agent, rolette, creditor, coat, man]
         say: "\"That's Rolette's man. The worst of it is that he isn't wrong; the money's owed, and he'll take the boat for it unless somebody puts a hundred in silver in his hand.\" He looks at the paper in his own hand and doesn't say whose silver he means."
@@ -114,7 +106,7 @@ npcs:
             text: "\"I saw her go over on the rope, and that's the way of it from now on.\" He looks almost pleased."
           - text: "\"That's every foot of hemp I could buy in Peoria. Strung from bank to bank, it lets you pull her over in any water short of a flood. Ogee calls it a fancy.\""
       - keys: [paper, order, governor, edwards, vandalia, pay, silver]
-        say: "\"It's an order on Governor Edwards for my mail pay. It says seventy-two dollars and change, and it'll be worth every cent of that in Vandalia, which is two hundred miles off. On this riverbank nobody will give a dollar of silver for it.\""
+        say: "\"It's my mail pay, an order on Governor Edwards. It'll be good money in Vandalia, two hundred miles off, but it's no use to me here.\""
       - keys: [mail, contract, route, peoria, galena, post office]
         say: "\"I carry the mail from Peoria up to Galena, and this crossing sits square in the middle of the route, so a man who carries the mail needs the ferry.\""
       - keys: [family, wife, rebecca, children, sons, james, boys]
@@ -215,40 +207,6 @@ actions:
     else:
       - say: You've already got {dixon's} rope.
 
-  - id: get_order
-    speaker: dixon
-    phrases: [offer to sell the order, offer to sell order, ask dixon for the order, ask dixon for order, take paper, i'll sell it, sell order for dixon, offer to cash the order, ask for the order, i'll find a buyer, ask for paper, ask dixon for paper, ask for order, can i have order, let me sell order, i'll sell order, sell order, sell paper, sell the paper, take order, get order, i can sell it, offer to sell it, ask to sell order, ask dixon about selling order]
-    when: [not 1830.has_order, not 1830.order_cashed, here:dixon]
-    do:
-      - give: order
-      - set: 1830.has_order
-      - say: "\"If you can find a man who'll give silver for it, you're welcome to try.\" He hands you the folded order."
-    else:
-      - say: You already have {dixon's} order, or what it bought.
-
-  - id: give_dixon
-    speaker: dixon
-    phrases: [give dixon 100, "give dixon {n}", give dixon money, give money to dixon, give dixon the money, give dixon silver, give dixon the silver, give silver to dixon, pay dixon, lend dixon the money, lend dixon money, give 100 to dixon]
-    when: [money>=100, here:dixon, not 1830.lease_dixon]
-    do:
-      - money: -100
-      - set: [1830.lease_dixon, 1830.fog, known.dixon]
-      - say: >-
-          {dixon} counts it twice. "I'll make this right, whatever the river
-          allows," he says, and you walk down to the landing together. {dixon}
-          puts the silver in the agent's hand, and the agent counts it a third
-          time and writes it against the February note. Then {ogee} signs the
-          ferry over to {dixon} on a lease, with the rent to go to Rolette, and
-          the agent witnesses it with the look of a man who came for a horse
-          and has been paid for it instead. Then a chill comes off the river, and
-          within a few breaths the fog is on you, thick and white and wet, and
-          {ogee's} voice comes from close by: "Easy now. Don't go wandering in
-          this. Take my arm."
-      - move: landing
-    else:
-      - when: [money>0]
-        say: "{dixon} shakes his head. \"That's ${money}, and the man wants a hundred.\""
-      - say: "\"Silver first, friend, and then we'll talk.\""
 
 exits:
   - names: [north, trail, river, cabin, landing, back]

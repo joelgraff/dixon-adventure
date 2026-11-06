@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.8.0 (2026-11-06)
+- The money puzzle is rebuilt around Asa needing the ferry. Freeing his wagon earns a silver dollar, not forty. At the landing Asa explains he has silver but no way across if the agent takes the boat; once you've heard from Dixon what he's short of, tell Asa about Dixon and Asa pays a hundred in advance for a season of crossings, which Dixon hands to the agent before Ogee signs the lease. Dixon's government order is only the reason he has no silver; selling it is gone. The wrong fix is now asking Asa to pay the agent himself. Old saves are refused (save_compat 2).
+
 ## 0.7.8 (2026-11-06)
 - The money and the lease make sense: Dixon says plainly that he has no silver, only a government order for $72 that nobody at the river will cash, which is why Asa buying it for $60 matters. Dixon leases the ferry from Ogee with the rent going to Rolette's notes; his $100 pays the overdue February installment, and the payment scene and the agent say so.
 

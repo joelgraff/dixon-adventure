@@ -286,6 +286,8 @@ npcs:
         say: "\"Galena is where the note was recorded, and it's where I'd rather be.\""
       - keys: [dixon, paper, order]
         say: "\"Mr. Dixon has paper, and paper is not silver.\""
+      - keys: [asa, teamster, wagons, freighter]
+        say: "\"The teamster? He has silver, I'd guess, and a great many reasons to want this boat where it is.\""
       - keys: [name, who]
         say: "He smiles thinly. \"My name isn't on the note. Mr. Rolette's is.\""
       - keys: [ogee, joseph]
@@ -446,23 +448,8 @@ actions:
   - id: pay_agent
     speaker: agent
     phrases: [pay agent, give agent 100, give agent money, give money to agent, give 100 to agent, pay the debt, pay debt, pay rolette's man, give agent silver, give silver to agent, pay agent 100]
-    when: [money>=100, here:agent]
     do:
-      - money: -100
-      - set: [1830.lease_player, 1830.fog]
-      - say: >-
-          The agent counts the silver twice. "Silver's silver, and it goes
-          against the note. Whose name goes on the paper?" He writes yours,
-          though you couldn't run a ferry if your life depended on it, and
-          {ogee} looks away. Up the trail,
-          a tall figure turns and walks back toward the camp. Then a chill comes
-          off the river, and within a few breaths the fog is on you, and
-          {ogee's} voice comes from close by, flatter than before: "Easy now.
-          Take my arm."
-    else:
-      - when: [not here:agent]
-        say: There's nobody here to pay.
-      - say: "\"A hundred in silver, friend, and not a coin less.\""
+      - say: "\"A hundred in silver, friend, and not a coin less.\" He glances at your pockets and plainly doesn't expect it."
 
 exits:
   - names: [south, path, cabin, smoke, woodsmoke, clearing, up]

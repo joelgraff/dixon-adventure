@@ -34,37 +34,32 @@ tests:
       - {cmd: ask madeline for paddle, expect: That was my father's, score: 28}
       - {cmd: south, expect: "Dixon's camp", room: camp}
       - {cmd: talk to tall man, expect: [John Dixon, "Rolette's man", rope], not: hundred}
-      - {cmd: ask dixon about the lease, expect: [hundred in silver, "governor's own paper"]}
-      - {cmd: ask dixon for rope, expect: Dixon says, score: 31}
+      - {cmd: ask dixon about the lease, expect: [hundred in silver, paper on the governor]}
+      - {cmd: ask dixon for rope, expect: Dixon says}
       - {cmd: north, room: cabin}
       - {cmd: north, room: landing}
-      - {cmd: tar canoe, expect: tar, score: 36}
+      - {cmd: tar canoe, expect: tar}
       - {cmd: launch canoe, expect: [paying out the coil, north landing], room: northlanding}
-      - {cmd: tie rope to post, expect: "Dixon's rope", score: 43}
+      - {cmd: tie rope to post, expect: "Dixon's rope"}
       # Part 3: the slough
       - {cmd: ride ferry, room: landing}
-      - {cmd: ask ogee for the pole, expect: [Ogee says, Bring her back whole], score: 46}
+      - {cmd: ask ogee for the pole, expect: [Ogee says, Bring her back whole]}
       - {cmd: south, room: cabin}
       - {cmd: south, room: camp}
       - {cmd: south, expect: swearing, room: slough}
-      - {cmd: talk to big man, expect: [Asa, forty dollars]}
-      - {cmd: ask asa about galena, expect: paper}
-      - {cmd: cut brush, expect: willow, score: 50}
+      - {cmd: talk to big man, expect: [Asa, a dollar besides]}
+      - {cmd: ask asa about galena, expect: pay in silver}
+      - {cmd: cut brush, expect: willow}
       - {cmd: put brush under wheels, expect: Now the lever}
-      - {cmd: lever wagon with pole, expect: [forty dollars in silver, shoe is gone], score: 60, money: 40}
+      - {cmd: lever wagon with pole, expect: [silver dollar, shoe is gone], money: 1}
       - {cmd: dig in mud, expect: forged iron}
-      # Part 4: the silver and the lease
+      # Part 4: the deal
       - {cmd: north, room: camp}
-      - {cmd: ask dixon about the paper, expect: Governor Edwards}
-      - {cmd: offer to sell the order, expect: folded order, score: 63}
-      - {cmd: talk to young man, expect: [James, mail]}
       - {cmd: north, room: cabin}
       - {cmd: north, room: landing}
-      - {cmd: sell order to asa, expect: [Sixty, "$100"], score: 73, money: 100}
-      - {cmd: give shoe to ogee, expect: Smith made that, score: 81}
-      - {cmd: south, room: cabin}
-      - {cmd: south, room: camp}
-      - {cmd: give dixon 100, expect: [signs the ferry over to Dixon on a lease, Take my arm], score: 96, money: 0, room: landing}
+      - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
+      - {cmd: give shoe to ogee, expect: Smith made that}
+      - {cmd: tell asa about dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm], room: landing}
       - {cmd: south, expect: fog is too thick, room: landing}
       - {cmd: "take ogee's arm", expect: city sounds come back, room: wateredge}
       # Part 5: home

@@ -32,10 +32,10 @@ flags:
   1830.brush_placed:       {desc: Brush is under the wheels}
   1830.wagon_free:         {score: 10, desc: Freed Asa's wagon}
   1830.shoe_lost:          {desc: The pole shoe is in the mud}
-  1830.has_order:          {score: 3, desc: Got Dixon's order}
-  1830.order_cashed:       {score: 10, desc: Sold the order to Asa}
-  1830.lease_dixon:        {score: 15, desc: Gave Dixon the $100; the lease is in his name}
-  1830.lease_player:       {desc: Wrong fix - paid the agent yourself}
+  1830.dixon_short:        {score: 8, desc: Learned Dixon has no silver for the overdue hundred}
+  1830.asa_needs_ferry:    {score: 5, desc: Heard why Asa needs the ferry running}
+  1830.lease_dixon:        {score: 15, desc: Brought Asa and Dixon together; the lease is in Dixon's name}
+  1830.lease_player:       {desc: Wrong fix - had Asa pay the agent, with your name on the paper}
   1830.shoe_returned:      {score: 8, desc: Returned the pole shoe to Ogee}
   1830.fog:                {desc: The chapter-end fog has come in}
   chapter1.done:           {score: 4, desc: Talked to Margaret after the repair}
@@ -114,12 +114,6 @@ items:
     name: pole shoe
     aliases: [shoe, iron shoe, pole shoe, iron]
     look: It's a cone of forged iron, dented on one side and caked with mud.
-  order:
-    era: 1830
-    name: Dixon's order
-    aliases: [order, paper, warrant, governor's order]
-    look: It's a folded order on Governor Edwards at Vandalia for seventy-two dollars and change, written out in a careful clerk's hand.
-
 # The chapter-end fog: while it holds, every exit in an 1830 room is blocked
 # and the room_line is added to every 1830 room description.
 fog_lock:
@@ -146,7 +140,67 @@ deaths:
     out to be exactly as hard as it looked from up there.
 
 # Actions that work in several rooms.
+# The deal: Asa pays Dixon a season of crossings in advance, Dixon pays the
+# agent, and Ogee leases Dixon the ferry. Shared by Asa's topic and the
+# asa_deal action.
+deal_text: &deal >-
+  {asa} listens to it all with his arms folded, looking at the man on the
+  crate, and at his wagons, and at the river. "A season of crossings," he
+  says at last. "I make this run four or five times a year. Call it a hundred
+  in silver now, and my wagons cross free till it's worked off." He sends
+  his nephew running up the trail, and before long {dixon} comes down to the
+  landing with him. The two men talk for about a minute and shake hands, and
+  the silver goes from {asa's} coat to {dixon's} hand and from there to the
+  agent's, who counts it twice and writes it against the February note. Then
+  {ogee} signs the ferry over to {dixon} on a lease, with the rent to go to
+  Rolette, and the agent witnesses it with the look of a man who came for a
+  horse and has been paid for it instead. A chill comes off the river, and
+  within a few breaths the fog is on you, thick and white and wet. {ogee's}
+  voice comes from close by: "Easy now. Don't go wandering in this. Take my
+  arm."
+deal_do: &deal_do
+  - set: [1830.lease_dixon, 1830.fog, known.dixon]
+
 actions:
+  - id: asa_deal
+    speaker: asa
+    phrases: [tell asa about dixon, ask asa to help dixon, introduce asa to dixon, ask asa to pay, ask asa for money, ask asa for silver, ask asa for 100, ask asa to pay dixon, tell asa dixon needs silver, tell asa dixon needs money, ask asa to lend dixon money, ask asa to lend dixon silver, tell asa to talk to dixon, ask asa to talk to dixon, ask asa to buy crossings, ask asa about a deal, make a deal, tell asa about the lease, tell asa about lease, ask asa to pay for crossings, ask asa to pay in advance, fetch dixon, get dixon, bring dixon, send for dixon, ask asa to help]
+    when: [here:asa, 1830.wagon_free, not 1830.lease_dixon, not 1830.lease_player]
+    do:
+      - if:
+          when: [1830.dixon_short]
+          do:
+            - set: 1830.asa_needs_ferry
+            - say: *deal
+            - set: [1830.lease_dixon, 1830.fog, known.dixon]
+          else:
+            - say: "\"Dixon? The mail man, up at the camp? If he's the one who means to run her, I'd like to hear from him what he's short of before I put my hand in my coat.\""
+    else:
+      - when: [not here:asa]
+        say: There's nobody here who can help with that.
+      - when: [1830.lease_dixon]
+        say: It's done, and the lease is in {dixon's} name.
+      - say: "{asa} has a wagon in the mud, and that's all the business he means to do today."
+
+  - id: asa_pays_agent
+    speaker: asa
+    phrases: [ask asa to pay agent, tell asa to pay agent, ask asa to pay the agent, tell asa to pay the agent, ask asa to pay the debt, ask asa to pay debt, ask asa to pay rolette's man, tell asa to pay rolette's man, ask asa to pay off agent, ask asa to pay off the debt]
+    when: [here:asa, here:agent, 1830.wagon_free, not 1830.lease_dixon, not 1830.lease_player]
+    do:
+      - set: [1830.lease_player, 1830.fog]
+      - say: >-
+          {asa} shrugs and counts a hundred in silver onto the agent's papers,
+          and the agent counts it again. "Silver's silver, and it goes against
+          the note. Whose name goes on the paper?" "Not mine," says {asa}. "I'm
+          bound for Galena." So the agent writes yours, though you couldn't run
+          a ferry if your life depended on it, and {ogee} looks away. Up the
+          trail, a tall figure turns and walks back toward the camp. Then a
+          chill comes off the river, and within a few breaths the fog is on
+          you, and {ogee's} voice comes from close by, flatter than before:
+          "Easy now. Take my arm."
+    else:
+      - say: That would take {asa} and the agent in the same place.
+
   - id: follow_ogee
     phrases: [take ogee's arm, take his arm, take arm, follow ogee, follow him, stay close, go with ogee, take ferryman's arm, take the ferryman's arm, hold his arm, grab his arm, take his hand, hold on, hold on to him, go with him, follow ferryman, follow man, lead way, walk with ogee, walk with him, take ogee's hand, hold ogee's arm, take man's arm]
     when: [1830.fog]
@@ -183,35 +237,6 @@ actions:
       - when: [in:wateredge]
         say: You get as far as the bottom step, where the water turns out to be colder than a warm evening has any right to make it, and you think better of it.
       - say: There's no water here to drown in, which is something, at least.
-
-  - id: sell_order
-    phrases: [sell order to asa, give order to asa, sell the order, trade paper, trade order, cash the order, sell paper to asa, give paper to asa, offer asa the order, sell asa the order]
-    when: [has:order, here:asa]
-    do:
-      - take: order
-      - set: 1830.order_cashed
-      - money: 60
-      - say: >-
-          {asa} holds it to the light. "Seventy-two and change, on the governor.
-          The merchants in Galena will take that, at a price." He counts out
-          silver. "Sixty, and I'm doing you a kindness." You now have ${money}.
-    else:
-      - when: [has:order]
-        say: Nobody here has silver to spare for a government order.
-      - say: You haven't anything to sell.
-
-  - id: sell_order_agent
-    phrases: [sell order to agent, give order to agent, sell paper to agent, give paper to agent, offer agent the order, sell agent the order, give agent the order, pay agent with order, pay with order, pay debt with order, sell order to rolette's man, trade order with agent, show order to agent, show agent the order]
-    when: [has:order, here:agent]
-    do:
-      - say: >-
-          {agent} unfolds it, reads it, and hands it back. "Paper on the
-          governor, payable in Vandalia. Mr. Rolette wants silver, friend. Find
-          a man bound for Galena if you want that turned into money."
-    else:
-      - when: [has:order]
-        say: There's nobody here to sell it to.
-      - say: You haven't anything to sell.
 
 # The veil. In 1830 the fog makes you look as if you belong: homespun, boots,
 # and a phone that looks like a tin case to anyone else. Using it openly
@@ -286,8 +311,18 @@ npcs:
           "Asa. I'm that boy's uncle." He wipes his hands on his shirt, which
           only makes them muddier. "My bar broke an hour back. The wheels want
           brush under them, something to bite on, and I want a long lever under
-          that hind axle. Get me both and it's forty dollars, silver."
+          that hind axle. Get me both and you'll have my thanks, and a dollar
+          besides."
         do: [{set: known.asa}]
+      - when: [1830.wagon_free, not 1830.asa_needs_ferry]
+        text: >-
+          "Out of the mud and into this," he says, with a jerk of his head at
+          the man on the crate. "I've a train to get over this river and on to
+          Galena, and that one means to take the boat out from under us. If
+          she goes, I'm stuck on this bank until somebody builds another, and
+          my flour won't keep that long." He pats his coat, where something
+          heavy chinks. "I've silver enough. What I haven't got is a ferry."
+        do: [{set: 1830.asa_needs_ferry}]
       - when: [1830.wagon_free]
         text: "\"I owe you, and I don't like owing. If there's anything I can do, say so.\""
       - text: "\"Brush and a lever, that's all I need. I'm not getting any younger, and neither is that wagon.\""
@@ -295,12 +330,19 @@ npcs:
       - keys: [wagon, wheels, slough, mud, stuck, bar, lever, brush]
         say: "\"I want willow brush under the hind wheels and something long under the axle. Ogee's got a setting pole that would do, if he'd part with it.\""
       - keys: [galena, diggings, mines, lead, flour, tools]
-        say: "\"We're bound for the diggings with flour and tools. The merchants in Galena pay silver, and they'll take good paper too, at a price.\""
-      - keys: [paper, order, governor, silver, money, cash]
+        say: "\"We're bound for the diggings with flour and tools, and the merchants in Galena pay in silver. I make this run four or five times a season.\""
+      - keys: [silver, money, cash, coin]
+        say: "\"I carry silver for the road, more than I like to carry. A teamster who pays in paper doesn't get fed.\""
+      - keys: [dixon, lease, deal, hundred, help, crossings, tolls, pay, mail]
         say:
-          - when: [has:order]
-            text: "\"A government order, is it? Let's see it,\" he says, and holds out a muddy hand."
-          - text: "\"I've silver for the road and a little over. A man who carries paper to Galena can turn it into silver, if he's patient about it.\""
+          - when: [1830.lease_dixon]
+            text: "\"Dixon's a fair man to do business with. My wagons cross free till the hundred's worked off.\""
+          - when: [1830.dixon_short, 1830.asa_needs_ferry]
+            text: *deal
+            do: *deal_do
+          - when: [1830.asa_needs_ferry]
+            text: "\"Dixon? The mail man, up at the camp? If he's the one who means to run her, I'd like to hear what he's short of.\""
+          - text: "\"I've a wagon in the mud, and that's all the business I've got today.\""
       - keys: [eli, nephew, boy]
         say: "\"He's my sister's boy. His pa went with the militia in '27 and didn't come back, so I said I'd see him to the diggings and home again.\""
       - keys: [ferry, river, crossing, ogee]
@@ -344,14 +386,12 @@ hints:
     text: Put the brush under the wagon's wheels.
   - when: [era:1830, not 1830.wagon_free]
     text: Lever the wagon out with Ogee's pole.
-  - when: [era:1830, not 1830.order_cashed, not has:order]
-    text: Dixon has no silver, only a government order that nobody here will take, but a man bound for Galena might buy it. Offer to sell the order for Dixon.
-  - when: [era:1830, not 1830.order_cashed]
-    text: Sell the order to Asa.
-  - when: [era:1830, money>=100]
-    text: You have the hundred. Give it to Dixon, not the agent. (give dixon 100)
+  - when: [era:1830, not 1830.dixon_short]
+    text: Ask Dixon about the lease, and what's standing in his way.
+  - when: [era:1830, not 1830.asa_needs_ferry]
+    text: Talk to Asa at the landing. He carries silver, and he needs that ferry.
   - when: [era:1830]
-    text: Raise a hundred dollars in silver for Dixon.
+    text: Asa needs the ferry running and Dixon needs a hundred in silver to run it. Tell Asa about Dixon.
   - when: [1830.lease_player]
     text: Something went wrong in 1830. Go back to the water's edge, wait for the fog, and cross again.
   - when: [chapter1.done]
