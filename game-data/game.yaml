@@ -1,0 +1,149 @@
+# Game-wide data: verbs, the narrator's default replies, meta commands.
+# Chapter and room files hold everything specific to a place.
+
+# Release version (see CHANGELOG.md for the rules). Bump it, the ?v= in
+# play.html and the changelog together; the checker verifies they match.
+version: 0.7.8
+# Bump when a change would break saved games (renamed or removed flags,
+# items or rooms). Saves from another save_compat are refused, not loaded.
+save_compat: 1
+
+input_limit: 40            # SCI-era input buffer
+
+# Canonical verbs and the words that map to them. Multi-word synonyms are
+# matched before single words.
+verbs:
+  look:   [look at, examine, x, inspect, check, study, look in, look under, look behind, look through, look out, read, look]
+  take:   [take, get, grab, pick up]
+  touch:  [touch, feel, pat, rub, stroke, lean on, peel, lift]
+  push:   [push, pull, shove, move, turn, knock on, kick]
+  open:   [open]
+  close:  [close, shut]
+  sit:    [sit on, sit at, sit in, sit]
+  climb:  [climb, climb on, climb up]
+  smell:  [smell, sniff]
+  taste:  [taste, lick]
+  search: [search, rummage in, dig through]
+  sign:   [sign, write in, write on, autograph]
+  drink:  [drink, sip]
+  board:  [board, ride, get in, get on]
+  call:   [call, shout, yell, answer, reply, call out]
+  use:    [use]
+  give:   [give, hand, offer]
+  show:   [show]
+  photograph: [photograph, take a picture of, take picture of, take a photo of, take photo of, take a picture, take a photo, take pictures of, snap a picture of, film, record]
+  light:  [turn on flashlight, turn on the flashlight, turn on the light, turn on light, use flashlight, use the flashlight, use phone light, use the light, shine flashlight, shine the light, shine light, light up, flashlight]
+  talk:   [talk to, talk with, speak to, speak with, greet, chat with]
+  ask:    [ask]
+
+# The narrator's replies when a noun has no reply of its own for a verb.
+# One is picked at random. Keep the voice dry, never cruel.
+defaults:
+  look:   ["You see nothing more than you saw a moment ago."]
+  take:   ["That isn't yours to take, and you suspect someone would notice.", "You consider it for a moment, and it stays where it is."]
+  touch:  ["You touch it, and it goes on being exactly what it was.", "It feels about how it looks."]
+  push:   ["It doesn't budge, and you feel slightly foolish.", "You push, and the world declines to rearrange itself."]
+  open:   ["It doesn't open, or if it does, it isn't telling you how."]
+  close:  ["It isn't open."]
+  sit:    ["You'd rather not sit on that.", "Not even a tired tourist would sit there."]
+  climb:  ["You weigh the climb against your dignity, and dignity wins."]
+  smell:  ["It smells like exactly what it is."]
+  taste:  ["Absolutely not."]
+  search: ["You search it thoroughly and find nothing you didn't expect."]
+  sign:   ["There's nothing here that wants your signature."]
+  drink:  ["That isn't something you drink, and you're fairly sure of it."]
+  board:  ["There's nothing here to board."]
+  call:   ["Your voice goes flat in the damp air. Nothing answers."]
+  use:    ["You'll need to be more specific about how."]
+  give:   ["Nobody here seems to want that."]
+  show:   ["They look at it, and then at you, politely."]
+  photograph: ["You take a picture, and it comes out about the way you'd expect."]
+  light:  ["Nothing here needs lighting."]
+
+# Replies to commands the parser can't read at all. Picked at random.
+unknown:
+  - "You'd like to do that, but you can't think how."
+  - "That's a sentence, but it isn't a plan."
+  - "The parser squints at that and gives up."
+
+not_here: "You don't see that here."
+nobody_here: "There's no one here to talk to."
+cant_go: "You can't go that way."
+ambiguous: "Which do you mean: {options}?"
+did_you_mean: "Did you mean {options}?"
+
+# Meta commands, available everywhere.
+meta:
+  inventory: [i, inv, inventory]
+  score: [score, points]
+  save: [save]
+  restore: [restore, load]
+  restart: [restart]
+  help: [help, hint, hints, "?", "what now", stuck, use phone, check phone, ask phone, ask phone for help, ask the phone, ask assistant, ask the assistant, phone for help]
+
+  wait: [wait, z, rest]
+  listen: [listen]
+  look_around: [look, l, look around]
+  version: [version, about]
+  tour: [tour, tutorial, guide, show me around]
+
+score_line: "Your score is {score} of {max_score}."
+
+death_screen:
+  title: "You have died."
+  prompt: "Restore, Restart or Retry?"
+  retry_note: "You find yourself a moment earlier, considerably wiser."
+
+# The guided tour of the screen (`tour`, or Settings > Take the tour). Each
+# step outlines `target` (a CSS selector in play.html); `label: true` outlines
+# the whole setting; `settings: true` opens the Settings panel for the step.
+# Steps whose target is hidden (the quick buttons on a desktop) are skipped.
+tour_offer: "Take a quick look around the screen, or type tour at any time."
+tour:
+  - text: "A quick look around the screen. Use Next and Back, or press Esc to stop."
+  - target: "#bar-top"
+    text: "The top bar shows the game's version, where you are, and your score."
+  - target: "#output"
+    text: "This is the story so far. Every reply is added to this log and nothing is ever cleared, so you can scroll back to reread anything."
+  - target: "#bar"
+    text: "Type commands here, up to 40 characters, and press Enter. Try look, look at the panel, talk to someone, ask someone about something, or go north."
+  - target: "#quick"
+    text: "On a touch screen, these buttons type common commands for you."
+  - target: "#notes"
+    text: "The looked-at sidebar lists what you've examined, by place. Click an entry to reread it."
+  - target: "#gear"
+    text: "Settings live behind this button, and your browser remembers whatever you choose."
+  - target: "#opt-sidebar"
+    label: true
+    settings: true
+    text: "Looked-at sidebar: on by default. Turn it off if you'd rather keep notes in your head."
+  - target: "#opt-hl"
+    label: true
+    settings: true
+    text: "Highlighted words: off by default. Key items only colors what moves the story in blue. All adds look-only scenery in tan."
+  - target: "#opt-clicks"
+    label: true
+    settings: true
+    text: "Clickable words: off by default. When on, clicking a word looks at it, and clicking an exit walks that way."
+  - target: "#opt-histories"
+    label: true
+    settings: true
+    text: "Histories panel: off by default. It shows the sources behind each place, and marks which details are record, disputed, a guess or invented."
+  - target: "#about"
+    settings: true
+    text: "The version and save format, so you can always tell which build you're playing."
+  - target: "#cmd"
+    text: "When you're stuck, type help. Type tour any time to see this again. Good luck."
+
+settings:
+  sidebar: true              # looked-at sidebar
+  highlight: off             # off | key | all
+  clickable: false
+  histories: false           # the optional histories (citations) panel
+
+# Help comes from the assistant on the player's phone, so it is introduced
+# in the fiction: offline in 1830, online in the present.
+help_lead:
+  - when: [era:1830]
+    text: "You turn your back on anyone watching and thumb the tin case open. No signal, but the assistant answers anyway, from whatever it keeps on board:"
+  - text: "You check your phone. The assistant says:"

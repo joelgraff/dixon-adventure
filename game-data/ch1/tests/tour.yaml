@@ -1,0 +1,25 @@
+# The guided tour of the screen.
+tests:
+  - name: the tour walks every step and puts Settings back
+    steps:
+      - cmd: tour
+        visible: "#tour-card"
+      - {shows: {"#tour-text": "quick look around", "#tour-count": "1 of"}, hidden: "#settings"}
+      - {click: "#tour-next", shows: {"#tour-text": "top bar"}}
+      - {click: "#tour-back", shows: {"#tour-text": "quick look around"}}
+      - {click: "#tour-next", times: 6, visible: "#settings", shows: {"#tour-text": "Looked-at sidebar: on by default"}}
+      - {click: "#tour-next", times: 5, shows: {"#tour-text": "type tour any time"}}
+      - {click: "#tour-next", hidden: ["#tour-card", "#settings"]}
+  - name: Settings has a Take the tour button
+    steps:
+      - {click: "#gear", visible: "#tour-btn"}
+      - {click: "#tour-btn", visible: "#tour-card"}
+      - {click: "#tour-close", hidden: "#tour-card", visible: "#settings"}
+  - name: new players are offered the tour in a banner
+    steps:
+      - {visible: "#output .notice button", shows: {"#output .notice": "New here?"}}
+      - {click: "#output .notice button", visible: "#tour-card"}
+  - name: the tour skips the touch-screen buttons on a desktop
+    steps:
+      - {cmd: tour}
+      - {click: "#tour-next", times: 4, shows: {"#tour-text": "looked-at sidebar lists"}}

@@ -1,0 +1,203 @@
+id: cabin
+era: 1830
+name: "{ogee's} cabin, 1830"
+sources: [S1, S2]
+picture: >-
+  A single long log cabin with two doors and smoke from the chimney, in a
+  clearing above the river. A woman in the left doorway, two boys at a
+  chopping block in front, split oak stacked beside it, a canoe paddle
+  hung on pegs under the eaves, trees behind.
+
+look: >-
+  The path comes up from the landing into a clearing, where one long log
+  [cabin] stands with two doors and a thread of smoke rising from its
+  [chimney]. Behind you the [path] runs back north to the river, and ahead a
+  wagon trail goes on south through the oaks.
+listen: Someone is splitting kindling with quick, uneven strokes, a woodpecker is working somewhere in the trees, and below it all you can hear the river, the way you always can here.
+
+nouns:
+  paddle:
+    name: paddle
+    when: [not 1830.has_paddle]
+    aliases: [canoe paddle, spare paddle, ash paddle, oar, pegs, eaves, father's paddle]
+    room_line: A canoe [paddle] hangs on wooden pegs under the eaves.
+    look: It's a canoe paddle carved from a single piece of ash, longer and narrower than you'd expect, the grip worn dark and smooth by somebody's hands over a lot of years. It hangs on pegs under the eaves, out of the weather, the way you'd keep something you meant to keep.
+    verbs:
+      take:
+        - when: [here:madeline]
+          say: "{madeline} says, \"That was my father's,\" quietly, and you take your hand back. If you need it, you could ask her."
+        - say: You'd want to ask before taking it down.
+
+  cabin:
+    name: cabin
+    aliases: [log cabin, doors, door, house]
+    reveals: [westroom, eastroom]
+    look: It is one long cabin of squared logs with a door at each end. The [westroom|west room] belongs to the family, and the [eastroom|east room], about eighteen feet square, is kept for travelers and hired help.
+    verbs:
+      open: Both doors already stand open to the spring air.
+      smell: The cabin smells of woodsmoke and tallow, with wet wool drying somewhere inside.
+
+  westroom:
+    name: west room
+    hidden: true
+    aliases: [west room, family room, sitting room]
+    look: Through the west door you can see the family's room, with two beds, a table and a few chairs, all of it kept neat. It isn't a room you'd walk into uninvited.
+    verbs:
+      search: You keep to the doorway, since it isn't your house to go through.
+
+  eastroom:
+    name: east room
+    hidden: true
+    aliases: [east room, travelers' room, travelers room, beds]
+    look: The east room holds four beds for travelers. At the foot of one sits a carpetbag marked GALENA, with a good coat folded over it, so the agent must be lodging here.
+    verbs:
+      search: You leave the agent's bag alone. It's tempting, but it isn't yours.
+
+  chimney:
+    name: chimney
+    aliases: [smoke, chimney smoke]
+    look: The chimney is built of sticks and clay, and it draws well; the smoke goes straight up into the still air.
+
+  block:
+    name: chopping block
+    aliases: [chopping block, stump, split oak, oak, stack, woodpile, wood]
+    room_line:
+      - when: [1830.has_axe]
+        text: A chopping [block] stands beside a stack of split oak.
+      - text: An [axe] stands sunk in the chopping [block] beside a stack of split oak.
+    look: The block is an old stump worn smooth on top by years of axes, and beside it someone has stacked enough split white oak to last the summer.
+    verbs:
+      sit: You sit on the block for a moment, then think better of it and stand up again.
+
+  axe:
+    name: axe
+    when: [not 1830.has_axe]
+    aliases: [hatchet]
+    look: It's a worn axe sunk in the block, its edge still sharp enough to catch a thumbnail.
+    verbs:
+      take:
+        - when: [not 1830.axe_ok]
+          say: "{madeline} looks up from the door. \"That's ours,\" she says, not unkindly, and you leave it in the block. If you need it, you could ask."
+        - say: You work the axe free of the block while {madeline} watches you do it.
+          do: [{give: axe}, {set: 1830.has_axe}]
+
+  path:
+    name: path
+    aliases: [river path]
+    look: The path runs back down through the trees to the landing and the river.
+
+  trail:
+    name: wagon trail
+    aliases: [trail, peoria trail, wagon trail, oaks]
+    look: Wagon ruts run south through the oaks toward Peoria, and a little way along them the smoke of a cook fire rises between the trees.
+
+npcs:
+  madeline:
+    name: Madeline
+    unknown: a woman in a dark shawl
+    ref: the woman in the shawl
+    aliases: [madeline, woman, wife, madeline ogee, mrs. ogee]
+    room_line: "[madeline] stands at the west door, and two [boys|boys] are splitting kindling by the block."
+    look: She wears a dark dress and a shawl, with her sleeves pushed up from work, and she is watching you the way you'd watch a dog you didn't know.
+    talk:
+      - when: [not known.madeline]
+        text: "\"I'm Madeline Ogee. My husband keeps the ferry down below, and you'll be the one he fished out of the river, because you're dripping on my doorstep.\" She glances at the axe in the block. \"Take it if you need it, but bring it back.\""
+        do: [{set: [known.madeline, 1830.axe_ok]}]
+      - text: "{madeline} gives you a short nod and goes back to her work."
+    topics:
+      - keys: [father, lasallier, trader, franklin creek, post]
+        say: "\"My father keeps a post on Franklin Creek, up the river.\" She doesn't offer anything more."
+      - keys: [ferry, burn, burned, bogardus, safe]
+        say: "\"Nobody is going to burn this ferry.\" She says it the way you'd say the sun comes up in the morning."
+      - keys: [potawatomi, people, family, relatives]
+        say: She looks at you for a long moment. "Ask me another time," she says, and it sounds like a door closing, politely.
+      - keys: [boys, sons, children]
+        say: "\"They're good boys, and they'll be better ones once they've split that pile.\""
+      - keys: [agent, coat, rolette, debt, creditor, guest]
+        say: "Her mouth thins. \"He eats at our table and sleeps in our east room, and all the while he means to take the boat. My husband says that's business.\""
+      - keys: [joseph, ogee, husband]
+        say: "\"He worries at that river like it owes him money.\" She pauses. \"It's the other way around.\""
+      - keys: [paddle, oar, father's paddle, spare paddle, canoe paddle]
+        say:
+          - when: [has:paddle]
+            text: "\"Bring it home when you're done with it.\""
+          - text: "\"That was my father's.\" She looks at it for a moment, then reaches up and lifts it down from the pegs. \"He'd laugh to see it back on the water. Mind you bring it home.\""
+            do: [{give: paddle}, {set: 1830.has_paddle}]
+      - keys: [axe, borrow, chopping, block]
+        say: "\"Take it if you need it. Just bring it back.\""
+        do: [{set: 1830.axe_ok}]
+    fallback: "{madeline} only shakes her head; it isn't something she means to discuss with a stranger."
+    social:
+      hello: "{madeline} nods to you from the doorway."
+      thanks: "\"Mm,\" she says, which seems to cover it."
+      bye: She lifts a hand as you go.
+      how: "\"Well enough, thank you.\""
+      sorry: "\"It's nothing. Don't trouble yourself.\""
+    parting: You nod to [madeline], and she nods back.
+
+  boys:
+    name: boys
+    aliases: [boys, sons, children, kindling, two boys]
+    look: Two boys are splitting kindling with a hatchet and more enthusiasm than skill. They stop to watch you, then pretend they weren't watching at all.
+    talk:
+      - text: The boys look at each other and say nothing, though one of them can't quite hide a grin.
+    fallback: The boys giggle and go back to their kindling.
+
+actions:
+  - id: borrow_paddle
+    speaker: madeline
+    phrases: [ask for paddle, borrow paddle, ask madeline for paddle, ask woman for paddle, ask her for paddle, ask madeline for the paddle, ask for the paddle, ask to borrow paddle, can i borrow paddle, may i borrow paddle, can i borrow the paddle, may i borrow the paddle, ask for spare paddle, ask for father's paddle, ask for oar, borrow oar]
+    when: [here:madeline, not has:paddle]
+    do:
+      - give: paddle
+      - set: 1830.has_paddle
+      - say: "\"That was my father's.\" She looks at it for a moment, then reaches up and lifts it down from the pegs. \"He'd laugh to see it back on the water. Mind you bring it home.\""
+    else:
+      - when: [has:paddle]
+        say: You already have the paddle.
+      - say: There's nobody here to ask.
+
+  - id: make_paddle
+    phrases: [cut paddle, make paddle, carve paddle, split oak for paddle, chop paddle, make a paddle, cut a paddle, shape paddle, make paddle from oak, carve paddle from oak, cut paddle from oak, whittle paddle, carve a paddle, shape oak into paddle, make oar, cut oar, carve oar]
+    do:
+      - say: Carving a paddle out of firewood would take you the rest of the day, and these lengths are only two feet long anyway. Someone who lives on a river probably has a spare.
+
+  - id: chop_wood
+    phrases: [carve oak, use axe on oak, split oak, chop oak, cut oak, split oak with axe, shape oak, chop wood, cut wood, split wood, chop the wood, cut the wood, split the wood, chop log, chop logs, split log, split logs, chop the oak, split the oak, cut the oak, chop, use axe, use the axe, use axe on wood, use axe on block, use axe on log, chop firewood, chop a log, swing axe]
+    when: [has:axe]
+    do:
+      - say: You split a few lengths of oak and add them to the pile, while the boys watch, unimpressed. It's honest work, and it gets you nothing but a sore shoulder.
+    else:
+      - say: You'd need an axe for that, and the only one here is sunk in the block.
+
+  - id: borrow_axe
+    speaker: madeline
+    phrases: [ask for axe, borrow axe, ask madeline for axe, ask woman for axe, ask her for axe, ask madeline for the axe, ask to borrow axe, can i borrow axe, may i borrow axe, can i use axe, may i use axe, ask to use axe, ask madeline about axe, ask woman about axe]
+    when: [here:madeline, not has:axe]
+    do:
+      - set: 1830.axe_ok
+      - say: "\"Take it if you need it. Just bring it back.\""
+    else:
+      - when: [has:axe]
+        say: You already have it.
+      - say: There's nobody here to ask.
+
+  - id: return_axe
+    phrases: [give axe to madeline, return axe, give madeline axe, put axe back, give back axe, give axe back, give axe back to madeline, return axe to madeline, give axe to woman, put axe in block, give her axe, give her the axe]
+    when: [has:axe, here:madeline]
+    do:
+      - take: axe
+      - clear: 1830.has_axe
+      - say: You hand the axe back. {madeline} takes it without a word, but something in her face eases.
+    else:
+      - say: You haven't got it to give back.
+
+exits:
+  - names: [north, path, river, landing, ferry, back, down]
+    to: landing
+    peek: The path runs back north through the trees, down to the river and the ferry landing.
+    text: You head back down the path to the landing.
+  - names: [south, trail, wagon trail, peoria trail, camp, fire]
+    to: camp
+    peek: The wagon trail runs south through the oaks toward the smoke of a cook fire.
+    text: You follow the wagon ruts south through the oaks until you come to a camp.

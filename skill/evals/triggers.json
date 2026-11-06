@@ -1,0 +1,25 @@
+{
+  "skill": "dixon-parser",
+  "test_cases": [
+    {
+      "input": "let's play the dixon game",
+      "should_trigger": true
+    },
+    {
+      "input": "look around the cottage",
+      "should_trigger": true
+    },
+    {
+      "input": "edit the scene card for the lighthouse",
+      "should_trigger": true
+    },
+    {
+      "input": "what is the weather today",
+      "should_trigger": false
+    },
+    {
+      "input": "push these notes to github",
+      "should_trigger": false
+    }
+  ]
+}

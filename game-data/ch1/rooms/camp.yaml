@@ -1,0 +1,261 @@
+id: camp
+era: 1830
+name:
+  - when: [known.dixon]
+    text: Dixon's camp, 1830
+  - when: [heard.dixon]
+    text: Dixon's camp, 1830
+  - text: A wagon camp, 1830
+sources: [S1, S2, S3, S4, S5]
+picture: >-
+  A wagon camp among oaks, the trail bending away south. A tall man in a dark
+  coat standing, a woman at a cook fire, a young man oiling harness beside a
+  canvas mail sack, two boys with a bucket, a heavy coil of rope on the
+  wagon's tailboard.
+
+look: >-
+  A canvas-topped [wagon] stands pulled off the trail among the [oaks], with
+  its team grazing on a picket line nearby and a cook [fire] burning low
+  under a [kettle]. From here the trail runs back north toward the river and
+  on south toward Peoria.
+listen: The kettle ticks as it heats, a horse stamps on the picket line, and two boys are arguing about whose turn it is with the bucket.
+
+nouns:
+  wagon:
+    name: wagon
+    aliases: [canvas, tailboard, wagon cover, team, horses, picket line]
+    look: It's a farm wagon with a canvas cover and everything the family owns lashed inside it, and they have been living out of it since they came up from Boyd's Grove.
+    verbs:
+      search: You keep your hands out of other people's wagons, as a rule.
+
+  rope:
+    name: coil of rope
+    when: [not 1830.has_rope]
+    aliases: [rope, coil, hemp, line]
+    room_line: A heavy coil of [rope] sits on the wagon's tailboard.
+    look: It's a great heavy coil of new hemp, far more rope than any family needs, unless the family means to run a ferry on it.
+    verbs:
+      take: "{dixon} says, \"Ask, and it's yours. Don't ask, and it isn't.\""
+
+  fire:
+    name: cook fire
+    aliases: [cook fire, campfire]
+    look: The fire is oak, burned down low to coals for cooking.
+
+  kettle:
+    name: kettle
+    aliases: [pot, cooking pot]
+    look: An iron kettle hangs over the coals with something like beans in it, still a long way from done.
+
+  paper:
+    name: folded paper
+    when: [not 1830.has_order, not 1830.order_cashed]
+    aliases: [folded paper, order, government order, document, seal]
+    look: It's a folded paper with a state seal on it, worn soft at the creases from being turned over and over, and whatever it says, it isn't making him any happier.
+    verbs:
+      take: "{dixon} folds it away. \"Ask me, if you've a use for it.\""
+
+  mailsack:
+    name: mail sack
+    aliases: [mail sack, mail, sack, mailbag, pouch, letters]
+    look: The canvas mail sack is tagged OGEE'S FERRY, ILL., and it's full of letters for the post office here and on up the road to Galena.
+    verbs:
+      open: Other people's letters are other people's business, and you leave the sack shut.
+      take: "The young man's hand lands on it. \"The mail stays with me.\""
+
+  harness:
+    name: harness
+    aliases: [tack, tallow]
+    look: The leather harness is cracked in places, and it's being worked over carefully with tallow.
+
+  oaks:
+    name: oaks
+    aliases: [oak, trees, woods, trail, peoria trail]
+    look: The bur oaks stand wide apart with the grass between them already green, and the trail runs north between them to the river and south toward Peoria.
+
+npcs:
+  dixon:
+    name: John Dixon
+    short: Dixon
+    unknown: a tall man in a dark coat
+    ref: the tall man
+    aliases: [dixon, john, john dixon, tall man, man in dark coat, man]
+    room_line:
+      - when: [not 1830.has_order, not 1830.order_cashed]
+        text: "[dixon] stands looking down toward the river, turning a folded [paper] over in his hands."
+      - text: "[dixon] stands looking down toward the river."
+    look: He is a tall man in his forties, in a dark coat, with a careful face, and he looks like a man doing sums he doesn't like the answer to.
+    talk:
+      - when: [not known.dixon]
+        text: >-
+          "John Dixon," he says, and his handshake is firm, though his eyes
+          take in your wet clothes before they come back to your face. "I came
+          up from Peoria to lease Ogee's ferry, and found Rolette's man sitting
+          on it, so for now I'm waiting to see how that comes out." He glances
+          at the wagon. "If you mean to help Ogee across that river, though,
+          there's rope on the tailboard. I meant to run her on a line."
+        do: [{set: known.dixon}]
+      - when: [1830.has_order, not 1830.order_cashed]
+        text: "\"Have you had any luck with that paper?\""
+      - when: [money>=100]
+        text: "{dixon's} eyes go to your pocket and then politely away again."
+      - when: [1830.dixon_short]
+        text: "\"Bring me a hundred in silver, and the lease is signed by dark.\""
+      - text: "{dixon} nods to you. \"I'm still waiting on Rolette's man, and he's in no hurry.\""
+    topics:
+      - keys: [lease, ferry, ogee, buy, money, silver, hundred, waiting, short, trouble, terms]
+        say: "\"Ogee and I have come to terms. I lease the ferry from him, and the rent goes against Rolette's notes, so Rolette is paid in time and Ogee keeps a roof over his family. But the first of it has to be a hundred in silver, today, or Rolette's man takes the boat, and that's the trouble.\" He turns the folded paper over in his hands. \"I haven't a coin of silver to my name. What I have is the governor's own paper.\""
+        do: [{set: 1830.dixon_short}]
+      - keys: [agent, rolette, creditor, coat, man]
+        say: "\"That's Rolette's man. The worst of it is that he isn't wrong; the money's owed, and he'll take the boat for it unless somebody puts a hundred in silver in his hand.\" He looks at the paper in his own hand and doesn't say whose silver he means."
+      - keys: [rope, line, rope ferry, hemp]
+        say:
+          - when: [1830.rope_strung]
+            text: "\"I saw her go over on the rope, and that's the way of it from now on.\" He looks almost pleased."
+          - text: "\"That's every foot of hemp I could buy in Peoria. Strung from bank to bank, it lets you pull her over in any water short of a flood. Ogee calls it a fancy.\""
+      - keys: [paper, order, governor, edwards, vandalia, pay, silver]
+        say: "\"It's an order on Governor Edwards for my mail pay. It says seventy-two dollars and change, and it'll be worth every cent of that in Vandalia, which is two hundred miles off. On this riverbank nobody will give a dollar of silver for it.\""
+      - keys: [mail, contract, route, peoria, galena, post office]
+        say: "\"I carry the mail from Peoria up to Galena, and this crossing sits square in the middle of the route, so a man who carries the mail needs the ferry.\""
+      - keys: [family, wife, rebecca, children, sons, james, boys]
+        say: "\"There's Rebecca and the children, and James drives the mail with me. We came the eleventh of April, meaning to be sleeping under a roof by now.\" He looks at the wagon and leaves it there."
+      - keys: [boyd's grove, home, from, bureau]
+        say: "\"Boyd's Grove, down in the Bureau country. We had two years there, and Peoria before that.\""
+      - keys: [travelers, loans, lend, money, men]
+        say: "\"I've lent money to half the men on this road, and it's a funny thing how none of it is in my pocket today.\""
+      - keys: [sauk, fox, black hawk, saukenuk, treaty]
+        say: "{dixon} is quiet a moment. \"The Sauk and Fox come back every spring to their corn at Saukenuk, and the settlers there don't like it. The government says an old treaty sold the land, and Black Hawk says nobody sold it.\" He looks at the river. \"I'd rest easier if I thought that was finished.\""
+      - keys: [lincoln, abraham]
+        say: "\"Lincoln? I can't say I know the name.\""
+      - keys: ["1832", war, militia]
+        say: "{dixon} gives you an odd look. \"Eighteen thirty-two? That's two years off. I don't keep accounts that far ahead.\""
+      - keys: [fog, mist]
+        say: "\"The mist? It's been odd this year,\" he says, and doesn't say anything more."
+    fallback: "{dixon} considers it. \"That's not my line, I'm afraid. Ogee might know.\""
+    social:
+      hello: "{dixon} inclines his head. \"Good day to you.\""
+      thanks: "\"You're welcome. A man ought to be civil on a river, of all places.\""
+      bye: "\"Safe passage to you.\""
+      how: "\"Well enough, and I'd be better with a roof.\""
+      sorry: "\"No offence taken.\""
+    parting: You nod to [dixon], and he touches two fingers to his hat brim.
+
+  rebecca:
+    name: Rebecca Dixon
+    short: Rebecca
+    unknown: a woman in an apron
+    ref: the woman at the fire
+    aliases: [rebecca, woman, wife, mrs. dixon, rebecca dixon, woman in apron]
+    room_line: "[rebecca] is tending the fire."
+    look: She wears a plain dress and an apron, and she stirs the kettle with the patience of someone who has cooked on a great many fires.
+    talk:
+      - when: [not known.rebecca]
+        text: "\"Rebecca Dixon,\" she says, without stopping her stirring. \"You'll be the one helping with the ferry. Good, because I'd like a floor.\""
+        do: [{set: known.rebecca}]
+      - text: "\"Supper's a while yet, I'm afraid.\""
+    topics:
+      - keys: [wait, roof, floor, cabin, house]
+        say: "\"We were meant to be in that cabin by now. Instead we're living in the wagon, and that man's sleeping in the east room.\""
+      - keys: [road, journey, boyd's grove, trip]
+        say: "\"We came from Boyd's Grove to here with the children and everything we own, and I'll not do it backwards.\""
+      - keys: [children, boys, sons, james]
+        say: "\"The two young ones are hauling water, slowly.\" She raises her voice. \"Very slowly!\""
+    fallback: "\"You'd best ask John about that.\""
+    social:
+      hello: "{rebecca} nods to you without stopping her stirring."
+      thanks: "\"Mm-hm,\" she says, still stirring."
+      bye: "\"Mind how you go on the trail.\""
+      how: "\"I'm tired. Ask me again when there's a floor.\""
+      sorry: "\"It's no matter.\""
+
+  james:
+    name: James Dixon
+    short: James
+    unknown: a young man of nineteen or so
+    ref: the young man at the harness
+    aliases: [james, young man, son, james dixon, mail driver]
+    room_line: "[james] is oiling harness beside a [mailsack|mail sack]."
+    look: He's a young man of nineteen or so, oiling harness with his sleeves rolled up, and he has his father's careful face.
+    talk:
+      - when: [not known.james]
+        text: "\"I'm James,\" he says, without looking up from the harness. \"I drive the mail for Father, and every team bound for the diggings comes through this crossing.\""
+        do: [{set: known.james}]
+      - text: "{james} nods to you and keeps working."
+    topics:
+      - keys: [mail, route, peoria, galena, road]
+        say: "\"It runs from Peoria to Galena and back, and you get to know every slough on the way.\""
+      - keys: [teams, diggings, wagons, traffic]
+        say: "\"In spring they all go north, and in the fall the ones who made it come back south. Some of them owe Father money.\""
+    fallback: "{james} shrugs; he isn't much for talking to strangers yet."
+    social:
+      hello: "{james} gives you a nod."
+      thanks: "\"Sure thing.\""
+      bye: "\"Mind the slough if you go south.\""
+      how: "\"Busy, same as always.\""
+      sorry: "\"Nothing to be sorry for.\""
+
+  dixonboys:
+    name: boys
+    aliases: [boys, two boys, bucket, john w, elijah]
+    room_line: Two [dixonboys|boys] go by with a bucket of water between them, arguing as they go.
+    look: The boys are thirteen or fourteen, carrying a bucket between them and spilling most of it, and they're far too busy arguing to notice you.
+    talk:
+      - text: "\"He's not holding his end!\" says one, and \"I am so!\" says the other, so you leave them to it."
+    fallback: The boys are too busy arguing to answer.
+
+actions:
+  - id: get_rope
+    speaker: dixon
+    phrases: [ask dixon for rope, ask for rope, borrow rope, take rope, get rope, get rope from wagon, ask dixon for the rope, ask about rope]
+    when: [not 1830.has_rope, here:dixon]
+    do:
+      - give: rope
+      - set: 1830.has_rope
+      - say: "\"Take it. That's every foot of hemp I could buy in Peoria.\" He helps you get the coil over your shoulder, and it's heavier than it looks."
+    else:
+      - say: You've already got {dixon's} rope.
+
+  - id: get_order
+    speaker: dixon
+    phrases: [offer to sell the order, offer to sell order, ask dixon for the order, ask dixon for order, take paper, i'll sell it, sell order for dixon, offer to cash the order, ask for the order, i'll find a buyer, ask for paper, ask dixon for paper, ask for order, can i have order, let me sell order, i'll sell order, sell order, sell paper, sell the paper, take order, get order, i can sell it, offer to sell it, ask to sell order, ask dixon about selling order]
+    when: [not 1830.has_order, not 1830.order_cashed, here:dixon]
+    do:
+      - give: order
+      - set: 1830.has_order
+      - say: "\"If you can find a man who'll give silver for it, you're welcome to try.\" He hands you the folded order."
+    else:
+      - say: You already have {dixon's} order, or what it bought.
+
+  - id: give_dixon
+    speaker: dixon
+    phrases: [give dixon 100, "give dixon {n}", give dixon money, give money to dixon, give dixon the money, give dixon silver, give dixon the silver, give silver to dixon, pay dixon, lend dixon the money, lend dixon money, give 100 to dixon]
+    when: [money>=100, here:dixon, not 1830.lease_dixon]
+    do:
+      - money: -100
+      - set: [1830.lease_dixon, 1830.fog, known.dixon]
+      - say: >-
+          {dixon} counts it twice. "I'll make this right, whatever the river
+          allows," he says, and you walk down to the landing together. {dixon}
+          puts the silver in the agent's hand, and the agent counts it a third
+          time and writes it against the February note. Then {ogee} signs the
+          ferry over to {dixon} on a lease, with the rent to go to Rolette, and
+          the agent witnesses it with the look of a man who came for a horse
+          and has been paid for it instead. Then a chill comes off the river, and
+          within a few breaths the fog is on you, thick and white and wet, and
+          {ogee's} voice comes from close by: "Easy now. Don't go wandering in
+          this. Take my arm."
+      - move: landing
+    else:
+      - when: [money>0]
+        say: "{dixon} shakes his head. \"That's ${money}, and the man wants a hundred.\""
+      - say: "\"Silver first, friend, and then we'll talk.\""
+
+exits:
+  - names: [north, trail, river, cabin, landing, back]
+    to: cabin
+    peek: The trail runs north through the oaks to {ogee's} cabin and the river.
+    text: You walk back north along the trail to {ogee's} clearing.
+  - names: [south, slough, peoria, trail south]
+    to: slough
+    peek: To the south the trail dips toward a stretch of wet ground, where someone is swearing at oxen.
+    text: You follow the trail south until it dips into black, wet ground.

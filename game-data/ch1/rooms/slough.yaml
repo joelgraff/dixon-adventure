@@ -1,0 +1,128 @@
+id: slough
+era: 1830
+name: The slough, 1830
+sources: [S4, S6]
+picture: >-
+  A rutted trail dipping into black mud between willows. A loaded supply wagon
+  tilted to its hubs, four oxen straining, a big man in a sweat-dark shirt at
+  the wheel.
+
+# Asa is defined in chapter.yaml because he moves to the landing once freed.
+look: >-
+  Here the Peoria trail drops into a low wet stretch where the ruts
+  disappear into black [mud], and [willows] crowd in along the edges. Behind
+  you the trail climbs back north toward {dixon's} camp.
+listen:
+  - when: [1830.wagon_free]
+    text: Now that the oxen are gone you can hear the frogs, and water trickling back into the ruts.
+  - text: Oxen are blowing, mud is sucking at their hooves, and over it all runs a steady and inventive stream of swearing.
+
+nouns:
+  wagon:
+    name: mired wagon
+    when: [not 1830.wagon_free]
+    aliases: [mired wagon, stuck wagon, flour, sacks, tools, freight]
+    room_line:
+      - when: [1830.brush_placed]
+        text: A loaded [wagon] sits sunk to its hubs with willow brush packed under its [wheels], and four [oxen] stand blowing in the traces.
+      - text: A loaded [wagon] sits sunk to its hubs, and four [oxen] stand blowing in the traces.
+    look: It's a supply wagon loaded with flour sacks and tools, tilted hard where the hind wheels have gone into the mud, and the hind axle sits a hand's width below the surface.
+
+  wheels:
+    name: wheels
+    when: [not 1830.wagon_free]
+    aliases: [wheel, hind wheels, axle, hind axle, hubs]
+    look:
+      - when: [1830.brush_placed]
+        text: The hind wheels sit on a mat of willow now, and what's wanted is a long lever under the axle.
+      - text: The hind wheels are down to the hubs, with nothing under them for the oxen to pull against but more mud.
+
+  oxen:
+    name: oxen
+    when: [not 1830.wagon_free]
+    aliases: [ox, team, cattle, traces]
+    look: The four oxen are mud to the shoulder, leaning into their yokes and getting nowhere, and they look at you with a deep, wet resentment.
+    verbs:
+      push: You put your shoulder to the nearest ox, and it remains unmoved in every sense.
+
+  mud:
+    name: mud
+    aliases: [black mud, ruts, slough, hole, ground]
+    room_line:
+      - when: [1830.shoe_lost, not has:shoe, not 1830.shoe_returned]
+        text: Where the pole went in, the [mud] has a narrow hole in it.
+    look:
+      - when: [1830.shoe_lost, not has:shoe, not 1830.shoe_returned]
+        text: The mud is black and cold and deep. Where the pole went in there's a narrow hole, slowly filling, and anything iron that came off would be down there still.
+      - text: The mud is black and cold, and deep enough to lose a boot in.
+    verbs:
+      touch: It's cold, and it doesn't want to let go of your hand.
+
+  willows:
+    name: willows
+    aliases: [willow, brush, saplings, willow brush, willow saplings]
+    look: Willow saplings grow thick along the wet edges, whippy and straight, and an armful of them would make good footing under a wheel, if you had something to cut them with.
+    verbs:
+      take: Willow is tougher than it looks, and you'd need an axe to cut it.
+
+actions:
+  - id: cut_brush
+    phrases: [cut brush, cut willows, cut willow, chop brush, chop willows, gather brush, cut saplings, chop willow, use axe on willows, use axe on brush, use axe on willow, cut willow brush, chop saplings, cut some brush, cut branches, chop branches, cut willow branches, use axe, take brush, get brush, take willows, take willow, get willows, gather willows, gather willow, take willow brush, get willow brush, gather willow brush, cut some willow, pick brush, collect brush, take saplings, cut the willows, cut the brush]
+    when: [has:axe, not has:brush, not 1830.brush_placed, not 1830.wagon_free]
+    do:
+      - give: brush
+      - set: 1830.has_brush
+      - say: You hack down an armful of willow and bundle it under one arm.
+    else:
+      - when: [{any: [has:brush, 1830.brush_placed]}]
+        say: You've already cut plenty.
+      - when: [1830.wagon_free]
+        say: The wagon's out, so the willows can keep their brush.
+      - say: Your bare hands aren't up to willow; you'd want an axe.
+
+  - id: place_brush
+    phrases: [put brush under wheels, put brush under wagon, put brush under wheel, use brush on wheels, lay brush, put brush in mud, place brush, put brush down, use brush, use brush on wagon, put willows under wheels, put willow under wheels, lay brush under wheels, pack brush under wheels, use willows, put brush under axle, give brush to asa, put brush under wheels of wagon, put brush in ruts, spread brush, lay willow]
+    when: [has:brush, not 1830.wagon_free]
+    do:
+      - take: brush
+      - set: 1830.brush_placed
+      - say: "You pack the willow under the sunk wheels, shoving it as deep as it will go. \"Now the lever,\" says {asa}."
+    else:
+      - say: You haven't any brush to lay.
+
+  - id: lever_wagon
+    phrases: [lever wagon with pole, lever wagon, pry wagon, pry wagon with pole, use pole on wagon, push wagon with pole, lift axle, lever axle, use pole, put pole under axle, lift wagon, use pole on axle, lever axle with pole, put pole under wagon, pry axle, lift wagon with pole, use pole as lever, lever with pole, push pole under axle, pry axle with pole, lever, heave, pry wagon out, lever wagon out, put pole under wheel, use lever]
+    when: [has:pole, 1830.brush_placed, not 1830.wagon_free]
+    do:
+      - set: [1830.wagon_free, 1830.shoe_lost]
+      - money: 40
+      - say: >-
+          You set the pole under the axle and heave while {asa} hollers the oxen
+          up. The brush bites, and with a sound like a cork leaving a bottle the
+          wagon lurches out onto firm ground. {asa} counts forty dollars in
+          silver into your hand. "Earned," he says, and drives on toward the
+          landing. When you pull the pole out it comes up lighter than it went
+          in, because its iron shoe is gone, somewhere down in the mud.
+    else:
+      - when: [1830.wagon_free]
+        say: The wagon's already out and gone.
+      - when: [not 1830.brush_placed]
+        say: "{asa} waves you off. \"Brush under the wheels first, or you'll only drive her deeper.\""
+      - say: You've nothing long enough for a lever, and {asa's} own bar lies broken in two pieces in the mud.
+
+  - id: dig_mud
+    phrases: [dig in mud, search mud, feel in mud, look in mud, dig, reach into mud, search hole, dig in hole, reach in hole, search hole for shoe, dig for shoe, look for shoe, find shoe, search for shoe, feel in hole, dig in mud for shoe, search mud for shoe, reach into hole, look in hole, dig for iron, search for iron, get shoe, take shoe]
+    when: [1830.shoe_lost, not has:shoe, not 1830.shoe_returned]
+    do:
+      - give: shoe
+      - say: You go in up to the elbow in cold mud, and finally your fingers close on it, a cone of forged iron, dented on one side.
+    else:
+      - say: There's nothing but mud down there, all the way down.
+
+exits:
+  - names: [north, trail, camp, back, dixon's camp]
+    to: camp
+    peek: The trail climbs back north out of the wet toward {dixon's} camp.
+    text: You climb out of the wet and walk back north to {dixon's} camp.
+  - names: [south, peoria, trail south]
+    blocked: The trail goes on south to Peoria, which is a long way off, and your business is back at the river.

@@ -1,0 +1,312 @@
+tests:
+  - name: wrong fix, then the retry rewinds 1830
+    url: scene=landing
+    steps:
+      - setup: {flags: [present.returned, known.ogee, known.agent, known.volunteer, 1830.arrived], money: 100}
+      - {cmd: pay agent, expect: [Whose name goes on the paper, Take my arm], money: 0}
+      - {cmd: take arm, room: wateredge}
+      - {cmd: go to museum, room: museum}
+      - {cmd: read panel, expect: newcomer whose name was not recorded}
+      - {cmd: talk to margaret, expect: [Something's gone wrong, look at the water again]}
+      - {cmd: out, room: street}
+      - {cmd: north, room: riverwalk}
+      - {cmd: down, room: wateredge}
+      - {cmd: wait}
+      - {cmd: wait}
+      - {cmd: wait, expect: [planks, handle a canoe]}
+      - {cmd: answer, expect: [unmade, The ferry landing], room: landing, money: 0}
+      - {cmd: look, expect: [Sit a moment, homespun shirt, world comes back, "Rolette's agent sits", rocking hard in the high water]}
+
+  - name: the fog closes after the repair
+    url: scene=wateredge
+    steps:
+      - setup: {flags: [1830.lease_dixon, present.returned]}
+      - {cmd: wait}
+      - {cmd: wait}
+      - {cmd: wait}
+      - {cmd: wait}
+      - {cmd: look at water, expect: just the river, not: planks}
+
+  - name: death - poling the ferry in high water, then retry
+    url: scene=landing
+    steps:
+      - {cmd: pole ferry, expect: [Several times, You have died, Restore, Restart or Retry]}
+      - {cmd: look, expect: Restore, Restart or Retry}
+      - {cmd: retry, expect: [a moment earlier, The ferry landing], room: landing}
+
+  - name: death - launching the cracked canoe
+    url: scene=landing
+    steps:
+      - {cmd: launch canoe, expect: [equal enthusiasm, You have died]}
+
+  - name: death - no paddle
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.canoe_tarred], items: [rope]}
+      - {cmd: launch canoe, expect: [paddle would have helped, You have died]}
+
+  - name: death - swimming
+    url: scene=landing
+    steps:
+      - {cmd: swim, expect: [colder than it looks, You have died]}
+
+  - name: death - the riverwalk railing, then restart
+    url: scene=riverwalk
+    steps:
+      - {cmd: jump over railing, expect: [riprap, You have died]}
+      - {cmd: restart, expect: Rolette Historic Center, room: museum, score: 0}
+
+  - name: save and restore
+    steps:
+      - {cmd: sign guestbook, score: 2}
+      - {cmd: save, expect: Game saved}
+      - {cmd: out, room: street}
+      - {cmd: restore, expect: Game restored, room: museum, score: 2}
+
+  - name: no rope, no crossing
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.canoe_tarred], items: [paddle]}
+      - {cmd: launch canoe, expect: "Fetch Dixon's rope", room: landing}
+      - {cmd: north, expect: Not in this water, room: landing}
+
+  - name: Asa needs brush before the lever
+    url: scene=slough
+    steps:
+      - setup: {items: [pole]}
+      - {cmd: lever wagon with pole, expect: Brush under the wheels first, money: 0}
+
+  - name: Dixon wants the full hundred
+    url: scene=camp
+    steps:
+      - setup: {money: 40}
+      - {cmd: give dixon 40, expect: "The man wants a hundred", money: 40}
+
+  - name: clarifications use display names
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.wagon_free]}
+      - {cmd: talk to man, expect: [Which do you mean, the man in the buckskin shirt, the big man], not: asa}
+
+  - name: unknown things are answered in the narrator's voice
+    steps:
+      - {cmd: flibber the gizmo, not: undefined}
+      - {cmd: look at unicorn, expect: "You don't see that here"}
+
+  - name: help points at the next step
+    url: scene=landing
+    steps:
+      - {cmd: help, expect: Talk to the man in the buckskin shirt}
+
+  - name: narration doesn't name people before you meet them
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: look at ferry, expect: "The ferryman's flatboat", not: Ogee}
+      - {cmd: look at dock, expect: The ferryman has been flooded out, not: Ogee}
+      - {cmd: look at agent, expect: watches the ferryman, not: Ogee}
+      - {cmd: s, expect: "The ferryman's cabin", not: Ogee}
+      - {cmd: look at axe, not: Ogee}
+      - {cmd: take axe, not: Madeline}
+      - {cmd: look at cabin}
+      - {cmd: search west room, expect: "It isn't your house", not: Madeline}
+      - {cmd: s, expect: A wagon camp, not: Dixon}
+      - {cmd: look at wagon, expect: the family owns, not: Dixon}
+      - {cmd: n}
+      - {cmd: n}
+      - {cmd: talk to man in buckskin, expect: Joseph Ogee}
+      - {cmd: look at ferry, expect: "Ogee's flatboat"}
+      - {cmd: s, expect: "Ogee's cabin"}
+      - {cmd: s, expect: "Dixon's camp"}
+
+  - name: you arrive by falling in, and Ogee says why it falls to you
+    url: scene=wateredge
+    steps:
+      - setup: {flags: [present.planks, present.voice]}
+      - {cmd: answer, expect: ["the planks aren't there", hauls you over the side, "somebody who needed one", cracked canoe], room: landing, not: [Ogee, homespun shirt, Loaded wagons, good coat]}
+      - {cmd: tar the split, expect: [legs have other ideas, Sit a moment, homespun shirt, flat tin case, world comes back, tar pot, swab, good coat], not: [pack the split, Joseph Ogee]}
+      - {cmd: look at canoe, expect: fished you out of the river, not: Sit a moment}
+      - {cmd: talk to man in buckskin, expect: [Joseph Ogee, "So it's you", "Mine's halfway to St. Louis"]}
+      - {cmd: ask ogee why, expect: "you owe me the use of them"}
+      - {cmd: ask ogee about canoe, expect: fishing you out}
+      - {cmd: look, expect: [swab, oakum]}
+      - {cmd: look at swab, expect: work hot tar into a seam}
+      - {cmd: tar the split, expect: [pack the split with oakum, with the swab]}
+      - {cmd: help, expect: [No signal, the assistant answers]}
+      - {cmd: use phone, expect: the assistant answers}
+      - {cmd: look at phone, expect: came through the river}
+
+  - name: the veil - showing the phone spooks people, twice sends you back
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, 1830.met_ogee, known.ogee]}
+      - {cmd: show phone to tall man, expect: "I'd put that away", not: fog doesn't wait}
+      - {cmd: talk to tall man, expect: Not now}
+      - {cmd: talk to woman in apron, expect: Rebecca Dixon, not: "won't meet"}
+      - {cmd: north}
+      - {cmd: south}
+      - {cmd: talk to tall man, expect: John Dixon}
+      - {cmd: take a picture, expect: [fog doesn't wait, own dry clothes], room: wateredge, score: 0}
+
+  - name: the veil - Ogee doesn't mind, and nobody sees you alone
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: show the ferryman my phone, expect: The last one had a thing like that}
+      - {cmd: talk to man in good coat, expect: Mr. Rolette}
+      - {cmd: turn on flashlight, expect: writes something on his papers}
+      - setup: {room: northlanding}
+      - {cmd: turn on flashlight, expect: Nobody saw}
+      - {cmd: take a picture of the post, expect: comes out about the way}
+      - {cmd: call on phone, expect: nobody to call}
+      - {cmd: look at tin, expect: tin case}
+
+  - name: the crossing comes on its own, and walking toward the voice answers it
+    url: scene=riverwalk
+    steps:
+      - {cmd: down, room: wateredge}
+      - {cmd: look}
+      - {cmd: look around}
+      - {cmd: look, expect: [planks, handle a canoe]}
+      - {cmd: go north, expect: "the planks aren't there", room: landing}
+
+  - name: before the fog, heading for the water still says no
+    url: scene=riverwalk
+    steps:
+      - {cmd: down, room: wateredge}
+      - {cmd: go north, expect: you'd have to be a fool, room: wateredge}
+      - {cmd: walk out on the planks, expect: Nothing answers, room: wateredge}
+
+  - name: the axe is for asking, and the oak is only firewood
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: take axe, expect: [That's ours, you could ask], not: work the axe free}
+      - {cmd: ask woman for axe, expect: Take it if you need it}
+      - {cmd: take axe, expect: work the axe free}
+      - {cmd: use axe on oak, expect: gets you nothing}
+      - {cmd: return axe, expect: You hand the axe back}
+
+  - name: the landing points at the canoe once it's ready
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee, 1830.canoe_tarred], items: [phone, paddle, rope]}
+      - {cmd: go north, expect: The canoe is ready}
+      - {cmd: cross, expect: "That's what you tarred her for"}
+      - {cmd: take rope across, room: northlanding}
+      - {cmd: wrap rope around post, expect: "Dixon's rope"}
+
+  - name: Ogee notices the missing shoe, and takes both back
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.rope_strung, 1830.has_pole, 1830.wagon_free, 1830.shoe_lost], items: [phone, pole]}
+      - {cmd: look at pole, not: ferry's lines}
+      - {cmd: give pole back, expect: Lost her shoe in that slough}
+      - {cmd: look at setting pole, expect: foot is bare}
+      - {cmd: ask ogee for pole, expect: Take her}
+      - setup: {items: [phone, pole, shoe]}
+      - {cmd: give shoe to ogee, expect: [Smith made that, takes the pole from you]}
+      - {cmd: inventory, not: pole}
+
+  - name: leaving before meeting Margaret says "the volunteer", not "a volunteer"
+    steps:
+      - {cmd: go outside, expect: [You thank the volunteer, West Fifth Street], not: [a volunteer], room: street}
+
+  - name: help on the riverfront points at the marker and the steps, not up Hennepin
+    url: scene=riverwalk
+    steps:
+      - {cmd: help, expect: [Read the marker, down the steps], not: walk north up Hennepin}
+
+  - name: help in 1830 is checked discreetly, out of sight
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee]}
+      - {cmd: help, expect: [turn your back, tin case, No signal]}
+
+  - name: the slough hint moves on with each step
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee, 1830.rope_strung], items: [axe]}
+      - {cmd: help, expect: Ask Ogee for his setting pole}
+      - setup: {items: [axe, pole]}
+      - {cmd: help, expect: cut willow brush, not: Ask Ogee}
+      - {cmd: cut brush, expect: willow}
+      - {cmd: help, expect: Put the brush under}
+      - {cmd: put brush under wheels, expect: Now the lever}
+      - {cmd: help, expect: Lever the wagon out}
+
+  - name: Rolette's agent turns down Dixon's paper
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, 1830.has_order], items: [order]}
+      - {cmd: sell order to agent, expect: [Mr. Rolette wants silver, bound for Galena], not: "can't think how"}
+
+  - name: while you're still dazed, help and save work but don't use up the moment
+    url: scene=wateredge
+    steps:
+      - setup: {flags: [present.planks, present.voice]}
+      - {cmd: answer, room: landing}
+      - {cmd: help, expect: Talk to the man in the buckskin shirt, not: Sit a moment}
+      - {cmd: score, not: Sit a moment}
+      - {cmd: wait, expect: [Sit a moment, world comes back]}
+      - {cmd: wait, expect: Time passes, not: Sit a moment}
+
+  - name: an unnamed person is "a man" the first time and "the man" after
+    url: scene=wateredge
+    steps:
+      - setup: {flags: [present.planks, present.voice]}
+      - {cmd: answer, room: landing}
+      - {cmd: wait, expect: "A man in a good coat sits", not: "The man in the good coat"}
+      - {cmd: look, expect: "The man in the good coat sits", not: "A man in a good coat"}
+      - {cmd: talk to man in good coat, expect: "The man in the good coat says"}
+
+  - name: after the rescue, the room already calls Ogee "the man"
+    url: scene=wateredge
+    steps:
+      - setup: {flags: [present.planks, present.voice]}
+      - {cmd: answer, expect: "The man in the buckskin shirt stands", not: "A man in a buckskin shirt", room: landing}
+
+  - name: Madeline says whose wife she is
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to woman, expect: [Madeline Ogee, My husband keeps the ferry], not: "his wife"}
+
+  - name: the paddle is Madeline's father's, and you have to ask
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, 1830.axe_ok, 1830.has_axe], items: [axe]}
+      - {cmd: look, expect: hangs on wooden pegs under the eaves}
+      - {cmd: chop wood, expect: gets you nothing, not: paddle}
+      - {cmd: carve a paddle, expect: [two feet long, has a spare]}
+      - {cmd: take paddle, expect: [That was my father's, you could ask], not: lifts it down}
+      - {cmd: ask woman about paddle, expect: [lifts it down from the pegs, bring it home]}
+      - {cmd: inventory, expect: paddle}
+      - {cmd: look, not: under the eaves}
+      - {cmd: ask for paddle, expect: already have the paddle}
+
+
+  - name: the pole stays in sight after the rope is strung
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee, 1830.rope_strung]}
+      - {cmd: look, expect: setting pole leans idle against the post}
+      - {cmd: ask ogee for pole, expect: Take her}
+      - {cmd: look, not: leans idle}
+      - {cmd: give pole back}
+      - {cmd: look, expect: leans idle against the post}
+
+  - name: taking the willow brush with the axe cuts it
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: take brush, expect: you'd want an axe}
+      - setup: {items: [phone, axe]}
+      - {cmd: take willow brush, expect: hack down an armful of willow}
+
+  - name: Dixon's seventy-two dollars is paper, not silver
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, known.dixon]}
+      - {cmd: ask dixon about lease, expect: [rent goes against Rolette's notes, "haven't a coin of silver"]}
+      - {cmd: ask dixon about paper, expect: [seventy-two dollars, nobody will give a dollar of silver]}

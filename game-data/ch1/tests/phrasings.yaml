@@ -1,0 +1,3 @@
+# Every phrasing declared on a room action must reach that action (catches
+# phrasings shadowed by another action or by the parser).
+phrases: true

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16181a">
+<title>Dixon</title>
+<style>
+body { font-family: Georgia, "Times New Roman", serif; background: #16181a; color: #d8d4c8; margin: 0; }
+main { max-width: 68rem; margin: 0 auto; padding: 1rem 1rem 2rem; }
+#bar-top { display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid #333; padding: 0.3rem 0 0.5rem; }
+#bar-top h1 { font-weight: normal; letter-spacing: 0.15em; font-size: 1rem; color: #8a867a; text-transform: uppercase; margin: 0; }
+#place { flex: 1; color: #b8b4a8; font-variant: small-caps; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#score { color: #8a867a; font-family: monospace; white-space: nowrap; }
+#version { color: #6c685e; font-family: monospace; font-size: 0.8rem; }
+#settings .about { color: #6c685e; font-size: 0.85rem; margin-top: 0.8rem; display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+#tour-btn { padding: 0.4rem 0.8rem; }
+#tour-box { position: fixed; border: 3px solid #f0c060; border-radius: 10px; z-index: 98; pointer-events: none; box-shadow: 0 0 0 9999px rgba(0,0,0,.35); }
+#tour-box.off { display: none; }
+#tour-card { position: fixed; left: 50%; transform: translateX(-50%); width: min(40rem, calc(100vw - 2rem)); box-sizing: border-box; background: #101214; color: #f3efe4; border: 1px solid #f0c060; border-radius: 10px; padding: 0.9rem 1.1rem 0.8rem; z-index: 99; box-shadow: 0 6px 24px rgba(0,0,0,.5); font-size: 1.05rem; line-height: 1.45; }
+#tour-card.bottom { bottom: 1rem; } #tour-card.top { top: 1rem; }
+#tour-card p { margin: 0 0 0.7rem; }
+#tour-card .row { display: flex; gap: 0.5rem; align-items: center; }
+#tour-card .count { flex: 1; color: #8a867a; font-family: monospace; font-size: 0.85rem; }
+#tour-card button { padding: 0.4rem 0.9rem; }
+#tour-card button:disabled { opacity: 0.4; cursor: default; }
+#gear { padding: 0.3rem 0.7rem; font-size: 0.9rem; }
+#settings { display: none; background: #202325; border: 1px solid #444; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.95rem; }
+#settings.open { display: block; }
+#settings label { display: block; margin: 0.45rem 0; cursor: pointer; }
+#settings small { display: block; color: #8a867a; margin-left: 1.5rem; }
+#layout { display: flex; gap: 1rem; align-items: flex-start; margin-top: 0.8rem; }
+#play { flex: 1; min-width: 0; }
+#output { height: 64vh; overflow-y: auto; padding: 0.5rem 1rem; border-top: none; border-bottom: 1px solid #333; line-height: 1.55; font-size: 1.05rem; }
+#output p { margin: 0 0 0.9rem; }
+#output p.echo { color: #8a867a; font-family: monospace; margin-bottom: 0.4rem; }
+#output p.heading { color: #8a867a; font-variant: small-caps; letter-spacing: 0.1em; margin-top: 1.6rem; }
+#output p.meta { color: #9fb7a6; font-style: italic; }
+#output .notice { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; margin: 0.2rem 0 1rem; padding: 0.75rem 1rem;
+  background: #2a2416; border: 1px solid #f0c060; border-left-width: 5px; border-radius: 8px; color: #f6efd9; font-size: 1.05rem;
+  box-shadow: 0 2px 12px rgba(240,192,96,.12); }
+#output .notice .label { font-family: monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: #f0c060; }
+#output .notice .msg { flex: 1; min-width: 12rem; }
+#output .notice button { background: #f0c060; color: #16181a; border-color: #f0c060; font-weight: bold; padding: 0.45rem 0.9rem; }
+#output .notice button:hover { background: #ffd47a; }
+#output p.death { color: #e3a59a; font-variant: small-caps; letter-spacing: 0.12em; font-size: 1.15rem; margin-top: 1.2rem; }
+body.hl-key .noun.key, body.hl-all .noun.key { color: #7ec8e3; }
+body.hl-all .noun.minor { color: #b7a77a; }
+body.clickable .noun { cursor: pointer; text-decoration: underline dotted; }
+aside { width: 17rem; flex: none; }
+#notes, #histories { max-height: 64vh; overflow-y: auto; font-size: 0.95rem; line-height: 1.4; }
+#notes { border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 0.3rem 0.8rem; height: 40vh; }
+#histories:not(:empty) { border-bottom: 1px solid #333; padding: 0.3rem 0.8rem 0.6rem; margin-top: 0.6rem; max-height: 30vh; }
+h2.panel { font-size: 0.75rem; font-weight: normal; letter-spacing: 0.14em; text-transform: uppercase; color: #6c685e; margin: 0.4rem 0; }
+aside h3 { font-size: 0.8rem; font-weight: normal; letter-spacing: 0.1em; text-transform: uppercase; color: #8a867a; margin: 0.8rem 0 0.3rem; }
+aside h3.current { color: #d8d4c8; }
+#notes details { margin: 0.15rem 0; }
+#notes summary { cursor: pointer; color: #7ec8e3; }
+#notes details p { margin: 0.3rem 0 0.6rem; color: #b8b4a8; }
+.empty { color: #6c685e; font-style: italic; }
+.badge { color: #7ec8e3; font-size: 0.75em; margin-left: 0.3em; }
+.source { margin: 0.4rem 0 0.6rem; color: #b8b4a8; }
+.source a { color: #7ec8e3; }
+.claims { padding-left: 1rem; margin: 0.3rem 0; color: #b8b4a8; }
+.claims li { margin: 0.3rem 0; }
+.status { font-family: monospace; font-size: 0.75rem; padding: 0 0.3em; border: 1px solid #555; border-radius: 3px; color: #d8d4c8; }
+.status.invented { border-color: #8a6a9e; } .status.guess, .status.disputed { border-color: #b7a77a; } .status.needs-source { border-color: #a05a4a; }
+body.nosidebar #notes { display: none; }
+#bar { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+#cmd { flex: 1; background: #202325; color: #e8e4d8; border: 1px solid #444; padding: 0.6rem; font-family: monospace; font-size: 1rem; }
+button { background: #2a2e30; color: #d8d4c8; border: 1px solid #444; padding: 0.6rem 1rem; font-family: monospace; cursor: pointer; }
+select { background: #202325; color: #d8d4c8; border: 1px solid #444; font-family: inherit; }
+#quick { display: none; gap: 0.4rem; margin-top: 0.6rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#quick button { flex: none; padding: 0.55rem 0.8rem; min-height: 2.5rem; }
+@media (pointer: coarse) { #quick { display: flex; } }
+@media (max-width: 760px) {
+  html, body { height: 100%; overscroll-behavior: none; }
+  main { height: 100dvh; box-sizing: border-box; display: flex; flex-direction: column; padding: 0.5rem 0.7rem calc(0.6rem + env(safe-area-inset-bottom)); }
+  #layout { flex: 1; min-height: 0; flex-direction: column; gap: 0.5rem; }
+  #play { flex: 1; min-height: 0; display: flex; flex-direction: column; width: 100%; }
+  #output { flex: 1; height: auto; min-height: 0; padding: 0.4rem 0.2rem; font-size: 1rem; }
+  aside { width: 100%; }
+  #notes { height: auto; max-height: 11dvh; }
+  #histories:not(:empty) { max-height: 11dvh; margin-top: 0.3rem; }
+  #score { font-size: 0.85rem; }
+  #cmd { font-size: 16px; padding: 0.7rem; }
+  button { min-height: 2.75rem; }
+  #settings { max-height: 40dvh; overflow-y: auto; }
+  #bar-top h1 { display: none; }
+  #output .notice { font-size: 0.95rem; padding: 0.55rem 0.75rem; gap: 0.3rem 0.7rem; }
+  #output .notice .msg { flex-basis: 100%; order: 2; }
+  #output .notice .label { order: 1; }
+  #output .notice button { order: 3; padding: 0.35rem 0.8rem; min-height: 2.2rem; }
+  #version { display: none; }
+}
+</style>
+</head>
+<body>
+<main>
+<div id="bar-top">
+  <h1>Dixon</h1>
+  <span id="version" title="Game version"></span>
+  <span id="place"></span>
+  <span id="score"></span>
+  <button id="gear" aria-expanded="false">Settings</button>
+</div>
+<div id="settings">
+  <label><input type="checkbox" id="opt-sidebar"> Looked-at sidebar<small>Keeps a list of what you've examined, by place.</small></label>
+  <label>Highlighted words
+    <select id="opt-hl">
+      <option value="off">Off</option>
+      <option value="key">Key items only</option>
+      <option value="all">All (key and minor, two colors)</option>
+    </select>
+    <small>Key items (blue) move the story along. Minor items (tan) are just there to be looked at.</small>
+  </label>
+  <label><input type="checkbox" id="opt-clicks"> Clickable highlighted words<small>Click a word to look at it. Off by default; typing is the point.</small></label>
+  <label><input type="checkbox" id="opt-histories"> Histories panel<small>Shows the historical sources behind the current place, and marks what is invented.</small></label>
+  <div class="about"><button id="tour-btn">Take the tour</button> <span id="about"></span></div>
+</div>
+<div id="layout">
+  <div id="play">
+    <div id="output" aria-live="polite"></div>
+    <div id="bar">
+      <input id="cmd" maxlength="40" autocomplete="off" autocapitalize="off" autocorrect="off" enterkeyhint="go" spellcheck="false" placeholder="what do you do?" autofocus>
+      <button id="enter">Enter</button>
+    </div>
+    <div id="quick" aria-label="Quick commands">
+      <button data-run="look">look</button>
+      <button data-run="north">N</button>
+      <button data-run="south">S</button>
+      <button data-run="east">E</button>
+      <button data-run="west">W</button>
+      <button data-run="up">up</button>
+      <button data-run="down">down</button>
+      <button data-fill="look at ">look at</button>
+      <button data-fill="talk to ">talk</button>
+      <button data-fill="ask about ">ask</button>
+      <button data-run="inventory">inv</button>
+      <button data-run="wait">wait</button>
+      <button data-run="listen">listen</button>
+      <button data-run="help">help</button>
+    </div>
+  </div>
+  <aside>
+    <div id="notes" aria-label="Things you have looked at"></div>
+    <div id="histories" aria-label="Histories"></div>
+  </aside>
+</div>
+</main>
+<script src="vendor/js-yaml-4.1.0.min.js"></script>
+<script type="module" src="play.js?v=0.7.8"></script>
+</body>
+</html>

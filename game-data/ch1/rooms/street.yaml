@@ -1,0 +1,112 @@
+id: street
+era: present
+name: West Fifth Street at Hennepin
+sources: []
+picture: >-
+  Street corner at dusk. The brick museum at left, a dusty pickup at the curb,
+  frame houses and big maples, Hennepin running away north to a courthouse at
+  the end of the next block.
+
+look: >-
+  The sidewalk is still warm from the day and nearly empty. A [pickup] is
+  parked at the [corner], a [porch light] clicks on across the way, and the
+  [museum] door stands open behind you. This is a quiet residential block of
+  old frame [houses] under big [maples]. [Hennepin] runs north, and at the end
+  of the next block you can make out the police station and the
+  [courthouse], with the downtown blocks running on beyond them toward the
+  [river].
+listen: A truck downshifts somewhere nearby, and under it, very faintly, you can hear moving water.
+
+nouns:
+  pickup:
+    name: pickup
+    aliases: [truck, pickup truck, plate, bumper]
+    reveals: [sticker]
+    look: It's a dusty pickup with an Illinois plate and nobody in it, and a faded [sticker] is curling off the bumper.
+    verbs:
+      open: It's locked, and it isn't yours anyway.
+      touch: The hood is still warm, so whoever left it here hasn't been gone long.
+
+  sticker:
+    name: bumper sticker
+    hidden: true
+    aliases: [bumper sticker, stickers, older sticker, old sticker]
+    look:
+      - when: [present.sticker_peeled]
+        text: The top sticker curls back from an older one underneath, sun-bleached by years on the bumper, which reads DIXON'S FERRY DAYS beside the same cartoon ferry.
+      - when: [1830.lease_dixon]
+        text: The sticker reads DIXON RIVER DAYS beside a cartoon ferry. Its corner has peeled away from the bumper, and part of an older sticker shows underneath.
+      - when: [1830.lease_player]
+        text: The sticker reads RIVER DAYS COMMITTEE beside a cartoon ferry, with no town name on it at all. Its corner has peeled away, and part of an older sticker shows underneath.
+      - text: The sticker reads ROLETTE RIVER DAYS beside a cartoon ferry. Its corner has peeled away from the bumper, and part of an older sticker shows underneath.
+    verbs:
+      touch:
+        - when: [present.sticker_peeled]
+          say: You've already peeled it back, and DIXON'S FERRY DAYS looks up at you patiently.
+        - say: The curled corner lifts easily, and when you peel the top sticker back, the older one beneath it is clear enough to read. It says DIXON'S FERRY DAYS beside the same cartoon ferry, though nobody on this block would call the town that.
+          do: [{set: present.sticker_peeled}]
+      take:
+        - when: [present.sticker_peeled]
+          say: The older one is stuck fast, as you'd expect of something that has been there for years.
+        - say: The curled corner lifts easily, and when you peel the top sticker back, the older one beneath it is clear enough to read. It says DIXON'S FERRY DAYS beside the same cartoon ferry, though nobody on this block would call the town that.
+          do: [{set: present.sticker_peeled}]
+
+  corner:
+    name: corner
+    aliases: [intersection, crosswalk, bench, bus bench]
+    look: There's a crosswalk and a bus bench with no bus, and nothing else worth a second look.
+    verbs:
+      sit: The bench is warm from the sun and no bus is coming, but you sit anyway for a moment before getting up again.
+
+  porchlight:
+    name: porch light
+    aliases: [porch light, porch, light, house across the way]
+    look: It's a yellow bulb on a porch across the street, and it's already drawing moths.
+
+  museum:
+    name: Historic Center
+    aliases: [center, historic center, building, door, brick building]
+    look: The {town} Historic Center is a modest brick building on the corner, its glass door propped open and its fluorescent lights still burning inside.
+    verbs:
+      open: The door is already open.
+      touch: The brick is still warm from the day.
+
+  houses:
+    name: houses
+    aliases: [house, frame houses, homes, block]
+    look: The houses are old frame houses with deep porches, most of them older than anyone living in them.
+
+  maples:
+    name: maples
+    aliases: [maple, trees, tree]
+    look: Big silver maples line the block, and their roots lift the sidewalk in slow waves.
+    verbs:
+      climb: Not on this block, and not at your age either.
+
+  hennepin:
+    name: Hennepin
+    aliases: [hennepin avenue, hennepin street, road, north]
+    look: Hennepin runs north past the police station and the courthouse, through three blocks of downtown, to the river.
+
+  courthouse:
+    name: courthouse
+    aliases: [police station, police, station, downtown]
+    look: At the end of the next block the courthouse and the police station sit side by side, one stone and one brick, and past them the buildings grow taller and closer together as the street runs into downtown.
+    verbs:
+      touch: It's a whole block away.
+
+  river:
+    name: river
+    aliases: [water, rock river]
+    look: You can't see the river from here. The Rock River is four blocks north, past the courthouse and through downtown, with the riverside walk running along its bank.
+    verbs:
+      touch: It's four blocks away from here.
+
+exits:
+  - names: [museum, door, back, inside, in, south, center]
+    to: museum
+    text: You step back through the door into the cool, bright room.
+  - names: [north, river, riverwalk, river walk, riverfront, walk, hennepin, downtown]
+    to: riverwalk
+    peek: Hennepin runs north, past the police station and the courthouse and through three blocks of downtown, to the riverfront.
+    text: You walk north up Hennepin, past the police station and the courthouse, then through three blocks of downtown storefronts, until the pavement opens onto the riverfront.
