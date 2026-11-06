@@ -248,8 +248,11 @@ function learnName(c, typed) {
 function pronoun(t) { return /^(him|her|them|he|she)$/.test(cleanNoun(t)); }
 function speak(id, text) {
   const t = text.trim();
-  if (/^["“]/.test(t)) { const who = cap(npcName(id)); markSeen(id); say(`${who} says, ${t}`, { npcPrefix: true }); }
-  else say(t);
+  // A line that opens with a quote gets a speech tag, unless it tags itself
+  // ("Joseph Ogee," he says, ...).
+  const tagged = /^["“][^"”]*[,?!]["”]\s+(?:he|she|they)\s+(?:says|adds|asks|calls|answers|replies)\b/i.test(t);
+  if (/^["“]/.test(t) && !tagged) { const who = cap(npcName(id)); markSeen(id); say(`${who} says, ${t}`, { npcPrefix: true }); }
+  else { if (tagged) markSeen(id); say(t); }
 }
 
 // ------------------------------------------------------------------- nouns

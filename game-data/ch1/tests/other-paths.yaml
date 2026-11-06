@@ -314,3 +314,9 @@ tests:
       - setup: {flags: [1830.arrived, known.dixon]}
       - {cmd: ask dixon about lease, expect: [rent goes against Rolette's notes, "haven't a coin of silver"]}
       - {cmd: ask dixon about paper, expect: [mail pay, good money in Vandalia]}
+
+  - name: a line that tags its own speaker isn't tagged twice
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to man in buckskin, expect: "\"Joseph Ogee,\" he says", not: buckskin shirt says}
