@@ -14,7 +14,7 @@ picture: >-
 # The return-visit description (see FORMAT.md, Rooms).
 brief:
   - when: [1830.lease_dixon]
-    text: "The [water] slides past the foot of the [stairway], brown and unhurried, with no mist on it now."
+    text: "The [water] slides past the foot of the [stairway], brown and ordinary, with no mist on it now."
   - text: "Mist hangs low over the [water] at the foot of the [stairway], and the [walkway] is dark with wet."
 look:
   - when: [1830.lease_dixon, not present.planks]
@@ -39,20 +39,20 @@ look:
       The mist is up around your knees and still rising, the traffic noise
       has gone, and the walk above you has faded to a pale line. The
       [walkway] is dark with wet, and the [water] slides past, steady and
-      unhurried and hard to stop watching.
+      smooth and hard to stop watching.
   - when: [turns>=1]
     text: >-
       The mist has thickened until the far bank is gone and the walk above
       you is only a pale line. The [walkway] is dark with wet, and the [water]
       slides past a few feet away.
   - text: >-
-      A broad concrete [walkway] runs along the water at the foot of the
-      steps, hemmed in by a curved limestone [wall] on one side and a low green
-      [seawall] on the other, and a little [driftwood] has washed up in its
-      corners. Upstream a [bridge] crosses the river, and a steel [tower]
-      carries power lines over the bank. The [water] slides past a few feet
-      away with mist hanging low over it, and the [stairway] you came down is
-      behind you.
+      At the foot of the steps a broad concrete [walkway] runs along the
+      water, between a curved limestone [wall] and a low green [seawall], with
+      a little [driftwood] washed into its corners. Upstream a [bridge]
+      crosses the river and a steel [tower] carries power lines over the bank,
+      both of them soft at the edges in the mist. The [water] slides past a
+      few feet away, close enough to hear, and the [stairway] you came down
+      climbs back up behind you.
 
 listen:
   - when: [present.planks]
@@ -181,7 +181,7 @@ nouns:
     name: muddy bank
     when: [present.voice]
     aliases: [muddy bank, mud, shore]
-    look: It's a low bank of black mud cut up by hooves and wheels, and there's no wall, no walk and no Hennepin anywhere behind it.
+    look: The bank is low and black with mud, cut up by hooves and wheels, and there's no wall, no walk and no Hennepin anywhere behind it.
 
   trees:
     name: trees
@@ -193,7 +193,7 @@ nouns:
     name: voice
     when: [present.voice]
     aliases: [knocking, sound, calling, man]
-    look: It's a man's voice, hoarse and practical, coming from somewhere out in the white, and he sounds as if he has been calling for a while.
+    look: The voice is a man's, hoarse and practical, coming from somewhere out in the white, and he sounds as if he has been calling for a while.
 
 actions:
   - id: answer_voice

@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.13.5 (2026-11-07)
+- The present-day rooms get the prose pass. The riverfront no longer sounds like a brochure (it was built for crowds, and tonight you nearly have it to yourself), the statue plaque says the same things in fewer words, and the street gathers itself into three sentences. At the water's edge the bridge and the tower go soft in the mist, and the river is no longer 'unhurried' four times over. In the museum, the late light no longer sounds like the color of the window, the exhibits drop their 'It's a' openings, and Margaret has decided the clock is the humidity instead of choosing not to think about it.
+
 ## 0.13.4 (2026-11-07)
 - The camp and the slough get the same prose pass. The camp opens on a family making a home around a wagon; Dixon taps his paper instead of turning it over yet again, says the mist is odd enough that he's stopped mentioning it to Rebecca, and looks at a wagon that is not a roof; his rope line isn't said twice. Rebecca expects to cook on a great many more fires. The slough no longer repeats the wet ground you've just walked into, and Asa introduces himself by his fretting nephew instead of assuming you've met him. Partings with Dixon and Asa no longer start 'You nod'.
 

@@ -12,16 +12,15 @@ picture: >-
 # The return-visit description (see FORMAT.md, Rooms).
 brief: "The plaza is still nearly empty under the bronze [statue], and at the end of the [railing] the worn [stairway] leads down to the water."
 look: >-
-  The riverfront is a broad public plaza of pale paving and limestone walls on
-  the south bank, the kind of place that fills up for the farmers market and
-  summer concerts, though tonight it is nearly empty. A green iron [railing]
-  follows the curve of the wall above the water, and a stone [pavilion] stands
-  a little way along, with a [bench] facing the river. A bronze [statue] of a
-  man on a horse rises from the plaza, and near it a green historical [marker]
-  stands on a post. The [river] is wide and brown and slow, and a long raft of
-  mist lies on it. At the far end of the railing, a wide [stairway] of worn
-  steps leads down to the water. Behind you, [hennepin|Hennepin] runs south
-  through downtown, back toward the Historic Center.
+  The plaza was built for crowds, with pale paving and limestone walls
+  stepping down toward the water, but tonight you nearly have it to
+  yourself. A bronze [statue] of a man on a horse rises in the middle of it,
+  and nearby a green historical [marker] stands on a post. Along the water a
+  green iron [railing] follows the curve of the wall, past a stone [pavilion]
+  and a [bench] that faces the river. The [river] is wide and brown and slow,
+  and a long raft of mist lies on it. At the far end of the railing a worn
+  [stairway] goes down to the water, and behind you [hennepin|Hennepin] runs
+  back south through downtown.
 listen: You hear water against stone and, somewhere, a halyard clinking against a pole, though there are no boats anywhere.
 
 on_turn:
@@ -91,14 +90,12 @@ nouns:
     hidden: true
     aliases: [statue plaque, bronze plaque, dedication, begins the trail]
     look: >-
-      The plaque is titled BEGINS THE TRAIL, and beneath it, in quotation
-      marks, it reads: "It was in {town_in} that I really found myself." The
-      words are attributed to Ronald Reagan, who lived here from 1920 to 1933.
-      The text goes on to describe how he came back in the summer of 1950 and
-      rode a palomino through these streets in a parade, and how that ride
-      inspired the statue, and it recalls his years as a lifeguard on the Rock
-      River, where he is said to have saved 77 lives. At the bottom it says
-      the statue was dedicated on August 14, 2009.
+      The plaque is titled BEGINS THE TRAIL, and under the title it quotes
+      Ronald Reagan, who lived here from 1920 to 1933: "It was in {town_in}
+      that I really found myself." The rest tells how he came back in 1950 to
+      ride a palomino in a parade, which is where the statue comes from, and
+      how he is said to have saved 77 lives as a lifeguard on the Rock River.
+      It was dedicated on August 14, 2009.
     verbs:
       touch: The raised letters are cool under your fingers and slightly gritty.
     on_look:
@@ -111,7 +108,7 @@ nouns:
     name: bench
     aliases: [seat]
     reveals: [plate]
-    look: It's a slatted bench with a brass [plate] screwed to its back, and the slats are damp, though it hasn't rained.
+    look: The slats of the bench are damp, though it hasn't rained, and a brass [plate] is screwed to its back.
     verbs:
       sit:
         say: You sit for a while with a brass [plate] on the backrest pressing into your shoulders. The mist on the water doesn't move, and neither, you notice after a while, does anything else.
@@ -143,7 +140,7 @@ nouns:
     name: ringbolt
     hidden: true
     aliases: [ring, bolt, iron ring]
-    look: It's a rusted iron ring set into the stone, worn bright on one side where rope used to run, and it's older than the railing and older than the walk.
+    look: A rusted iron ring is set into the stone, worn bright on one side where rope used to run. It's older than the railing, and older than the walk.
     verbs:
       touch: You can't reach it from up here.
 
