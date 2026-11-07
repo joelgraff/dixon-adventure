@@ -29,7 +29,8 @@ tests:
       - {cmd: talk to man in coat, expect: [Galena, Rolette, hundred dollars in silver]}
       - {cmd: talk to young man, expect: [Eli, slough], score: 23}
       - {cmd: south, expect: "Ogee's cabin", room: cabin}
-      - {cmd: talk to woman, expect: [Madeline, Bring it back]}
+      - {cmd: talk to woman, expect: Madeline, not: Take it}
+      - {cmd: ask madeline for axe, expect: Take it if you need it}
       - {cmd: take axe, expect: work the axe free, score: 24}
       - {cmd: ask madeline for paddle, expect: That was my father's, score: 28}
       - {cmd: south, expect: "Dixon's camp", room: camp}

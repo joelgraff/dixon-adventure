@@ -320,3 +320,12 @@ tests:
     steps:
       - setup: {flags: [1830.arrived]}
       - {cmd: talk to man in buckskin, expect: "\"Joseph Ogee,\" he says", not: buckskin shirt says}
+
+  - name: Madeline doesn't offer the axe; you have to ask
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to woman, expect: Madeline Ogee, not: axe}
+      - {cmd: take axe, expect: you could ask, not: work the axe free}
+      - {cmd: ask madeline about the axe, expect: Take it if you need it}
+      - {cmd: take axe, expect: work the axe free}

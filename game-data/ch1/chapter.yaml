@@ -380,6 +380,8 @@ hints:
     text: Launch the canoe at the landing, then tie the rope to the post on the far bank.
   - when: [era:1830, not 1830.wagon_free, not has:pole]
     text: Eli's uncle Asa is stuck in the slough, south past Dixon's camp. He needs brush under the wheels and something long to lever with. Ask Ogee for his setting pole.
+  - when: [era:1830, not 1830.wagon_free, not 1830.brush_placed, not has:brush, not has:axe]
+    text: You'll need an axe to cut willow brush. There's one in the chopping block at the cabin, if you ask Madeline for it.
   - when: [era:1830, not 1830.wagon_free, not 1830.brush_placed, not has:brush]
     text: At the slough, cut willow brush with the axe.
   - when: [era:1830, not 1830.wagon_free, not 1830.brush_placed]
