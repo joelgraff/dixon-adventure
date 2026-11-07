@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.13.3 (2026-11-07)
+- The cabin's prose gets the same pass as the landing. The room no longer repeats the clearing you've just walked into, and its lines vary their shape. Madeline has mending to go back to and watches you to the edge of the clearing; her look, her ferry line and the paddle no longer all use 'the way you'd'. Giving back the axe is plain business, so the softening is saved for her father's paddle. The paddle, the crow and the axe no longer open with 'It's a'.
+
 ## 0.13.2 (2026-11-07)
 - Two landing lines said plainly: the agent watches the ferry as if it were already his, and Ogee is sorry to ask the work of somebody he's only just pulled out of the river.
 

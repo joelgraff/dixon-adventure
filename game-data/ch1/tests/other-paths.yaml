@@ -281,7 +281,7 @@ tests:
     url: scene=cabin
     steps:
       - setup: {flags: [1830.arrived, 1830.axe_ok, 1830.has_axe], items: [axe]}
-      - {cmd: look, expect: hangs on wooden pegs under the eaves}
+      - {cmd: look, expect: Under the eaves, a canoe paddle hangs}
       - {cmd: chop wood, expect: gets you nothing, not: paddle}
       - {cmd: carve a paddle, expect: [two feet long, has a spare]}
       - {cmd: take paddle, expect: [That was my father's, you could ask], not: lifts it down}
@@ -337,10 +337,10 @@ tests:
     url: scene=cabin
     steps:
       - setup: {flags: [1830.arrived, known.madeline, met.madeline, 1830.rope_strung, 1830.has_paddle], items: [phone, paddle]}
-      - {cmd: look, not: hangs on wooden pegs}
+      - {cmd: look, not: canoe paddle hangs}
       - {cmd: give the paddle back to madeline, expect: "been on the water again"}
       - {cmd: inventory, not: paddle}
-      - {cmd: look, expect: hangs on wooden pegs}
+      - {cmd: look, expect: canoe paddle hangs}
 
   - name: Eli knows his uncle is free if you meet him afterward
     url: scene=landing
@@ -526,19 +526,19 @@ tests:
     steps:
       - setup: {flags: [1830.arrived]}
       - {cmd: south, room: camp, expect: canvas-topped wagon}
-      - {cmd: north, room: cabin, expect: [Smoke still threads up, woman in the dark shawl and the boys are still here], not: [one long log cabin, An axe stands sunk]}
-      - {cmd: look, expect: [one long log cabin, An axe stands sunk, two boys are splitting kindling]}
+      - {cmd: north, room: cabin, expect: [Smoke still threads up, woman in the dark shawl and the boys are still here], not: [One long log cabin fills, An axe is sunk]}
+      - {cmd: look, expect: [One long log cabin fills, An axe is sunk, two boys split kindling]}
 
   - name: a return visit shows what changed since you were last there
     url: scene=cabin
     steps:
       - setup: {flags: [1830.arrived, known.madeline, met.madeline, 1830.has_axe], items: [phone, axe]}
-      - {cmd: look, expect: A chopping block stands}
+      - {cmd: look, expect: the chopping block has no axe in it}
       - {cmd: south, room: camp}
       - {cmd: north, room: cabin, expect: Madeline and the boys are still here, not: chopping block}
       - {cmd: give axe to madeline}
       - {cmd: south, room: camp}
-      - {cmd: north, room: cabin, expect: [An axe stands sunk in the chopping block, Madeline and the boys are still here]}
+      - {cmd: north, room: cabin, expect: [An axe is sunk in the chopping block, Madeline and the boys are still here]}
 
   - name: the museum on your return lists what has changed
     url: scene=museum

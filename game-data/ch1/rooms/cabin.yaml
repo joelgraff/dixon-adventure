@@ -11,10 +11,10 @@ picture: >-
 # The return-visit description (see FORMAT.md, Rooms).
 brief: "Smoke still threads up from the [cabin] chimney, and the wagon trail runs on south through the oaks."
 look: >-
-  The path comes up from the landing into a clearing, where one long log
-  [cabin] stands with two doors and a thread of smoke rising from its
-  [chimney]. Behind you the [path] runs back north to the river, and ahead a
-  wagon trail goes on south through the oaks.
+  One long log [cabin] fills the clearing, with a door at each end and a
+  thread of smoke going straight up from its [chimney] into the still air.
+  Behind you the [path] drops back to the river, and a wagon trail leads on
+  south through the oaks.
 listen: Someone is splitting kindling with quick, uneven strokes, a woodpecker is working somewhere in the trees, and below it all you can hear the river, the way you always can here.
 
 nouns:
@@ -22,8 +22,8 @@ nouns:
     name: paddle
     when: [not has:paddle]
     aliases: [canoe paddle, spare paddle, ash paddle, oar, pegs, eaves, father's paddle]
-    room_line: A canoe [paddle] hangs on wooden pegs under the eaves.
-    look: It's a canoe paddle carved from a single piece of ash, longer and narrower than you'd expect, the grip worn dark and smooth by somebody's hands over a lot of years. It hangs on pegs under the eaves, out of the weather, the way you'd keep something you meant to keep.
+    room_line: Under the eaves, a canoe [paddle] hangs on a pair of wooden pegs.
+    look: The paddle was carved from a single piece of ash, longer and narrower than you'd expect, and its grip has been worn dark and smooth by somebody's hands over a great many years. Whoever hung it on these pegs, out of the weather, meant to keep it.
     verbs:
       take:
         - when: [here:madeline]
@@ -36,11 +36,11 @@ nouns:
     aliases: [bird, big crow, roof, ridge, glint, something shiny, shiny thing, brass thing, key, brass key]
     room_line:
       - when: [not 1830.crow_traded]
-        text: A big [crow] sits on the roof ridge by the chimney, with something small glinting at its feet.
-      - text: The [crow] sits on the roof ridge, turning a silver dollar over with its beak.
+        text: Up on the roof ridge a big [crow] keeps watch by the chimney, with something small glinting at its feet.
+      - text: Up on the ridge, the [crow] turns a silver dollar over and over with its beak.
     look:
       - when: [not 1830.crow_traded]
-        text: It's a big glossy crow, and it's watching you with one eye and then the other. At its feet, wedged between two shingles, something small and brass winks in the light.
+        text: The crow is big and glossy, and it studies you with one eye and then the other. At its feet, wedged between two shingles, something small and brass winks in the light.
       - text: The crow is far too pleased with its silver dollar to pay you any attention.
     verbs:
       take: The crow watches you come, then hops a little further along the ridge, and the roof is no place for you to follow.
@@ -84,8 +84,8 @@ nouns:
     aliases: [chopping block, stump, split oak, oak, stack, woodpile, wood]
     room_line:
       - when: [1830.has_axe]
-        text: A chopping [block] stands beside a stack of split oak.
-      - text: An [axe] stands sunk in the chopping [block] beside a stack of split oak.
+        text: Beside a stack of split oak, the chopping [block] has no axe in it now.
+      - text: An [axe] is sunk in the chopping [block] beside a stack of split oak.
     look: The block is an old stump worn smooth on top by years of axes, and beside it someone has stacked enough split white oak to last the summer.
     verbs:
       sit: You sit on the block for a moment, then think better of it and stand up again.
@@ -94,7 +94,7 @@ nouns:
     name: axe
     when: [not 1830.has_axe]
     aliases: [hatchet]
-    look: It's a worn axe sunk in the block, its edge still sharp enough to catch a thumbnail.
+    look: The axe is old and its handle is dark with sweat, but the edge is still sharp enough to catch a thumbnail.
     verbs:
       take:
         - when: [not 1830.axe_ok]
@@ -118,18 +118,18 @@ npcs:
     unknown: a woman in a dark shawl
     ref: the woman in the shawl
     aliases: [madeline, woman, wife, madeline ogee, mrs. ogee]
-    room_line: "[madeline] stands at the west door, and two [boys|boys] are splitting kindling by the block."
-    look: She wears a dark dress and a shawl, with her sleeves pushed up from work, and she is watching you the way you'd watch a dog you didn't know.
+    room_line: "[madeline] waits in the west doorway with a basket of mending on her hip, while two [boys|boys] split kindling by the block."
+    look: She wears a dark dress and a shawl, with her sleeves pushed up from work, and she hasn't taken her eyes off you since you came into the clearing.
     talk:
       - when: [not met.madeline]
-        text: "\"I'm Madeline Ogee. My husband keeps the ferry down below, and you'll be the one he fished out of the river, because you're dripping on my doorstep.\" She looks you over, and doesn't say anything more."
+        text: "\"I'm Madeline Ogee. My husband keeps the ferry down below, and you'll be the one he fished out of the river, because you're dripping on my doorstep.\" She looks you over, from your wet hair down to your cracked boots, and leaves it at that."
         do: [{set: [known.madeline, met.madeline]}]
-      - text: "{madeline} gives you a short nod and goes back to her work."
+      - text: "{madeline} gives you a short nod and goes back to her mending."
     topics:
       - keys: [father, lasallier, trader, franklin creek, post]
-        say: "\"My father keeps a post on Franklin Creek, up the river.\" She doesn't offer anything more."
+        say: "\"My father keeps a post on Franklin Creek, up the river.\" She leaves it there."
       - keys: [ferry, burn, burned, bogardus, safe]
-        say: "\"Nobody is going to burn this ferry.\" She says it the way you'd say the sun comes up in the morning."
+        say: "\"Nobody is going to burn this ferry.\" She says it as if she were telling you the time."
       - keys: [potawatomi, people, family, relatives]
         say: She looks at you for a long moment. "Ask me another time," she says, and it sounds like a door closing, politely.
       - keys: [boys, sons, children]
@@ -157,7 +157,7 @@ npcs:
       bye: She lifts a hand as you go.
       how: "\"Well enough, thank you.\""
       sorry: "\"It's nothing. Don't trouble yourself.\""
-    parting: You nod to [madeline], and she nods back.
+    parting: "[madeline] watches you all the way to the edge of the clearing."
 
   boys:
     name: boys
@@ -260,7 +260,7 @@ actions:
       - take: axe
       - clear: 1830.has_axe
       - set: 1830.axe_returned
-      - say: You hand the axe back. {madeline} takes it without a word, but something in her face eases.
+      - say: You hand the axe back. {madeline} looks along the edge, finds it no worse than she lent it, and sinks it back in the block.
     else:
       - say: You haven't got it to give back.
 
