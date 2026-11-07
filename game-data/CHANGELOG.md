@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.3 (2026-11-07)
+- At the start of the game the museum desk no longer points out its locked middle drawer; you can still find it by trying the drawers, and it's in the desk's description once the key turns up.
+
 ## 0.14.2 (2026-11-07)
 - The present-day rooms show their major features too (the porch light, the pavilion and bench, the driftwood and the museum window turn up when you look closer), the landing reads lighter, and every room's prose has had a sentence-by-sentence pass: about a fifth of sentences now join two clauses with ', and', down from a third. Fixed: the boys are 'the boys' again after you've talked to them.
 

@@ -615,3 +615,11 @@ tests:
       - {cmd: talk to boys}
       - {cmd: south, room: camp}
       - {cmd: north, room: cabin, expect: Madeline and the boys are still here}
+
+  - name: the locked drawer waits to be found until the key turns up
+    url: scene=museum
+    steps:
+      - {cmd: look at desk, expect: scratched it blank, not: brass lock}
+      - {cmd: open drawers, expect: [locked, this one won't move]}
+      - setup: {flags: [present.returned, 1830.lease_dixon, known.volunteer, met.volunteer]}
+      - {cmd: look at desk, expect: [middle drawer has a small brass lock, POST OFFICE]}

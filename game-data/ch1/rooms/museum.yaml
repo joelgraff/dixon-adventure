@@ -216,10 +216,7 @@ nouns:
           door. Below the blotter, the middle [drawer] has a small brass lock. A brass plate screwed to its side reads POST OFFICE, DIXON'S
           FERRY, 1831. J. DIXON, P.M.
       - text: >-
-          The desk is tidy and older than everything around it, with the usual
-          [clutter] on top. The [guestbook] lies open at the corner nearest the
-          door. Below the blotter, the middle [drawer] has a small brass lock. A brass plate is screwed to its side, but somebody scratched it
-          blank long ago.
+          The desk is tidy and older than everything around it, with the usual [clutter] on top and the [guestbook] open at the corner nearest the door. A brass plate is screwed to its side, but somebody scratched it blank long ago.
     on_look:
       - if:
           when: [1830.lease_dixon, not present.noticed_desk]
