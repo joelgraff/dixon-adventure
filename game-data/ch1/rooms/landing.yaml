@@ -36,8 +36,8 @@ nouns:
       - text: A flat-bottomed [ferry] tugs at her lines, rocking hard in the high water.
     look:
       - when: [1830.rope_strung]
-        text: "This is {ogee's} flatboat, with a new rope running from the bank through a block on her rail and across to the far side. She sits steadier on it than she has any right to."
-      - text: "This is {ogee's} flatboat, broad and low and big enough for a wagon and its team. She was built to be poled, but right now the river runs deeper than any pole is long."
+        text: "This is {ogee's} flatboat, with a new rope running from the bank through a block on her rail and across to the far side. She sits steadier on it than she has any right to. On the dock beside her, a [tarpot|tar pot] still smokes over a small fire."
+      - text: "This is {ogee's} flatboat, broad and low and big enough for a wagon and its team. She was built to be poled, but right now the river runs deeper than any pole is long. On the dock beside her, a [tarpot|tar pot] smokes over a small fire, where {ogee} was doing her seams."
 
   rope:
     name: rope
@@ -69,7 +69,7 @@ nouns:
   tarpot:
     name: tar pot
     aliases: [tar pot, tar, pot, fire, small fire]
-    look: An iron pot of pine tar bubbles over a small fire on the planks and smells like a shipyard. A [swab] stands up in it, with a hank of [oakum] beside it, just where {ogee} dropped them when he ran for the canoe.
+    look: An iron pot of pine tar bubbles over a small fire on the dock beside the ferry, where {ogee} was doing her seams, and it smells like a shipyard. A [swab] stands up in it, with a hank of [oakum] beside it, just where {ogee} dropped them when he ran for the canoe.
     verbs:
       touch: You think better of it about an inch away, because it's very hot.
       take: You'd need something to carry it in, and you'd have to want burned hands.
@@ -102,7 +102,7 @@ nouns:
     look:
       - when: [1830.canoe_tarred]
         text: "{ogee's} dugout has its split seam packed and black with fresh tar. It might even float."
-      - text: This is the dugout that fished you out of the river. It split along one seam when it struck the piling, and its paddle went on toward St. Louis without it. Patched, it would carry one person and a coil of rope. A few yards off, {ogee's} [tarpot|tar pot] is still smoking on the dock.
+      - text: This is the dugout that fished you out of the river. It split along one seam when it struck the piling, and its paddle went on toward St. Louis without it. Patched, it would carry one person and a coil of rope. On the dock beside the ferry, {ogee's} [tarpot|tar pot] is still smoking.
     verbs:
       push: It slides a little way in the gravel and stops.
 

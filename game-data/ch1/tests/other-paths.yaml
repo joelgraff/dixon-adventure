@@ -623,3 +623,11 @@ tests:
       - {cmd: open drawers, expect: [locked, this one won't move]}
       - setup: {flags: [present.returned, 1830.lease_dixon, known.volunteer, met.volunteer]}
       - {cmd: look at desk, expect: [middle drawer has a small brass lock, POST OFFICE]}
+
+  - name: the tar pot sits on the dock beside the ferry
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: look at ferry, expect: [On the dock beside her, tar pot, doing her seams]}
+      - {cmd: look at tar pot, expect: [beside the ferry, swab, oakum]}
+      - {cmd: look at canoe, expect: beside the ferry}

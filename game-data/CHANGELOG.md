@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.4 (2026-11-07)
+- The tar pot sits on the dock beside the ferry, where Ogee was doing her seams, and the ferry's description shows it; the canoe points you there too.
+
 ## 0.14.3 (2026-11-07)
 - At the start of the game the museum desk no longer points out its locked middle drawer; you can still find it by trying the drawers, and it's in the desk's description once the key turns up.
 
