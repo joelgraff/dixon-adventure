@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.13.6 (2026-11-07)
+- Margaret is choosing not to think about the clock again, and when you ask, she's still choosing not to. It's a refrain she shares with you (waking in 1830, walking out of the fog), and it stays.
+
 ## 0.13.5 (2026-11-07)
 - The present-day rooms get the prose pass. The riverfront no longer sounds like a brochure (it was built for crowds, and tonight you nearly have it to yourself), the statue plaque says the same things in fewer words, and the street gathers itself into three sentences. At the water's edge the bridge and the tower go soft in the mist, and the river is no longer 'unhurried' four times over. In the museum, the late light no longer sounds like the color of the window, the exhibits drop their 'It's a' openings, and Margaret has decided the clock is the humidity instead of choosing not to think about it.
 

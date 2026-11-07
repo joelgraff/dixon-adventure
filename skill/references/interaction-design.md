@@ -16,6 +16,7 @@ How the demo should feel. These rules come from playtest feedback and are meant 
 - Characters keep their voices. A laconic man still speaks in natural sentences, with the rhythm of real speech; terseness comes from what he chooses not to say, not from clipped telegraph phrasing.
 - Short replies are fine when the moment is small, but they are still sentences.
 - The 1980s brevity we borrow is about how much a room tells you at once, not about the shape of the sentences.
+- Repeated phrasing is a tic unless it's a refrain on purpose. The one refrain is "not to think about it": the narrator says it when you wake in 1830 and when you walk back out of the fog, and Margaret says it about the clock. They're the two people who have brushed against what really happened, and neither wants to look straight at it. Keep it to them, and don't spend it anywhere else.
 
 ## Progressive Discovery
 - The top-level room description lists only what a visitor would notice first. Further detail is found by examining things.

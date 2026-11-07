@@ -561,3 +561,11 @@ tests:
     steps:
       - setup: {flags: [1830.arrived]}
       - {cmd: ask boys about the crow, expect: the younger boy says, not: Boys says}
+
+  # The one deliberate refrain (interaction-design.md, Prose).
+  - name: Margaret is choosing not to think about the clock, and still is
+    url: scene=museum
+    steps:
+      - setup: {flags: [present.returned, 1830.lease_dixon, known.volunteer, met.volunteer]}
+      - {cmd: look at clock, expect: "I'm choosing not to think about it"}
+      - {cmd: ask margaret about the clock, expect: "I'm still choosing not to think about it"}

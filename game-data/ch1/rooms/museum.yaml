@@ -209,7 +209,7 @@ nouns:
               - if:
                   when: [here:volunteer]
                   do:
-                    - say: "\"It started again this afternoon, all by itself,\" {volunteer} says, not looking at it. \"I've decided it's the humidity.\""
+                    - say: "\"It started again this afternoon, all by itself,\" {volunteer} says, not looking at it. \"I'm choosing not to think about it.\""
 
   desk:
     name: desk
@@ -486,7 +486,8 @@ npcs:
       - keys: [clock, time, wind]
         say:
           - when: [1830.lease_dixon]
-            text: "\"It started again this afternoon, all by itself, and nobody's touched it. I've been very careful not to.\""
+            # The refrain (see interaction-design.md, Prose): "still" because she may have said it already.
+            text: "\"It started again this afternoon, all by itself. I'm still choosing not to think about it.\""
           - text: "\"That clock has been stopped since before I started here. The tape says not to wind it, so I don't.\""
       - keys: [desk, drawer, lock, key, plate, provenance]
         say:
