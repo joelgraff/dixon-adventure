@@ -241,7 +241,7 @@ tests:
     url: scene=landing
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free]}
-      - {cmd: talk to asa, expect: "What I ain't got is a ferry"}
+      - {cmd: talk to asa, expect: "What I need is a ferry"}
       - {cmd: ask agent about asa, expect: reasons to want this boat}
       - {cmd: tell asa about dixon, expect: what he's short of, not: season of crossings}
       - setup: {flags: [1830.dixon_short, known.dixon, met.dixon]}
@@ -374,9 +374,9 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.rope_strung, 1830.wagon_free, known.dixon, met.dixon, 1830.dixon_short]}
       - {cmd: look at big man, expect: pleased with the world}
-      - {cmd: talk to big man, expect: [got me out of that slough, What I ain't got is a ferry]}
+      - {cmd: talk to big man, expect: [got me out of that slough, What I need is a ferry]}
       - {cmd: ask asa about the wagon, expect: thanks to you}
-      - {cmd: thank asa, expect: owes you thanks}
+      - {cmd: thank asa, expect: owes you}
       - {cmd: ask asa about dixon, expect: [season of crossings, Take that up to Dixon]}
       - {cmd: score, expect: Your score is}
 
@@ -675,7 +675,7 @@ tests:
     url: scene=slough
     steps:
       - setup: {flags: [1830.arrived, known.asa, met.asa]}
-      - {cmd: ask asa about the wagon, expect: bar under that axle, not: [willow, setting pole]}
+      - {cmd: ask asa about the wagon, expect: broken bar, not: [willow, setting pole]}
       - {cmd: push wagon, expect: wheels only spin}
       - {cmd: free wagon, expect: nothing long enough for a lever}
       - setup: {flags: [1830.has_pole], items: [phone, pole]}
@@ -786,12 +786,19 @@ tests:
     url: scene=slough
     steps:
       - setup: {flags: [1830.arrived]}
-      - {cmd: talk to big man, expect: [Bar broke an hour back, Dollar besides], not: ["I'll not", "I've a", ought]}
-      - {cmd: ask asa about galena, expect: "Four, five runs a season", not: ["I'll not", "I've a"]}
-      - {cmd: ask asa about eli, expect: never come home}
+      - {cmd: talk to big man, expect: [snapped in two, dollar in it], not: ["I'll not", "I've a", ought]}
+      - {cmd: ask asa about galena, expect: "four or five runs a season", not: ["I'll not", "I've a"]}
+      - {cmd: ask asa about eli, expect: never came home}
 
   - name: a year like '27 keeps its apostrophe
     url: scene=slough
     steps:
       - setup: {flags: [1830.arrived, known.asa, met.asa]}
       - {cmd: ask asa about eli, shows: {"#output": "in ’27"}}
+
+  - name: Asa shows what's wrong rather than explaining it
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to big man, expect: [snapped in two, dollar in it]}
+      - {cmd: look at broken bar, expect: snapped clean in two}

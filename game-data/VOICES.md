@@ -6,7 +6,35 @@ don't have to. Speech should sound like the person: their origin, their work,
 their temper and what they want from you. Two characters should never be
 interchangeable on the page.
 
-Rules for everyone:
+## How dialogue works in this game
+
+A parser game tempts every reply into a little speech that explains the
+situation. Don't let it.
+
+- **Short.** One idea per quote, usually one or two sentences. If there's
+  more to know, it belongs in a topic the player can ask about.
+- **Show the facts, don't say them.** What the player needs comes through
+  what a character does and what's in front of them: Asa nods at the broken
+  bar in the mud, points at his flour, pats the coin in his coat. Nobody
+  explains what the player can see.
+- **Reported speech is rare.** "He tells you his name is Asa" is a last
+  resort, not a habit; a gesture or a short quote nearly always does it
+  better.
+- **Plain words.** A contemporary player should never have to decode a line.
+  One light touch of period or character per line at most ("fella",
+  "ain't"), and no term the narration hasn't already shown.
+- **Distinct by want.** What a character wants from you (the wagon out, the
+  ferry kept, the silver, to be taken seriously) shapes every line, more
+  than any vocabulary.
+
+Example (Asa, once his wagon is out):
+
+> Asa jerks his head at the man on the crate. "That fella means to take the
+> only boat on this river." He points at the flour he's hauling to Galena,
+> then pats his coat, and something heavy inside it clinks. "I've got the
+> silver. What I need is a ferry."
+
+## Rules for everyone
 
 - Voice comes from rhythm, word choice and what a person leaves out. Never
   from respelled dialect ("goin'", "ye", "dat").
@@ -61,20 +89,19 @@ funny thing how none of it is in my pocket today."
 a season. Upland Southern stock, Kentucky by way of southern Illinois. Blunt,
 impatient, fair in a deal, soft about his sister's boy (but he won't say so).
 
-**How he talks:** Short and blunt. Drops the subject when it's obvious ("Got
-flour for Galena." "Bar broke an hour back."). Loose grammar: "ain't", "you
-seen", "them wheels", "never come home". Counts and bargains in plain numbers.
-Calls his wagon "she". Swears offstage (the narrator says so; he doesn't on
-the page).
+**How he talks:** Short and blunt; he'd rather point at a thing than explain
+it. Says what he wants and what it's worth ("Get her out and there's a dollar
+in it."). Plain words, now and then a "fella" or an "ain't". Calls his wagon
+"she". Swears offstage (the narrator says so; he doesn't on the page). Never
+mentions his nephew softly, but goes quiet when he does.
 
-**Uses:** reckon, fixing to, fella, yonder, a sight, plumb, square (for fair),
-"Silver I got."
+**Uses:** fella, square (for fair), plain numbers.
 
 **Never:** "I'll not", "I've a", "ought", "Mind", anything that sounds read
-from a book. No long sentences unless he's angry, and then they run together
-with "and".
+from a book, or dialect a player would have to decode. No long sentences
+unless he's angry.
 
-**Sounds like:** "Silver I got. What I ain't got is a ferry."
+**Sounds like:** "I've got the silver. What I need is a ferry."
 
 ## Eli (Asa's nephew)
 

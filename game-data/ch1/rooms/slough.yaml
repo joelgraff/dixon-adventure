@@ -62,6 +62,14 @@ nouns:
     verbs:
       touch: It's cold, and it doesn't want to let go of your hand.
 
+  bar:
+    name: broken bar
+    when: [not 1830.wagon_free]
+    aliases: [broken bar, his bar, asa's bar, halves, pieces, broken lever]
+    look: "{asa's} bar has snapped clean in two. Both halves lie in the mud beside the wheel, no use to anybody."
+    verbs:
+      take: The pieces are too short to lever anything now.
+
   willows:
     name: willows
     aliases: [willow, brush, saplings, willow brush, willow saplings]
@@ -117,7 +125,7 @@ actions:
           You set the pole under the axle and heave while {asa} hollers the
           oxen up. The wagon lifts a hand's width and the wheels turn, but they
           only spin in the black mud and throw it back at you, with nothing under them to bite on. Then the whole load settles back where it was. {asa} wipes
-          the mud out of one eye and looks over at the [willows]. "She wants something under them wheels," he says. "Good armful of that willow might give her a grip."
+          the mud out of one eye and looks over at the [willows]. "She wants something under those wheels," he says. "Good armful of that willow might give her a grip."
 
   - id: dig_mud
     phrases: [dig in mud, search mud, feel in mud, look in mud, dig, reach into mud, search hole, dig in hole, reach in hole, search hole for shoe, dig for shoe, look for shoe, find shoe, search for shoe, feel in hole, dig in mud for shoe, search mud for shoe, reach into hole, look in hole, dig for iron, search for iron, get shoe, take shoe]

@@ -194,7 +194,7 @@ deaths:
 # down with you and pays the agent (camp.yaml, deliver_silver). Paying the
 # agent yourself puts your name on the lease (landing.yaml, pay_agent).
 deal_text: &deal >-
-  {asa} hears you out with his arms folded, looking from the man on the crate to his wagons to the river. "Season of crossings," he says at last. "Hundred silver now, and my wagons cross free till it's worked off." He counts the coins into a canvas bag, knots it and puts it in your hands. "Take that up to Dixon. I ain't leaving my wagons with that fella sitting there."
+  {asa} hears you out with his arms folded, looking from the man on the crate to his wagons to the river. "Season of crossings," he says at last. "A hundred in silver now, and my wagons cross free till it's worked off." He counts the coins into a canvas bag, knots it and puts it in your hands. "Take that up to Dixon. I'm not leaving my wagons with that fella sitting there."
 deal_do: &deal_do
   - give: silver
   - set: [1830.asa_needs_ferry, known.dixon]
@@ -212,12 +212,12 @@ actions:
             - give: silver
             - set: [1830.asa_needs_ferry, known.dixon]
           else:
-            - say: "\"Dixon? The mail fella, up at the camp? If he means to run her, I want to hear from him what he's short of before I go in my coat.\""
+            - say: "\"Dixon? The mail fella, up at the camp?\" He folds his arms. \"Before I go into my coat, I want to hear from him what he's short of.\""
     else:
       - when: [not here:asa]
         say: There's nobody here who can help with that.
       - when: [has:silver]
-        say: "\"You got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
+        say: "\"You've got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
       - when: [1830.lease_dixon]
         say: It's done, and the lease is in {dixon's} name.
       - say: "{asa} has a wagon in the mud, and that's all the business he means to do today."
@@ -346,65 +346,65 @@ npcs:
     talk:
       - when: [not met.asa, 1830.wagon_free]
         text: >-
-          "Asa. That's my nephew on the wagon tongue yonder, and you're the one got me out of that slough." He jerks his head at the man on the crate. "Got flour for Galena and that fella fixing to take the only boat on the river. Boat goes, I sit on this bank till my flour spoils." He pats his coat, where something heavy chinks. "Silver I got. What I ain't got is a ferry."
+          "Asa," he says, and shakes your hand hard enough to hurt. "You're the one got me out of that slough." He jerks his head at the man on the crate. "That fella means to take the only boat on this river." He points at the flour he's hauling to Galena, then pats his coat, and something heavy inside it clinks. "I've got the silver. What I need is a ferry."
         do: [{set: [known.asa, met.asa, 1830.asa_needs_ferry]}]
       - when: [not met.asa]
         text: >-
-          "Asa." He wipes his hands on his shirt, which only makes them muddier. "Come by the landing? Then you seen my nephew, fretting on a wagon tongue. Bar broke an hour back, and she's in to the hubs. Get her out and I'll owe you. Dollar besides."
+          "Asa," he says, without letting go of the wheel. He nods at a bar lying snapped in two in the mud. "Get her out and there's a dollar in it."
         do: [{set: [known.asa, met.asa]}]
       - when: [1830.wagon_free, not 1830.asa_needs_ferry]
         text: >-
-          "Out of the mud and into this," he says, with a jerk of his head at the man on the crate. "Got flour for Galena and that fella fixing to take the only boat on the river. Boat goes, I sit on this bank till my flour spoils." He pats his coat, where something heavy chinks. "Silver I got. What I ain't got is a ferry."
+          "Out of the mud and into this," he says, with a jerk of his head at the man on the crate. "That fella means to take the only boat on this river." He points at the flour he's hauling to Galena, then pats his coat, and something heavy inside it clinks. "I've got the silver. What I need is a ferry."
         do: [{set: 1830.asa_needs_ferry}]
       - when: [1830.wagon_free]
-        text: "\"I owe you. Don't like owing. Anything you need, say so.\""
+        text: "\"I owe you. Anything you need, say so.\""
       - when: [1830.brush_placed]
-        text: "\"That's the willow under her. Now get something long under that axle, and we'll see.\""
-      - text: "\"Ain't getting any younger. Neither's that wagon.\""
+        text: "\"That's the willow under her. Now something long under that axle.\""
+      - text: "{asa} looks at you, then at the wagon. \"She ain't getting out by herself.\""
     topics:
       - keys: [wagon, wheels, slough, mud, stuck, bar, lever, brush]
         say:
           - when: [1830.wagon_free]
             text: "\"She's out and down at the landing, thanks to you. Next slough I see, I'm going around it.\""
           - when: [1830.brush_placed]
-            text: "\"Willow's under her. Now I want something long under that axle.\""
-          - text: "\"Down to the hubs, and the oxen can't shift her. Had a bar under that axle. Broke an hour back.\""
+            text: "\"Willow's under her. Now something long under that axle.\""
+          - text: "\"Down to the hubs, and the oxen can't shift her.\" He kicks one half of his broken bar further into the mud."
 
       - keys: [galena, diggings, mines, lead, flour, tools]
-        say: "\"Flour and tools for the diggings. Galena merchants pay in silver, so I haul to Galena. Four, five runs a season.\""
+        say: "\"Flour and tools for the diggings. Galena pays in silver, so I haul to Galena, four or five runs a season.\""
       - keys: [agent, rolette, debt, notes, crate, coat]
         say:
           - when: [1830.wagon_free]
-            text: "\"That fella wants a hundred silver or he takes the boat. I got it. But I ain't paying another man's debt for nothing.\" He looks at the ferry. \"Find me the man who means to run her, and we'll talk.\""
-          - text: "\"Got a wagon in the mud. Ferry's troubles'll keep.\""
+            text: "\"That fella wants a hundred in silver or he takes the boat.\" He pats his coat. \"I've got it. But I'm not paying another man's debt for nothing. Find me the man who means to run her, and we'll talk.\""
+          - text: "\"Got a wagon in the mud. The ferry'll keep.\""
       - keys: [silver, money, cash, coin]
-        say: "\"Carry more silver than I like, on this road. Teamster pays in paper, nobody feeds his oxen.\""
+        say: "\"More than I like to carry on this road. Nobody out here takes paper.\""
       - keys: [dixon, lease, deal, hundred, help, crossings, tolls, pay, mail]
         say:
           - when: [1830.lease_dixon]
-            text: "\"Dixon's square to deal with. My wagons cross free till the hundred's worked off.\""
+            text: "\"Dixon's square. My wagons cross free till the hundred's worked off.\""
           - when: [has:silver]
-            text: "\"You got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
+            text: "\"You've got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
           - when: [1830.dixon_short, 1830.wagon_free]
             text: *deal
             do: *deal_do
           - when: [1830.wagon_free]
-            text: "\"Dixon? The mail fella, up at the camp? If he means to run her, I'd want to hear what he's short of.\""
-          - text: "\"Got a wagon in the mud. That's all the business I got today.\""
+            text: "\"Dixon? The mail fella, up at the camp? If he means to run her, I want to hear what he's short of.\""
+          - text: "\"Got a wagon in the mud. That's all the business I've got today.\""
       - keys: [eli, nephew, boy]
-        say: "\"My sister's boy. His pa went with the militia in '27 and never come home.\" He's quiet a moment. \"Told her I'd see him to the diggings and back.\""
+        say: "\"My sister's boy. His pa went with the militia in '27 and never came home.\" He's quiet a moment. \"Told her I'd see him to the diggings and back.\""
       - keys: [ferry, river, crossing, ogee]
         say:
           - when: [1830.rope_strung]
-            text: "\"Ogee's got her going on a rope. Never seen the like. We'll be over by dark.\""
-          - text: "\"Nobody's crossing till the river drops anyhow. Might as well be stuck here as there.\""
-    fallback: "{asa} spits into the mud. \"Couldn't tell you. Ain't got time to find out.\""
+            text: "\"Ogee's got her going on a rope. Never seen the like.\""
+          - text: "\"Nobody's crossing till the river drops anyhow.\""
+    fallback: "{asa} spits into the mud. \"Couldn't tell you.\""
     social:
       hello: "{asa} grunts something that might be a greeting."
       thanks:
         - when: [1830.wagon_free]
-          text: "\"It's me owes you thanks.\""
-        - text: "\"Thank me when she's out of the mud.\""
+          text: "\"It's me owes you.\""
+        - text: "\"Thank me when she's out.\""
       bye: "\"Watch your boots.\""
       how: "\"Muddy. How's it look?\""
       sorry: "\"Nothing to be sorry for.\""
