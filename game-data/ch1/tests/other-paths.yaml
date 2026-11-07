@@ -74,7 +74,7 @@ tests:
     url: scene=slough
     steps:
       - setup: {items: [pole]}
-      - {cmd: lever wagon with pole, expect: Brush under the wheels first, money: 0}
+      - {cmd: lever wagon with pole, expect: [only spin in the black mud, armful of that willow], not: Brush under the wheels, money: 0}
 
   - name: you can't pay the agent yourself
     url: scene=landing
@@ -669,3 +669,13 @@ tests:
       - {cmd: ask ogee for the pole, expect: Take her}
       - {cmd: south, room: cabin}
       - {cmd: north, room: landing, not: setting pole}
+
+  - name: trying the wagon before the brush shows it needs a grip
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived, known.asa, met.asa]}
+      - {cmd: ask asa about the wagon, expect: bar under that axle, not: [willow, setting pole]}
+      - {cmd: push wagon, expect: wheels only spin}
+      - {cmd: free wagon, expect: nothing long enough for a lever}
+      - setup: {flags: [1830.has_pole], items: [phone, pole]}
+      - {cmd: free wagon, expect: [nothing under them to bite on, armful of that willow]}

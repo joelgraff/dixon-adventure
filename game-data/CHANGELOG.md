@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.10 (2026-11-07)
+- Trying to lever Asa's wagon out before there's anything under the wheels now shows you what's wrong: the wheels spin in the mud with nothing to bite on, and Asa suggests an armful of willow might give her a grip. Pushing the wagon shows the same, and 'free wagon' and 'pull wagon out' now work. Asked about the wagon, Asa describes the trouble rather than the fix.
+
 ## 0.14.9 (2026-11-07)
 - Fixed: Ogee's setting pole had dropped out of the landing's description. It now leans against the post at the end of the dock (useless in this water, then forgotten once the rope is across), and once the rope is across it stays in view every time you come back until you borrow it.
 

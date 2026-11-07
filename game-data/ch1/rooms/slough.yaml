@@ -29,6 +29,8 @@ nouns:
         text: In the middle of it a loaded [wagon] sits down to its hubs on willow brush packed under its [wheels], while four [oxen] stand blowing in the traces.
       - text: In the middle of it a loaded [wagon] has gone down to its hubs. Four [oxen] stand blowing in the traces.
     look: The supply wagon is loaded with flour sacks and tools and tilted hard backwards, where the hind wheels have gone into the mud until the axle sits a hand's width below the surface.
+    verbs:
+      push: You put your shoulder to the tailboard while {asa} hollers the oxen up. The wheels only spin, throwing black mud over both of you, and the wagon doesn't move an inch.
 
   wheels:
     name: wheels
@@ -93,7 +95,7 @@ actions:
       - say: You haven't any brush to lay.
 
   - id: lever_wagon
-    phrases: [lever wagon with pole, lever wagon, pry wagon, pry wagon with pole, use pole on wagon, push wagon with pole, lift axle, lever axle, use pole, put pole under axle, lift wagon, use pole on axle, lever axle with pole, put pole under wagon, pry axle, lift wagon with pole, use pole as lever, lever with pole, push pole under axle, pry axle with pole, lever, heave, pry wagon out, lever wagon out, put pole under wheel, use lever]
+    phrases: [lever wagon with pole, lever wagon, pry wagon, pry wagon with pole, use pole on wagon, push wagon with pole, lift axle, lever axle, use pole, put pole under axle, lift wagon, use pole on axle, lever axle with pole, put pole under wagon, pry axle, lift wagon with pole, use pole as lever, lever with pole, push pole under axle, pry axle with pole, lever, heave, pry wagon out, lever wagon out, put pole under wheel, use lever, free wagon, pull wagon out, get wagon out, get wagon unstuck, unstick wagon, help asa, help asa with wagon, move wagon]
     when: [has:pole, 1830.brush_placed, not 1830.wagon_free]
     do:
       - set: [1830.wagon_free, 1830.shoe_lost]
@@ -108,9 +110,17 @@ actions:
     else:
       - when: [1830.wagon_free]
         say: The wagon's already out and gone.
-      - when: [not 1830.brush_placed]
-        say: "{asa} waves you off. \"Brush under the wheels first, or you'll only drive her deeper.\""
-      - say: You've nothing long enough for a lever, and {asa's} own bar lies broken in two pieces in the mud.
+      - when: [not has:pole]
+        say: You've nothing long enough for a lever, and {asa's} own bar lies broken in two pieces in the mud.
+      # The first try shows what's wrong: nothing under the wheels to bite on.
+      - say: >-
+          You set the pole under the axle and heave while {asa} hollers the
+          oxen up. The wagon lifts a hand's width and the wheels turn, but they
+          only spin in the black mud and throw it back at you, with nothing
+          under them to bite on. She settles back where she was. {asa} wipes
+          the mud out of one eye and looks over at the [willows]. "She wants
+          something under those wheels," he says. "A good armful of that willow
+          might give her a grip."
 
   - id: dig_mud
     phrases: [dig in mud, search mud, feel in mud, look in mud, dig, reach into mud, search hole, dig in hole, reach in hole, search hole for shoe, dig for shoe, look for shoe, find shoe, search for shoe, feel in hole, dig in mud for shoe, search mud for shoe, reach into hole, look in hole, dig for iron, search for iron, get shoe, take shoe]
