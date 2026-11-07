@@ -208,8 +208,8 @@ npcs:
           and I was calling for somebody to paddle it across." He tips his head
           at the man in the good coat. "I can't let go of these lines, and I'll
           not step off this dock while that one sits there waiting for me to do
-          it. So it's you, I'm afraid, and I'm sorry for it, with you half
-          drowned. The tar's hot and the oakum's by the pot, and she'll float
+          it. So it's you, I'm afraid. I'm sorry to ask it of somebody I've
+          only just pulled out of the river. The tar's hot and the oakum's by the pot, and she'll float
           once that split is packed. My own
           paddle went off downriver while I was pulling you in, but Madeline
           keeps her father's old one up at the cabin. Ask her nicely."
@@ -301,7 +301,7 @@ npcs:
     when: [not 1830.lease_dixon, not 1830.lease_player]
     room_line:
       - when: [not 1830.dazed]
-        text: "[agent] sits on a [crate] with [papers] folded in his lap, watching the ferry as though he had already counted it."
+        text: "[agent] sits on a [crate] with [papers] folded in his lap, and he watches the ferry as if it were already his."
     look: His coat is well made and muddy to the knee, and he watches {ogee} the way a man watches a horse he means to take.
     talk:
       - when: [not met.agent]

@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.13.2 (2026-11-07)
+- Two landing lines said plainly: the agent watches the ferry as if it were already his, and Ogee is sorry to ask the work of somebody he's only just pulled out of the river.
+
 ## 0.13.1 (2026-11-07)
 - A rewrite of the ferry landing's prose, as a sample of a fuller pass. The room opens on the river instead of a list of objects, and its lines vary their shape and hold on to each other. The agent watches the ferry as though he'd already counted it, and Eli keeps an eye on the trail. Ogee no longer looks at the canoe and then at you, apologizes for putting a half-drowned stranger to work, and coaches you through the tarring. Eli mentions his Pa, and his uncle whistling alarms him. Fewer 'It's a ...' openings, and no more 'the way a man' three times in one room.
 
