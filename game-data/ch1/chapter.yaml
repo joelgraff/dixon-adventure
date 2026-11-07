@@ -457,8 +457,6 @@ hints:
     text: Something went wrong in 1830. Go back to the water's edge, wait for the fog, and cross again.
   - when: [chapter1.done]
     text: Chapter 1 is finished. Margaret's next puzzle is still to come.
-  - when: [present.returned, 1830.lease_dixon, not 1830.key_returned]
-    text: The drawer's key was lost in 1830, at Ogee's cabin. Margaret knows the story. Ask her about the desk.
   - when: [present.returned, 1830.lease_dixon]
     text: Go to the museum and talk to Margaret.
   - when: [in:riverwalk]

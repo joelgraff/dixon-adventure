@@ -63,7 +63,7 @@ tests:
       - {cmd: ask boys about the crow, expect: only up}
       - {cmd: put dollar on chopping block, expect: small brass key, money: 0}
       - {cmd: south, room: camp}
-      - {cmd: give key to james, expect: [Of course it was the crow, Father need never know]}
+      - {cmd: give key to james, expect: Father need never know, not: crow}
       - {cmd: north, room: cabin}
       - {cmd: north, room: landing}
       - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
@@ -94,7 +94,7 @@ tests:
       - {cmd: south, room: street}
       - {cmd: in, room: museum}
       - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 132}
-      - {cmd: ask margaret about the desk, expect: [post office desk, Come back on Saturday]}
-      - {cmd: look at key, expect: [DIXON'S FERRY P.O., It fits]}
-      - {cmd: open drawer, expect: Not tonight}
+      - {cmd: ask margaret about the desk, expect: [post office desk, try it later]}
+      - {cmd: look at key, expect: [DIXON'S FERRY P.O., try it later]}
+      - {cmd: open drawer, expect: try it later}
       - {cmd: score, expect: Your score is 132 of 132}

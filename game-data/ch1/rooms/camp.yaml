@@ -243,7 +243,7 @@ actions:
     do:
       - take: key
       - set: 1830.key_returned
-      - say: "{james} stares at it, and then at you. \"Where did you find it?\" You tell him about the crow, and he laughs out loud for the first time since you've known him. \"Of course it was the crow.\" He threads the string through his buttonhole and pats it twice. \"Father need never know.\""
+      - say: "{james} stares at it, then at you, and lets out a long breath. \"Where did you find it? No, never mind. Thank you.\" He threads the string through his buttonhole and pats it twice. \"Father need never know.\""
     else:
       - when: [not has:key]
         say: You haven't got it.

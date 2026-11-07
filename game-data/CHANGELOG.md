@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.10.2 (2026-11-06)
+- After the repair an old brass key always turns up on Margaret's blotter, and she'll try it in the drawer later; it carries the DIXON'S FERRY P.O. tag only if you got James's key back to him. James no longer mentions the crow, and Margaret no longer tells a story about it or talks about Saturday.
+
 ## 0.10.1 (2026-11-06)
 - The boys' hint about the crow is gentler: just that he's a thief who's always finding something shiny. Asking them about the crow still gets 'He'll trade, but only up.'
 
