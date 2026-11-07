@@ -213,6 +213,9 @@ npcs:
         text: "\"The rope's the thing. Dixon has it, I have the canoe, and the river has opinions about both.\""
       - when: [not 1830.wagon_free]
         text: "\"She runs. I never thought I'd see her pulled across like a bucket on a well rope.\" He nods at the waiting wagons. \"Now if only that train would move.\""
+      - when: [not 1830.lease_dixon, not has:silver]
+        text: "{ogee} nods up the landing at {asa's} wagons, then at the man on the crate. \"That's one train out of the mud, and that one still sitting on my boat. Dixon would have his lease and I'd have my ferry, if he could find a hundred in silver.\" He looks back at the wagons. \"There's silver in this landing somewhere.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
       - text: "\"You've the look of somebody with a question,\" he says. \"Ask it, then.\""
     topics:
       - keys: [river, water, high water, flood, rise, current]
@@ -317,7 +320,7 @@ npcs:
       - keys: [debt, notes, owe, overdue, installment, mortgage, terms, hundred, silver]
         say: "\"Mr. Ogee owes a hundred dollars that fell due in February, and a good deal more after it. A hundred in silver today buys him time. Paper buys him nothing.\""
       - keys: [lease, rent, tolls, lessee]
-        say: "\"If Mr. Ogee leases her to Mr. Dixon, or to any man who can pay, the rent comes to Mr. Rolette, and so much the better for everyone. But the first hundred comes in silver, and it comes today.\""
+        say: "\"If Mr. Ogee leases her to a man who can pay, the rent comes to Mr. Rolette, and so much the better for everyone. But the first hundred comes in silver, and it comes today.\""
       - keys: [rolette, master, employer, prairie du chien, trader]
         say: "\"Mr. Rolette trades out of Prairie du Chien. He's a patient man up to a point, and this is the point.\""
       - keys: [boat, ferry, seize, take, court]
@@ -326,7 +329,6 @@ npcs:
         say: "\"Galena is where the note was recorded, and it's where I'd rather be.\""
       - keys: [dixon, paper, order]
         say: "\"Mr. Dixon has paper, and paper is not silver.\""
-        do: [{set: [1830.dixon_short, heard.dixon]}]
       - keys: [asa, teamster, wagons, freighter]
         say: "\"The teamster? He has silver, I'd guess, and a great many reasons to want this boat where it is.\""
       - keys: [name, who]

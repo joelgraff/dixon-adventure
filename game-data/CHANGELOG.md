@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.16 (2026-11-07)
+- The agent no longer cares who leases the ferry. Instead Ogee raises it himself once Asa's wagon is free: one train out of the mud, the agent still on his boat, and Dixon would have his lease if he could find a hundred in silver, and there's silver in this landing somewhere.
+
 ## 0.14.15 (2026-11-07)
 - Asa, Ogee and the agent now point you to Dixon. Asa will pay, but only to the man who means to run the ferry; Ogee says that's Dixon, and that Dixon is a hundred in silver short; the agent names Dixon as the man who'd lease her. Help follows the main story instead of sending you after James's key, which it mentions only at the camp and the cabin.
 
