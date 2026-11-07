@@ -331,3 +331,12 @@ tests:
       - {cmd: take axe, expect: you could ask, not: work the axe free}
       - {cmd: ask madeline about the axe, expect: Take it if you need it}
       - {cmd: take axe, expect: work the axe free}
+
+  - name: the paddle goes home to Madeline
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, 1830.rope_strung, 1830.has_paddle], items: [phone, paddle]}
+      - {cmd: look, not: hangs on wooden pegs}
+      - {cmd: give the paddle back to madeline, expect: "been on the water again"}
+      - {cmd: inventory, not: paddle}
+      - {cmd: look, expect: hangs on wooden pegs}

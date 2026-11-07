@@ -18,7 +18,7 @@ listen: Someone is splitting kindling with quick, uneven strokes, a woodpecker i
 nouns:
   paddle:
     name: paddle
-    when: [not 1830.has_paddle]
+    when: [not has:paddle]
     aliases: [canoe paddle, spare paddle, ash paddle, oar, pegs, eaves, father's paddle]
     room_line: A canoe [paddle] hangs on wooden pegs under the eaves.
     look: It's a canoe paddle carved from a single piece of ash, longer and narrower than you'd expect, the grip worn dark and smooth by somebody's hands over a lot of years. It hangs on pegs under the eaves, out of the weather, the way you'd keep something you meant to keep.
@@ -181,6 +181,24 @@ actions:
       - when: [has:axe]
         say: You already have it.
       - say: There's nobody here to ask.
+
+  - id: return_paddle
+    speaker: madeline
+    phrases: [return paddle, give paddle to madeline, give madeline paddle, give madeline the paddle, give paddle back, give paddle back to madeline, give back paddle, return paddle to madeline, put paddle back, hang paddle up, hang up paddle, hang paddle on pegs, put paddle on pegs, put paddle back on pegs, give her paddle, give her the paddle, give paddle to woman, give paddle, return oar, give oar to madeline, bring paddle home, give father's paddle back]
+    when: [has:paddle, here:madeline]
+    do:
+      - take: paddle
+      - set: 1830.paddle_returned
+      - if:
+          when: [1830.rope_strung]
+          do:
+            - say: "{madeline} takes it and runs her hand along the blade, where the river has left it dark. \"So it's been on the water again,\" she says, and something in her face softens before she hangs it back on its pegs under the eaves."
+          else:
+            - say: "{madeline} hangs it back on its pegs under the eaves. \"Back so soon? It'll be here if you want it.\""
+    else:
+      - when: [not has:paddle]
+        say: You haven't got it.
+      - say: There's nobody here to give it back to.
 
   - id: return_axe
     phrases: [give axe to madeline, return axe, give madeline axe, put axe back, give back axe, give axe back, give axe back to madeline, return axe to madeline, give axe to woman, put axe in block, give her axe, give her the axe]
