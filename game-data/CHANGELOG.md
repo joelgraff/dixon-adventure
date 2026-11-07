@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.15 (2026-11-07)
+- Asa, Ogee and the agent now point you to Dixon. Asa will pay, but only to the man who means to run the ferry; Ogee says that's Dixon, and that Dixon is a hundred in silver short; the agent names Dixon as the man who'd lease her. Help follows the main story instead of sending you after James's key, which it mentions only at the camp and the cabin.
+
 ## 0.14.14 (2026-11-07)
 - The axe is back in sight, sunk in the chopping block, and stays in view on return visits until you take it. Madeline wants a reason for whichever she lends first, the paddle or the axe: she asks what you want it for and lends it to keep Rolette's man off the ferry; the second she lends without fuss.
 

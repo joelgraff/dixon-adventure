@@ -722,3 +722,14 @@ tests:
       - {cmd: take axe, expect: work the axe free}
       - {cmd: south, room: camp}
       - {cmd: north, room: cabin, not: axe}
+
+  - name: Asa, Ogee and the agent point you to Dixon
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.asa_needs_ferry]}
+      - {cmd: ask asa about the agent, expect: Find me the man who means to run her}
+      - {cmd: ask ogee about asa, expect: who means to run her}
+      - {cmd: ask agent about the lease, expect: leases her to Mr. Dixon}
+      - {cmd: ask ogee about the agent, expect: [Dixon would lease her, Dixon hasn't got it]}
+      - {cmd: help, expect: Tell Asa about Dixon, not: James}
+      - {cmd: tell asa about dixon, expect: Take that up to Dixon}

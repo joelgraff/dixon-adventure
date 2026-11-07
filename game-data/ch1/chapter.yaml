@@ -383,6 +383,11 @@ npcs:
 
       - keys: [galena, diggings, mines, lead, flour, tools]
         say: "\"We're bound for the diggings with flour and tools, and the merchants in Galena pay in silver. I make this run four or five times a season.\""
+      - keys: [agent, rolette, debt, notes, crate, coat]
+        say:
+          - when: [1830.wagon_free]
+            text: "\"That one wants a hundred in silver or he takes the boat. I've the silver, but I'll not pay another man's debt for nothing.\" He looks at the ferry. \"Find me the man who means to run her, and we'll talk.\""
+          - text: "\"I've a wagon in the mud. The ferry's troubles will keep till she's out.\""
       - keys: [silver, money, cash, coin]
         say: "\"I carry silver for the road, more than I like to carry. A teamster who pays in paper doesn't get fed.\""
       - keys: [dixon, lease, deal, hundred, help, crossings, tolls, pay, mail]
@@ -450,9 +455,9 @@ hints:
     text: Lever the wagon out with Ogee's pole.
   - when: [era:1830, has:silver]
     text: Take Asa's silver up to Dixon at the camp, and give it to him. Not to the agent.
-  - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.key_lost]
+  - when: [in:camp, 1830.wagon_free, not 1830.key_returned, not 1830.key_lost]
     text: James Dixon, at the camp, has lost something. Talk to him.
-  - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.crow_traded]
+  - when: [in:cabin, 1830.wagon_free, 1830.key_lost, not 1830.key_returned, not 1830.crow_traded]
     text: The crow on the cabin roof has James's key. The boys say it only trades up, for something shinier. Asa's silver dollar is shiny. Put it on the chopping block.
   - when: [era:1830, has:key]
     text: Give the key back to James at the camp.

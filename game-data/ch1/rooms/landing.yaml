@@ -245,11 +245,21 @@ npcs:
       - keys: [axe, oak, wood, cabin]
         say: "\"There's an axe in the block up by the cabin. Ask Madeline for it; she'll let you have it, and she'll want it back.\""
       - keys: [agent, man, coat, creditor, rolette, debt, debts, notes, owe, money]
-        say: "{ogee's} jaw works for a moment. \"He's come for my creditors. I owe more than this ferry takes in a year, and Rolette holds the paper now, and that man holds it for him.\""
+        say: "{ogee's} jaw works for a moment. \"He's come for my creditors. I owe more than this ferry takes in a year, and Rolette holds the paper now, and that man holds it for him.\" He looks up the trail. \"Dixon would lease her off me and pay it down out of the rent, only that one wants a hundred in silver first, and Dixon hasn't got it.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
+      - keys: [lease, rent, terms, offer, deal]
+        say: "\"Dixon means to lease her off me and pay Rolette out of the rent. It would suit everybody, only Rolette's man wants a hundred in silver first, and Dixon hasn't got it.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
+      - keys: [asa, teamster, freighter, uncle]
+        say:
+          - when: [1830.wagon_free]
+            text: "\"Asa's got silver in his coat and a train that has to cross, and the man on the crate knows it as well as I do. He'll not hand it over for nothing, mind. He'd want to know who means to run her.\""
+          - text: "\"That's the boy's uncle, stuck in the slough with his second wagon. His train won't move without him.\""
       - keys: [schellenger, partner, half]
         say: "\"George Schellenger bought half the ferry off me last fall and wanted out again by winter. Now I owe him more than I sold it for, and he's gone and sold the debt to Rolette.\""
       - keys: [dixon, trader, mail, john]
         say: "\"John Dixon carries the mail up from Peoria. He came to lease the ferry off me and found that one sitting on it.\" He jerks his chin at the agent. \"He's a fair man; he just hasn't any silver.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
       - keys: [madeline, wife, family, sons, boys]
         say: "\"That's Madeline. Her people are Potawatomi, and her father traded on Franklin Creek. It's on her account that nobody burns my boat the way they burned Bogardus's.\""
       - keys: [bogardus]
@@ -307,7 +317,7 @@ npcs:
       - keys: [debt, notes, owe, overdue, installment, mortgage, terms, hundred, silver]
         say: "\"Mr. Ogee owes a hundred dollars that fell due in February, and a good deal more after it. A hundred in silver today buys him time. Paper buys him nothing.\""
       - keys: [lease, rent, tolls, lessee]
-        say: "\"If Mr. Ogee leases her to a man who can pay, the rent comes to Mr. Rolette, and so much the better for everyone. But the first hundred comes in silver, and it comes today.\""
+        say: "\"If Mr. Ogee leases her to Mr. Dixon, or to any man who can pay, the rent comes to Mr. Rolette, and so much the better for everyone. But the first hundred comes in silver, and it comes today.\""
       - keys: [rolette, master, employer, prairie du chien, trader]
         say: "\"Mr. Rolette trades out of Prairie du Chien. He's a patient man up to a point, and this is the point.\""
       - keys: [boat, ferry, seize, take, court]
@@ -316,6 +326,7 @@ npcs:
         say: "\"Galena is where the note was recorded, and it's where I'd rather be.\""
       - keys: [dixon, paper, order]
         say: "\"Mr. Dixon has paper, and paper is not silver.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
       - keys: [asa, teamster, wagons, freighter]
         say: "\"The teamster? He has silver, I'd guess, and a great many reasons to want this boat where it is.\""
       - keys: [name, who]
