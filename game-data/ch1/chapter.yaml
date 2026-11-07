@@ -377,7 +377,7 @@ npcs:
           - when: [1830.wagon_free]
             text: "\"She's out and down at the landing, thanks to you, and she'll stay out of sloughs if I have any say in it.\""
           - when: [1830.brush_placed]
-            text: "\"The brush is under her. Now I want something long under that axle. Ogee's got a setting pole that would do, if he'd part with it.\""
+            text: "\"The brush is under her. Now I want something long under that axle.\""
           - text: "\"She's down to the hubs, and the oxen can't shift her. I had a bar under that axle, but it broke an hour back.\""
 
       - keys: [galena, diggings, mines, lead, flour, tools]

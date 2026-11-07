@@ -679,3 +679,9 @@ tests:
       - {cmd: free wagon, expect: nothing long enough for a lever}
       - setup: {flags: [1830.has_pole], items: [phone, pole]}
       - {cmd: free wagon, expect: [nothing under them to bite on, armful of that willow]}
+
+  - name: Asa wants a lever but doesn't point you at Ogee's pole
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived, known.asa, met.asa, 1830.brush_placed]}
+      - {cmd: ask asa about the wagon, expect: something long under that axle, not: [setting pole, Ogee]}

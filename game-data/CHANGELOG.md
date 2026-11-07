@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.11 (2026-11-07)
+- Asa no longer suggests Ogee's setting pole as the lever; finding something long enough is up to you.
+
 ## 0.14.10 (2026-11-07)
 - Trying to lever Asa's wagon out before there's anything under the wheels now shows you what's wrong: the wheels spin in the mud with nothing to bite on, and Asa suggests an armful of willow might give her a grip. Pushing the wagon shows the same, and 'free wagon' and 'pull wagon out' now work. Asked about the wagon, Asa describes the trouble rather than the fix.
 
