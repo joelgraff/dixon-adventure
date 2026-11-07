@@ -117,6 +117,11 @@ items:
     name: paddle
     aliases: [oar]
     look: "It's {madeline's} father's paddle, one piece of ash, the grip worn dark and smooth by somebody's hands for a long time before yours."
+  silver:
+    era: 1830
+    name: "Asa's silver"
+    aliases: [silver, bag, canvas bag, hundred, dollars, coins, asa's silver, bag of silver]
+    look: "A canvas bag of a hundred silver dollars, knotted at the neck and heavier than it looks. It's {asa's} money, and it's meant for {dixon}."
   key:
     era: 1830
     name: brass key
@@ -173,44 +178,41 @@ deaths:
     out to be exactly as hard as it looked from up there.
 
 # Actions that work in several rooms.
-# The deal: Asa pays Dixon a season of crossings in advance, Dixon pays the
-# agent, and Ogee leases Dixon the ferry. Shared by Asa's topic and the
-# asa_deal action.
+# The deal, in two steps the player plays: Asa buys a season of crossings
+# in advance and hands you the silver to carry (here, shared by Asa's topic
+# and the asa_deal action); you give it to Dixon at the camp, and he walks
+# down with you and pays the agent (camp.yaml, deliver_silver). Paying the
+# agent yourself puts your name on the lease (landing.yaml, pay_agent).
 deal_text: &deal >-
-  {asa} listens to it all with his arms folded, looking at the man on the
-  crate, and at his wagons, and at the river. "A season of crossings," he
-  says at last. "Call it a hundred
-  in silver now, and my wagons cross free till it's worked off." He sends
-  his nephew running up the trail, and before long {dixon} comes down to the
-  landing with him. The two men talk briefly and shake hands, and
-  the silver goes from {asa's} coat to {dixon's} hand and from there to the
-  agent's, who counts it twice and writes it against the February note. Then
-  {ogee} signs the ferry over to {dixon} on a lease, with the rent to go to
-  Rolette, and the agent witnesses it with the look of a man who came to take
-  a boat and is going home with silver instead. A chill comes off the river, and
-  within a few breaths the fog is on you, thick and white and wet. {ogee's}
-  voice comes from close by: "Easy now. Don't go wandering in this. Take my
-  arm."
+  {asa} hears you out with his arms folded, looking from the man on the crate
+  to his wagons to the river. "A season of crossings," he says at last. "Call
+  it a hundred in silver now, and my wagons cross free till it's worked off."
+  He counts the coins into a canvas bag, knots it and puts it in your hands.
+  "Take that up to Dixon. I'll not leave my wagons while that one's sitting
+  there."
 deal_do: &deal_do
-  - set: [1830.asa_needs_ferry, 1830.lease_dixon, 1830.fog, known.dixon]
+  - give: silver
+  - set: [1830.asa_needs_ferry, known.dixon]
 
 actions:
   - id: asa_deal
     speaker: asa
     phrases: [tell asa about dixon, ask asa to help dixon, introduce asa to dixon, ask asa to pay, ask asa for money, ask asa for silver, ask asa for 100, ask asa to pay dixon, tell asa dixon needs silver, tell asa dixon needs money, ask asa to lend dixon money, ask asa to lend dixon silver, tell asa to talk to dixon, ask asa to talk to dixon, ask asa to buy crossings, ask asa about a deal, make a deal, tell asa about the lease, tell asa about lease, ask asa to pay for crossings, ask asa to pay in advance, fetch dixon, get dixon, bring dixon, send for dixon, ask asa to help]
-    when: [here:asa, 1830.wagon_free, not 1830.lease_dixon, not 1830.lease_player]
+    when: [here:asa, 1830.wagon_free, not 1830.lease_dixon, not 1830.lease_player, not has:silver]
     do:
       - if:
           when: [1830.dixon_short]
           do:
-            - set: 1830.asa_needs_ferry
             - say: *deal
-            - set: [1830.asa_needs_ferry, 1830.lease_dixon, 1830.fog, known.dixon]
+            - give: silver
+            - set: [1830.asa_needs_ferry, known.dixon]
           else:
             - say: "\"Dixon? The mail man, up at the camp? If he's the one who means to run her, I'd like to hear from him what he's short of before I put my hand in my coat.\""
     else:
       - when: [not here:asa]
         say: There's nobody here who can help with that.
+      - when: [has:silver]
+        say: "\"You've got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
       - when: [1830.lease_dixon]
         say: It's done, and the lease is in {dixon's} name.
       - say: "{asa} has a wagon in the mud, and that's all the business he means to do today."
@@ -394,6 +396,8 @@ npcs:
         say:
           - when: [1830.lease_dixon]
             text: "\"Dixon's a fair man to do business with. My wagons cross free till the hundred's worked off.\""
+          - when: [has:silver]
+            text: "\"You've got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
           - when: [1830.dixon_short, 1830.wagon_free]
             text: *deal
             do: *deal_do
@@ -451,6 +455,8 @@ hints:
     text: Put the brush under the wagon's wheels.
   - when: [era:1830, not 1830.wagon_free]
     text: Lever the wagon out with Ogee's pole.
+  - when: [era:1830, has:silver]
+    text: Take Asa's silver up to Dixon at the camp, and give it to him. Not to the agent.
   - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.key_lost]
     text: James Dixon, at the camp, has lost something. Talk to him.
   - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.crow_traded]

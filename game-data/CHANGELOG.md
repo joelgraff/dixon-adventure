@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.0 (2026-11-07)
+- The deal is now yours to carry. Tell Asa about Dixon and he counts a hundred in silver into a bag and puts it in your hands; take it up to Dixon at the camp, and he walks down to the landing with you, pays the agent and takes the lease while you watch. Pay the agent yourself and the lease is in your name. The landing shows its major features (the river, the dock, the ferry, the canoe, the wagons and the people), and smaller things like the tar pot turn up when you look closer. Ogee no longer lays out the whole plan: he tells you what's wrong and where the rope is, and leaves the rest to you. Its prose is rewritten sentence by sentence.
+
 ## 0.13.6 (2026-11-07)
 - Margaret is choosing not to think about the clock again, and when you ask, she's still choosing not to. It's a refrain she shares with you (waking in 1830, walking out of the fog), and it stays.
 

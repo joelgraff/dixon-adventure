@@ -239,6 +239,32 @@ actions:
     else:
       - say: You've already got {dixon's} rope.
 
+  - id: deliver_silver
+    speaker: dixon
+    phrases: [give silver to dixon, give dixon silver, give dixon the silver, give bag to dixon, give dixon bag, give dixon the bag, give money to dixon, give dixon money, give asa's silver to dixon, give dixon asa's silver, give bag of silver to dixon, hand silver to dixon, hand dixon silver, hand bag to dixon, give silver to tall man, give silver to him, give him silver, give him the silver, give him bag, give him the bag, show silver to dixon, show dixon silver, show bag to dixon, give 100 to dixon, give dixon 100, pay dixon, give silver, give bag, tell dixon about asa, tell dixon asa will pay]
+    when: [has:silver, here:dixon]
+    do:
+      - take: silver
+      - say: "{dixon} weighs the bag in his hand and looks inside. \"From the teamster? A season of crossings, paid in advance.\" For a moment he only stands there. Then he puts on his hat. \"Well. Let's not keep Rolette's man waiting.\""
+      - say: You walk down to the river together, past the cabin and down the path, and he doesn't say another word the whole way.
+      - move: landing
+      - say: >-
+          {dixon} counts the hundred out onto the agent's papers. The agent
+          counts it again and writes it against the February note. Then {ogee}
+          signs the ferry over to {dixon} on a lease, with the rent to go to
+          Rolette, and the agent witnesses it with the look of a man who came to
+          take a boat and is going home with silver instead. Over by his wagons,
+          {asa} lifts a hand to you.
+      - say: >-
+          A chill comes off the river. Within a few breaths the fog is on you,
+          thick and white and wet, and {ogee's} voice comes from close by:
+          "Easy now. Don't go wandering in this. Take my arm."
+      - set: [1830.lease_dixon, 1830.fog, known.dixon]
+    else:
+      - when: [not has:silver]
+        say: You haven't any silver to give.
+      - say: There's nobody here to give it to.
+
   - id: return_key
     speaker: james
     phrases: [give key to james, give james key, give james the key, return key, return key to james, give key back, give key back to james, give back key, give key, give mail key to james, give james mail key, give key to young man, give him key, give him the key, show key to james, show james key, hand key to james]

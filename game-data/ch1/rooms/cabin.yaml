@@ -195,6 +195,8 @@ actions:
     else:
       - when: [1830.crow_traded]
         say: The crow has what it wants, and so do you.
+      - when: [has:silver]
+        say: "{asa's} silver is spoken for. The crow will have to want something else."
       - say: You've nothing shiny to offer it. The crow seems to know that.
 
   - id: borrow_paddle

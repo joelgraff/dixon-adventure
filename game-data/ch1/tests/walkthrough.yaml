@@ -22,7 +22,7 @@ tests:
       - {cmd: look at ridges, expect: [grooves, street fades]}
       - {cmd: look at water, expect: [planks, city is simply gone, handle a canoe], score: 13}
       - {cmd: answer, expect: [The ferry landing, 1830], score: 18, room: landing}
-      - {cmd: look, expect: [Sit a moment, world comes back, tar pot]}
+      - {cmd: look, expect: [Sit a moment, world comes back, split and still draining], not: tar pot}
       # Part 2: the high water and the rope
       - {cmd: talk to man in buckskin, expect: [Joseph Ogee, River's up past the pole, Dixon], score: 21}
       - {cmd: look at man in coat, expect: horse he means to take}
@@ -39,8 +39,9 @@ tests:
       - {cmd: ask dixon for rope, expect: Dixon says}
       - {cmd: north, room: cabin}
       - {cmd: north, room: landing}
+      - {cmd: look at canoe, expect: tar pot}
       - {cmd: tar canoe, expect: tar}
-      - {cmd: launch canoe, expect: [paying out the coil, north landing], room: northlanding}
+      - {cmd: launch canoe, expect: [pay out the coil, north landing], room: northlanding}
       - {cmd: tie rope to post, expect: "Dixon's rope"}
       # Part 3: the slough
       - {cmd: ride ferry, room: landing}
@@ -70,7 +71,10 @@ tests:
       - {cmd: north, room: landing}
       - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
       - {cmd: give shoe to ogee, expect: Smith made that}
-      - {cmd: tell asa about dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm], room: landing}
+      - {cmd: tell asa about dixon, expect: [season of crossings, Take that up to Dixon], room: landing}
+      - {cmd: south, room: cabin}
+      - {cmd: south, room: camp}
+      - {cmd: give silver to dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm], room: landing}
       - {cmd: south, expect: fog is too thick, room: landing}
       - {cmd: "take ogee's arm", expect: city sounds come back, room: wateredge}
       # Part 5: home, noticing what changed (2 points each), Margaret last
