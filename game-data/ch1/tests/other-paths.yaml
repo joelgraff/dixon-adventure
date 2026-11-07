@@ -183,7 +183,7 @@ tests:
     steps:
       - setup: {flags: [1830.arrived]}
       - {cmd: take axe, expect: [That's ours, you could ask], not: work the axe free}
-      - {cmd: ask woman for axe, expect: Take it if you need it}
+      - {cmd: ask woman for axe, expect: [What do you want with an axe, Take it, then]}
       - {cmd: take axe, expect: work the axe free}
       - {cmd: use axe on oak, expect: gets you nothing}
       - {cmd: return axe, expect: You hand the axe back}
@@ -331,7 +331,7 @@ tests:
       - setup: {flags: [1830.arrived]}
       - {cmd: talk to woman, expect: Madeline Ogee, not: axe}
       - {cmd: take axe, expect: you could ask, not: work the axe free}
-      - {cmd: ask madeline about the axe, expect: Take it if you need it}
+      - {cmd: ask madeline about the axe, expect: [What do you want with an axe, Take it, then]}
       - {cmd: take axe, expect: work the axe free}
 
   - name: the paddle goes home to Madeline
@@ -527,8 +527,9 @@ tests:
     steps:
       - setup: {flags: [1830.arrived]}
       - {cmd: south, room: camp, expect: canvas-topped wagon}
-      - {cmd: north, room: cabin, expect: [Smoke still threads up, woman in the dark shawl and the boys are still here], not: [One long log cabin fills, chopping block]}
-      - {cmd: look, expect: [One long log cabin fills, crow, two boys split kindling by the chopping block], not: An axe is sunk}
+      - {cmd: north, room: cabin, expect: [Smoke still threads up, woman in the dark shawl and the boys are still here], not: One long log cabin fills}
+      - {cmd: look at block, expect: An axe is sunk in it}
+      - {cmd: look, expect: [One long log cabin fills, crow, An axe is sunk in the chopping block, two boys split kindling by the woodpile]}
 
   - name: a return visit shows what changed since you were last there
     url: scene=cabin
@@ -694,3 +695,30 @@ tests:
       - {cmd: inventory, expect: bundle of willow branches, not: brush}
       - {cmd: put branches under wheels, expect: Now the lever}
       - {cmd: look, expect: willow branches packed under its wheels, not: brush}
+
+  # Madeline wants a reason once: for whichever she lends first.
+  - name: Madeline asks why for the paddle, then lends the axe without fuss
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
+      - {cmd: look, expect: An axe is sunk in the chopping block}
+      - {cmd: ask madeline for paddle, expect: [What do you want with it, keeps that man off the ferry]}
+      - {cmd: ask madeline for axe, expect: "Take it. Just bring it back", not: What do you want}
+
+  - name: Madeline asks why for the axe, then lends the paddle without fuss
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
+      - {cmd: ask madeline for axe, expect: [What do you want with an axe, Take it, then]}
+      - {cmd: ask madeline for paddle, expect: [That was my father's, Mind you bring it home], not: What do you want}
+
+  - name: the axe stays in view on return visits until you take it
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
+      - {cmd: south, room: camp}
+      - {cmd: north, room: cabin, expect: An axe is sunk in the chopping block}
+      - {cmd: ask madeline for axe}
+      - {cmd: take axe, expect: work the axe free}
+      - {cmd: south, room: camp}
+      - {cmd: north, room: cabin, not: axe}

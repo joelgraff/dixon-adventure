@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.14 (2026-11-07)
+- The axe is back in sight, sunk in the chopping block, and stays in view on return visits until you take it. Madeline wants a reason for whichever she lends first, the paddle or the axe: she asks what you want it for and lends it to keep Rolette's man off the ferry; the second she lends without fuss.
+
 ## 0.14.13 (2026-11-07)
 - When the lever fails, the narration says the whole load settles back, rather than calling the wagon 'she'; Asa still does.
 

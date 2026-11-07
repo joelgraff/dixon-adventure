@@ -83,6 +83,10 @@ nouns:
   block:
     name: chopping block
     aliases: [chopping block, stump, split oak, oak, stack, woodpile, wood]
+    room_line:
+      - when: [not 1830.has_axe]
+        text: An [axe] is sunk in the chopping [block] beside a stack of split oak.
+    always: [not 1830.has_axe, not 1830.axe_returned]   # you'll need it, so return visits show it
     look:
       - when: [1830.has_axe]
         text: The block is an old stump worn smooth on top by years of axes, with no axe in it now. Beside it, someone has stacked enough split white oak to last the summer.
@@ -118,7 +122,7 @@ npcs:
     unknown: a woman in a dark shawl
     ref: the woman in the shawl
     aliases: [madeline, woman, wife, madeline ogee, mrs. ogee]
-    room_line: "[madeline] waits in the west doorway with a basket of mending on her hip, while two [boys|boys] split kindling by the chopping [block]."
+    room_line: "[madeline] waits in the west doorway with a basket of mending on her hip, while two [boys|boys] split kindling by the [block|woodpile]."
     look: She wears a dark dress and a shawl, with her sleeves pushed up from work. She hasn't taken her eyes off you since you came into the clearing.
     talk:
       - when: [not met.madeline]
@@ -142,14 +146,20 @@ npcs:
         say:
           - when: [has:paddle]
             text: "\"Bring it home when you're done with it.\""
-          - text: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
+          - when: [1830.madeline_told]
+            text: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs. \"Mind you bring it home.\""
             do: [{give: paddle}, {set: 1830.has_paddle}]
+          - text: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
+            do: [{give: paddle}, {set: [1830.has_paddle, 1830.madeline_told]}]
       - keys: [axe, borrow, chopping, block]
         say:
           - when: [has:axe]
             text: "\"You've got it. Just bring it back when you're done.\""
-          - text: "\"Take it if you need it. Just bring it back.\""
+          - when: [1830.madeline_told]
+            text: "\"Take it. Just bring it back.\""
             do: [{set: 1830.axe_ok}]
+          - text: "\"What do you want with an axe?\" You tell her you're helping her husband keep the ferry, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"Take it, then,\" she says at last. \"Just bring it back.\""
+            do: [{set: [1830.axe_ok, 1830.madeline_told]}]
     fallback: "{madeline} only shakes her head; it isn't something she means to discuss with a stranger."
     social:
       hello: "{madeline} nods to you from the doorway."
@@ -206,7 +216,14 @@ actions:
     do:
       - give: paddle
       - set: 1830.has_paddle
-      - say: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
+      # Whichever she lends first, the paddle or the axe, she wants to know why.
+      - if:
+          when: [1830.madeline_told]
+          do:
+            - say: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs. \"Mind you bring it home.\""
+          else:
+            - say: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
+            - set: 1830.madeline_told
     else:
       - when: [has:paddle]
         say: You already have the paddle.
@@ -231,7 +248,13 @@ actions:
     when: [here:madeline, not has:axe]
     do:
       - set: 1830.axe_ok
-      - say: "\"Take it if you need it. Just bring it back.\""
+      - if:
+          when: [1830.madeline_told]
+          do:
+            - say: "\"Take it. Just bring it back.\""
+          else:
+            - say: "\"What do you want with an axe?\" You tell her you're helping her husband keep the ferry, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"Take it, then,\" she says at last. \"Just bring it back.\""
+            - set: 1830.madeline_told
     else:
       - when: [has:axe]
         say: You already have it.

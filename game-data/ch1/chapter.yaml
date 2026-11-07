@@ -21,6 +21,7 @@ flags:
   1830.arrived:            {score: 5, desc: Answered the voice}
   1830.met_ogee:           {score: 3, desc: Heard from Ogee why he can't cross}
   1830.has_rope:           {score: 3, desc: Got the rope from Dixon}
+  1830.madeline_told:      {desc: Told Madeline what you're borrowing her things for}
   1830.has_axe:            {score: 1, desc: Took the axe}
   1830.has_paddle:         {score: 4, desc: Borrowed Madeline's father's paddle}
   1830.paddle_returned:    {score: 2, desc: Gave the paddle back to Madeline}
