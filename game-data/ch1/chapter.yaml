@@ -77,6 +77,15 @@ vars:
 start_items: [phone]
 start_money: 0
 
+# The silver in your pocket (money), lookable whenever you have any.
+money_item:
+  name: silver dollar
+  aliases: [dollar, coin, money, silver, asa's dollar, asa's silver dollar]
+  look: "{asa's} silver dollar is heavy for its size and worn smooth at the rim, and it's bright where somebody's thumb has rubbed it. It catches the light whichever way you turn it."
+  verbs:
+    taste: "It tastes of metal and of {asa's} pocket."
+    take: It's already in your pocket.
+
 items:
   phone:
     name: phone

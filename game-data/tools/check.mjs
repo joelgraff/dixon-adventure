@@ -261,8 +261,8 @@ for (const ch of chapterDirs) {
   const chWhere = `${ch}/chapter.yaml`;
   if (!rooms[chapter.start]) err(chWhere, `start room "${chapter.start}" not found`);
   for (const i of asList(chapter.start_items)) if (!items[i]) err(chWhere, `start item "${i}" not defined`);
-  walk({ vars: chapter.vars, items: chapter.items, fog_lock: chapter.fog_lock, actions: chapter.actions, hints: chapter.hints }, chWhere, null, (s, w) => checkMarkup(s, w, null));
-  lintNames({ items: chapter.items, actions: chapter.actions, fog_lock: chapter.fog_lock, deaths: chapter.deaths, veil: chapter.veil, npcs: chapterNpcs }, chWhere, []);
+  walk({ vars: chapter.vars, items: chapter.items, money_item: chapter.money_item, fog_lock: chapter.fog_lock, actions: chapter.actions, hints: chapter.hints }, chWhere, null, (s, w) => checkMarkup(s, w, null));
+  lintNames({ items: chapter.items, money_item: chapter.money_item, actions: chapter.actions, fog_lock: chapter.fog_lock, deaths: chapter.deaths, veil: chapter.veil, npcs: chapterNpcs }, chWhere, []);
   for (const [nid, npc] of Object.entries(chapterNpcs)) {
     checkIntro(npc, `${chWhere} npcs.${nid}`);
     counts.npcs++;

@@ -293,6 +293,8 @@ several rooms (following Ogee home, swimming).
 ## Chapter
 
 `chapter.yaml` holds the chapter's id and title, the start room, `max_score`,
+`money_item` (how the silver in your pocket looks and answers to verbs; it is
+something you carry whenever `money` is above 0),
 the scoring flags, `vars`, `items` (an item with `era: 1830` is removed by a
 rewind), `deaths`, the fog lock (exits blocked and a line added to every 1830
 room while it holds), chapter-wide actions, and `npcs` who move between rooms.

@@ -316,6 +316,9 @@ function candidates() {
     const it = CH.items[id];
     list.push({ kind: 'item', id, def: it, name: it.name, labels: [id, it.name, ...L(it.aliases)] });
   }
+  // Silver in your pocket is something you carry too (chapter.yaml `money_item`).
+  const coin = CH.money_item;
+  if (coin && S.money > 0) list.push({ kind: 'item', id: 'money', def: coin, name: coin.name, labels: [coin.name, ...L(coin.aliases)] });
   return list.map(c => ({ ...c, labels: c.labels.filter(Boolean).map(norm) }));
 }
 function cleanNoun(t) {
@@ -898,7 +901,12 @@ function renderInventory() {
   if (!items.length && !S.money) html += '<div class="empty">Nothing at all.</div>';
   else {
     html += '<ul>' + items.map(it => `<li><button class="item" data-look="${esc(it.name)}">${esc(cap(it.name))}</button></li>`).join('');
-    if (S.money) html += `<li class="silver">$${S.money} in silver</li>`;
+    if (S.money) {
+      const silver = `$${S.money} in silver`;
+      html += CH.money_item
+        ? `<li class="silver"><button class="item" data-look="${esc(CH.money_item.name)}">${silver}</button></li>`
+        : `<li class="silver">${silver}</li>`;
+    }
     html += '</ul>';
   }
   panel.innerHTML = html;

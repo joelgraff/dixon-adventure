@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.19 (2026-11-07)
+- The silver dollar in your pocket is something you can look at anywhere (look at dollar, x coin), and the silver in the inventory panel can be clicked like any other item.
+
 ## 0.14.18 (2026-11-07)
 - More ways to show the crow the silver dollar: use it, put or set it down or out, shine or polish it, hold it in the light, put it where the crow can see it, and 'bird' works wherever 'crow' does. The dollar now catches the light on the chopping block.
 

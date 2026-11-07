@@ -753,3 +753,14 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, 1830.wagon_free, 1830.key_lost], money: 1}
       - {cmd: use silver, expect: small brass key, money: 0}
+
+  - name: the silver dollar is something you can look at, wherever you are
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: look at dollar, expect: "You don't see that here"}
+      - setup: {money: 1}
+      - {cmd: look at dollar, expect: [heavy for its size, catches the light]}
+      - {cmd: x coin, expect: worn smooth at the rim}
+      - {cmd: take dollar, expect: already in your pocket}
+      - {click: "#inventory button[data-look='silver dollar']", shows: {"#output": "catches the light"}}
