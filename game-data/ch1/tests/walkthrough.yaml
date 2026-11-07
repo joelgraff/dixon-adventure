@@ -59,7 +59,8 @@ tests:
       - {cmd: talk to young man, expect: [I'm James, lost the mail key]}
       - {cmd: north, room: cabin}
       - {cmd: look at crow, expect: winks in the light}
-      - {cmd: talk to boys, expect: [He's a thief, something shinier]}
+      - {cmd: talk to boys, expect: [He's a thief, something shiny], not: shinier}
+      - {cmd: ask boys about the crow, expect: only up}
       - {cmd: put dollar on chopping block, expect: small brass key, money: 0}
       - {cmd: south, room: camp}
       - {cmd: give key to james, expect: [Of course it was the crow, Father need never know]}

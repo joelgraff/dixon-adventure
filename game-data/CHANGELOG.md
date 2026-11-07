@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.10.1 (2026-11-06)
+- The boys' hint about the crow is gentler: just that he's a thief who's always finding something shiny. Asking them about the crow still gets 'He'll trade, but only up.'
+
 ## 0.10.0 (2026-11-06)
 - The mail key: James has lost the post office mail key at Ogee's chopping block, and a crow on the cabin roof has it. The boys say it only trades up, for something shinier; set Asa's silver dollar on the chopping block and the crow swaps. Give the key back to James (10 points in all). In the present, the key turns up on Margaret's desk tagged DIXON'S FERRY P.O. and fits the locked drawer, which she'll open with you on Saturday (chapter 2). Without it, she tells the family story of the crow. Chapter 1 is out of 132. 'Dollar' is no longer dropped from what you type.
 

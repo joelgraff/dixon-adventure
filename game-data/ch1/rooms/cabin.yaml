@@ -163,7 +163,7 @@ npcs:
     look: Two boys are splitting kindling with a hatchet and more enthusiasm than skill. They stop to watch you, then pretend they weren't watching at all.
     talk:
       - when: [not 1830.crow_traded]
-        text: "The older boy jerks his chin at the roof. \"He's a thief, that one. He's always finding something shiny, and you never get it back unless you give him something shinier.\" The younger one nods hard."
+        text: "The older boy jerks his chin at the roof. \"He's a thief, that one. He's always finding something shiny.\" The younger one nods hard."
       - text: The boys look at each other and say nothing, though one of them can't quite hide a grin.
     topics:
       - keys: [crow, bird, thief, shiny, key, roof]
