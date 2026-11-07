@@ -35,8 +35,8 @@ flags:
   1830.rope_strung:        {score: 7, desc: Tied the rope on the north bank}
   1830.met_eli:            {score: 2, desc: Talked to Eli about his uncle}
   1830.has_pole:           {score: 3, desc: Borrowed Ogee's setting pole}
-  1830.has_brush:          {score: 4, desc: Cut brush}
-  1830.brush_placed:       {desc: Brush is under the wheels}
+  1830.has_brush:          {score: 4, desc: Cut willow branches}
+  1830.brush_placed:       {desc: Willow branches are under the wheels}
   1830.wagon_free:         {score: 10, desc: Freed Asa's wagon}
   1830.shoe_lost:          {desc: The pole shoe is in the mud}
   1830.dixon_short:        {score: 4, desc: Learned Dixon has no silver for the overdue hundred}
@@ -137,9 +137,9 @@ items:
       - text: "{ogee's} ash setting pole is long and heavy, shod at the foot with a cone of forged iron."
   brush:
     era: 1830
-    name: bundle of brush
-    aliases: [brush, willow, willows, bundle]
-    look: It's an armful of willow, cut and bundled together.
+    name: bundle of willow branches
+    aliases: [brush, willow, willows, bundle, branches, willow branches]
+    look: It's an armful of willow branches, cut and bundled together.
   shoe:
     era: 1830
     name: pole shoe
@@ -369,7 +369,7 @@ npcs:
       - when: [1830.wagon_free]
         text: "\"I owe you, and I don't like owing. If there's anything I can do, say so.\""
       - when: [1830.brush_placed]
-        text: "\"The brush is down. Now get something long under that axle.\""
+        text: "\"That's the willow under her. Now get something long under that axle.\""
       - text: "\"I'm not getting any younger, and neither is that wagon.\""
     topics:
       - keys: [wagon, wheels, slough, mud, stuck, bar, lever, brush]
@@ -377,7 +377,7 @@ npcs:
           - when: [1830.wagon_free]
             text: "\"She's out and down at the landing, thanks to you, and she'll stay out of sloughs if I have any say in it.\""
           - when: [1830.brush_placed]
-            text: "\"The brush is under her. Now I want something long under that axle.\""
+            text: "\"The willow's under her. Now I want something long under that axle.\""
           - text: "\"She's down to the hubs, and the oxen can't shift her. I had a bar under that axle, but it broke an hour back.\""
 
       - keys: [galena, diggings, mines, lead, flour, tools]
@@ -438,13 +438,13 @@ hints:
   - when: [era:1830, not 1830.rope_strung]
     text: Launch the canoe at the landing, then tie the rope to the post on the far bank.
   - when: [era:1830, not 1830.wagon_free, not has:pole]
-    text: Eli's uncle Asa is stuck in the slough, south past Dixon's camp. He needs brush under the wheels and something long to lever with. Ask Ogee for his setting pole.
+    text: Eli's uncle Asa is stuck in the slough, south past Dixon's camp. He needs something under the wheels for grip and something long to lever with. Ask Ogee for his setting pole.
   - when: [era:1830, not 1830.wagon_free, not 1830.brush_placed, not has:brush, not has:axe]
-    text: You'll need an axe to cut willow brush. There's one in the chopping block at the cabin, if you ask Madeline for it.
+    text: You'll need an axe to cut willow branches. There's one in the chopping block at the cabin, if you ask Madeline for it.
   - when: [era:1830, not 1830.wagon_free, not 1830.brush_placed, not has:brush]
-    text: At the slough, cut willow brush with the axe.
+    text: At the slough, cut willow branches with the axe.
   - when: [era:1830, not 1830.wagon_free, not 1830.brush_placed]
-    text: Put the brush under the wagon's wheels.
+    text: Put the willow branches under the wagon's wheels.
   - when: [era:1830, not 1830.wagon_free]
     text: Lever the wagon out with Ogee's pole.
   - when: [era:1830, has:silver]

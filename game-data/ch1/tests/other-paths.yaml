@@ -231,9 +231,9 @@ tests:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.rope_strung], items: [axe]}
       - {cmd: help, expect: Ask Ogee for his setting pole}
       - setup: {items: [axe, pole]}
-      - {cmd: help, expect: cut willow brush, not: Ask Ogee}
+      - {cmd: help, expect: cut willow branches, not: Ask Ogee}
       - {cmd: cut brush, expect: willow}
-      - {cmd: help, expect: Put the brush under}
+      - {cmd: help, expect: Put the willow branches under}
       - {cmd: put brush under wheels, expect: Now the lever}
       - {cmd: help, expect: Lever the wagon out}
 
@@ -384,8 +384,8 @@ tests:
     url: scene=slough
     steps:
       - setup: {flags: [1830.arrived, known.asa, met.asa, 1830.brush_placed]}
-      - {cmd: talk to asa, expect: The brush is down}
-      - {cmd: ask asa about the wheels, expect: The brush is under her}
+      - {cmd: talk to asa, expect: "That's the willow under her"}
+      - {cmd: ask asa about the wheels, expect: "The willow's under her"}
 
   - name: Madeline's axe line once you have it
     url: scene=cabin
@@ -685,3 +685,12 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.asa, met.asa, 1830.brush_placed]}
       - {cmd: ask asa about the wagon, expect: something long under that axle, not: [setting pole, Ogee]}
+
+  - name: the willow is called branches, and branches work as a word
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived, known.asa, met.asa, 1830.has_axe], items: [phone, axe]}
+      - {cmd: cut branches, expect: armful of willow}
+      - {cmd: inventory, expect: bundle of willow branches, not: brush}
+      - {cmd: put branches under wheels, expect: Now the lever}
+      - {cmd: look, expect: willow branches packed under its wheels, not: brush}
