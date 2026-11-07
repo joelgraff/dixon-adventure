@@ -26,7 +26,7 @@ const src = load(path.join(root, 'sources.yaml')) || {};
 const chapterDirs = fs.readdirSync(root).filter(d => /^ch\d+$/.test(d));
 
 const COND_RE = /^(money|score|turns|n)\s*(>=|<=|==|>|<)\s*(-?\d+)$/;
-const EFFECTS = new Set(['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'if']);
+const EFFECTS = new Set(['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'end', 'if']);
 const BUILTIN_VARS = new Set(['money', 'score', 'max_score', 'picked', 'n']);
 const asList = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
 

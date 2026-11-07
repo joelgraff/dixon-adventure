@@ -45,6 +45,7 @@ flags:
   1830.shoe_returned:      {score: 8, desc: Returned the pole shoe to Ogee}
   1830.fog:                {desc: The chapter-end fog has come in}
   chapter1.done:           {score: 4, desc: Talked to Margaret after the repair}
+  chapter1.ended:          {desc: Left the museum with Margaret; the chapter is over}
   present.noticed_panel:   {score: 2, desc: Noticed the change to the panel}
   present.noticed_shoe:    {score: 2, desc: Noticed the pole shoe on the pedestal}
   present.noticed_token:   {score: 2, desc: Noticed the change to the token}
@@ -138,6 +139,13 @@ items:
     name: pole shoe
     aliases: [shoe, iron shoe, pole shoe, iron]
     look: It's a cone of forged iron, dented on one side and caked with mud.
+# The end of the chapter: once `when` holds, every command but the meta ones
+# (help, save, restore, restart, version, tour, score) gets `blocked`.
+ending:
+  when: [chapter1.ended]
+  title: "The end of Chapter 1"
+  blocked: "Margaret has locked up and gone home, and chapter 1 is over. Type restart to play again, or restore to load a saved game."
+
 # The chapter-end fog: while it holds, every exit in an 1830 room is blocked
 # and the room_line is added to every 1830 room description.
 fog_lock:

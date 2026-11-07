@@ -421,7 +421,8 @@ npcs:
           feeling the next puzzle won't be so easy." She looks at the clock,
           which is ticking now, and starts gathering her things. "I've got to
           close up and get home, but come back next Saturday, will you? I'll
-          wait for you, and we'll try that old key in the drawer together."
+          wait for you, and we'll try that old key in the drawer together." She
+          nods at the room. "I'll be a few minutes yet, so take your time."
         do: [{set: chapter1.done}]
       - when: [1830.lease_player]
         text: >-
@@ -521,7 +522,25 @@ npcs:
         text: "You nod to {volunteer} on your way out. \"Take care out there,\" she says, still watching the panel."
       - text: "You thank {volunteer} and say you'll be back. \"Do come again,\" she says, pencil already moving. \"And mind the fog, it comes up quick.\""
 
+actions:
+  - id: close_up
+    phrases: [leave museum, go home, walk home, say goodnight, say good night, help margaret close up, close up, help close up]
+    when: [chapter1.done]
+    do:
+      - set: chapter1.ended
+      - say: >-
+          You hold the door while {volunteer} switches off the fluorescents one
+          bank at a time. She locks up behind you, tries the handle twice, and
+          tells you goodnight, and then she walks off up Fifth Street with her
+          coat collar turned up against the river damp. The street is quiet.
+          Behind you, in the dark front room, the schoolhouse clock is ticking.
+      - end: true
+    else:
+      - say: "{volunteer} is here till closing, and you've nowhere you need to be just yet."
+
 exits:
   - names: [outside, out, door, street, leave, exit]
     to: street
+    action: close_up           # once the chapter is done, leaving ends it
+    action_when: [chapter1.done]
     text: You step through the propped door and out onto the sidewalk, and the hum of the fluorescents fades behind you.

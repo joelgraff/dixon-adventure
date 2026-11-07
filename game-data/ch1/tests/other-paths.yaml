@@ -420,3 +420,19 @@ tests:
       - {cmd: look, expect: An old brass key lies on the blotter, not: paper tag}
       - {cmd: look at key, expect: no tag, not: "DIXON'S FERRY P.O."}
       - {cmd: ask margaret about the desk, expect: next Saturday, not: crow}
+
+  - name: leaving after Margaret closes up ends the game
+    url: scene=museum
+    steps:
+      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer, chapter1.done]}
+      - {cmd: out, expect: [locks up behind you, The end of Chapter 1, Final score], room: museum}
+      - {cmd: look, expect: chapter 1 is over}
+      - {cmd: north, expect: chapter 1 is over}
+      - {cmd: score, expect: Your score is}
+      - {cmd: restart, expect: Restart from the beginning}
+
+  - name: before Margaret closes up, leaving is just leaving
+    url: scene=museum
+    steps:
+      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer]}
+      - {cmd: out, room: street, not: The end of Chapter 1}

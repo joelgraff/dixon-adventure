@@ -107,6 +107,7 @@ A list of one-key maps, run in order.
 | `say: text` | print a line (text variants allowed) |
 | `move: room` | go to a room (no farewell lines) |
 | `death: id` | show that death and the Restore / Restart / Retry prompt |
+| `end: true` | show the chapter's `ending` screen; from then on only meta commands work |
 | `leave_behind: 1830` | drop every 1830 item and all money (the fog lets nothing through) |
 | `rewind: 1830` | clear every `1830.` flag and 1830 item, set money to 0, take back their points |
 | `if: {when: [...], do: [...], else: [...]}` | conditional effects (`else` optional) |
@@ -305,3 +306,22 @@ counts.
 
 NPCs can be typed by their `ref` as well as their `unknown` description, since
 narration uses it.
+
+## The end of a chapter (chapter.yaml `ending`)
+
+```yaml
+ending:
+  when: [chapter1.ended]      # once this holds, the chapter is over
+  title: "The end of Chapter 1"
+  blocked: "...Type restart to play again, or restore to load a saved game."
+```
+
+An action with `end: true` shows the title and the final score. After that,
+every command except help, save, restore, restart, version, tour and score gets
+`blocked`. In chapter 1, leaving the museum after Margaret's closing talk runs
+`close_up`, which ends the game.
+
+An exit can run an action instead of moving: `action: <id>` runs while
+`action_when` holds (or the exit's `when`, if the exit has no `to`), and
+otherwise the exit moves as usual.
+

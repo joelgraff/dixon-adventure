@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.11.0 (2026-11-06)
+- The game now ends: after Margaret's closing talk she says to take your time, and when you leave the museum she locks up, says goodnight and heads home, and the chapter ends with your final score. After that only restart, restore and the other meta commands work.
+
 ## 0.10.3 (2026-11-06)
 - Chapter 1 ends with Margaret closing up for the night: she asks you to come back next Saturday, and she'll wait for you to try the old key in the drawer together.
 

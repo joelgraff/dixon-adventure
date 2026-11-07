@@ -71,30 +71,28 @@ tests:
       - {cmd: tell asa about dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm], room: landing}
       - {cmd: south, expect: fog is too thick, room: landing}
       - {cmd: "take ogee's arm", expect: city sounds come back, room: wateredge}
-      # Part 5: home
+      # Part 5: home, noticing what changed (2 points each), Margaret last
       - {cmd: look, expect: mist has lifted}
-      - {cmd: go to museum, expect: Dixon Historic Center, room: museum}
-      - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
-      - {cmd: talk to margaret, expect: [DIXON, next puzzle, come back next Saturday], score: 110}
-      # Noticing what changed: 2 points each, with Margaret's comments
-      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 112}
-      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 114}
-      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 116}
-      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 118}
-      - {cmd: look at clock, expect: all by itself, score: 120}
-      - {cmd: look at crossword, expect: tip of my pencil, score: 122}
-      - {cmd: look at sign, expect: before I knew why, score: 124}
-      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 124}
-      - {cmd: out, room: street}
-      - {cmd: look at sticker, score: 126}
-      - {cmd: north, room: riverwalk}
-      - {cmd: read marker, score: 128}
+      - {cmd: up, room: riverwalk}
+      - {cmd: read marker, score: 108}
       - {cmd: look at statue}
-      - {cmd: read plaque, expect: Dixon, score: 130}
+      - {cmd: read plaque, expect: Dixon, score: 110}
       - {cmd: south, room: street}
+      - {cmd: look at sticker, score: 112}
       - {cmd: in, room: museum}
-      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 132}
+      - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
+      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 114}
+      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 116}
+      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 118}
+      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 120}
+      - {cmd: look at clock, expect: all by itself, score: 122}
+      - {cmd: look at crossword, expect: tip of my pencil, score: 124}
+      - {cmd: look at sign, expect: before I knew why, score: 126}
+      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 126}
+      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 128}
       - {cmd: ask margaret about the desk, expect: [post office desk, next Saturday]}
       - {cmd: look at key, expect: [DIXON'S FERRY P.O., next Saturday]}
       - {cmd: open drawer, expect: Next Saturday, the two of us}
+      - {cmd: talk to margaret, expect: [DIXON, come back next Saturday], score: 132}
+      - {cmd: out, expect: [locks up behind you, The end of Chapter 1, "Final score: 132 of 132"]}
       - {cmd: score, expect: Your score is 132 of 132}

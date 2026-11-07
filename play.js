@@ -6,7 +6,7 @@ const DATA = 'game-data/';
 const params = new URLSearchParams(location.search);
 const $ = id => document.getElementById(id);
 const L = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
-const EFFECTS = ['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'if'];
+const EFFECTS = ['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'end', 'if'];
 const SAVE_KEY = 'dixon.ch1.save';
 const AUTO_KEY = 'dixon.ch1.auto';
 const SETTINGS_KEY = 'dixon.settings';
@@ -148,6 +148,12 @@ function run(list) {
       // Nothing from the past comes back through the fog: its items and silver stay there.
       case 'leave_behind': S.items = S.items.filter(i => String((CH.items[i] || {}).era) !== String(v)); S.money = 0; break;
       case 'describe': describe(); break;
+      // The chapter's ending screen; after it only meta commands work (see handle).
+      case 'end':
+        say((CH.ending || {}).title || 'The End', { cls: 'death', raw: true });
+        meta(`Final score: ${score()} of ${CH.max_score}.`);
+        meta((CH.ending || {}).blocked || 'Type restart to play again.');
+        break;
       case 'if': run(ok(v.when) ? v.do : v.else); break;
       default: break;
     }
@@ -468,7 +474,8 @@ function fogLocked() {
 }
 function go(exit) {
   if (fogLocked()) return say(CH.fog_lock.blocked);
-  if (exit.action && ok(exit.when)) return doAction({ a: [...L(room().actions), ...L(CH.actions)].find(a => a.id === exit.action), n: null });
+  // An exit can run an action instead of moving: while `action_when` holds (or `when`, if it has no `to`).
+  if (exit.action && ok(exit.action_when !== undefined ? exit.action_when : exit.when)) return doAction({ a: [...L(room().actions), ...L(CH.actions)].find(a => a.id === exit.action), n: null });
   if (!exit.to || !ok(exit.when)) return say(textOf(exit.blocked) || G.cant_go);
   if (exit.farewell !== false) farewell();
   arrive(exit.to, textOf(exit.text));
@@ -750,6 +757,8 @@ function handle(t) {
   // 0. a room may hold the player still for a turn (dazed, pinned, listening)
   const hold = L(room().hold).find(e => ok(e.when));
   if (hold && !HOLD_FREE.some(k => isMeta(t, k))) { if (hold.say) show(hold.say); run(hold.do); return; }
+  // once the chapter has ended, only meta commands still work
+  if (CH.ending && ok(CH.ending.when) && !HOLD_FREE.some(k => isMeta(t, k))) return meta(CH.ending.blocked);
   // 1. puzzle actions (room first, then chapter-wide)
   const act = matchAction(t);
   if (act) return doAction(act);
