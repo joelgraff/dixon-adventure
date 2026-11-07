@@ -192,6 +192,18 @@ for (const ch of chapterDirs) {
     }
   }
 
+  // ---- introductions -------------------------------------------------------
+  // A first meeting is keyed on `not met.<id>`, never `not known.<id>`: the
+  // player can learn a name before meeting someone (typing it, reading a name
+  // tag), and that must not skip the introduction.
+  function checkIntro(npc, where) {
+    for (const [i, v] of asList(npc.talk).entries()) {
+      for (const c of asList(v && v.when)) {
+        if (typeof c === 'string' && /^not\s+known\./.test(c.trim())) err(`${where}.talk[${i}]`, `introductions use "not met.<id>", not "${c}" (see FORMAT.md, Flag prefixes)`);
+      }
+    }
+  }
+
   // ---- rooms ---------------------------------------------------------------
   for (const [rid, r] of Object.entries(rooms)) {
     const where = `${ch}/rooms/${rid}.yaml`;
@@ -214,6 +226,7 @@ for (const ch of chapterDirs) {
       }
     }
     for (const [nid, npc] of Object.entries(r.npcs || {})) {
+      checkIntro(npc, `${where} npcs.${nid}`);
       counts.npcs++;
       counts.topics += asList(npc.topics).length;
       if (!npc.name) err(`${where} npcs.${nid}`, `missing name`);
@@ -249,6 +262,7 @@ for (const ch of chapterDirs) {
   walk({ vars: chapter.vars, items: chapter.items, fog_lock: chapter.fog_lock, actions: chapter.actions, hints: chapter.hints }, chWhere, null, (s, w) => checkMarkup(s, w, null));
   lintNames({ items: chapter.items, actions: chapter.actions, fog_lock: chapter.fog_lock, deaths: chapter.deaths, veil: chapter.veil, npcs: chapterNpcs }, chWhere, []);
   for (const [nid, npc] of Object.entries(chapterNpcs)) {
+    checkIntro(npc, `${chWhere} npcs.${nid}`);
     counts.npcs++;
     counts.topics += asList(npc.topics).length;
     // check the moving NPC's markup against each room it can stand in
@@ -277,7 +291,8 @@ for (const ch of chapterDirs) {
 
   // flags read but never set (known.* names are set by talk; they still need a set)
   for (const [f, w] of flagsRead) if (!flagsSet.has(f)) err(w, `flag ${f} is read but never set anywhere`);
-  for (const [f, w] of flagsSet) if (!flagsRead.has(f) && !f.startsWith('seen.') && !(chapter.flags || {})[f]) warn(w, `flag ${f} is set but never read and not declared in chapter.yaml`);
+  // seen.* and known.* are read by the runtime (names and "a" / "the"), not by the data
+  for (const [f, w] of flagsSet) if (!flagsRead.has(f) && !/^(seen|known)\./.test(f) && !(chapter.flags || {})[f]) warn(w, `flag ${f} is set but never read and not declared in chapter.yaml`);
 
   // sources and claims
   for (const [cid, c] of Object.entries(src.claims || {})) {

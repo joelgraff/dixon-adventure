@@ -185,7 +185,7 @@ npcs:
       - text: "[ogee] stands at the ferry's lines, holding her against the current, a setting [pole] leaning on the post beside him."
     look: He is a broad man in a buckskin shirt with his sleeves rolled over scarred forearms, and he looks at the river the way a man looks at a horse that has thrown him before.
     talk:
-      - when: [not known.ogee, 1830.canoe_tarred, not 1830.rope_strung]
+      - when: [not met.ogee, 1830.canoe_tarred, not 1830.rope_strung]
         text: >-
           "Joseph Ogee," he says, hauling at the ferry's lines. "I see you've
           tarred her already, and made a fair job of it." He nods at the man in
@@ -194,8 +194,8 @@ npcs:
           rope enough to run a line bank to bank. Carry it over in her and tie
           it off on the far side. You'll want a paddle; Madeline keeps her
           father's old one up at the cabin."
-        do: [{set: [known.ogee, 1830.met_ogee, heard.dixon]}]
-      - when: [not known.ogee]
+        do: [{set: [known.ogee, met.ogee, 1830.met_ogee, heard.dixon]}]
+      - when: [not met.ogee]
         text: >-
           "Joseph Ogee," he says, already back at the ferry's lines and hauling
           them in against the current. "The river's up past the pole, and if I
@@ -210,7 +210,7 @@ npcs:
           and she'll float. You'll want a paddle too, because mine's halfway to
           St. Louis by now, but Madeline keeps her father's old one up at the
           cabin. Ask her nicely."
-        do: [{set: [known.ogee, 1830.met_ogee, heard.dixon]}]
+        do: [{set: [known.ogee, met.ogee, 1830.met_ogee, heard.dixon]}]
       - when: [not 1830.met_ogee]
         text: "\"Back again, are you? The river's still up past the pole. Dixon has the rope, you owe me a canoe, and the tar's hot.\""
         do: [{set: 1830.met_ogee}]
@@ -301,12 +301,12 @@ npcs:
         text: "[agent] sits on a [crate] with [papers] in his lap."
     look: His coat is well made and muddy to the knee, and he watches {ogee} the way a man watches a horse he means to take.
     talk:
-      - when: [not known.agent]
+      - when: [not met.agent]
         text: >-
           "I've come down from Galena for Mr. Rolette, who holds Mr. Ogee's
           notes. Pay a hundred dollars in silver toward what's overdue, and the
           boat stays where it is. Otherwise, I take her."
-        do: [{set: known.agent}]
+        do: [{set: [known.agent, met.agent]}]
       - text: "\"The terms haven't changed, friend: a hundred in silver.\""
     topics:
       - keys: [debt, notes, owe, overdue, installment, mortgage, terms, hundred, silver]
@@ -349,20 +349,20 @@ npcs:
         text: He's a young man in patched homespun with an old flintlock across his knees, and now that his uncle's wagons are down at the landing he sits a good deal easier.
       - text: He's a young man in patched homespun with an old flintlock across his knees, and he keeps looking back up the trail.
     talk:
-      - when: [not known.eli, 1830.wagon_free]
+      - when: [not met.eli, 1830.wagon_free]
         text: >-
           "I'm Eli." He grins and jerks a thumb at the wagons. "You'll be the one
           who got Uncle Asa out of the slough. He says you've got more back than
           sense, and from him that's high praise. We're bound for the diggings,
           soon as there's a boat to carry us."
-        do: [{set: [known.eli, 1830.met_eli]}]
-      - when: [not known.eli]
+        do: [{set: [known.eli, met.eli, 1830.met_eli]}]
+      - when: [not met.eli]
         text: >-
           "I'm Eli." He nods back up the trail. "We're bound for the diggings,
           but my uncle's second wagon is down to the hubs in the slough back on
           the trail, and he won't cross the train without it. Not that anybody's
           crossing today."
-        do: [{set: [known.eli, 1830.met_eli]}]
+        do: [{set: [known.eli, met.eli, 1830.met_eli]}]
       - when: [1830.wagon_free]
         text: "\"Uncle's in a fine mood now, for the first time this week.\""
       - text: "\"He's still stuck. Uncle says he'll be out by dark or know the reason why.\""

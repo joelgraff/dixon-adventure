@@ -118,7 +118,8 @@ score; the points are given the first time the flag is set, and taken back if
 a rewind clears it.
 
 Flag prefixes: `present.` (the present day), `1830.` (cleared by a rewind),
-`known.` (names the player has learned; never cleared), `heard.` (a name the
+`known.` (names the player has learned; never cleared), `met.` (the person
+has introduced themselves; never cleared), `heard.` (a name the
 player has been told but whose owner they haven't met, e.g. `heard.dixon` once
 Ogee mentions him; never cleared), `seen.` (an unnamed person the player has
 already been shown, so later mentions use "the"; set by the runtime, or by an
@@ -131,6 +132,14 @@ or put the name in a variant whose `when` includes `known.dixon` or
 `heard.dixon`. Speech in quotation marks is exempt (characters know each
 other), and so is written text the player reads, which should be quoted. The
 checker flags every name in narration that breaks this rule.
+
+**Knowing a name is not meeting someone.** `known.<id>` only decides what the
+person is called. The player can learn a name before any introduction: by
+typing it ("talk to dixon"), or from a name tag the look text reads out. So a
+first meeting is keyed on `met.<id>`, never on `known.<id>`: the introduction is
+the first `talk` variant, `when: [not met.<id>]`, and its `do` sets both
+`known.<id>` and `met.<id>`. The checker refuses a `talk` variant keyed on
+`not known.<id>`.
 
 ## Rooms
 
@@ -147,7 +156,7 @@ nouns:   {id: noun, ...}
 npcs:    {id: npc, ...}
 exits:   [exit, ...]
 actions: [action, ...]     # puzzle actions that belong to this room
-on_turn: [{when: [...], say: ..., do: [...]}]   # checked after each turn spent here
+on_turn: [{when: [...], say: ..., do: [...]}]   # checked after each turn spent here (see Turns)
 hold: [{when: [...], say: ..., do: [...]}]      # while one holds, it answers the next command instead
 ```
 
@@ -161,6 +170,12 @@ holds, any command except help, save, restore, restart, version, tour and
 score is answered by that entry's `say` and `do` instead, and still counts as a
 turn. Clear the flag in its `do` to let the player go (the landing uses this
 for the moment after you're pulled from the river).
+
+**Turns.** A command that acts in the world (looking, talking, waiting,
+moving, a puzzle action, even one that fails) is a turn, which adds one to
+`turns` and runs the room's `on_turn`. Help, save, restore, restart,
+version, tour, score and inventory take no time, and neither does a command
+the parser can't read at all, so they never move a room's clock.
 
 ### Nouns
 
@@ -183,6 +198,11 @@ pedestal:
     touch: The velvet is cool.  # a natural verb: text, or {when, say, do}, or a variant list
 ```
 
+When a word names both something in the room and something the player
+carries, the one whose own id or name it is wins ("key" is the brass key, not
+the crow with `key` among its aliases); if it is only an alias for both, the
+thing in the room wins ("case" in the museum is a glass case, not the phone).
+
 ### NPCs
 
 ```yaml
@@ -195,17 +215,18 @@ ogee:
   when: [not 1830.fog]
   look: ...
   room_line: ...
-  talk:                         # variants; the first talk usually sets known.<id>
-    - when: [not known.ogee]
+  talk:                         # variants; the first is the introduction
+    - when: [not met.ogee]      # never `not known.ogee` (see Flag prefixes)
       text: ...
-      do: [{set: [known.ogee, 1830.met_ogee]}]
+      do: [{set: [known.ogee, met.ogee, 1830.met_ogee]}]
     - text: ...
   topics:
     - keys: [rope, river, high water]    # whole words
-      when: [...]
+      when: [...]                        # optional: the topic only counts while this holds
       say: ...
       do: [...]
-  fallback: ...                 # unknown topics, in character
+  fallback: ...                 # unknown topics, in character; also said when a
+                                #   topic's say variants all fail
   social: {hello: ..., thanks: ..., bye: ..., how: ..., sorry: ...}
   parting: ...                  # said when the player leaves the room
 ```

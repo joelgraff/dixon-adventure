@@ -82,7 +82,7 @@ npcs:
     room_line: "[dixon] stands looking down toward the river, turning a folded [paper] over in his hands."
     look: He is a tall man in his forties, in a dark coat, with a careful face, and he looks like a man doing sums he doesn't like the answer to.
     talk:
-      - when: [not known.dixon, {any: [1830.has_rope, 1830.rope_strung]}]
+      - when: [not met.dixon, {any: [1830.has_rope, 1830.rope_strung]}]
         text: >-
           "John Dixon," he says, and his handshake is firm, though his eyes
           take in your wet clothes before they come back to your face. "I came
@@ -90,8 +90,8 @@ npcs:
           on it, so for now I'm waiting to see how that comes out." He glances
           at the empty tailboard. "And I see my rope has found a use. That's
           what I brought it for."
-        do: [{set: known.dixon}]
-      - when: [not known.dixon]
+        do: [{set: [known.dixon, met.dixon]}]
+      - when: [not met.dixon]
         text: >-
           "John Dixon," he says, and his handshake is firm, though his eyes
           take in your wet clothes before they come back to your face. "I came
@@ -99,7 +99,7 @@ npcs:
           on it, so for now I'm waiting to see how that comes out." He glances
           at the wagon. "If you mean to help Ogee across that river, though,
           there's rope on the tailboard. I meant to run her on a line."
-        do: [{set: known.dixon}]
+        do: [{set: [known.dixon, met.dixon]}]
       - when: [1830.dixon_short]
         text: "\"If you hear of a hundred in silver going spare, I'd be glad to know of it.\""
       - text: "{dixon} nods to you. \"I'm still waiting on Rolette's man, and he's in no hurry.\""
@@ -150,9 +150,9 @@ npcs:
     room_line: "[rebecca] is tending the fire."
     look: She wears a plain dress and an apron, and she stirs the kettle with the patience of someone who has cooked on a great many fires.
     talk:
-      - when: [not known.rebecca]
+      - when: [not met.rebecca]
         text: "\"Rebecca Dixon,\" she says, without stopping her stirring. \"You'll be the one helping with the ferry. Good, because I'd like a floor.\""
-        do: [{set: known.rebecca}]
+        do: [{set: [known.rebecca, met.rebecca]}]
       - text: "\"Supper's a while yet, I'm afraid.\""
     topics:
       - keys: [wait, roof, floor, cabin, house]
@@ -181,7 +181,7 @@ npcs:
       - text: "[james] is oiling harness beside a [mailsack|mail sack]."
     look: He's a young man of nineteen or so, oiling harness with his sleeves rolled up, and he has his father's careful face.
     talk:
-      - when: [not known.james, not 1830.key_returned]
+      - when: [not met.james, not 1830.key_returned]
         text: >-
           "I'm James," he says, without looking up from the harness. "I drive
           the mail for Father, and every team bound for the diggings comes
@@ -189,10 +189,10 @@ npcs:
           lowers his voice. "And I've gone and lost the mail key. I set it on
           the chopping block at Ogee's while I watered the team, and when I
           turned round it was gone. Father doesn't know yet."
-        do: [{set: [known.james, 1830.key_lost]}]
-      - when: [not known.james]
+        do: [{set: [known.james, met.james, 1830.key_lost]}]
+      - when: [not met.james]
         text: "\"I'm James,\" he says, without looking up from the harness. \"I drive the mail for Father, and every team bound for the diggings comes through this crossing.\""
-        do: [{set: known.james}]
+        do: [{set: [known.james, met.james]}]
       - when: [not 1830.key_returned]
         text: "\"No sign of that key, I suppose?\" He doesn't sound hopeful."
       - text: "{james} nods to you and keeps working."

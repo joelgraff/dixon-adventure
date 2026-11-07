@@ -344,7 +344,7 @@ npcs:
         text: He's a big man in a sweat-dark shirt with the mud drying on him to the thighs, and for once he looks fairly pleased with the world.
       - text: He's a big man in a sweat-dark shirt, mud to the thighs, with the look of someone who has been losing an argument with a wagon since sunup.
     talk:
-      - when: [not known.asa, 1830.wagon_free]
+      - when: [not met.asa, 1830.wagon_free]
         text: >-
           "Asa. I'm that boy's uncle, and you're the one who got me out of that
           slough." He jerks his head at the man on the crate. "I've a train to
@@ -353,15 +353,15 @@ npcs:
           somebody builds another, and my flour won't keep that long." He pats
           his coat, where something heavy chinks. "I've silver enough. What I
           haven't got is a ferry."
-        do: [{set: [known.asa, 1830.asa_needs_ferry]}]
-      - when: [not known.asa]
+        do: [{set: [known.asa, met.asa, 1830.asa_needs_ferry]}]
+      - when: [not met.asa]
         text: >-
           "Asa. I'm that boy's uncle." He wipes his hands on his shirt, which
           only makes them muddier. "My bar broke an hour back. The wheels want
           brush under them, something to bite on, and I want a long lever under
           that hind axle. Get me both and you'll have my thanks, and a dollar
           besides."
-        do: [{set: known.asa}]
+        do: [{set: [known.asa, met.asa]}]
       - when: [1830.wagon_free, not 1830.asa_needs_ferry]
         text: >-
           "Out of the mud and into this," he says, with a jerk of his head at
@@ -450,7 +450,7 @@ hints:
     text: Put the brush under the wagon's wheels.
   - when: [era:1830, not 1830.wagon_free]
     text: Lever the wagon out with Ogee's pole.
-  - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not known.james]
+  - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.key_lost]
     text: James Dixon, at the camp, has lost something. Talk to him.
   - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.crow_traded]
     text: The crow on the cabin roof has James's key. The boys say it only trades up, for something shinier. Asa's silver dollar is shiny. Put it on the chopping block.

@@ -17,6 +17,7 @@ let snapshot = null;             // state before the current command (for Retry)
 let halted = false;              // a death stops the rest of a command
 let pending = null;              // {kind: 'death' | 'restart'}
 let speaker = null;              // NPC whose lines an action's quoted says belong to
+let untimed = false;             // the current command took no time (see UNTIMED)
 let seed = params.has('seed') ? Number(params.get('seed')) || 1 : null;
 const settings = { inventory: true, sidebar: true, highlight: 'off', clickable: false, histories: false };
 
@@ -65,11 +66,22 @@ function serialize(s) {
 }
 // A save from an incompatible version is refused rather than half-loaded.
 function compatible(saved) { return saved && saved._compat === G.save_compat; }
+// True when version string a is older than b ("0.12.1" < "0.12.2").
+function olderThan(a, b) {
+  const x = String(a || '0').split('.').map(Number);
+  const y = String(b).split('.').map(Number);
+  for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) < (y[i] || 0);
+  return false;
+}
 function deserialize(o) {
   const s = { ...o };
   delete s._version;
   delete s._compat;
   for (const f of SET_FIELDS) s[f] = new Set(o[f] || []);
+  // Before 0.12.2 an introduction was keyed on `known.<id>`; now it is keyed
+  // on `met.<id>`. Anyone an older save already knows has been met, so they
+  // don't introduce themselves a second time.
+  if (olderThan(o._version, '0.12.2')) for (const f of [...s.flags]) if (f.startsWith('known.')) s.flags.add(`met.${f.slice(6)}`);
   return s;
 }
 const clone = s => deserialize(JSON.parse(JSON.stringify(serialize(s))));
@@ -320,10 +332,17 @@ function resolve(name) {
   const uniq = list => [...new Map(list.map(c => [`${c.kind}:${c.id}`, c])).values()];
   if (exact.length) {
     const u = uniq(exact);
-    // prefer something in the room over the same thing in the pocket
-    const inRoom = u.filter(c => c.kind !== 'item');
     if (u.length === 1) return { one: u[0] };
-    if (inRoom.length === 1 && u.length === 2) return { one: u.find(c => c.kind === 'item') || inRoom[0] };
+    // One thing in the room and one in the pocket answer to the same word:
+    // the one whose own id or name it is wins ("key" is the brass key, not the
+    // crow that has it); if it is only an alias for both, the room wins ("case"
+    // in the museum is a glass case, not the phone).
+    const inRoom = u.filter(c => c.kind !== 'item');
+    if (inRoom.length === 1 && u.length === 2) {
+      const item = u.find(c => c.kind === 'item');
+      const own = c => [c.id, c.kind === 'npc' && !known(c.id) ? null : c.def.name].filter(Boolean).map(norm).includes(n);
+      return { one: own(item) && !own(inRoom[0]) ? item : inRoom[0] };
+    }
     return { many: u };
   }
   if (n.length < 4) return null;
@@ -571,13 +590,21 @@ function lastNpc() {
   return here.length === 1 ? here[0] : null;
 }
 function talkTo(name) {
-  if (pronoun(name)) { const id = lastNpc(); if (id) name = id; }
+  const byPronoun = pronoun(name);
+  if (byPronoun) {
+    const id = lastNpc();
+    const here = npcIdsIn(S.room);
+    if (!id && !here.length) return say(G.nobody_here);
+    if (!id) return say(`Talk to whom? ${here.map(i => npcName(i)).join(' or ')}?`);
+    name = id;
+  }
   const res = resolve(name);
   if (!res) return say(npcIdsIn(S.room).length ? "There's no one by that name here." : G.nobody_here);
   if (!res.one) return clarify(res);
   const c = res.one;
   if (c.kind !== 'npc') return say('It doesn\'t answer. You hadn\'t really expected it to.');
-  learnName(c, name);
+  // "him" was swapped for their id above, which is not the player naming them.
+  if (!byPronoun) learnName(c, name);
   if (cold(c.id)) return;
   S.lastNpc = c.id;
   const e = pick(c.def.talk);
@@ -603,10 +630,12 @@ function askAbout(who, topic) {
   if (cold(id)) return;
   const npc = npcDef(id);
   const t = ` ${cleanNoun(topic)} `;
-  const hit = L(npc.topics).find(tp => L(tp.keys).some(k => new RegExp(`\\b${norm(k).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(t)));
-  if (!hit) return speak(id, textOf(npc.fallback) || `${cap(npcName(id))} has nothing to say about that.`);
+  const hit = L(npc.topics).find(tp => ok(tp.when) && L(tp.keys).some(k => new RegExp(`\\b${norm(k).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(t)));
+  const fallback = () => speak(id, textOf(npc.fallback) || `${cap(npcName(id))} has nothing to say about that.`);
+  if (!hit) return fallback();
   const e = pick(hit.say);
-  if (e && e.text) speak(id, e.text);
+  // a topic whose variants all fail still answers, in character
+  if (e && e.text) speak(id, e.text); else fallback();
   run(hit.do);
   if (e) run(e.do);
 }
@@ -736,10 +765,12 @@ function command(raw) {
   if (pending) { answerPending(input); return finish(false); }
   snapshot = clone(S);
   halted = false;
+  untimed = false;
   const before = S.room;
-  const t = norm(input).replace(/[.!?]+$/, '');
+  // trailing punctuation is dropped, unless it is all there is ("?" is help)
+  const t = norm(input).replace(/[.!?]+$/, '') || norm(input);
   handle(t);
-  finish(!halted && S.room === before && !pending);
+  finish(!halted && !untimed && S.room === before && !pending);
 }
 function finish(tick) {
   if (tick) {
@@ -752,6 +783,8 @@ function finish(tick) {
 }
 // Commands a room's `hold` lets through: they don't act in the world.
 const HOLD_FREE = ['help', 'save', 'restore', 'restart', 'version', 'tour', 'score'];
+// Commands that take no time, so a room's `on_turn` clock doesn't move.
+const UNTIMED = [...HOLD_FREE, 'inventory'];
 function handle(t) {
   let m;
   // 0. a room may hold the player still for a turn (dazed, pinned, listening)
@@ -763,6 +796,7 @@ function handle(t) {
   const act = matchAction(t);
   if (act) return doAction(act);
   // 2. meta commands
+  if (UNTIMED.some(k => isMeta(t, k))) untimed = true;
   if (isMeta(t, 'look_around')) return describe();
   if (isMeta(t, 'inventory')) return inventory();
   if (isMeta(t, 'score')) return meta(G.score_line.replace('{score}', score()).replace('{max_score}', CH.max_score));
@@ -802,6 +836,7 @@ function handle(t) {
   // 6. a bare noun is a look
   const res = resolve(t);
   if (res && res.one) return lookAt(res.one);
+  untimed = true;                  // nothing the parser could read, so no time passes
   say(pickOne(G.unknown));
 }
 
@@ -838,7 +873,8 @@ function renderNotes() {
     entries.sort((a, b) => (b[1].key ? 1 : 0) - (a[1].key ? 1 : 0));
     for (const [k, n] of entries) {
       const id = `${rid}:${k}`;
-      html += `<details data-id="${esc(id)}"${open.has(id) ? ' open' : ''}><summary>${esc(cap(n.title))}${n.key ? '<span class="badge" title="Key item">★</span>' : ''}</summary><p>${render(n.text, { room: rid })}</p></details>`;
+      const title = k.startsWith('npc:') ? npcName(k.slice(4), true) : n.title;
+      html += `<details data-id="${esc(id)}"${open.has(id) ? ' open' : ''}><summary>${esc(cap(title))}${n.key ? '<span class="badge" title="Key item">★</span>' : ''}</summary><p>${render(n.text, { room: rid })}</p></details>`;
     }
   }
   panel.innerHTML = html;

@@ -17,6 +17,10 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.12.2 (2026-11-07)
+- Fixes from a review. Saying someone's name before you've met them (talk to ogee, talk to james, talk to dixon), or reading Margaret's name tag first, no longer skips their introduction, so Ogee doesn't say "Back again" to a stranger and James still tells you about the mail key. talk to him asks whom when several people are here and no longer gives away a name. In the museum, case means the glass cases and light the window, not your phone. Score, inventory, version, help, save and anything the parser can't read take no time, so they no longer bring the fog on at the water's edge. A bare ? asks for help. The Looked at sidebar uses a person's name once you've learned it. Saved games carry over.
+- For authors: introductions are keyed on a new `met.<id>` flag instead of `known.<id>`, and the checker refuses the old form. A topic's `when` is now honoured, a topic whose variants all fail answers with the character's fallback line, and tests can check `turns`.
+
 ## 0.12.1 (2026-11-06)
 - Housekeeping: the site's front page (index.html) now opens the game; the old prototype moved to prototype.html. The filmed tour covers the inventory panel, and the design notes match the current game (the town's broken name, the crossing, and help as the one place commands are named).
 

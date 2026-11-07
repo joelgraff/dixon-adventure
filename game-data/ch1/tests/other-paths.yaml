@@ -2,7 +2,7 @@ tests:
   - name: wrong fix, then the retry rewinds 1830
     url: scene=landing
     steps:
-      - setup: {flags: [present.returned, known.ogee, known.agent, known.volunteer, known.asa, 1830.arrived, 1830.rope_strung, 1830.wagon_free]}
+      - setup: {flags: [present.returned, known.ogee, met.ogee, known.agent, met.agent, known.volunteer, met.volunteer, known.asa, met.asa, 1830.arrived, 1830.rope_strung, 1830.wagon_free]}
       - {cmd: ask asa to pay agent, expect: [Whose name goes on the paper, "Not mine", Take my arm]}
       - {cmd: take arm, room: wateredge}
       - {cmd: go to museum, room: museum}
@@ -79,7 +79,7 @@ tests:
   - name: you can't pay the agent yourself
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.agent], money: 1}
+      - setup: {flags: [1830.arrived, known.agent, met.agent], money: 1}
       - {cmd: pay agent, expect: not a coin less, money: 1}
 
   - name: clarifications use display names
@@ -139,7 +139,7 @@ tests:
   - name: the veil - showing the phone spooks people, twice sends you back
     url: scene=camp
     steps:
-      - setup: {flags: [1830.arrived, 1830.met_ogee, known.ogee]}
+      - setup: {flags: [1830.arrived, 1830.met_ogee, known.ogee, met.ogee]}
       - {cmd: show phone to tall man, expect: "I'd put that away", not: fog doesn't wait}
       - {cmd: talk to tall man, expect: Not now}
       - {cmd: talk to woman in apron, expect: Rebecca Dixon, not: "won't meet"}
@@ -190,7 +190,7 @@ tests:
   - name: the landing points at the canoe once it's ready
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee, 1830.canoe_tarred], items: [phone, paddle, rope]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.canoe_tarred], items: [phone, paddle, rope]}
       - {cmd: go north, expect: The canoe is ready}
       - {cmd: cross, expect: "That's what you tarred her for"}
       - {cmd: take rope across, room: northlanding}
@@ -199,7 +199,7 @@ tests:
   - name: Ogee notices the missing shoe, and takes both back
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.rope_strung, 1830.has_pole, 1830.wagon_free, 1830.shoe_lost], items: [phone, pole]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.rope_strung, 1830.has_pole, 1830.wagon_free, 1830.shoe_lost], items: [phone, pole]}
       - {cmd: look at pole, not: ferry's lines}
       - {cmd: give pole back, expect: Lost her shoe in that slough}
       - {cmd: look at setting pole, expect: foot is bare}
@@ -220,13 +220,13 @@ tests:
   - name: help in 1830 is checked discreetly, out of sight
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee]}
       - {cmd: help, expect: [turn your back, tin case, No signal]}
 
   - name: the slough hint moves on with each step
     url: scene=slough
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee, 1830.rope_strung], items: [axe]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.rope_strung], items: [axe]}
       - {cmd: help, expect: Ask Ogee for his setting pole}
       - setup: {items: [axe, pole]}
       - {cmd: help, expect: cut willow brush, not: Ask Ogee}
@@ -238,11 +238,11 @@ tests:
   - name: Asa wants to hear what Dixon is short of before he pays
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, known.asa, known.agent, 1830.rope_strung, 1830.wagon_free]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free]}
       - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
       - {cmd: ask agent about asa, expect: reasons to want this boat}
       - {cmd: tell asa about dixon, expect: what he's short of, not: season of crossings}
-      - setup: {flags: [1830.dixon_short, known.dixon]}
+      - setup: {flags: [1830.dixon_short, known.dixon, met.dixon]}
       - {cmd: ask asa about dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm]}
 
   - name: while you're still dazed, help and save work but don't use up the moment
@@ -293,7 +293,7 @@ tests:
   - name: the pole stays in sight after the rope is strung
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.met_ogee, 1830.rope_strung]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.rope_strung]}
       - {cmd: look, expect: setting pole leans idle against the post}
       - {cmd: ask ogee for pole, expect: Take her}
       - {cmd: look, not: leans idle}
@@ -313,7 +313,7 @@ tests:
   - name: Dixon's pay is paper, not silver
     url: scene=camp
     steps:
-      - setup: {flags: [1830.arrived, known.dixon]}
+      - setup: {flags: [1830.arrived, known.dixon, met.dixon]}
       - {cmd: ask dixon about lease, expect: [rent goes against Rolette's notes, "haven't a coin of silver"]}
       - {cmd: ask dixon about paper, expect: [mail pay, good money in Vandalia]}
 
@@ -335,7 +335,7 @@ tests:
   - name: the paddle goes home to Madeline
     url: scene=cabin
     steps:
-      - setup: {flags: [1830.arrived, known.madeline, 1830.rope_strung, 1830.has_paddle], items: [phone, paddle]}
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline, 1830.rope_strung, 1830.has_paddle], items: [phone, paddle]}
       - {cmd: look, not: hangs on wooden pegs}
       - {cmd: give the paddle back to madeline, expect: "been on the water again"}
       - {cmd: inventory, not: paddle}
@@ -344,7 +344,7 @@ tests:
   - name: Eli knows his uncle is free if you meet him afterward
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.rope_strung, 1830.wagon_free, known.asa]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.rope_strung, 1830.wagon_free, known.asa, met.asa]}
       - {cmd: look at young man, expect: sits a good deal easier}
       - {cmd: talk to young man, expect: [I'm Eli, got Uncle Asa out of the slough], not: down to the hubs}
       - {cmd: ask eli about his uncle, expect: fine mood, not: back in the slough}
@@ -370,7 +370,7 @@ tests:
   - name: Asa met for the first time after his wagon is free
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.rope_strung, 1830.wagon_free, known.dixon, 1830.dixon_short]}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.rope_strung, 1830.wagon_free, known.dixon, met.dixon, 1830.dixon_short]}
       - {cmd: look at big man, expect: pleased with the world}
       - {cmd: talk to big man, expect: [got me out of that slough, What I haven't got is a ferry]}
       - {cmd: ask asa about the wagon, expect: thanks to you}
@@ -381,21 +381,21 @@ tests:
   - name: Asa's lines once the brush is down
     url: scene=slough
     steps:
-      - setup: {flags: [1830.arrived, known.asa, 1830.brush_placed]}
+      - setup: {flags: [1830.arrived, known.asa, met.asa, 1830.brush_placed]}
       - {cmd: talk to asa, expect: The brush is down}
       - {cmd: ask asa about the wheels, expect: The brush is under her}
 
   - name: Madeline's axe line once you have it
     url: scene=cabin
     steps:
-      - setup: {flags: [1830.arrived, known.madeline, 1830.axe_ok, 1830.has_axe], items: [phone, axe]}
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline, 1830.axe_ok, 1830.has_axe], items: [phone, axe]}
       - {cmd: ask madeline about the axe, expect: already have it}
       - {cmd: ask madeline about the chopping block, expect: "You've got it"}
 
   - name: nothing from 1830 comes back through the fog
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, 1830.lease_dixon, 1830.fog], items: [phone, pole, shoe, axe], money: 1}
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.lease_dixon, 1830.fog], items: [phone, pole, shoe, axe], money: 1}
       - {cmd: take ogee's arm, expect: has stayed there, room: wateredge, money: 0}
       - {cmd: inventory, expect: phone, not: [pole, shoe, axe, silver]}
 
@@ -416,7 +416,7 @@ tests:
   - name: without James's key, the key on the blotter has no tag
     url: scene=museum
     steps:
-      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer]}
+      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer, met.volunteer]}
       - {cmd: look, expect: An old brass key lies on the blotter, not: paper tag}
       - {cmd: look at key, expect: no tag, not: "DIXON'S FERRY P.O."}
       - {cmd: ask margaret about the desk, expect: next Saturday, not: crow}
@@ -424,7 +424,7 @@ tests:
   - name: leaving after Margaret closes up ends the game
     url: scene=museum
     steps:
-      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer, chapter1.done]}
+      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer, met.volunteer, chapter1.done]}
       - {cmd: out, expect: [locks up behind you, The end of Chapter 1, Final score], room: museum}
       - {cmd: look, expect: chapter 1 is over}
       - {cmd: north, expect: chapter 1 is over}
@@ -434,7 +434,7 @@ tests:
   - name: before Margaret closes up, leaving is just leaving
     url: scene=museum
     steps:
-      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer]}
+      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer, met.volunteer]}
       - {cmd: out, room: street, not: The end of Chapter 1}
 
   - name: the inventory panel shows what you carry, and clicking looks
@@ -447,3 +447,74 @@ tests:
       - {click: "#gear"}
       - {click: "#opt-inventory", hidden: "#inventory"}
 
+
+  # Learning a name is not the same as being introduced (0.12.2).
+  - name: naming James before meeting him still gets his introduction
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to james, expect: [I'm James, lost the mail key]}
+      - {cmd: talk to james, expect: No sign of that key, not: I'm James}
+
+  - name: naming Dixon before meeting him still gets his introduction
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, heard.dixon]}
+      - {cmd: talk to dixon, expect: [John Dixon, came up from Peoria]}
+
+  - name: naming Ogee before meeting him still gets his introduction
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to ogee, expect: [Joseph Ogee, Madeline keeps her father's old one], not: Back again, score: 8}
+
+  - name: reading Margaret's name tag doesn't skip her hello
+    url: scene=museum
+    steps:
+      - {cmd: look at margaret, expect: MARGARET}
+      - {cmd: talk to margaret, expect: [I'm Margaret, guestbook]}
+      - {cmd: talk to her, not: I'm Margaret}
+
+  - name: talk to him asks whom when several are here, and never gives away a name
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to him, expect: Talk to whom, not: no one by that name}
+      - {cmd: ask man in buckskin about the river, expect: man in the buckskin shirt says}
+      - {cmd: talk to him, expect: [Joseph Ogee, Madeline keeps her father's old one], not: Back again}
+
+  - name: the notes sidebar uses a name once you've learned it
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: look at man in buckskin, shows: {"#notes": "man in the buckskin shirt"}}
+      - {cmd: talk to man in buckskin, shows: {"#notes": "Joseph Ogee"}}
+
+  # The room before the pocket, unless the word is the pocket thing's own name.
+  - name: in the museum, "case" is a glass case and "light" is the window
+    url: scene=museum
+    steps:
+      - {cmd: look at case, expect: arrowheads, not: battery}
+      - {cmd: look at light, expect: parking lot, not: battery}
+      - {cmd: look at phone, expect: battery}
+
+  - name: with James's key in hand, "key" is the key and not the crow
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, 1830.crow_traded], items: [phone, key]}
+      - {cmd: look at key, expect: small brass key, not: silver dollar}
+
+  - name: score, inventory, version and help take no time
+    url: scene=wateredge
+    steps:
+      - {cmd: score, turns: 0}
+      - {cmd: inventory, turns: 0}
+      - {cmd: version, turns: 0}
+      - {cmd: help, turns: 0}
+      - {cmd: xyzzy, turns: 0, not: fog closes}
+      - {cmd: wait, turns: 1, expect: mist coming off the water is thicker}
+
+  - name: a bare "?" asks for help
+    url: scene=museum
+    steps:
+      - {cmd: "?", expect: The assistant says, turns: 0}

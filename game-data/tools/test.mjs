@@ -15,6 +15,7 @@
 //           score: 18                  # optional checks after the command
 //           room: landing
 //           money: 0
+//           turns: 2                    # turns spent in this room (on_turn's clock)
 //         - click: "#tour-next"         # click a page element (times: 3 repeats it)
 //           visible: "#tour-card"       # also hidden:, and shows: {selector: words}
 //   phrases: true                      # instead of steps: every room action's
@@ -93,10 +94,11 @@ async function runSteps(t, file) {
       const fail = msg => { throw new Error(`step ${i + 1} "${step.cmd}": ${msg}\n    reply: ${reply.split('\n').slice(1).join(' | ').slice(0, 400)}`); };
       for (const e of asList(step.expect)) if (!low.includes(String(e).toLowerCase())) fail(`expected "${e}"`);
       for (const e of asList(step.not)) if (low.includes(String(e).toLowerCase())) fail(`did not expect "${e}"`);
-      const st = await page.evaluate(() => ({ score: window.dixon.score(), room: window.dixon.state.room, money: window.dixon.state.money }));
+      const st = await page.evaluate(() => ({ score: window.dixon.score(), room: window.dixon.state.room, money: window.dixon.state.money, turns: window.dixon.state.turns }));
       if (step.score !== undefined && st.score !== step.score) fail(`score ${st.score}, expected ${step.score}`);
       if (step.room !== undefined && st.room !== step.room) fail(`room ${st.room}, expected ${step.room}`);
       if (step.money !== undefined && st.money !== step.money) fail(`money ${st.money}, expected ${step.money}`);
+      if (step.turns !== undefined && st.turns !== step.turns) fail(`turns ${st.turns}, expected ${step.turns}`);
       if (errors.length) fail(`page error: ${errors[0]}`);
       await domChecks();
     }

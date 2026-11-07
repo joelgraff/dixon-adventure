@@ -405,12 +405,12 @@ npcs:
       - text: She's a woman of sixty or so in a cardigan, with reading glasses pushed up into grey hair and a name tag that says MARGARET, and she works the crossword with the patience of long habit.
         do: [{set: known.volunteer}]
     talk:
-      - when: [not known.volunteer]
+      - when: [not met.volunteer]
         text: >-
           "Oh, hello. Have you been in before? You've a familiar face." She
           sets down her pencil. "I'm Margaret, and I'm here Saturdays, mostly.
           Feel free to look around, and do sign the [guestbook] before you go."
-        do: [{set: known.volunteer}]
+        do: [{set: [known.volunteer, met.volunteer]}]
       - when: [1830.lease_dixon, not chapter1.done]
         text: >-
           "You were in earlier, weren't you?" She frowns at the wall, then at
