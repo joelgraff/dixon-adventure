@@ -1,7 +1,8 @@
 # The Dixon text adventure (docs/)
 
 - The game is docs/play.html + docs/play.js, playing the data in docs/game-data
-  (format: docs/game-data/FORMAT.md). docs/index.html is the old prototype.
+  (format: docs/game-data/FORMAT.md). docs/index.html sends visitors to play.html;
+  docs/prototype.html is the old prototype, kept for reference.
 - Every push that changes the game bumps its version:
   `cd docs/game-data/tools && npm run bump -- patch "what changed"` (minor for
   features). No releases or tags. Rules: docs/game-data/CHANGELOG.md.

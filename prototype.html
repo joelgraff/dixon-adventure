@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16181a">
+<title>Dixon Parser</title>
+<style>
+body { font-family: Georgia, "Times New Roman", serif; background: #16181a; color: #d8d4c8; margin: 0; }
+main { max-width: 64rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+#layout { display: flex; gap: 1rem; align-items: flex-start; }
+#play { flex: 1; min-width: 0; }
+#notes { width: 16rem; height: 62vh; overflow-y: auto; border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 0.5rem 0.8rem; font-size: 0.95rem; line-height: 1.4; }
+#notes h2 { font-size: 0.8rem; font-weight: normal; letter-spacing: 0.12em; text-transform: uppercase; color: #8a867a; margin: 0.8rem 0 0.3rem; }
+#notes h2.current { color: #d8d4c8; }
+#notes details { margin: 0.15rem 0; }
+#notes summary { cursor: pointer; color: #7ec8e3; text-transform: capitalize; }
+#notes details p { margin: 0.3rem 0 0.6rem; color: #b8b4a8; }
+#notes .empty { color: #6c685e; font-style: italic; }
+#quick { display: none; gap: 0.4rem; margin-top: 0.6rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#quick button { flex: none; padding: 0.55rem 0.8rem; min-height: 2.5rem; }
+@media (pointer: coarse) { #quick { display: flex; } }
+@media (max-width: 760px) {
+  html, body { height: 100%; overscroll-behavior: none; }
+  body { -webkit-text-size-adjust: 100%; }
+  main { height: 100dvh; box-sizing: border-box; display: flex; flex-direction: column; padding: 0.5rem 0.7rem calc(0.6rem + env(safe-area-inset-bottom)); padding-left: max(0.7rem, env(safe-area-inset-left)); padding-right: max(0.7rem, env(safe-area-inset-right)); }
+  h1 { margin: 0.3rem 0; }
+  #layout { flex: 1; min-height: 0; flex-direction: column; gap: 0.5rem; }
+  #play { flex: 1; min-height: 0; display: flex; flex-direction: column; width: 100%; }
+  #output { flex: 1; height: auto; min-height: 0; padding: 0.4rem 0.2rem; font-size: 1rem; }
+  #notes { width: auto; height: auto; max-height: 20dvh; flex: none; }
+  #bar { margin-top: 0.5rem; }
+  #cmd { font-size: 16px; padding: 0.7rem; }
+  button { min-height: 2.75rem; }
+  #settings { max-height: 40dvh; overflow-y: auto; }
+}
+#head { display: flex; justify-content: space-between; align-items: center; }
+#gear { padding: 0.3rem 0.7rem; font-size: 0.9rem; }
+#settings { display: none; background: #202325; border: 1px solid #444; padding: 0.8rem 1rem; margin-bottom: 1rem; font-size: 0.95rem; }
+#settings.open { display: block; }
+#settings label { display: block; margin: 0.4rem 0; cursor: pointer; }
+#settings small { display: block; color: #8a867a; margin-left: 1.5rem; }
+body.clicks .interactive { cursor: pointer; text-decoration: underline dotted; }
+body.nosidebar #notes { display: none; }
+h1 { font-weight: normal; letter-spacing: 0.15em; font-size: 1.1rem; color: #8a867a; text-transform: uppercase; }
+#output { height: 62vh; overflow-y: auto; padding: 0.5rem 1rem; border-top: 1px solid #333; border-bottom: 1px solid #333; line-height: 1.55; font-size: 1.05rem; }
+#output p { margin: 0 0 0.9rem; }
+#output p.echo { color: #8a867a; font-family: monospace; margin-bottom: 0.4rem; }
+#output p.heading { color: #8a867a; font-variant: small-caps; letter-spacing: 0.1em; margin-top: 1.6rem; }
+body.hl-key .interactive.key, body.hl-all .interactive.key { color: #7ec8e3; }
+body.hl-all .interactive.minor { color: #b7a77a; }
+#notes .badge { color: #7ec8e3; font-size: 0.75em; margin-left: 0.3em; }
+#bar { display: flex; gap: 0.5rem; margin-top: 1rem; }
+#cmd { flex: 1; background: #202325; color: #e8e4d8; border: 1px solid #444; padding: 0.6rem; font-family: monospace; font-size: 1rem; }
+button { background: #2a2e30; color: #d8d4c8; border: 1px solid #444; padding: 0.6rem 1rem; font-family: monospace; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+<div id="head"><h1>Dixon <span style="font-size:0.75em;letter-spacing:0.05em;text-transform:none">· old prototype · <a href="play.html" style="color:#7ec8e3">play the new version</a></span></h1><button id="gear" aria-expanded="false">Settings</button></div>
+<div id="settings">
+  <label><input type="checkbox" id="opt-sidebar"> Looked-at sidebar<small>Keeps a list of what you've examined, by scene.</small></label>
+  <label>Highlighted words
+    <select id="opt-hl">
+      <option value="key">Key items only</option>
+      <option value="all">All (key and minor, two colors)</option>
+      <option value="off">Off</option>
+    </select>
+    <small>Key items (blue) are what move the story along. Minor items (tan) are just there to be looked at.</small>
+  </label>
+  <label><input type="checkbox" id="opt-clicks"> Clickable highlighted words<small>Click a highlighted word to examine it. Off by default; typing is the point.</small></label>
+</div>
+<div id="layout">
+  <div id="play">
+    <div id="output" aria-live="polite"></div>
+    <div id="bar">
+      <input id="cmd" maxlength="40" autocomplete="off" autocapitalize="off" autocorrect="off" enterkeyhint="go" spellcheck="false" placeholder="what do you do?" autofocus>
+      <button id="enter">Enter</button>
+    </div>
+    <div id="quick" aria-label="Quick commands">
+      <button data-run="look">look</button>
+      <button data-run="north">N</button>
+      <button data-run="south">S</button>
+      <button data-run="east">E</button>
+      <button data-run="west">W</button>
+      <button data-run="up">up</button>
+      <button data-run="down">down</button>
+      <button data-fill="examine ">examine</button>
+      <button data-fill="talk to ">talk</button>
+      <button data-fill="ask about ">ask</button>
+      <button data-run="inventory">inv</button>
+      <button data-run="wait">wait</button>
+      <button data-run="listen">listen</button>
+      <button data-run="help">help</button>
+    </div>
+  </div>
+  <aside id="notes" aria-label="Things you have looked at"></aside>
+</div>
+</main>
+<script>
+const output = document.getElementById('output');
+const cmd = document.getElementById('cmd');
+
+const settings = { sidebar: true, clicks: false, highlight: "key" };
+try { Object.assign(settings, JSON.parse(localStorage.getItem("dixonSettings") || "{}")); } catch (e) {}
+
+function applySettings() {
+  if (typeof document.body === "undefined" || !document.body) return;
+  document.body.classList.toggle("nosidebar", !settings.sidebar);
+  document.body.classList.toggle("clicks", settings.clicks);
+  document.body.classList.remove("hl-key", "hl-all");
+  if (settings.highlight !== "off") document.body.classList.add("hl-" + settings.highlight);
+  const hl = document.getElementById("opt-hl");
+  if (hl) hl.value = settings.highlight;
+  const sb = document.getElementById("opt-sidebar"), ck = document.getElementById("opt-clicks");
+  if (sb) sb.checked = settings.sidebar;
+  if (ck) ck.checked = settings.clicks;
+  try { localStorage.setItem("dixonSettings", JSON.stringify(settings)); } catch (e) {}
+}
+
+const state = {
+  scene: "museum",
+  money: 0,
+  hasLand: false,
+  hasFerry: false,
+  hasAxe: false,
+  dixonOwns: false,
+  dixonCash: 260,
+  warnedClaim: false,
+  visited1830: false,
+  returned: false,
+  ogeeIntroduced: false,
+  turnsHere: 0,
+  shift: 0,
+  fog: false,
+  volunteerSpoke: false,
+  signed: false,
+  found: {},
+  parted: {},
+  notes: {},
+  visitedScenes: []
+};
+
+const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function keyOf(type, entry) {
+  if (entry.key !== undefined) return entry.key;
+  return type === "npc" || !!(entry.reveals && entry.reveals.length);
+}
+
+function isKeyNoun(noun, sceneId) {
+  const sc = scenes[sceneId];
+  if (!sc) return false;
+  const n = noun.toLowerCase();
+  const hit = (key, e) => key === n || (e.aliases || []).includes(n) || (e.name && e.name.toLowerCase() === n);
+  for (const [k, o] of Object.entries(sc.objects)) if (hit(k, o) && keyOf("object", o)) return true;
+  for (const [k, o] of Object.entries(sc.npcs || {})) if (hit(k, o)) return true;
+  return sc.exits.some(e => e.names.includes(n));
+}
+
+const fmt = (t, sceneId) => esc(t).replace(/\[([^\]]+)\]/g, (m, noun) =>
+  `<span class="interactive ${isKeyNoun(noun, sceneId || state.scene) ? "key" : "minor"}" data-noun="${noun}">${noun}</span>`).replace(/\n/g, "<br>");
+
+function print(text, cls) {
+  output.innerHTML += `<p${cls ? ` class="${cls}"` : ""}>${fmt(text)}</p>`;
+  output.scrollTop = output.scrollHeight;
+}
+
+function phoneText() {
+  const fog = state.scene === "riverbank" ? state.turnsHere : 0;
+  if (state.scene === "ferry" || state.scene === "farbank" || state.scene === "cabins" || (state.scene === "riverbank" && state.shift >= 1)) {
+    return "The screen is black. When you hold the button it lights for a moment — no bars, no clock, only a thin line where the battery should be — then it goes dark again.";
+  }
+  if (fog >= 4) return "The screen is dim and the bars are gone. The clock reads 4:17 and does not change while you watch it.";
+  if (fog >= 2) return "The signal is down to one bar and flickering. The mist has beaded on the glass.";
+  if (done()) return "Battery at 58 percent, full signal. The clock reads 4:21 and, while you watch, turns to 4:22.";
+  return "Battery at 61 percent, full signal. Nothing new.";
+}
+
+function guestEntries() {
+  const entries = [
+    "“Lovely little museum! — D. & S., Rockford.”",
+    "“Came for the Reagan boyhood home, stayed for the ferry. — Peoria.”",
+    "“My great-grandfather is in the 1912 photo, third from left. — K. Novak.”",
+    "“Cold in here. Good coffee, though.”",
+    "“Ohio sends its regards.”",
+    "“The little boy in the flood picture is my grandpa!”",
+    "“Where is the thing that goes on the pedestal?”",
+    "A child's drawing of a boat, signed with a crayon.",
+    "“Fog again today.” No name, just the date in pencil."
+  ];
+  if (state.visited1830) {
+    entries.push(
+      "In a hurried hand: “The river is not where it was.” It has been crossed out.",
+      "“Does anyone else hear knocking down by the water?”",
+      "“Ask Margaret about the labels.” Nobody has signed it."
+    );
+  }
+  return entries;
+}
+
+const FERRY_PRICE = 360;
+const done = () => state.returned && state.dixonOwns;
+const wrongFix = () => state.returned && state.hasFerry && !state.dixonOwns;
+const townName = () => done() ? "Dixon" : "Ogee's Landing";
+
+const scenes = {
+  museum: {
+    get name() { return townName() + " Historic Center"; },
+    look: () => {
+      let text = "The front room is quiet and a little too brightly lit. Fluorescent tubes hum over a row of glass [cases] and a wall of framed [photos]. The founding [exhibit] takes up most of the far wall, and beside it a [pedestal] stands with a faded ring pressed into its velvet where something used to sit. A schoolhouse [clock] hangs by the back door.\n\n";
+      text += state.returned
+        ? "A [volunteer] in a cardigan sits behind the [desk] by the entrance, a [guestbook] open at her elbow, frowning across the room at the exhibit panel. "
+        : "A [volunteer] in a cardigan sits behind the [desk] by the entrance, a [guestbook] open at her elbow and a pencil moving slowly over a [crossword]. ";
+      text += "Late light comes through the [window] the color of weak tea, and the glass door to the street has been propped open.";
+      return text;
+    },
+    listen: () => done() ? "The lights hum. In the back a clock ticks, a little behind the others, as though it had never stopped." : "The lights hum. In the back, one clock is silent.",
+    extras: {
+      drawer: "The desk has a [drawer] with a small brass lock.",
+      card: "A small typed [card] is propped against the pedestal."
+    },
+    objects: {
+      exhibit: {
+        key: true,
+        aliases: ["panel", "founding", "display", "wall"],
+        desc: () => {
+          if (done()) return "The panel is whole. THE FOUNDING OF DIXON. It ends: “In April 1830 John Dixon bought the ferry from Joseph Ogee, and the settlement took his name.” The last glass case holds a small brass token where there was only felt before." + (state.hasLand ? " A surveyor's claim receipt is pinned beside the panel: a thirty-two-acre ridge timber claim, claimant unknown." : "");
+          if (wrongFix()) return "The panel is worse. THE FOUNDING OF OGEE'S LANDING, and then a few lines that trail off. A new sentence has been added: the ferry passed to a newcomer in 1830, whose name was not recorded. After that the settlement simply stops.";
+          return "A wall panel and a small case, titled THE FOUNDING OF OGEE'S LANDING. “Joseph Ogee kept a ferry on the Rock River from about 1828. A post office and a few cabins grew up beside it.” The paragraph ends a line short, as though the story wasn't finished.";
+        }
+      },
+      clock: {
+        aliases: ["schoolhouse clock", "back clock", "wall clock", "clocks"],
+        desc: () => done()
+          ? "The schoolhouse clock by the back door is running. Its hands stand a few minutes past four, and it ticks a little behind the others. The strip of masking tape on the case, DO NOT WIND, has come loose."
+          : "A schoolhouse clock by the back door, stopped at 4:17. Every other clock in the building runs a little fast or slow, but this one has stopped dead. A strip of masking tape on the case reads DO NOT WIND, in someone's careful hand.",
+        verbs: { touch: "The case is cool and slightly dusty.", take: "It's bolted to the wall.", open: "You'd have to wind it, and the tape says not to." }
+      },
+      crossword: {
+        key: true,
+        aliases: ["puzzle", "grid", "clue", "clues", "seven down", "crosswords", "newspaper"],
+        desc: () => done()
+          ? "The crossword is finished, every square in neat pencil. Seven down, five letters, “Founder of the ferry town”: DIXON. The letters cross cleanly. In the margin, rubbed nearly out: john, john, john."
+          : wrongFix()
+            ? "The crossword has gone soft. Half the squares are blank, and seven down has no clue at all, only a smudge where it was."
+            : "A newspaper crossword, nearly finished in neat pencil. Four across, four letters, “Rock River ferryman”: OGEE, in ink. Seven down, five letters, “Founder of the ferry town,” is blank, the squares rubbed raw from erasing. In the margin, over and over: john.",
+        verbs: { touch: "The paper is soft where the eraser has been. Margaret glances over, and you take your hand away.", take: "Margaret's hand covers it, politely." }
+      },
+      cases: {
+        key: false,
+        aliases: ["case", "glass", "glass cases", "display case"],
+        desc: () => "Arrowheads on cotton, a cracked clay pipe, a ledger page too faded to read. The cards under each are typed, not printed. " + (done()
+          ? "The last case in the row, empty before, now holds a brass [token]."
+          : "The last case in the row is an [empty case], the felt brushed and the glass wiped."),
+        reveals: ["emptycase"],
+        verbs: { open: "The cases are locked. The little brass keyholes are clean, as if someone opens them often." }
+      },
+      emptycase: {
+        hidden: true,
+        title: "empty case",
+        aliases: ["empty case", "bare case", "last case", "empty", "token", "brass token", "something"],
+        desc: () => done()
+          ? "On the felt that was bare this morning, a worn brass token stamped with a flatboat and the initials J.O. The card holder now has a card: “Ferry token, c. 1830. Donor unknown.”"
+          : "A case like the others, with a card holder and nothing in it. The card holder is empty too. Somebody dusts it regularly, all the same."
+      },
+      card: {
+        hidden: true,
+        aliases: ["label", "note"],
+        desc: "The typed card, slightly crooked, reads: “Exhibit temporarily removed for conservation.” Below it, in pencil, someone has written and half erased: ask Margaret."
+      },
+      photos: {
+        aliases: ["photo", "photographs", "pictures", "frames", "wall of photos"],
+        desc: () => {
+          let text = "Mostly the twentieth century: a parade on Galena Avenue, the theatre marquee lit at night, a flooded riverbank with men in rowboats. The last two frames in the row are empty, just bare mats.";
+          if (done()) text = text.replace("The last two frames in the row are empty, just bare mats.", "One of the last two frames, empty before, now holds a faded print of a flatboat and a tall man in a dark coat at its pole. The label says: John Dixon at his ferry, 1830s.");
+          else if (state.returned && state.hasLand) text = text.replace("The last two frames in the row are empty, just bare mats.", "One of the last two frames, empty before, now holds a survey plat of a ridge lot, labeled Unknown claimant.");
+          return text;
+        }
+      },
+      pedestal: {
+        key: false,
+        aliases: ["empty", "stand", "plinth"],
+        desc: () => {
+          if (done()) return "On the velvet where there was only a faded ring, a corroded iron pole-shoe from a river flatboat. The card says: “Donor unknown.”";
+          return "A waist-high pedestal with a ring pressed into its velvet, as if something heavy and round sat here for decades. A small typed [card] is propped against its base.";
+        },
+        reveals: ["card"],
+        verbs: {
+          touch: "The velvet is cool and compressed into a perfect ring. Whatever sat here sat here a very long time.",
+          push: "It doesn't budge. It's bolted to the floor."
+        }
+      },
+      desk: {
+        key: false,
+        aliases: ["volunteer desk", "table", "chair"],
+        desc: () => "A tidy desk, older than everything around it: a lanyard, a roll of mints, a cold cup of coffee with a lipstick ring on the lid" + (state.returned ? ", and a hand-lettered sign reading ASK ABOUT THE LATEST LABELS" : "") + ". A [guestbook] lies open at the corner nearest the door, and below the blotter the middle [drawer] has a small brass lock.",
+        reveals: ["guestbook", "drawer"],
+        verbs: { sit: "You glance at the chair. Margaret looks at you over her glasses and you think better of it." }
+      },
+      drawer: {
+        aliases: ["middle drawer", "lock", "keyhole"],
+        desc: "A shallow middle drawer with a small brass lock, much older than the rest of the desk's hardware. The keyhole is worn bright.",
+        verbs: {
+          open: "Locked. The other drawers slide out easily, full of staples and brochures, but not this one.",
+          push: "It doesn't budge.",
+          search: "The other drawers hold staples, brochures, and a stapler. This one is locked."
+        }
+      },
+      guestbook: {
+        key: true,
+        aliases: ["book", "register", "guest book", "log"],
+        desc: () => {
+          const pool = guestEntries();
+          const picks = pool.sort(() => Math.random() - 0.5).slice(0, 3);
+          let text = "You page back through the recent entries. " + picks.join(" ");
+          if (state.signed) text += " Your own name is there, in your own hand, under the date.";
+          return text + " A pen on a bead chain hangs beside it, for anyone who wants to leave their name.";
+        },
+        verbs: {
+          sign: () => {
+            if (state.signed) return "You've already signed. Your name sits there, a little smaller than you remembered writing it.";
+            state.signed = true;
+            return "You take the pen on its chain and sign your name under the last line. The ink is darker than you expected.";
+          },
+          read: () => scenes.museum.objects.guestbook.desc(),
+          close: "You flip the cover shut, then open it again; it feels rude to hide it."
+        }
+      },
+      riverwalk: {
+        key: true,
+        hidden: true,
+        aliases: ["river walk", "riverfront", "river", "walk"],
+        desc: "The riverfront walk Margaret mentioned, four blocks north up Hennepin. You can't see it from in here.",
+        verbs: { touch: "It's four blocks away." }
+      },
+      window: {
+        aliases: ["view", "pane"],
+        desc: "A parking lot, the back of a neighbor's garage, and a power line with two crows on it. The light is going brown, and a thin haze sits low over the roofs.",
+        verbs: {
+          open: "It's painted shut. The sash hasn't moved in decades.",
+          touch: "The glass is cool and faintly damp on the outside.",
+          sit: "There's no sill deep enough to sit on."
+        }
+      }
+    },
+    npcs: {
+      volunteer: {
+        name: "the volunteer",
+        aliases: ["docent", "woman", "lady", "margaret"],
+        desc: () => state.returned
+          ? "Margaret, by her name tag: sixty or so, reading glasses pushed up into grey hair. She is looking at the exhibit panel with her head tilted, the way you look at a picture hung slightly crooked."
+          : "A woman in a cardigan, sixty or so, reading glasses pushed up into grey hair. Her name tag says MARGARET. She sits at the [desk] working the crossword with the patience of long habit.",
+        talk: () => {
+          if (state.returned) {
+            if (state.volunteerSpoke === "back") return done()
+              ? "“Mm?” Margaret glances up. “Sorry. Still looking at seven down. Isn't it odd, finishing something and not knowing what it was?”"
+              : "“Mm?” Margaret glances up. “Sorry. Still thinking about the labels.”";
+            state.volunteerSpoke = "back";
+            return done()
+              ? "“Oh, hello again. You were in earlier, weren't you?” She frowns at the wall, then at the crossword, and something in her face settles. “Funny. I could swear the labels weren't like that this morning. Nobody's touched them.” She taps the finished grid. “Well. That's one done. Come by again, will you? I've a feeling the next puzzle won't be so easy.”"
+              : "“Oh, hello again. You were in earlier, weren't you?” She frowns at the wall. “Funny. I could swear the labels weren't like that this morning. Nobody's touched them.” She laughs, not quite convincingly.";
+          }
+          if (state.volunteerSpoke) return "Margaret glances up from the crossword and smiles. “Mm?”";
+          state.volunteerSpoke = true;
+          reveal(["guestbook"]);
+          return "“Oh, hello! I'm Margaret. I'm here Saturdays, mostly.” She sets down her pencil. “Feel free to look around. And if you like, sign the [guestbook] before you go. We like to know who's been in.”";
+        },
+        fallback: "“Hm. I couldn't tell you. I'm afraid I couldn't say. You could try the front office on a weekday.”",
+        topics: [
+          { keys: ["fog", "mist", "haze", "weather"], say: "“It's been coming off the river all week, odd for the time of year. Some mornings you can't see the far side from the walk.” She glances at the window, then back at her crossword. “Burns off by noon, usually.”" },
+          { keys: ["river", "walk", "riverwalk", "river walk", "outside", "bank", "evening", "stroll", "path"], reveals: ["riverwalk"], say: () => "“The [riverwalk]? It's the best of " + townName() + " at this hour. Go up Hennepin, four blocks north. There's a marker there, Ogee's Ferry. Most people walk right past it.” She glances toward the window, though it only faces the parking lot. " + (done() ? "“The fog's been coming off the water all week. Odd, for the time of year.”" : "“Seven down has been bothering me all week, and the marker's missing a line, if you ask me. People say if you look at the water long enough, you lose track of time.” She goes back to her pencil. “Silly, I know.”") },
+          { keys: ["ogee", "joseph"], say: () => done() ? "“Joseph Ogee. He ran a ferry here before John Dixon bought it. Our panel gives him a line now. Funny, I'd have sworn it didn't.”" : "“Joseph Ogee. He kept the ferry, and the whole town started at his dock. Our panel stops short of what came next. The marker by the river does a little better.”" },
+          { keys: ["dixon", "john", "founder", "founding", "exhibit", "panel", "ferry"], say: () => done() ? "“John Dixon bought the ferry in 1830. Of course he did. Why did I ever think the panel ended anywhere else?” She laughs, not quite convincingly." : wrongFix() ? "“Now there's a newcomer nobody can name. That isn't right. It isn't right at all.”" : "“It ends mid-thought, doesn't it? Thirty-one years of Saturdays and I've never known what comes after Ogee. I keep writing a name in the margin, ‘John’, and then I can't think why.”" },
+          { keys: ["crossword", "puzzle", "clue", "seven", "pencil", "margin"], say: () => done() ? "“Seven down. Dixon, five letters. I couldn't get it all week. Look, it fits.” She taps the grid." : wrongFix() ? "“The whole puzzle has gone to pieces. Seven down isn't even there any more.”" : "“Seven down. ‘Founder of the ferry town,’ five letters. It's on the tip of my pencil, and then it slides right off.” She taps the margin. “I keep writing the same name there. John.”" },
+          { keys: ["pedestal", "removed", "conservation", "card"], say: () => done() ? "“That wasn't there this morning. It's an iron pole-shoe, off a flatboat. I couldn't tell you where it came from.” She doesn't sound as though she expects to be asked again." : "“Empty since before my time. Conservation, the card says. I've never once seen anyone conserve anything.” She smiles. “I've never known what stood there, either.”" },
+          { keys: ["photo", "frames", "mats", "frame", "picture"], say: () => state.returned && (state.hasLand || state.dixonOwns) ? "“One of the empty frames has something in it now. Nobody told me.”" : "“Those last two came back from the framer's in 'ninety-eight with nothing in them. Nobody ever filled them in.”" },
+          { keys: ["desk", "drawer", "lock", "key"], reveals: ["drawer"], say: "“That desk came out of the old county clerk's office when they cleared it in the seventies. It's the nicest thing in the building, and the drawers still work, too. Except the locked one. Always wondered what's in it.”" },
+          { keys: ["case", "cases", "arrowhead", "locked"], say: "“Locked, since 1998. The key's with the board. The empty one at the end I dust every Saturday, out of habit.”" },
+          { keys: ["guestbook", "book", "sign", "visitor"], say: "“Everyone signs, even the ones who say they won't. Some of them write the oddest things.”" },
+          { keys: ["lincoln", "black hawk", "fort", "war", "militia", "1832"], say: () => done() ? "“Dixon's Ferry was the staging ground in 1832. Lincoln came through as a militia captain, and so did half the officers of the next war. They never fought a battle here. Just passed through.”" : "“Ogee's Landing saw troops in 1832, I'm told. The militia crossed here, and then went on. There's not much to show for it.”" },
+          { keys: ["label", "labels", "change", "changed", "different"], say: () => state.returned ? "She hesitates. “I'd rather not say it out loud. The labels have changed, and nobody's touched them. That's all.”" : "“Labels? I wouldn't think so. They've been the same since the nineties.”" },
+          { keys: ["museum", "center", "centre", "historic center", "building", "hours", "collection", "place"], say: "“The Historic Center? It's small, but it's ours. The founding exhibit is what most people come for, and the cases hold what the county collected over the years. The photographs are mostly parades and floods. We're open Saturdays, and weekdays when someone can be spared.” She smiles. “If you want the rest of Dixon, the best of it is outside. Take the [riverwalk].”", reveals: ["riverwalk"] },
+          { keys: ["margaret", "you", "yourself", "volunteer"], say: "“Thirty-one years on Saturdays. Someone has to know where the stapler is.”" }
+        ]
+      }
+    },
+    exits: [
+      { names: ["outside", "out", "door", "street", "leave"], to: "street", text: "You step through the propped door and out onto the sidewalk. The hum of the fluorescents fades behind you." }
+    ]
+  },
+
+  street: {
+    name: "West Fifth Street at Hennepin",
+    look: () => "The sidewalk is warm and nearly empty. A [pickup] is parked at the [corner], and a house porch light clicks on across the way. The [museum] door stands behind you. This is a quiet residential block of old frame houses and big maples. Hennepin runs north; at the end of the next block you can make out the police station and the [courthouse], and beyond them the downtown blocks run on toward the [river], where the riverfront [path] begins.",
+    listen: "A truck downshifts somewhere. Under it, very faintly, the sound of moving water.",
+    objects: {
+      museum: {
+        aliases: ["center", "historic center", "ogee's ferry historic center", "dixon historic center", "building", "door"],
+        desc: "The Historic Center, a modest brick building on the corner, with its glass door propped open. Inside, the fluorescents are still lit.",
+        verbs: { open: "The door is already open.", touch: "The brick is still warm from the day." }
+      },
+      courthouse: {
+        aliases: ["police station", "police", "station"],
+        desc: "At the end of the next block, the courthouse and the police station sit side by side, stone and brick. Past them the buildings get taller and closer together: downtown.",
+        verbs: { touch: "It's a block away." }
+      },
+      pickup: {
+        key: false,
+        aliases: ["truck"],
+        desc: "A dusty pickup with an Illinois plate. A faded [sticker] curls on the bumper. Nobody is in it.",
+        reveals: ["sticker"],
+        verbs: { open: "Locked.", touch: "The hood is warm. Whoever left it here hasn't been gone long." }
+      },
+      sticker: {
+        hidden: true,
+        aliases: ["bumper sticker", "bumper"],
+        desc: "RIVER DAYS COMMITTEE, with a cartoon ferry. The corner has peeled away from the bumper, and part of an older sticker shows underneath, hidden by the newer one."
+        ,verbs: {
+          touch: "The curled corner lifts easily. You peel the whole sticker back, and the older one beneath it is clear enough to read: DIXON'S FERRY DAYS, with the same cartoon ferry. It's sun-bleached, as though it has been there for years. Nobody on this block would call the town that.",
+          read: "The top sticker is easy to read. The older one is hidden beneath it, though the corner is loose enough to peel back.",
+          take: "The curled corner lifts easily. You peel the whole sticker back, and the older one beneath it is clear enough to read: DIXON'S FERRY DAYS, with the same cartoon ferry. It's sun-bleached, as though it has been there for years. Nobody on this block would call the town that."
+        }
+      },
+      corner: {
+        aliases: ["intersection"],
+        desc: "A crosswalk, a bus bench with no bus. Nothing worth a second look.",
+        verbs: { sit: "The bench is warm from the sun, and no bus is coming. You sit anyway for a moment, then get up." }
+      },
+      river: {
+        aliases: ["strip", "water", "silver"],
+        desc: "You can't see it from here. The Rock River is four blocks north, past the courthouse and through downtown, and the riverside walk runs along it.",
+        verbs: { touch: "It's four blocks away." }
+      }
+    },
+    extras: {
+      sticker: "A faded [sticker] curls on the pickup's bumper."
+    },
+    npcs: {},
+    exits: [
+      { names: ["museum", "door", "back", "inside", "in", "south"], to: "museum", text: "You step back into the cool, bright room. Margaret glances up from her desk and gives you a small smile." },
+      { names: ["path", "river", "north", "uphill", "riverfront", "walk"], peek: "Hennepin runs north, past the police station and the courthouse and through three blocks of downtown, to the riverfront path.", to: "riverpath", text: "You walk north up Hennepin, past the police station and the courthouse, then through three blocks of downtown storefronts, until the pavement gives out into the riverside walk." }
+    ]
+  },
+
+  riverpath: {
+    name: "Riverside walk",
+    look: () => "The riverfront is a broad public space of pale paving and limestone walls, running along the south bank between Peoria Avenue and Galena Avenue, the kind of place that fills up for the farmers market and the Petunia Festival concerts, though tonight it is nearly empty. A green iron [railing] follows the curve of the wall above the water, and a stone [pavilion] stands a little way along, with a [bench] facing the river. A bronze [statue] of a man on a horse rises from the plaza nearby, and between them a green historical [marker] stands on a post. The [river] is wide and brown and slow, and a long raft of mist lies on it. At the far end of the railing, a wide [stairway] of worn steps leads north, down to the water. Behind you, Hennepin [street] runs south through downtown, back toward the Historic Center.",
+    listen: "Water against stone. A halyard clinking, though there are no boats.",
+    onTick: () => {
+      const t = state.turnsHere;
+      if (t === 3) print("The mist on the water has crept toward the wall. Somewhere below the railing, the river laps at the lowest steps, a sound you didn't notice a minute ago.");
+      if (t === 6) print("The evening has gone very quiet. Even the fountains seem to have stopped, and the only thing still moving is the river, slowly, past the foot of the stairs.");
+    },
+    objects: {
+      marker: {
+        aliases: ["sign", "historical marker", "post"],
+        desc: () => (done() ? "DIXON'S FERRY" : "OGEE'S FERRY") + ". “A ferry crossed the Rock River at about this spot by the late 1820s, kept by Joseph Ogee. " + (done() ? "The settlement that grew on this bank took its name from John Dixon, who arrived in 1830." : "The settlement that grew on this bank kept the ferryman's name.") + "”" + (done() ? " Near the bottom, a line of smaller type reads: “Dixon's Ferry: the crossing that named a town.”" : " Near the bottom, a line of smaller type has been [sanded] away, leaving a pale smooth patch."),
+        reveals: ["sanded"],
+        verbs: { touch: () => done() ? "The paint is gritty with old salt, and unbroken all the way down." : "The paint is gritty with old salt. You can feel where the sanding stopped." }
+      },
+      sanded: {
+        hidden: true,
+        aliases: ["sanded line", "patch", "pale patch", "line", "smaller type", "small type", "type", "text", "lettering", "letters"],
+        desc: () => done() ? "The line is whole: “Dixon's Ferry: the crossing that named a town.” You'd swear the type was never anything else." : "A few letters survive at the edge of the patch: …ever re… Whatever it said, someone cared enough to take it off, and not enough to repaint.",
+        verbs: { touch: "Smooth as a pebble, and cooler than the paint around it." }
+      },
+      bench: {
+        key: false,
+        aliases: ["seat"],
+        desc: "A slatted bench with a [plate] screwed to the back. The slats are damp, though it hasn't rained.",
+        reveals: ["plate"],
+        verbs: { sit: "You sit for a while. The mist on the water doesn't move, and neither, you notice, does anything else. The city sounds seem a little farther away than when you sat down." }
+      },
+      plate: {
+        hidden: true,
+        aliases: ["brass plate", "inscription"],
+        desc: "FOR HARRY, WHO KNEW THE RIVER. 1931–2009. Below it someone has scratched, with a key or a nail: it remembers."
+      },
+      bronzeplaque: {
+        hidden: true,
+        aliases: ["plaque", "statue plaque", "dedication", "begins the trail", "paving"],
+        desc: () => "The plaque is titled BEGINS THE TRAIL. Beneath it, a line in quotation marks: “It was in " + townName() + " that I really found myself.” It is attributed to Ronald Reagan, who lived here from 1920 to 1933 and always called this town his hometown. The text goes on to describe his return in the summer of 1950, when he rode a palomino through these streets in the Injun Summer Days parade, and how that ride inspired the statue. It was sculpted by Donald L. Reed and given to the city by thirteen local donors, in Heritage Crossing Riverfront Plaza, and it recalls his years as a lifeguard on the Rock River, where he is said to have saved 77 lives. At the bottom: Dedicated August 14, 2009.",
+        verbs: { touch: "The raised letters are cool and slightly gritty." }
+      },
+      pavilion: {
+        aliases: ["gazebo", "shelter", "roof"],
+        desc: "A square stone-pier pavilion with a dark shingled roof, a little cupola and a weathervane on top. Picnic tables and trash cans sit under it, and the benches are empty tonight. The weathervane doesn't turn.",
+        verbs: { sit: "You sit at one of the picnic tables for a minute. The wood is damp, and the city sounds seem a little far off.", climb: "The roof is well out of reach." }
+      },
+      statue: {
+        key: false,
+        aliases: ["horse", "rider", "bronze", "monument", "pedestal", "plaza", "fountains", "fountain"],
+        desc: "A bronze rider on a palomino, nine feet of it, high on a block of dark granite and framed by two flagpoles. A bronze [plaque] is set into the paving at its foot. Low fountains play in the plaza around it, and the flags hang limp in the damp air.",
+        reveals: ["bronzeplaque"],
+        verbs: { touch: "The granite is cold and beaded with damp.", climb: "It's a long way up, and it wouldn't be respectful." }
+      },
+      street: {
+        aliases: ["hennepin", "hennepin street", "road", "downtown"],
+        desc: "Hennepin Street runs south from the riverfront through downtown, past the courthouse, toward the Historic Center. Four blocks, an easy walk."
+      },
+      railing: {
+        key: false,
+        aliases: ["rail", "fence"],
+        desc: "Painted iron, cold and a little wet. Past it the bank drops away to riprap and the water. Down at the base of the wall, an old iron [ringbolt] is set into the stone.",
+        reveals: ["ringbolt"],
+        verbs: { climb: "Not a good idea, with that drop behind it.", touch: "Cold, wet iron. Someone has scratched initials in the paint." }
+      },
+      ringbolt: {
+        hidden: true,
+        aliases: ["ring", "bolt", "iron ring"],
+        desc: "A rusted iron ring set into the stone, worn bright on one side where rope used to run. It's older than the railing, older than the walk.",
+        verbs: { touch: "Rough and cold. You can feel the groove the rope wore.", push: "It doesn't move, and you can't reach it from here.", climb: "You can't reach it from here." }
+      },
+      river: {
+        aliases: ["water", "rock river", "mist"],
+        desc: "Broad, brown, and slow. The mist lies in a single bank on the water as if it were being kept there. The far shore has no buildings that you can see, only mist. The [stairway] goes down to the water's edge, and the marker says the old ferry crossed at about this spot.",
+        verbs: { touch: "You can't reach it from the walk.", drink: "You'd rather not.", smell: "Mud, iron, cut grass. Something older underneath." }
+      },
+      stairway: {
+        aliases: ["stairs", "steps", "stair"],
+        desc: "Wide concrete steps, worn in the middle, curving down to the lower walkway beside the water. The lowest few vanish into the mist.",
+        verbs: { climb: "You'd have to go down, not up.", touch: "Damp concrete, worn smooth in the middle by a lot of feet." }
+      }
+    },
+    extras: {
+      plate: "A brass [plate] is screwed to the back of the bench.",
+      ringbolt: "At the base of the wall, below the railing, an old [ringbolt] is set into the stone.",
+      sanded: () => done() ? "" : "A line of the marker's text has been [sanded] away."
+    },
+    npcs: {},
+    exits: [
+      { names: ["street", "hennepin", "back", "up", "uphill", "south"], to: "street", text: "You walk back south along Hennepin, through downtown and past the courthouse, to the Historic Center's block." },
+      { names: ["stairway", "stairs", "steps", "stair", "bank", "down", "north", "water", "river"], to: "riverbank", text: "You go down the worn steps, one hand on the cold rail.", reset: true }
+    ]
+  },
+
+  riverbank: {
+    name: "The water's edge",
+    look: () => {
+      const stage = state.turnsHere;
+      if (state.shift >= 1) {
+        state.shift = 2;
+        return "The mist has thinned to a pale veil, and the city is simply gone. There is no bridge, no tower, no limestone wall; only a low muddy bank, dark trees pressed close behind it, and the rough-hewn [planks] you are standing on, running out toward the [water]. The river is the same river, brown and unhurried. Out in the white, wood knocks against wood, and a hoarse [voice] calls across the water: “You lookin' for work?”";
+      }
+      if (stage >= 4) return "The mist is up around your knees and rising. The traffic noise from the street has gone, and the walk above you is only a pale line. The concrete is dark with wet, and the [water] slides past, steady and unhurried, hard to stop watching.";
+      if (stage >= 2) return "The mist has thickened. The far bank is gone, and the walk above you is only a pale line. The concrete is dark with wet. The [water] slides past a few feet away.";
+      return "A broad concrete walkway runs along the water at the foot of the steps, hemmed in by a curved limestone [wall] on one side and a low green [seawall] railing on the other. Upstream, a bridge crosses the river, and a steel [tower] carries power lines over the bank. A little [driftwood] has washed up in the corners. The [water] slides past a few feet away, mist hanging low over it, and the [stairway] you came down is behind you.";
+    },
+    extras: {
+      ridges: () => state.shift ? "" : "Two shallow [ridges] run through the silt on the lowest step, from the water toward the walk."
+    },
+    listen: () => state.shift >= 1 ? (state.shift = 2, "Wood knocks against wood out in the white, and a hoarse voice calls across the water: “You lookin' for work?”") : "Water. Nothing else, and then, for a moment, something else.",
+    onTick: () => {
+      const t = state.turnsHere;
+      if (state.shift) return;
+      if (t === 2) print("The mist off the water is thicker now. The far bank has gone altogether.");
+      if (t === 4) print("The sound of the street has faded into the heavy fog.");
+    },
+    objects: {
+      water: {
+        aliases: ["river", "mist", "fog", "bank", "shore"],
+        desc: () => {
+          if (state.shift === 1) return scene().look();
+          if (state.shift >= 2) return "Brown water slides past, the same river and not. Nothing crosses it now, and the far bank is nothing but dark trees. Out in the white, the knocking goes on, and the voice is waiting.";
+          if (state.turnsHere >= 4) {
+            state.shift = 1;
+            return "You watch the current slide past, brown and smooth, a single leaf turning in it, and for a moment you lose track of everything else. When you look down, the concrete under your feet is gone. You are standing on rough-hewn wooden planks, grey with age and wet with mist.";
+          }
+          return "Brown water slides past. At the end of the walkway the lowest broad step runs into the water, and the silt left on it is combed into shallow [ridges], as though something has recently been dragged across it.";
+        },
+        reveals: ["ridges"],
+        verbs: {
+          touch: () => state.turnsHere >= 4 || state.shift ? "The water is colder than it should be on a warm evening, and it pulls at your fingers." : "Cold, and slow. It leaves your fingers smelling of iron.",
+          drink: "You'd rather not. It looks like the Rock River in any century.",
+          smell: "Mud, iron, and under it something like woodsmoke.",
+          search: () => { reveal(["ridges"]); return "You walk the length of the lower walk. The only marks are the two parallel [ridges] in the silt on the lowest step."; }
+        }
+      },
+      ridges: {
+        visible: () => !state.shift,
+        hidden: true,
+        aliases: ["ridge", "grooves", "marks", "drag marks"],
+        desc: "The silt is pressed into two long, shallow grooves, about a boat's width apart, running from the waterline up to the walk. Their edges look old and weathered, but the damp earth inside them seems freshly disturbed. You can't tell how long they've been there."
+      },
+      wall: {
+        visible: () => !state.shift,
+        aliases: ["limestone", "limestone wall", "stone", "stonework"],
+        desc: "Rough-cut limestone in warm tan and grey, laid in courses and curving up to the railing of the riverfront above. The upper walk overhangs it like a shelf. The stone is cool, and a little damp.",
+        verbs: { touch: "Cool, rough stone, beaded with damp.", climb: "There's nothing to hold on to." }
+      },
+      seawall: {
+        visible: () => !state.shift,
+        aliases: ["railing", "rail", "fence", "concrete wall"],
+        desc: "A low concrete wall with a green iron railing along its top, between the walk and the water. Beyond it the river is only a few feet down.",
+        verbs: { touch: "Cold, damp iron.", climb: "The river's a long way to fall into, and you don't need to." }
+      },
+      tower: {
+        visible: () => !state.shift,
+        aliases: ["pylon", "power lines", "lines", "bridge", "transmission tower"],
+        desc: "A lattice steel tower stands on the bank, carrying power lines across the water. Beyond it the bridge is a low grey line in the mist.",
+        verbs: { climb: "No." }
+      },
+      driftwood: {
+        visible: () => !state.shift,
+        aliases: ["wood", "bottle", "litter"],
+        desc: "Silver driftwood and a plastic bottle, washed into the corner of the wall by the last high water. Nothing you'd want.",
+        verbs: { search: "You turn over a few pieces. Nothing you'd want.", take: "None of it is worth carrying." }
+      },
+      stairway: {
+        aliases: ["stairs", "steps", "stair", "back"],
+        visible: () => !state.shift,
+        desc: "The concrete steps you came down, going back up to the walk.",
+        verbs: { climb: () => { move(scene().exits[0]); return null; } }
+      },
+      planks: {
+        visible: () => state.shift >= 1,
+        aliases: ["plank", "boards", "dock", "wood", "floor", "ground"],
+        desc: "Rough-hewn planks, adze-marked and pegged, grey and slick with mist. They are old and new at once, with no nails in them anywhere.",
+        verbs: { touch: "Damp, rough wood. A splinter catches your thumb.", search: "No nails, no bolts. Only wooden pegs.", sit: "The planks are wet. You stay on your feet." }
+      },
+      voice: {
+        aliases: ["knocking", "sound", "calling", "man"],
+        visible: () => state.shift >= 2,
+        desc: "A man's voice, tired and practical. It sounds as if he's asked the question a hundred times.",
+        onTalk: () => { move(scene().exits[1]); return null; },
+        verbs: {
+          call: () => { move(scene().exits[1]); return null; },
+          take: "You can't take a voice."
+        }
+      }
+    },
+    npcs: {},
+    exits: [
+      { names: ["stairway", "stairs", "steps", "stair", "back", "up", "south", "walk", "street", "hennepin", "riverfront", "plaza", "statue", "path"], to: "riverpath", when: () => !state.shift, blocked: "You turn, but there are no steps behind you now; only planks, and the mist.", text: "You climb the steps and come out on the riverfront, near the statue. The traffic sound comes back in pieces." },
+      { names: ["water", "river", "voice", "forward", "fog", "mist", "out"], to: "ferry", when: () => state.shift >= 2, blocked: () => state.shift === 1 ? "You can't make out where the planks lead. Take a look around, or listen." : "The water is only water. The far bank is out there somewhere, and you'd have to be a fool to wade it." + (state.turnsHere >= 4 ? " Still, it is hard to stop watching." : ""), text: "You call back, and walk out along the planks toward the sound. The mist parts, and the knocking is suddenly very close.", onArrive: () => {
+        state.visited1830 = true;
+        if (state.hasFerry && !state.dixonOwns) {
+          state.hasFerry = false; state.money = 0; state.dixonCash = 260; state.warnedClaim = false; state.rewound = true;
+        }
+      } }
+    ]
+  },
+
+  ferry: {
+    get name() { return (state.dixonOwns ? "Dixon's" : "Ogee's") + " ferry landing, 1830"; },
+    look: () => {
+      let text = "A rough plank dock runs out into the slow brown water of the Rock River. A flat-bottomed [ferry] rides against it, and the [dock] posts hold a coil of line. " + (state.dixonOwns ? "The landing is Dixon's now; Ogee has gone, and a hired hand is tarring a seam. " : "A [man] in a buckskin shirt is working on the boat. ") + "Half buried in the gravel along the bank, a cracked [canoe] lies on its side. Two loaded [wagons] wait their turn at the head of the landing. A worn [path] climbs south, away from the water, toward woodsmoke; across the river, the north bank has a few buildings standing on it. ";
+      text += state.fog
+        ? "The [fog] has come in off the river, thick and white, and you can barely see the end of the dock."
+        : "The afternoon is clear; the mist you came through has burned off.";
+      if (state.rewound) {
+        state.rewound = false;
+        text += "\n\nSomething is different. Ogee's ferry is Ogee's again, and the rope is the old rope, as though nobody had ever paid for it. Across the water, the post is lit and busy. Whatever you did last time has been unmade, and you remember it anyway.";
+      }
+      return text;
+    },
+    listen: () => state.dixonOwns ? "Water slapping the hull. A mallet somewhere up the path. Somebody is tarring a seam, and it isn't Ogee." : "Water slapping the hull. A mallet somewhere up the path. The knocking you heard is Ogee, patching a plank.",
+    extras: {
+      pole: "An iron-shod [pole] is stowed along the ferry's rail.",
+      shoe: "The pole's [shoe] is worn bright and thin.",
+      lines: "Under the dock, [lines] of green slime mark the water's height."
+    },
+    objects: {
+      ferry: {
+        aliases: ["boat", "flatboat", "raft"],
+        desc: "Joseph Ogee's flatboat, a rope strung bank to bank and an iron-shod [pole] stowed along the rail. It carries wagons as well as people across the Rock River.",
+        reveals: ["pole"],
+        verbs: {
+          board: () => { move(scene().exits[1]); return null; },
+          touch: "The planks are slick and warm in the sun. Fresh tar on one seam.",
+          climb: () => { move(scene().exits[1]); return null; }
+        }
+      },
+      wagons: {
+        aliases: ["wagon", "teams", "team", "teamsters", "oxen", "freight", "lead"],
+        desc: "Two ox-drawn wagons stacked with pigs of lead, the metal still grey and dull, bound from the Galena mines for the markets downriver. The teamsters are asleep on the seats. Ogee says there is a line some days, and the ferry is the only crossing for fifty miles.",
+        verbs: { take: "Each pig weighs about seventy pounds. You leave them.", search: "Nothing in the wagons but lead, a water keg and a tattered quilt." }
+      },
+      pole: {
+        key: false,
+        hidden: true,
+        aliases: ["setting pole", "iron pole"],
+        desc: "A long ash pole with an iron [shoe] on the end, worn bright and thin on the side that bears against the riverbed.",
+        reveals: ["shoe"],
+        verbs: { take: "It's Ogee's, and he'd notice.", push: "You lean on it. It's heavier than it looks and doesn't want to move." }
+      },
+      shoe: {
+        hidden: true,
+        aliases: ["pole shoe", "iron shoe", "iron"],
+        desc: "A cone of forged iron, dented on one side. The kind of object a museum would put on a velvet pedestal, if anyone had thought to save it.",
+        verbs: { take: "It's riveted to the pole." }
+      },
+      dock: {
+        key: false,
+        aliases: ["landing", "wharf", "post"],
+        desc: "Rough planks and posts, half-submerged at the edges. The water has left a green line a hand above your boots, and under the planks the [lines] of other, higher floods are still visible.",
+        reveals: ["lines"],
+        verbs: { sit: "You sit on the edge of the dock with your boots over the water. The river is very close.", search: "You walk the length of the planks. There's a coil of line, some tar, a mallet. Ogee's, all of it." }
+      },
+      lines: {
+        hidden: true,
+        aliases: ["line", "flood lines", "slime", "high water"],
+        desc: "Four distinct green bands, one above another on the pilings. Whoever built this dock has been flooded out more than once, and rebuilt it each time in the same place."
+      },
+      canoe: {
+        aliases: ["dugout"],
+        desc: "An old dugout canoe, cracked along the seam and half-buried in gravel by the dock. No paddle.",
+        verbs: { push: "It's stuck fast in the gravel.", climb: "You'd go straight through the crack.", search: "No paddle, no gear. Just gravel, and a long split down the hull." }
+      },
+      fog: {
+        aliases: ["mist"],
+        visible: () => state.fog,
+        desc: "A wall of white, so thick the river is only a sound. It is cold, and a little electric. Through it, very faintly, you hear a car door.",
+        verbs: { touch: "Cold, damp, and a little electric.", smell: "Diesel and cut grass, from somewhere that isn't here." }
+      }
+    },
+    npcs: {
+      ogee: {
+        visible: () => !state.dixonOwns,
+        get name() { return state.ogeeIntroduced ? "Joseph Ogee" : "the ferryman"; },
+        aliases: ["joseph", "ferryman", "man"],
+        desc: "A broad man in a buckskin shirt, forearms scarred, sleeves rolled. He runs the ferry and has been here longer than the town.",
+        fallback: "He gives a small shrug. “I couldn't tell you much about that, I'm afraid. I've spent most of my life on this river.”",
+        topics: [
+          { keys: ["price", "ferry", "buy", "boat", "sell"], say: () => state.hasFerry ? "Ogee says, “She's yours. Keep the seams tarred, and don't pole her out when the river's running high.”" : "Ogee says, “A fellow came up from downriver and offered me three hundred sixty dollars for her. Dixon's been over twice, but he hasn't got that much. I'd rather sell to someone around here, but I can't turn down the full price.”" },
+          { keys: ["work", "haul", "keg", "freight", "job", "money"], say: "Ogee says, “There's usually freight to take over to the settlement. Whiskey kegs, mostly. Four to a load, near a hundred and fifty pounds apiece. I'll pay twenty dollars to pole them across and bring the ferry back. If the river behaves, you might make three trips in a week.”" },
+          { keys: ["lead", "galena", "wagon", "wagons", "teams", "mines", "traffic", "teamsters"], say: "Ogee says, “Lead out of the Galena mines, bound downriver. Some days I've five, ten teams waiting. It's the only crossing for fifty miles, so they wait.”" },
+          { keys: ["timber", "axe", "wood", "oak"], say: "Ogee jerks his chin up the path. “Axe is up at the cabins. White oak down by the river sells at the sawmill.”" },
+          { keys: ["dixon", "trader"], say: "Ogee says, “John Dixon. Trader. Came up this spring and set up across the river. Does a fair trade with the Sauk and Fox. Quiet man, but everybody knows him.”" },
+          { keys: ["land", "plot", "acre"], say: () => state.hasLand ? "Ogee says, “Heard you took the ridge claim. Good oak up there.”" : "Ogee says, “No land office hereabouts. The surveyor over at Dixon's post writes up claims. You'll want money.”" },
+          { keys: ["fog", "mist", "east", "from", "where", "home"], say: "Ogee looks upriver for a long moment. “Comes and goes. Folks walk into it and don't always walk out the same.” He goes back to the plank." },
+          { keys: ["river", "flood", "floods"], say: "“River does what it wants. Four times I've rebuilt this dock. Fifth time, I'll build it higher.”" },
+          { keys: ["pole", "shoe"], say: "“Ash pole, iron shoe. I had the smith make that. It'll outlast me.”" }
+        ]
+      }
+    },
+    exits: [
+      { names: ["south", "path", "cabins", "smoke"], peek: "A worn path climbs south, away from the water, toward woodsmoke and the cabins.", to: "cabins", text: "You walk up the path. Three cabins sit in a clearing, smoke coming from the middle one." },
+      { names: ["north", "far bank", "across", "river"], peek: "Across the water, on the north bank, a log trading post stands above a small dock.", noFarewell: true, to: "farbank", text: () => (state.dixonOwns ? "A hired hand poles you across." : "Ogee poles you across.") + " The rope hums against the hull, the current grabs mid-river, then eases. On the far bank a tall man in a dark coat watches you come in." },
+      { names: ["east", "west"], blocked: "The bank runs on in both directions, thick with brush and willow. There is no path that way, and no reason to push into it yet." },
+      { names: ["fog", "mist", "back", "return"], blocked: "There is nothing there but the clear afternoon and the river. Whatever brought you here has gone for now, and you still have things to settle in 1830." }
+    ]
+  },
+
+  farbank: {
+    name: "The far bank, 1830",
+    look: () => "The ferry rocks against a smaller dock on the north bank. A rough log [post] stands above the landing, its door open on the dim interior. A tall man in a dark coat, [Dixon], stands on the path watching the river. Through a side door, a thin man at a plank table, the [surveyor], is writing in a field book. A young teamster with a rifle across his knees, [Eli], sits near the door. The [dock] is smaller than Ogee's. Back [south] across the water, " + (state.dixonOwns ? "the ferry landing." : "Ogee's landing."),
+    listen: "Rope creaking, a murmur of voices from inside the post, and farther up the bank the clatter of someone stacking wood.",
+    objects: {
+      post: {
+        aliases: ["trading post", "store", "door"],
+        desc: "Dixon's trading post: a single room of logs and plank, its door open on shelves of goods, stacked [barrels], bundled [pelts] and a canvas [mail] pouch on a peg.",
+        reveals: ["barrels", "pelts", "mail"],
+        verbs: { open: "The door is already open. Inside it's dim and smells of tallow.", climb: "You'd rather use the door." }
+      },
+      barrels: {
+        hidden: true,
+        aliases: ["barrel", "kegs", "keg"],
+        desc: "Oak barrels branded with a trader's mark, stacked three high. Some are lighter than others.",
+        verbs: { push: "They don't budge. They're heavier than they look.", open: "They're sealed with wax. That's someone's whiskey." }
+      },
+      mail: {
+        hidden: true,
+        aliases: ["mail pouch", "pouch", "letters", "post office", "mailbag"],
+        desc: "A canvas mail pouch on a peg, tagged OGEE'S FERRY, ILL. Inside, a few folded letters addressed to settlers up and down the river, and one to a man in Galena. The post office came with the ferry.",
+        verbs: { open: "You leave the pouch alone. Other people's letters are other people's letters.", take: "It isn't yours." }
+      },
+      pelts: {
+        hidden: true,
+        aliases: ["pelt", "furs", "fur", "hides"],
+        desc: "Beaver, muskrat, a few deer hides, bundled and tied with rawhide. The Sauk and Fox trade them here for iron and cloth.",
+        verbs: { touch: "Thick and a little greasy. They smell of smoke and woodlands.", smell: "Smoke, tallow, wet fur." }
+      },
+      dock: {
+        aliases: ["landing"],
+        desc: "The north-bank dock, smaller than Ogee's, with a hitching post nearby.",
+        verbs: { sit: "You sit on the edge of the dock and watch the river go by. A fish rises." }
+      },
+      map: {
+        hidden: true,
+        aliases: ["wall map", "survey"],
+        desc: "A hand-drawn survey, the river a thick blue line. A band of ridge land to the west is shaded in and labelled in a small surveyor's hand. Across the river, at Ogee's landing, someone has pencilled a question mark.",
+        verbs: { touch: "The paper is soft and a little brittle at the edges." }
+      },
+      ledger: {
+        hidden: true,
+        aliases: ["field book", "book", "notes", "accounts", "register"],
+        desc: "The surveyor's field book, columns of bearings, distances and the odd name. Most lines are crossed out. The last unfilled line is dated for a day that hasn't come yet in this century.",
+        verbs: { touch: "The surveyor shifts it out of reach without looking up." }
+      }
+    },
+    extras: {
+      map: "A large survey [map] hangs behind the surveyor.",
+      ledger: "The surveyor's [field book] lies open on the table."
+    },
+    npcs: {
+      dixon: {
+        name: "John Dixon", aliases: ["john"],
+        desc: "A tall man in a dark coat. A quiet trader who does fair business with the Sauk and Fox. He set up here this spring.",
+        fallback: "Dixon considers. “Not my line. You might ask Ogee, or the surveyor.”",
+        topics: [
+          { keys: ["sauk", "treaty", "militia", "black hawk", "war", "saukenuk"], say: "Dixon is quiet a moment. “From what I hear, the Sauk and Fox winter west of the Mississippi and come back every spring to their corn at Saukenuk. The settlers there don't like it. The government says an old treaty sold the land, and Black Hawk says nobody sold it.” He looks at the river. “I'd rest easier if I thought that was finished.”" },
+          { keys: ["1832", "lincoln", "fort"], say: "Dixon gives you an odd look. “Eighteen thirty-two? That's two years off. I don't keep accounts that far ahead.”" },
+          { keys: ["ogee", "ferry", "joseph", "money", "price", "buy", "short", "speculator", "downriver", "offer", "help", "need", "want", "himself", "yourself", "problem", "trouble"], say: () => state.dixonOwns ? "“It's mine. Thank you for that.”" : state.dixonCash >= FERRY_PRICE ? "“I have it all.”" : `“I have $${state.dixonCash}, and Ogee won't take less than $${FERRY_PRICE}. A speculator came up from downriver and offered it flat. I'm $${FERRY_PRICE - state.dixonCash} short.” He looks across the water. “If you could lend me the difference, I'd see you right. Say \"give Dixon $${FERRY_PRICE - state.dixonCash}\".”` },
+          { keys: ["land", "plot", "clerk", "surveyor", "claim", "acre"], say: () => state.hasLand ? "“You took the ridge claim, I hear. Good timber. Keep that receipt safe; it's all the law there is out here.”" : "“Land's what I'd buy, if I were you. The surveyor writes up claims on the ridge. Go and see him.”" },
+          { keys: ["family", "wife", "children", "kids", "cabin", "seven"], say: "“My wife and the children are up the bank. Seven of us all told, so you'll forgive me if I notice a stranger. We came the eleventh of April and took over Ogee's claim.”" },
+          { keys: ["trade", "pelts", "post", "whiskey"], say: "“Pelts, iron, cloth, and a little whiskey. People come a long way for the iron.”" },
+          { keys: ["fog", "mist", "east"], say: "“The mist? It's been odd this year.” He doesn't say more." }
+        ]
+      },
+      clerk: {
+        name: "the surveyor", aliases: ["surveyor", "land clerk", "clerk", "agent", "office"],
+        desc: "A thin man at a plank table in a side room of the post, in the country to lay out the Galena road. Between sightings he writes up claims for settlers. A large [map] hangs behind him and his [field book] lies open on the table.",
+        reveals: ["map", "ledger"],
+        fallback: "The surveyor looks pained. “That isn't my line. I measure; I don't know.”",
+        topics: [
+          { keys: ["land", "plot", "timber", "acre", "ridge", "price", "buy", "claim"], say: () => state.hasLand ? "The surveyor glances up. “Your claim is in my field book, bounds and all. Nothing more I can sell you.”" : "The surveyor nods. “There's no government sale yet; that's years off. Till then a claim is a man's word and a witness. The ridge timber west is staked by a fellow who's gone back east. Thirty-two acres, forty dollars to him, two to me for entering the bounds.”" },
+          { keys: ["road", "galena", "trail", "kellogg", "teams", "lead"], say: "“I'm laying out the road to Galena, to replace Kellogg's old trail. Hilly in places, but passable. Everything for the lead mines crosses here.”" },
+          { keys: ["map", "survey"], say: "The surveyor taps it. “West ridge, thirty-two acres. East, nothing to speak of. Across the river, Ogee's. Not for sale, and not on my map.”" },
+          { keys: ["ledger", "book", "field", "name", "names"], say: "“Bounds and bearings. Names, when there's anyone to put down.”" }
+        ]
+      },
+      settler: {
+        name: "a young teamster", aliases: ["eli", "boy", "young man", "teamster"],
+        desc: "A young man in patched homespun with an old flintlock rifle across his knees, on his way to the Galena lead mines. He keeps glancing at the south bank, where his uncle's second wagon waits its turn.",
+        fallback: "Eli shrugs and looks at the river.",
+        topics: [
+          { keys: ["winnebago", "black hawk", "militia", "pa", "father", "war"], say: "Eli says, “My pa went out with the militia in '27, the Winnebago trouble. Took sick on the march and never came home.” He looks at the rifle. “Ma says the diggings pay better than corn.”" },
+          { keys: ["rifle", "gun"], say: "“Pa's old flintlock. Shoots true, if you hold your breath.”" },
+          { keys: ["river", "boats", "boat", "watch", "wagon", "uncle", "galena", "lead", "mines", "diggings"], say: "“Uncle's first wagon is over. The second waits on the far side. Folks say there's a day's line some days. Dixon lets me sit here out of the sun.”" }
+        ]
+      }
+    },
+    exits: [
+      { names: ["south", "back", "across", "ferry", "river"], peek: "Back across the water is the ferry landing, and the path to the cabins beyond it.", to: "ferry", text: () => state.dixonOwns ? "You cross back. A hired hand is coiling rope on the dock." : "You cross back. Ogee is on the dock, coiling rope." },
+      { names: ["north", "path", "settlement"], blocked: "The path north leads toward the settlement, but it's a long walk and the afternoon is going. Not today." }
+    ]
+  },
+
+  cabins: {
+    name: "Ogee's cabins, 1830",
+    look: () => {
+      let text = "Three log [cabin]s stand in a clearing, smoke rising from the middle one. ";
+      text += !state.hasAxe ? "An [axe] leans against a chopping [block] beside a stack of split oak. " : "A chopping [block] stands beside a stack of split oak. ";
+      text += "The path back [north] to the river is plain from here.";
+      return text;
+    },
+    listen: "A woodpecker. Water through the trees. Wind in the cabin chinking.",
+    extras: {
+      chest: "A [chest] sits at the foot of the loft.",
+      mattress: "A straw [mattress] lies in the loft."
+    },
+    objects: {
+      cabin: {
+        key: false,
+        aliases: ["middle cabin", "door", "cabins"],
+        desc: "The middle cabin: one room, a stone hearth gone cold, a [loft] reached by a ladder. Blankets, a tin cup, and the smell of old smoke.",
+        reveals: ["loft"],
+        verbs: { open: "The door is already ajar.", smell: "Cold ash, tallow, and old wool.", sit: "There's nothing to sit on but the floor." }
+      },
+      loft: {
+        key: false,
+        hidden: true,
+        aliases: ["ladder", "bed"],
+        desc: "A low loft with a straw [mattress] and a [chest] at its foot. It's been slept in recently.",
+        reveals: ["chest", "mattress"],
+        verbs: { climb: "You climb up and look around. A straw mattress, a chest. You come back down.", sit: "You sit on the edge of the loft and look at the room." }
+      },
+      mattress: {
+        hidden: true,
+        aliases: ["straw", "straw mattress"],
+        desc: "Straw in ticking, still holding the shape of whoever slept on it. A single grey hair on the pillow.",
+        verbs: { sit: "It crackles and smells of dust. You stand up again.", touch: "Dry straw. Not recently turned." }
+      },
+      chest: {
+        hidden: true,
+        aliases: ["trunk", "box"],
+        desc: "A plain wooden chest with a rope handle at each end. It isn't locked.",
+        verbs: { open: "You lift the lid. A razor, a pewter cup, a folded blanket. Nothing you'd want.", push: "It's heavier than it looks." }
+      },
+      block: {
+        aliases: ["chopping block", "oak", "stack", "wood", "split oak"],
+        desc: "A stump worn smooth at the top by years of axes. A stack of split white oak sits beside it, enough for the winter. The sawmill downriver would take it.",
+        verbs: { sit: "You sit on the block for a moment, then stand again.", climb: "You step onto the block and back down.", touch: "Dry, hard wood. The oak is well seasoned." }
+      },
+      axe: {
+        key: true,
+        aliases: ["hatchet"],
+        visible: () => !state.hasAxe,
+        desc: "A worn axe leaning against the block. Good for splitting or timber work.",
+        take: () => { state.hasAxe = true; return "You take the axe. It's heavier than it looks."; },
+        verbs: { touch: "The edge is sharp enough to catch a thumbnail." }
+      }
+    },
+    npcs: {},
+    exits: [
+      { names: ["north", "back", "river", "ferry", "landing"], peek: "The path runs back north, down to the river and the ferry landing.", to: "ferry", text: "You head back down the path to the dock." }
+    ]
+  }
+};
+
+const npcTalk = {
+  ogee: "He wipes his hands on his shirt. “I'm Joseph Ogee. I run this ferry. You looking for work, or just passing through? Kegs go to the settlement, twenty dollars a trip.”",
+  dixon: "Dixon steps forward, hand out. “John Dixon.” His handshake is firm. “Ogee send you? I'll be plain: I'm trying to buy his ferry, and I'm short of the price. If you've a strong back, kegs pay twenty dollars a trip, and I'd make it right with anyone who helped me.”",
+  clerk: "The surveyor looks up from his field book. “Claims near the river are spoken for. There's timber on the west ridge, if you take it as it stands. Mind, I only enter the bounds; the claim is between you and your neighbors.”",
+  settler: "The young man shifts the rifle. “Waiting on the second wagon. Uncle says we'll make the diggings by the first frost. Name's Eli.”"
+};
+
+const VERBS = "look, examine, go, take, talk, ask, use, open, wait, listen";
+
+function hint() {
+  let h;
+  if (state.fog && PAST.includes(state.scene)) h = "The fog has you. Ogee has hold of your sleeve; try “follow Ogee”.";
+  else if (state.scene === "riverbank" && state.shift === 1) h = "The air has changed. Take a look around, or listen.";
+  else if (state.scene === "riverbank" && state.shift >= 2) h = "Someone is calling from the water. Try “call”.";
+  else if (state.scene === "riverbank" && !state.returned) h = "The water is hard to stop watching. Wait a little, or look at the water, and see what happens.";
+  else if (PAST.includes(state.scene) && !state.dixonOwns && !state.hasFerry) {
+    const short = FERRY_PRICE - state.dixonCash;
+    h = state.dixonCash >= FERRY_PRICE ? "Dixon has what he needs." : `Dixon is $${short} short of Ogee's ferry. Earn money with “haul” or “haul week” (at the ferry landing or Dixon's post), then “give Dixon ${short}”. The surveyor's ridge claim is optional.`;
+  }
+  else if (done()) h = "The first chapter is finished. Margaret's next puzzle may take longer to find. Look around the museum and the river while you wait, or “go to museum” and talk to her.";
+  else if (state.returned) h = "Margaret may have noticed something new. “Go to museum”, and look at the exhibit and the crossword.";
+  else h = "Margaret keeps mentioning the river and the marker. Talk to her, look around, then walk north to the river.";
+  print(h + ` (${VERBS})`);
+}
+
+function scene() { return scenes[state.scene]; }
+
+function visible(entry) { return (!entry.visible || entry.visible()); }
+
+function isFound(key) { return state.found[state.scene + ":" + key]; }
+
+function reveal(keys) {
+  (keys || []).forEach(k => { state.found[state.scene + ":" + k] = true; });
+}
+
+function describe(entry) { return typeof entry.desc === "function" ? entry.desc() : entry.desc; }
+
+function editDistance(a, b) {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let diagonal = row[0];
+    row[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const above = row[j];
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, diagonal + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diagonal = above;
+    }
+  }
+  return row[b.length];
+}
+
+function candidates() {
+  const s = scene();
+  const list = [];
+  for (const [key, obj] of Object.entries(s.objects)) {
+    if (visible(obj) && (!obj.hidden || isFound(key))) list.push({ type: "object", key, entry: obj, labels: [key, ...(obj.aliases || [])] });
+  }
+  for (const [key, npc] of Object.entries(s.npcs || {})) {
+    if (visible(npc)) list.push({ type: "npc", key, entry: npc, labels: [key, npc.name.toLowerCase(), ...(npc.aliases || [])] });
+  }
+  list.push({ type: "item", key: "phone", entry: { desc: phoneText }, labels: ["phone", "cell", "cellphone", "mobile"] });
+  if (state.hasAxe) list.push({ type: "item", key: "axe", entry: { desc: "A worn axe, heavier than it looks." }, labels: ["axe", "hatchet"] });
+  return list;
+}
+
+function cleanName(name) {
+  name = name.toLowerCase().trim();
+  let prev;
+  do {
+    prev = name;
+    name = name.replace(/^(the|a|an|at|to|in|on|out of|out|through|thru|inside|behind|under|around|over|into|up)\s+/, "");
+  } while (name !== prev);
+  return name;
+}
+
+function findTarget(name) {
+  name = cleanName(name);
+  const matches = candidates();
+  const exact = matches.filter(m => m.labels.includes(name));
+  if (exact.length === 1) return exact[0];
+  if (exact.length > 1) return { type: "ambiguous", candidates: exact.slice(0, 2) };
+  const scored = matches.map(m => ({ ...m, distance: Math.min(...m.labels.map(label => editDistance(name, label))) })).sort((a, b) => a.distance - b.distance);
+  if (name.length >= 4 && scored.length && scored[0].distance <= 1) {
+    const best = scored.filter(m => m.distance === scored[0].distance);
+    return best.length === 1 ? best[0] : { type: "ambiguous", candidates: best.slice(0, 2) };
+  }
+  if (name.length >= 4 && scored.length && scored[0].distance <= 2) return { type: "suggestions", candidates: scored.slice(0, 2) };
+  return null;
+}
+
+function clarify(found) {
+  const names = found.candidates.map(c => c.key).join(" or ");
+  print(found.type === "ambiguous" ? `Which do you mean: ${names}?` : `I don't see that exactly. Did you mean ${names}?`);
+}
+
+const DIRS = { n: "north", s: "south", e: "east", w: "west", u: "up", d: "down" };
+
+function findExit(name) {
+  name = name.toLowerCase().trim();
+  let prev;
+  do { prev = name; name = name.replace(/^(?:the|to|toward|towards|into|through|down|up|along|onto|on|over|across|back to|back)\s+/, ""); } while (name !== prev && name);
+  name = DIRS[name] || name;
+  return scene().exits.find(e => e.names.includes(name));
+}
+
+function look() {
+  const s = scene();
+  let text = s.look();
+  const extras = Object.entries(s.extras || {}).filter(([k]) => isFound(k)).map(([, t]) => typeof t === "function" ? t() : t).filter(Boolean);
+  if (extras.length) text += " " + extras.join(" ");
+  if (state.fog && PAST.includes(state.scene) && state.scene !== "ferry") text += " The fog has closed in around you, thick and white, and a rough hand has found your sleeve.";
+  print(text);
+}
+
+const PAST = ["ferry", "farbank", "cabins"];
+
+function chapterEnd() {
+  if (!(state.dixonOwns || state.hasFerry) || state.fog || !PAST.includes(state.scene)) return;
+  state.fog = true;
+  print("A chill comes up off the river. Within a few breaths the fog is on you, thick and white and wet, and you can no longer see your own hands. Out of it, Ogee's voice, close by: “Easy now. Don't go wandering in this. Stay where you are, and take my arm.” A rough hand finds your sleeve.");
+}
+
+function followOgee() {
+  if (!state.fog) return print("There's nobody to follow right now.");
+  state.returned = true; state.shift = 0; state.fog = false;
+  arrive("riverbank", "You take Ogee's arm and walk blind through the white, step by step. His hand lets go of your sleeve somewhere along the way. The planks give way to concrete, the knocking fades, and the city sounds come back one by one. The museum is a short walk; Margaret will want to hear about it. (Say “go to museum”.)");
+}
+
+function arrive(id, text, onArrive) {
+  state.scene = id;
+  state.turnsHere = 0;
+  state.parted = {};
+  if (!state.visitedScenes.includes(id)) state.visitedScenes.push(id);
+  if (onArrive) onArrive();
+  if (text) print(text);
+  print(scene().name, "heading");
+  look();
+  renderNotes();
+}
+
+function move(exit) {
+  if (state.fog && PAST.includes(state.scene)) {
+    print("The fog is too thick to go anywhere. You take a step and lose all sense of direction, and Ogee's hand tightens on your sleeve. “Not that way. Follow me.”");
+    return true;
+  }
+  const blocked = typeof exit.blocked === "function" ? exit.blocked() : exit.blocked;
+  if (exit.when && !exit.when()) { print(blocked || "You can't go that way."); return true; }
+  if (!exit.to) { print(blocked || "You can't go that way."); return true; }
+  farewell(exit);
+  arrive(exit.to, typeof exit.text === "function" ? exit.text() : exit.text, exit.onArrive);
+  return true;
+}
+
+const PARTING = {
+  volunteer: () => state.returned
+    ? "You nod to Margaret on your way out. “Take care out there,” she says, still watching the panel."
+    : "You thank Margaret and say you'll be back. “Do come again,” she says, pencil already moving. “And mind the fog, it comes up quick.”",
+  ogee: "You nod to Ogee. He lifts his chin without looking up from the plank.",
+  dixon: "You nod to Dixon, and he touches two fingers to his hat brim.",
+  clerk: "You nod to the surveyor, who does not look up from his field book.",
+  settler: "You nod to Eli, and he nods back, watching the river."
+};
+
+function farewell(exit) {
+  if (exit.noFarewell) return;
+  const here = npcsHere().filter(n => PARTING[n.key]);
+  const unsaid = here.filter(n => !state.parted[n.key]);
+  if (!unsaid.length) return;
+  if (here.length === 1) {
+    const p = PARTING[here[0].key];
+    print(typeof p === "function" ? p() : p);
+  } else {
+    print("You nod to the others and take your leave.");
+  }
+}
+
+function examine(name) {
+  const found = findTarget(name);
+  if (!found) {
+    const exit = findExit(name);
+    if (exit && !(exit.when && !exit.when())) return print(exit.peek || `That way leads on. (Try “go ${name}”.)`);
+    return print("You don't see that here.");
+  }
+  if (found.type === "ambiguous" || found.type === "suggestions") return clarify(found);
+  const text = describe(found.entry);
+  print(text);
+  reveal(found.entry.reveals);
+  recordNote(found, text);
+}
+
+function recordNote(found, text) {
+  if (found.type === "item") return;
+  const id = state.scene;
+  state.notes[id] = state.notes[id] || {};
+  const title = found.entry.title || (found.type === "npc" ? found.entry.name.replace(/^(the|a)\s+/, "") : found.key);
+  state.notes[id][found.key] = { title, text, key: found.type === "npc" || keyOf("object", found.entry) };
+  renderNotes();
+}
+
+function renderNotes() {
+  const panel = document.getElementById("notes");
+  if (!panel) return;
+  const open = new Set([...panel.querySelectorAll("details[open]")].map(d => d.dataset.id));
+  const order = [state.scene, ...state.visitedScenes.filter(id => id !== state.scene).reverse()];
+  let html = "";
+  for (const id of order) {
+    const entries = Object.entries(state.notes[id] || {});
+    const current = id === state.scene;
+    if (!entries.length && !current) continue;
+    html += `<h2${current ? ' class="current"' : ""}>${esc(scenes[id].name)}</h2>`;
+    if (!entries.length) html += '<div class="empty">Nothing yet.</div>';
+    entries.sort((a, b) => (b[1].key ? 1 : 0) - (a[1].key ? 1 : 0));
+    for (const [key, note] of entries) {
+      const did = id + ":" + key;
+      html += `<details data-id="${did}"${open.has(did) ? " open" : ""}><summary>${esc(note.title)}${note.key ? '<span class="badge" title="Key item">★</span>' : ""}</summary><p>${fmt(note.text, id)}</p></details>`;
+    }
+  }
+  panel.innerHTML = html;
+}
+
+const VERB_CANON = {
+  sign: "sign", write: "sign", "write in": "sign", "write on": "sign", autograph: "sign",
+  read: "read", sit: "sit", "sit on": "sit", "sit at": "sit", "sit in": "sit", "sit down": "sit",
+  touch: "touch", peel: "touch", lift: "touch", feel: "touch", pat: "touch", rub: "touch", stroke: "touch",
+  push: "push", pull: "push", shove: "push", turn: "push", move: "push", knock: "push", "knock on": "push", kick: "push",
+  smell: "smell", sniff: "smell", taste: "taste", lick: "taste",
+  open: "open", close: "close", shut: "close",
+  climb: "climb", "climb on": "climb",
+  search: "search", rummage: "search", "look through": "search", "dig through": "search",
+  drink: "drink", sip: "drink", ring: "push", lean: "touch", "lean on": "touch",
+  use: "use", take: "take", get: "take", grab: "take",
+  board: "board", ride: "board", shout: "call", call: "call", yell: "call", answer: "call", reply: "call", respond: "call", "call out": "call", "shout back": "call"
+};
+
+const VERB_DEFAULT = {
+  board: "There's nothing here to board.",
+  call: "Your voice goes flat in the damp air. Nothing answers.",
+  sign: "There's nothing here to sign.",
+  read: "There's nothing to read on it.",
+  sit: "You'd rather not sit on that.",
+  touch: "You touch it. Nothing in particular happens.",
+  push: "It doesn't budge, and you feel a bit silly.",
+  smell: "It smells like what it is.",
+  taste: "You think better of it.",
+  open: "It doesn't open, or there's nothing in it that you'd find.",
+  close: "It isn't open.",
+  climb: "You can't climb that.",
+  search: "You look it over carefully but find nothing more.",
+  drink: "That isn't something you can drink.",
+  use: "You're not sure how to use that here.",
+  take: "That isn't yours to take."
+};
+
+function act(verb, name) {
+  const found = findTarget(name);
+  if (!found) return print("You don't see that here.");
+  if (found.type === "ambiguous" || found.type === "suggestions") return clarify(found);
+  const e = found.entry;
+  if (verb === "use" && found.key === "phone") return print(phoneText());
+  const custom = e.verbs && e.verbs[verb];
+  if (custom) {
+    const result = typeof custom === "function" ? custom() : custom;
+    if (result) print(result);
+    return;
+  }
+  if (verb === "take" && e.take) return print(e.take());
+  if (verb === "take" && found.type === "item") return print("It's already with you.");
+  if (verb === "read" || verb === "search") return examine(name);
+  if (verb === "open" && e.open) return print(e.open());
+  print(VERB_DEFAULT[verb]);
+}
+
+const SPEAKER = { volunteer: "Margaret", ogee: "Ogee", dixon: "Dixon", clerk: "The surveyor", settler: "Eli" };
+
+const SOCIAL = {
+  volunteer: {
+    hello: "“Hello, hello.” She smiles over her glasses.",
+    thanks: "“Oh, you're very welcome. Nobody thanks the volunteers. Not often.”",
+    bye: "“Mind the fog on your way. It comes up quick this time of year.”",
+    how: "“Can't complain. Quiet Saturday, a crossword, and someone to talk to. That's a good day.”",
+    sorry: "“Don't mention it.”"
+  },
+  ogee: {
+    hello: "“You came through the fog, eh? I'm Joseph Ogee. I run this ferry.”",
+    thanks: "Ogee grunts. “Don't thank me yet. River's not done with any of us.”",
+    bye: "“Watch the water.”",
+    how: "“Alive. Dock's still standing. That's a good week.”",
+    sorry: "“No harm done.”"
+  },
+  dixon: {
+    hello: "Dixon inclines his head. “Good day to you.”",
+    thanks: "“You're welcome. A man ought to be civil on a river.”",
+    bye: "“Safe passage.”",
+    how: "“Well enough. Trade is slow, but it's early yet.”",
+    sorry: "“No offence taken.”"
+  },
+  clerk: {
+    hello: "The surveyor glances up from his field book. “Yes?”",
+    thanks: "“Pay me, and we're square.” He sounds as though thanks are not entirely a pleasure.",
+    bye: "“Do come again when you have the money.”",
+    how: "“Busy. The Galena road doesn't survey itself.”",
+    sorry: "“Quite.”"
+  },
+  settler: {
+    hello: "Eli gives a quick, nervous nod. “Evening.”",
+    thanks: "“Oh. Sure. Anytime.” He looks pleased and a little surprised.",
+    bye: "“See you around. Watch the river.”",
+    how: "“Jumpy, mostly. Folks say the war's coming back.”",
+    sorry: "“It's all right.”"
+  }
+};
+
+function speak(key, text) {
+  const who = key === "ogee" && !state.ogeeIntroduced ? "The ferryman" : SPEAKER[key];
+  if (key === "ogee" && !state.ogeeIntroduced) text = text.replace(/^Ogee says,/, "The ferryman says,");
+  if (who && text.startsWith("“")) text = `${who} says, ${text}`;
+  print(text);
+}
+
+function talk(name) {
+  const found = findTarget(name);
+  if (!found || found.type === "suggestions" || found.type === "ambiguous") {
+    if (found) return clarify(found);
+    return print("There is no one by that name here.");
+  }
+  if (found.type !== "npc") {
+    if (found.entry.onTalk) return found.entry.onTalk();
+    return print("It doesn't answer.");
+  }
+  const npc = found.entry;
+  if (npc.talk) return speak(found.key, npc.talk());
+  if (found.key === "ogee" && state.ogeeIntroduced) {
+    return speak(found.key, "He gives you a nod. “Back again. Anything else you wanted to know?”");
+  }
+  speak(found.key, npcTalk[found.key] || `${npc.name} looks at you but says nothing yet.`);
+  if (found.key === "ogee") state.ogeeIntroduced = true;
+}
+
+function social(kind, name) {
+  let target = null;
+  if (name) {
+    const found = findTarget(name);
+    if (found && (found.type === "ambiguous" || found.type === "suggestions")) return clarify(found);
+    if (found && found.type === "npc") target = found;
+  }
+  if (!target) {
+    const here = npcsHere();
+    if (here.length === 1) target = here[0];
+    else if (!here.length) return print("There's no one here to say that to.");
+    else return print(`Say that to whom? ${here.map(n => (SPEAKER[n.key] || n.key).toLowerCase()).join(" or ")}?`);
+  }
+  const lines = SOCIAL[target.key];
+  if (kind === "hello" && target.key === "volunteer" && state.returned && !state.greeted) {
+    state.greeted = true;
+    return speak(target.key, "“Oh, hello again.” She glances at the panel and back. “Were you down by the river?”");
+  }
+  if (kind === "hello" && target.key === "ogee" && !state.ogeeIntroduced) state.ogeeIntroduced = true;
+  if (kind === "bye") state.parted[target.key] = true;
+  speak(target.key, (lines && lines[kind]) || `${target.entry.name} acknowledges you with a nod.`);
+}
+
+function pleasantry(input) {
+  let m;
+  const person = "(?:\\s+(?:to\\s+)?(.+))?";
+  if ((m = input.match(new RegExp("^(?:say\\s+)?(?:thanks|thank you|thank-you|thx|ty|cheers)(?:\\s+(?:so much|very much|a lot))?" + person + "$"))) ||
+      (m = input.match(/^thank\s+(?:you\s+)?(.+)$/))) return social("thanks", m[1]);
+  if ((m = input.match(new RegExp("^(?:say\\s+)?(?:hello|hi|hey|howdy|greetings|good (?:morning|afternoon|evening|day)|evening|afternoon)" + person + "$")))) return social("hello", m[1]);
+  if ((m = input.match(new RegExp("^(?:say\\s+)?(?:goodbye|good-bye|bye|farewell|see you|see you later|take care|good night|cheerio)" + person + "$")))) return social("bye", m[1]);
+  if ((m = input.match(/^(?:how are you|how's it going|how are things|how do you do|what's up|how have you been)(?:\s+(.+))?$/))) return social("how", m[1]);
+  if ((m = input.match(new RegExp("^(?:say\\s+)?(?:sorry|excuse me|pardon me|apologi[sz]e)" + person + "$")))) return social("sorry", m[1]);
+  if ((m = input.match(/^(?:have a (?:good|nice|great) (?:day|evening|night|one)|good luck|best wishes|well wishes)(?:\s+(.+))?$/))) return social("bye", m[1]);
+  return false;
+}
+
+function npcsHere() {
+  return candidates().filter(c => c.type === "npc");
+}
+
+function ask(rest) {
+  const m = rest.match(/^(.+?)\s+(?:about|for|if)\s+(.+)$/);
+  let npcName = m ? m[1] : null;
+  let topic = m ? m[2] : rest.replace(/^(?:about|for)\s+/, "");
+  let target = null;
+  if (npcName) {
+    const found = findTarget(npcName);
+    if (found && (found.type === "ambiguous" || found.type === "suggestions")) return clarify(found);
+    target = found;
+  } else {
+    const sole = npcsHere();
+    if (sole.length === 1) target = sole[0];
+    else if (!sole.length) return print("There's no one here to ask.");
+    else {
+      const guess = findTarget(rest);
+      if (guess && guess.type === "npc") return talk(rest);
+      return print(`Ask whom? ${sole.map(n => (SPEAKER[n.key] || n.key).toLowerCase()).join(" or ")}?`);
+    }
+  }
+  if (!target || target.type !== "npc") {
+    const sole = npcsHere();
+    if (sole.length === 1 && !npcName) target = sole[0];
+    else return print("There's no one by that name here.");
+  }
+  const npc = target.entry;
+  topic = cleanName(topic);
+  const hit = (npc.topics || []).find(t => t.keys.some(k => topic.includes(k)));
+  if (!hit) return speak(target.key, npc.fallback || `${npc.name} has nothing to say about that.`);
+  speak(target.key, typeof hit.say === "function" ? hit.say() : hit.say);
+  reveal(hit.reveals);
+}
+
+function run(input) {
+  let m;
+  if (state.returned && !state.fog && !state.shift && (state.scene === "riverbank" || state.scene === "riverpath")
+      && /^(?:(?:go|walk|head|return|run|get|come)\s+)?(?:(?:back\s+)?to\s+)?(?:the\s+)?(?:museum|historic center|center|margaret)$/.test(input)) {
+    return arrive("museum", "You make your way back to the Historic Center, the river walk and Hennepin passing in a blur of ordinary evening. Margaret glances up from her desk.");
+  }
+  if (state.scene === "riverbank" && /^(?:swim|wade|jump in(?:to)?|dive in(?:to)?|go in(?:to)?|walk into|step into)(?:\s+(?:the\s+)?(?:water|river))?$/.test(input)) return run("go water");
+  if (/^(?:help|hint|hints|\?|what (?:now|next|do i do|should i do)|what can i do|i'm stuck|stuck)$/.test(input)) return hint();
+  if (/^(look|l)( around)?$/.test(input)) return look();
+  if ((m = input.match(/^(?:pick up|take|get|grab)\s+(.+)$/))) return act("take", m[1]);
+  if ((m = input.match(/^(?:look at|examine|x|inspect|check|study|look in|look under|look behind)\s+(.+)$/))) return examine(m[1]);
+  if ((m = input.match(/^look\s+(.+)$/))) {
+    const exit = findExit(m[1]);
+    if (exit) return print(exit.peek || `You look ${m[1]}, but see nothing you hadn't already seen.`);
+    return examine(m[1]);
+  }
+  if ((m = input.match(/^(?:talk to|talk with|speak to|speak with|tell|chat with)\s+(.+?)\s+about\s+(.+)$/))) return ask(`${m[1]} about ${m[2]}`);
+  if ((m = input.match(/^(?:talk to|talk with|speak to|speak with|greet|chat with)\s+(.+)$/))) return talk(m[1]);
+  if (state.fog && PAST.includes(state.scene) && /^(?:follow|take (?:his |ogee's )?arm|go with ogee|stay|stay close|trust ogee|walk with ogee|let ogee lead)(?:.*)?$/.test(input)) return followOgee();
+  if (/^(?:yes|yeah|sure|ok|okay|aye)$/.test(input)) {
+    if (state.scene === "riverbank" && state.shift >= 2) return act("call", "voice");
+    if (state.scene === "ferry" || state.scene === "farbank") return run("haul");
+  }
+  if (/^(?:shout|call|yell|answer)(?: out| back)?$/.test(input)) {
+    return state.scene === "riverbank" && state.shift >= 2 ? act("call", "voice") : print(VERB_DEFAULT.call);
+  }
+  if ((m = input.match(/^ask\s+(.+)$/))) return ask(m[1]);
+  if ((m = input.match(/^(?:go|walk|head|enter|move|descend|ascend|climb down|climb up|run|step)(?: to| toward| towards| into| through)?\s+(?:the\s+)?(.+)$/))) {
+    const exit = findExit(m[1]);
+    return exit ? move(exit) : print("You can't go that way.");
+  }
+  const dirWord = DIRS[input] || input;
+  if (["north", "south", "east", "west", "up", "down"].includes(dirWord)) {
+    const dirExit = findExit(dirWord);
+    return dirExit ? move(dirExit) : print("You can't go that way.");
+  }
+  const bare = findExit(input);
+  if (bare) return move(bare);
+  const verbs = Object.keys(VERB_CANON).sort((a, b) => b.length - a.length);
+  for (const v of verbs) {
+    if (input.startsWith(v + " ")) return act(VERB_CANON[v], input.slice(v.length + 1));
+  }
+  if (/^(wait|z|rest)$/.test(input)) return print("You wait. Time passes, slowly.");
+  if (pleasantry(input) !== false) return;
+  if (/^listen$/.test(input)) { const l = scene().listen; return print((typeof l === "function" ? l() : l) || "You listen. Nothing stands out."); }
+  if (/^(i|inv|inventory)$/.test(input)) {
+    const carried = ["your phone"];
+    if (state.hasAxe) carried.push("an axe");
+    print(`You are carrying ${carried.join(" and ")}.` + (PAST.includes(state.scene) ? ` There is $${state.money} in your pocket.` : ""));
+    return;
+  }
+  if (/^(think|goals|recall)$/.test(input)) {
+    if (!state.visited1830) return print("You think about the empty pedestal, and the line of the panel that ends too soon.");
+    const bits = PAST.includes(state.scene) ? [`You have $${state.money}.`] : [];
+    if (state.hasLand) bits.push("The ridge claim is yours.");
+    if (state.dixonOwns) bits.push("Dixon has his ferry.");
+    else if (state.hasFerry) bits.push("The ferry is yours, which does not feel right.");
+    else bits.push(`Dixon is $${FERRY_PRICE - state.dixonCash} short of the ferry.`);
+    if (state.dixonOwns) bits.push("It feels, for a moment, like the first chapter is finished.");
+    return print(bits.join(" "));
+  }
+  if ((m = input.match(/^(?:haul|load (?:the )?(?:kegs?|wagons?)|carry (?:the )?kegs?|deliver|work|take (?:the|a) (?:job|trip)|do (?:the|a) (?:job|trip)|earn money|make money)(?:\s+(?:kegs?\s+)?(\d+|week))?$/))) {
+    if (state.scene !== "ferry" && state.scene !== "farbank") return print("There's nothing here to haul.");
+    const trips = m[1] === "week" ? 3 : Math.min(Math.max(parseInt(m[1] || "1", 10), 1), 6);
+    if (state.fog) return print("The fog is too thick to pole across. Ogee's hand stays on your sleeve.");
+    const boss = state.scene === "ferry" && !state.dixonOwns ? "Ogee" : "Dixon";
+    const lines = [
+      `You load the kegs and pole across. ${boss} counts them off and marks the tally.`,
+      `Four kegs, a calm river, and a team of oxen that does not want to board. ${boss} marks the tally.`,
+      `The current is running high today. You pole hard, and ${boss} marks the tally without a word.`
+    ];
+    state.hauls = (state.hauls || 0) + trips;
+    state.money += 20 * trips;
+    print(trips === 1 ? lines[state.hauls % lines.length] + " Twenty dollars for the trip." : `You work ${trips} trips, kegs across and empty boat back. Twenty dollars a trip: $${20 * trips}.`);
+    print(`You now have $${state.money}.`);
+    return;
+  }
+  if (/^(chop|cut wood|timber|cut timber)/.test(input)) {
+    if (state.hasAxe && (state.scene === "cabins" || state.scene === "ferry")) {
+      state.money += 15;
+      print("You spend the day cutting white oak. The sawmill downriver will take it. Fifteen dollars for the load.");
+      print(`You now have $${state.money}.`);
+    } else if (!state.hasAxe) print("You haven't got anything to cut it with.");
+    else print("There's no timber to cut here.");
+    return;
+  }
+  if (/^(buy|purchase) (land|plot)/.test(input)) {
+    if (state.scene !== "farbank") return print("Claims are written up across the river, by the surveyor at Dixon's trading post.");
+    if (state.hasLand) return print("You already own the ridge plot.");
+    if (state.money < 42) return print("You don't have enough money. The ridge claim is forty dollars plus a two-dollar fee for entering the bounds.");
+    state.money -= 42;
+    state.hasLand = true;
+    print("You count out forty-two dollars. The surveyor enters the bounds in his field book and signs a receipt. The ridge-line timber claim is yours.");
+    print(`You now have $${state.money}.`);
+    chapterEnd();
+    return;
+  }
+  if (/^(buy|purchase) (ferry|boat)/.test(input)) {
+    if (state.scene !== "ferry") return print("Ogee isn't here.");
+    if (state.dixonOwns) return print("The ferry isn't for sale. It's Dixon's now.");
+    if (state.hasFerry) return print("You already own the ferry.");
+    if (state.money < FERRY_PRICE) return print(`You don't have enough money. Ogee wants $${FERRY_PRICE}. (Dixon is the one who wants this ferry; you could help him with it.)`);
+    state.money -= FERRY_PRICE;
+    state.hasFerry = true;
+    print(`You count out $${FERRY_PRICE}. Ogee hands you the rope and the pole. The ferry is yours. Across the river, Dixon watches from his dock, then turns and walks slowly back toward the post.`);
+    print(`You now have $${state.money}.`);
+    chapterEnd();
+    return;
+  }
+  if (/^(?:give|lend|pay|hand)(?:\s+(?:dixon|john|him))?$/.test(input)) return print("Give how much? (give Dixon 50)");
+  if ((m = input.match(/^(?:give|lend|pay|hand)\s+(?:(?:dixon|john|him)\s+)?\$?(\d+|all|the rest|the difference)(?:\s*(?:dollars?|bucks))?(?:\s+to\s+(?:dixon|john|him))?$/))) {
+    if (state.scene !== "farbank") return print("Dixon isn't here.");
+    if (state.dixonOwns) return print("Dixon has what he needs.");
+    const need = FERRY_PRICE - state.dixonCash;
+    if (state.money <= 0) return print("You have no money to give.");
+    let amount = /^\d+$/.test(m[1]) ? parseInt(m[1], 10) : Math.min(state.money, need);
+    if (amount <= 0) return print("Give how much?");
+    if (amount > state.money) return print(`You only have $${state.money}.`);
+    amount = Math.min(amount, need);
+    if (amount >= need && !state.hasLand && !state.warnedClaim) {
+      state.warnedClaim = true;
+      return print("Dixon holds up a hand before you can pass it over. “Wait. Once this is done, I don't expect you'll be staying. If you want anything of your own, the surveyor is still writing up claims.” Say it again when you're ready.");
+    }
+    state.money -= amount;
+    state.dixonCash += amount;
+    if (state.dixonCash < FERRY_PRICE) {
+      print(`Dixon takes the money slowly. “That's $${state.dixonCash} I have now. $${FERRY_PRICE - state.dixonCash} to go.”`);
+      print(`You now have $${state.money}.`);
+      return;
+    }
+    state.dixonOwns = true;
+    print("Dixon counts the money into a leather pouch and looks at you for a long moment. “I'll make this right, whatever the river allows.” He walks you down to the dock. Across the water, he and Ogee settle it in the old way: a handshake, a pouch, and a rope and a pole changing hands. Ogee looks across the river at you and lifts his chin. Then Dixon's hand closes on the pole.");
+    print(`You now have $${state.money}.`);
+    chapterEnd();
+    return;
+  }
+  if (/^price/.test(input)) {
+    return print(state.scene === "ferry" ? (state.dixonOwns ? "The ferry is Dixon's now." : state.hasFerry ? "The ferry is yours; there's nothing left to buy." : `Ogee says, “A fellow came up from downriver and offered me three hundred sixty dollars for her. Dixon's been over twice, but he hasn't got that much. I'd rather sell to someone around here, but I can't turn down the full price.”`) : "Nothing here is for sale.");
+  }
+  print(`You can't think how to do that. (${VERBS})`);
+}
+
+function handle() {
+  const raw = cmd.value.trim().slice(0, 40);
+  cmd.value = "";
+  if (!raw) return;
+  print("> " + raw, "echo");
+  const before = state.scene;
+  run(raw.toLowerCase().replace(/[.!?]+$/, ""));
+  if (state.scene === before) {
+    state.turnsHere++;
+    if (scene().onTick) scene().onTick();
+  }
+}
+
+cmd.maxLength = 40;
+cmd.addEventListener("keydown", e => { if (e.key === "Enter") handle(); });
+const wire = (id, fn) => { const el = document.getElementById(id); if (el && el.addEventListener) el.addEventListener("change", fn); };
+wire("opt-sidebar", e => { settings.sidebar = e.target.checked; applySettings(); });
+wire("opt-hl", e => { settings.highlight = e.target.value; applySettings(); });
+wire("opt-clicks", e => { settings.clicks = e.target.checked; applySettings(); });
+const gear = document.getElementById("gear");
+if (gear && gear.addEventListener) gear.addEventListener("click", () => {
+  const panel = document.getElementById("settings");
+  const open = panel.classList.toggle("open");
+  gear.setAttribute("aria-expanded", open);
+});
+output.addEventListener && output.addEventListener("click", e => {
+  const noun = e.target.dataset && e.target.dataset.noun;
+  if (settings.clicks && noun) { cmd.value = (findExit(noun) && !findTarget(noun) ? "go " : "examine ") + noun; handle(); cmd.focus(); }
+});
+applySettings();
+const quick = document.getElementById("quick");
+if (quick && quick.addEventListener) quick.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("button");
+  if (!b) return;
+  if (b.dataset.run) { cmd.value = b.dataset.run; handle(); }
+  else { cmd.value = b.dataset.fill; cmd.focus(); }
+});
+const enterButton = document.getElementById("enter");
+if (enterButton) enterButton.addEventListener("click", handle);
+
+const start = typeof location !== "undefined" && /scene=(\w+)/.exec(location.search);
+if (start && scenes[start[1]]) state.scene = start[1];
+state.visitedScenes.push(state.scene);
+print(scene().name, "heading");
+look();
+renderNotes();
+</script>
+</body>
+</html>

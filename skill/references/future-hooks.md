@@ -49,7 +49,7 @@ A running ledger of ideas and planted details to reuse as new scenes and the pre
 
 ## Broken-present premise (2026-11-02)
 The starting present is a timeline where history went wrong. Open decisions are marked **OPEN**.
-- **The name:** the settlement is recorded as Ogee's Landing before it became Dixon's Ferry, so the broken present's town and museum can still carry the old name. Restored when Dixon owns the ferry. **DECIDED:** the broken present starts as Ogee's Landing (town and Historic Center).
+- **The name:** in the broken present the town is Rolette: Rolette's agent seized the ferry for Ogee's debts, so the crossing took the creditor's name. The wrong fix (your name on the lease) leaves a town with nobody's name, "the Landing". The repair restores Dixon. The variable is `town` in ch1/chapter.yaml.
 - **Dixon's alias:** he goes by a different name until the deal is done. **OPEN:** the alias (a different surname, or a nickname).
 - **Wrongness ledger** (each item is a clue now and a repair later): the Walgreens pharmacy chain never started (Charles Walgreen's Dixon boyhood, Hazelwood 1929); the Reagan "Begins the Trail" statue missing or different; the arch, theatre and courthouse with wrong names or details; the panel's missing sentence; the sanded line on the marker; the empty frames and case.
 - **Margaret as guide:** she knows "things" without knowing why and gives the missions each time the player returns. Her topics track what has been repaired. Everyone else has no memory.
