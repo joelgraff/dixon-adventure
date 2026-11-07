@@ -149,7 +149,7 @@ npcs:
     look: She wears a dark dress and a shawl, with her sleeves pushed up from work. She hasn't taken her eyes off you since you came into the clearing.
     talk:
       - when: [not met.madeline]
-        text: "\"I'm Madeline Ogee. My husband keeps the ferry down below, and you'll be the one he fished out of the river, because you're dripping on my doorstep.\" She looks you over, from your wet hair down to your cracked boots, and leaves it at that."
+        text: "\"Madeline Ogee. My husband keeps the ferry.\" She looks at the river water dripping off you onto her doorstep. \"He fished you out, then.\" She looks you over, from your wet hair down to your cracked boots, and leaves it at that."
         do: [{set: [known.madeline, met.madeline]}]
       - text: "{madeline} gives you a short nod and goes back to her mending."
     topics:
@@ -158,9 +158,9 @@ npcs:
       - keys: [ferry, burn, burned, bogardus, safe]
         say: "\"Nobody is going to burn this ferry.\" She says it as if she were telling you the time."
       - keys: [potawatomi, people, family, relatives]
-        say: She looks at you for a long moment. "Ask me another time," she says, and it sounds like a door closing, politely.
+        say: She looks at you for a long moment. "Why do you want to know?" It doesn't sound like a question she wants answered.
       - keys: [boys, sons, children]
-        say: "\"They're good boys, and they'll be better ones once they've split that pile.\""
+        say: "She watches them a moment. \"Good boys. Better once that pile is split.\""
       - keys: [agent, coat, rolette, debt, creditor, guest]
         say: "Her mouth thins. \"He eats at our table and sleeps in our east room, and all the while he means to take the boat. My husband says that's business.\""
       - keys: [joseph, ogee, husband]
@@ -168,16 +168,16 @@ npcs:
       - keys: [paddle, oar, father's paddle, spare paddle, canoe paddle]
         say:
           - when: [has:paddle]
-            text: "\"Bring it home when you're done with it.\""
+            text: "\"Bring it home when you're done.\""
           - when: [1830.madeline_told]
-            text: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs. \"Mind you bring it home.\""
+            text: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs and puts it in your hands. \"Bring it home.\""
             do: [{give: paddle}, {set: 1830.has_paddle}]
-          - text: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
+          - text: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Bring it home.\""
             do: [{give: paddle}, {set: [1830.has_paddle, 1830.madeline_told]}]
       - keys: [axe, borrow, chopping, block]
         say:
           - when: [has:axe]
-            text: "\"You've got it. Just bring it back when you're done.\""
+            text: "\"You've got it. Bring it back.\""
           - when: [1830.madeline_told]
             text: "\"Take it. Just bring it back.\""
             do: [{set: 1830.axe_ok}]
@@ -188,8 +188,8 @@ npcs:
       hello: "{madeline} nods to you from the doorway."
       thanks: "\"Mm,\" she says, which seems to cover it."
       bye: She lifts a hand as you go.
-      how: "\"Well enough, thank you.\""
-      sorry: "\"It's nothing. Don't trouble yourself.\""
+      how: "\"Busy.\""
+      sorry: "\"It's nothing.\""
     parting: "[madeline] watches you all the way to the edge of the clearing."
 
   boys:
@@ -199,13 +199,13 @@ npcs:
     look: Two boys are splitting kindling with a hatchet and more enthusiasm than skill. They stop to watch you, then pretend they weren't watching at all.
     talk:
       - when: [not 1830.crow_traded]
-        text: "The older boy jerks his chin at the roof. \"He's a thief, that one. He's always finding something shiny.\" The younger one nods hard."
+        text: "The older boy jerks his chin at the roof. \"He's a thief, that one, he's always...\" \"Something shiny!\" the younger one cuts in. \"Every time!\" \"I was telling it.\""
       - text: The boys look at each other and say nothing, though one of them can't quite hide a grin.
     topics:
       - keys: [crow, bird, thief, shiny, key, roof]
         say:
           - when: [not 1830.crow_traded]
-            text: "\"He took Mother's thimble once,\" the younger boy says. \"Pa got it back with a brass button. He'll trade, but only up.\""
+            text: "\"He took Mother's thimble once,\" the younger boy says. \"Pa got it back with a...\" \"Brass button,\" says the older one. \"He'll trade, but only up.\" \"I was telling it!\""
           - text: "\"You've made a friend for life,\" the older boy says, grinning."
     fallback: The boys giggle and go back to their kindling.
 
@@ -242,9 +242,9 @@ actions:
       - if:
           when: [1830.madeline_told]
           do:
-            - say: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs. \"Mind you bring it home.\""
+            - say: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs and puts it in your hands. \"Bring it home.\""
           else:
-            - say: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
+            - say: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Bring it home.\""
             - set: 1830.madeline_told
     else:
       - when: [has:paddle]

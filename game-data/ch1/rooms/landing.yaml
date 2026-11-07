@@ -358,19 +358,19 @@ npcs:
     talk:
       - when: [not met.eli, 1830.wagon_free]
         text: >-
-          "I'm Eli." He grins and jerks a thumb at the wagons. "You'll be the one
-          who got Uncle Asa out of the slough. He says you've got more back than
-          sense, and from him that's high praise. We're bound for the diggings,
-          soon as there's a boat to carry us."
+          "I'm Eli." He grins and jerks a thumb at the wagons. "You got Uncle
+          Asa out of the slough, and he says you've got more back than sense,
+          and from him that's... well, that's praise, honest. Anyhow, we're
+          bound for the diggings, soon as there's a boat."
         do: [{set: [known.eli, met.eli, 1830.met_eli]}]
       - when: [not met.eli]
         text: >-
           "I'm Eli." He says it to the trail more than to you, then remembers
-          his manners and looks round. "We're bound for the diggings, my uncle
-          and me, only his second wagon is down to the hubs in the slough back
-          on the trail. He won't cross the train without it." He shifts the
-          old rifle on his knees. "Not that anybody's crossing today. Pa always
-          said a river in flood is the devil's own road."
+          his manners and looks around. "We're bound for the diggings, my uncle
+          and me, only his second wagon's down to the hubs in the slough back
+          yonder, and he won't cross the train without it, and..." He shifts
+          the old rifle on his knees. "Not that anybody's crossing today. Pa
+          always said a river in flood is the devil's own road."
         do: [{set: [known.eli, met.eli, 1830.met_eli]}]
       - when: [1830.wagon_free]
         text: "\"Uncle's whistling,\" he says, sounding faintly alarmed. \"I didn't know he could.\""
@@ -379,17 +379,17 @@ npcs:
       - keys: [uncle, asa, wagon, slough, stuck, mud]
         say:
           - when: [1830.wagon_free]
-            text: "\"That's Asa, over by the wagons, in the best mood I've seen him in all week. You did that, getting him out of the slough.\""
-          - text: "\"That's Asa. He's back in the slough past Dixon's camp, cussing at the oxen, because his bar broke.\" He shakes his head. \"He won't leave that wagon, and he won't let me help either.\""
+            text: "\"That's Uncle Asa, over by the wagons, and that's the best mood I've seen him in all week, and that's you, honest. Getting him out.\""
+          - text: "\"Uncle Asa? He's back in the slough past Dixon's camp, and his bar broke, and he's cussing at the oxen like it's their fault.\" He shakes his head. \"He won't leave that wagon and he won't let me help. Uncle says I'd only be in the way.\""
             do: [{set: heard.dixon}]
       - keys: [father, pa, militia, winnebago, "1827", war]
-        say: "\"Pa went out with the militia in '27, the Winnebago trouble. Took sick on the march and never came home.\" He looks at the rifle. \"Ma says the diggings pay better than corn.\""
+        say: "\"Pa went with the militia in '27, the Winnebago trouble, and he took sick on the march, and he...\" He looks at the rifle. \"Anyhow. Ma says the diggings pay better than corn.\""
       - keys: [rifle, gun, flintlock]
-        say: "\"It was Pa's old flintlock. It shoots true, if you hold your breath.\""
+        say: "\"It was Pa's. Pa always said it shoots true if you hold your breath, and I guess I hold it pretty good.\""
       - keys: [diggings, galena, mines, lead]
         say: "\"Uncle says a man can make more in a summer at the diggings than in five years farming. Uncle says a lot of things.\""
       - keys: [river, crossing, ferry]
-        say: "\"I've never seen a river this big, and I'd sooner not get to know it any better.\""
+        say: "\"I never saw a river this big, not back home, not anywhere, and I don't guess I want to know it any better.\""
     fallback:
       - when: [1830.wagon_free]
         text: "{eli} shrugs and looks over at his uncle's wagons."
@@ -397,8 +397,8 @@ npcs:
     social:
       hello: "{eli} gives a quick, nervous nod."
       thanks: "\"Oh. Sure. Anytime.\" He looks pleased and a little surprised."
-      bye: "\"Mind the river, now.\""
-      how: "\"Jumpy, mostly. Folks keep saying the war's coming back.\""
+      bye: "\"Watch the river, now. Pa always said...\" He trails off. \"Just watch it.\""
+      how: "\"Jumpy, I guess. Folks keep saying the war's coming back, and Uncle says it won't, and...\" He shrugs."
       sorry: "\"It's all right, honest.\""
     parting: "[eli] bobs his head as you go and turns back to watching the trail."
 

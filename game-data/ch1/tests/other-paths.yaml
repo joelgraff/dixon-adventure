@@ -710,7 +710,7 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
       - {cmd: ask madeline for axe, expect: [What do you want with an axe, Take it, then]}
-      - {cmd: ask madeline for paddle, expect: [That was my father's, Mind you bring it home], not: What do you want}
+      - {cmd: ask madeline for paddle, expect: [That was my father's, Bring it home], not: What do you want}
 
   - name: the axe stays in view on return visits until you take it
     url: scene=cabin
@@ -840,3 +840,16 @@ tests:
       - {cmd: ask rebecca about the road, expect: I am not doing it backwards, not: "I'll not"}
       - {cmd: talk to james, expect: [lost the mail key, He stops himself]}
       - {cmd: ask james about the key, expect: One minute, not: postmaster}
+
+  # Madeline, the boys and Eli (VOICES.md).
+  - name: Madeline says little, the boys interrupt, Eli runs on
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
+      - {cmd: ask madeline about her people, expect: Why do you want to know}
+      - {cmd: ask madeline about the paddle, expect: [lifts it down from the pegs, Bring it home], not: Mind you}
+      - {cmd: talk to boys, expect: [the younger one cuts in, I was telling it]}
+      - setup: {room: landing}
+      - {cmd: talk to young man, expect: [I'm Eli, back yonder], not: "You'll be the one"}
+      - {cmd: ask eli about his father, expect: Anyhow, not: never came home}
+      - {cmd: ask eli about the river, expect: "don't guess I want to know it", not: "I'd sooner"}
