@@ -256,6 +256,7 @@ actions:
     do:
       - take: axe
       - clear: 1830.has_axe
+      - set: 1830.axe_returned
       - say: You hand the axe back. {madeline} takes it without a word, but something in her face eases.
     else:
       - say: You haven't got it to give back.

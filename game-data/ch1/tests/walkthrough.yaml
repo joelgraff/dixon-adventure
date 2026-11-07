@@ -1,6 +1,6 @@
 # The winning path, from the Walkthrough tab of the chapter 1 design doc.
 tests:
-  - name: winning path, 121 points
+  - name: winning path, 127 points
     steps:
       # Part 1: the museum to the water's edge
       - {cmd: look, expect: [glass cases, founding panel, silent], score: 0}
@@ -62,6 +62,8 @@ tests:
       - {cmd: talk to boys, expect: [He's a thief, something shiny], not: shinier}
       - {cmd: ask boys about the crow, expect: only up}
       - {cmd: put dollar on chopping block, expect: small brass key, money: 0}
+      - {cmd: give the paddle back to madeline, expect: been on the water again}
+      - {cmd: return axe, expect: You hand the axe back}
       - {cmd: south, room: camp}
       - {cmd: give key to james, expect: Father need never know, not: crow}
       - {cmd: north, room: cabin}
@@ -74,25 +76,25 @@ tests:
       # Part 5: home, noticing what changed (2 points each), Margaret last
       - {cmd: look, expect: mist has lifted}
       - {cmd: up, room: riverwalk}
-      - {cmd: read marker, score: 107}
+      - {cmd: read marker, score: 113}
       - {cmd: look at statue}
-      - {cmd: read plaque, expect: Dixon, score: 108}
+      - {cmd: read plaque, expect: Dixon, score: 114}
       - {cmd: south, room: street}
-      - {cmd: look at sticker, score: 109}
+      - {cmd: look at sticker, score: 115}
       - {cmd: in, room: museum}
       - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
-      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 110}
-      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 111}
-      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 112}
-      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 113}
-      - {cmd: look at clock, expect: all by itself, score: 114}
-      - {cmd: look at crossword, expect: tip of my pencil, score: 115}
-      - {cmd: look at sign, expect: before I knew why, score: 116}
-      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 116}
-      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 117}
+      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 116}
+      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 117}
+      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 118}
+      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 119}
+      - {cmd: look at clock, expect: all by itself, score: 120}
+      - {cmd: look at crossword, expect: tip of my pencil, score: 121}
+      - {cmd: look at sign, expect: before I knew why, score: 122}
+      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 122}
+      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 123}
       - {cmd: ask margaret about the desk, expect: [post office desk, next Saturday]}
       - {cmd: look at key, expect: [DIXON'S FERRY P.O., next Saturday]}
       - {cmd: open drawer, expect: Next Saturday, the two of us}
-      - {cmd: talk to margaret, expect: [DIXON, come back next Saturday], score: 121}
-      - {cmd: out, expect: [locks up behind you, The end of Chapter 1, "Final score: 121 of 121"]}
-      - {cmd: score, expect: Your score is 121 of 121}
+      - {cmd: talk to margaret, expect: [DIXON, come back next Saturday], score: 127}
+      - {cmd: out, expect: [locks up behind you, The end of Chapter 1, "Final score: 127 of 127"]}
+      - {cmd: score, expect: Your score is 127 of 127}

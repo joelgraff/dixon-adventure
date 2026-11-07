@@ -1,7 +1,7 @@
 id: ch1
 title: "Chapter 1: Ogee's Ferry"
 start: museum
-max_score: 121
+max_score: 127
 
 # Every room file, in the order the browser loads them (it can't list folders).
 rooms: [museum, street, riverwalk, wateredge, landing, cabin, camp, northlanding, slough]
@@ -23,12 +23,13 @@ flags:
   1830.has_rope:           {score: 3, desc: Got the rope from Dixon}
   1830.has_axe:            {score: 1, desc: Took the axe}
   1830.has_paddle:         {score: 4, desc: Borrowed Madeline's father's paddle}
-  1830.paddle_returned:    {desc: Gave the paddle back to Madeline}
+  1830.paddle_returned:    {score: 2, desc: Gave the paddle back to Madeline}
+  1830.axe_returned:       {score: 2, desc: Gave the axe back to Madeline}
   1830.key_lost:           {desc: Heard from James that the mail key is gone}
   1830.crow_traded:        {score: 4, desc: Traded Asa's dollar to the crow for the key}
   1830.has_key:            {desc: Holding James's mail key}
   1830.key_returned:       {score: 6, desc: Gave the mail key back to James}
-  1830.pole_returned:      {desc: Gave the setting pole back to Ogee}
+  1830.pole_returned:      {score: 2, desc: Gave the setting pole back to Ogee}
   1830.canoe_tarred:       {score: 5, desc: Tarred the canoe}
   1830.canoe_across:       {desc: The canoe is at the north landing}
   1830.rope_strung:        {score: 7, desc: Tied the rope on the north bank}
@@ -59,8 +60,8 @@ flags:
   present.noticed_desk:    {score: 1, desc: Noticed the desk's plate}
   present.noticed_key:     {desc: Saw the old key on the blotter}
 
-# Score check: 13 present + 93 in 1830 + 4 at the end = 110, plus 11 for noticing
-# what changed in the present after the repair = 121.
+# Score check: 13 present + 99 in 1830 + 4 at the end = 116, plus 11 for noticing
+# what changed in the present after the repair = 127.
 
 vars:
   town:

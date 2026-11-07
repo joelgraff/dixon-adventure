@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.11.2 (2026-11-06)
+- Giving back what you borrowed is worth 2 points each: Madeline's axe, her father's paddle and Ogee's setting pole. Chapter 1 is out of 127.
+
 ## 0.11.1 (2026-11-06)
 - Noticing a change after the repair is worth 1 point instead of 2; chapter 1 is out of 121.
 
