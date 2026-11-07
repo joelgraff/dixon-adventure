@@ -13,4 +13,4 @@ Proposed fixed sequence for the historical adventure:
 
 Additional candidates: Black Hawk War / Fort Dixon (1832), Bloody Gulch (1885), Dixon High School milestones, notable persons (Louella Parsons, Rita Crundwell, etc.).
 
-Historical sources live in the dixon_dem repo under docs/spec and docs/sierra-parser.
+Historical sources live in the dixon_dem repo under docs/spec, docs/game-data/sources.yaml and archive/sierra-parser.
