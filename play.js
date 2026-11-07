@@ -55,10 +55,11 @@ function editDistance(a, b) {
 function freshState() {
   return {
     room: CH.start, flags: new Set(), items: [...L(CH.start_items)], money: CH.start_money || 0,
-    turns: 0, scored: new Set(), found: new Set(), notes: {}, parted: new Set(), visited: [CH.start], n: null,
+    turns: 0, scored: new Set(), found: new Set(), notes: {}, parted: new Set(), spoke: new Set(), visited: [CH.start], n: null,
+    lines: {},                   // room id -> its description parts as last shown (see describe)
   };
 }
-const SET_FIELDS = ['flags', 'scored', 'found', 'parted'];
+const SET_FIELDS = ['flags', 'scored', 'found', 'parted', 'spoke'];
 function serialize(s) {
   const o = { ...s, _version: G.version, _compat: G.save_compat };
   for (const f of SET_FIELDS) o[f] = [...s[f]];
@@ -78,6 +79,7 @@ function deserialize(o) {
   delete s._version;
   delete s._compat;
   for (const f of SET_FIELDS) s[f] = new Set(o[f] || []);
+  s.lines = o.lines || {};
   // Before 0.12.2 an introduction was keyed on `known.<id>`; now it is keyed
   // on `met.<id>`. Anyone an older save already knows has been met, so they
   // don't introduce themselves a second time.
@@ -270,7 +272,7 @@ function speak(id, text) {
   const t = text.trim();
   // A line that opens with a quote gets a speech tag, unless it tags itself
   // ("Joseph Ogee," he says, ...).
-  const tagged = /^["“][^"”]*[,?!]["”]\s+(?:he|she|they)\s+(?:says|adds|asks|calls|answers|replies)\b/i.test(t);
+  const tagged = /^["“][^"”]*[,?!]["”]\s+(?:he|she|they|(?:the|one|another)(?:\s+[a-z]+){1,3}|[A-Z][a-z]+)\s+(?:says|adds|asks|calls|answers|replies)\b/.test(t);
   if (/^["“]/.test(t) && !tagged) { const who = cap(npcName(id)); markSeen(id); say(`${who} says, ${t}`, { npcPrefix: true }); }
   else { if (tagged) markSeen(id); say(t); }
 }
@@ -393,7 +395,7 @@ function render(text, opts = {}) {
     out += esc(before);
     const key = norm(m[1]);
     const ref = labels.get(key);
-    let shown = m[2] !== undefined ? m[2] : ref && ref.kind === 'npc' ? npcName(ref.id) : m[1];
+    let shown = smartQuotes(m[2] !== undefined ? m[2] : ref && ref.kind === 'npc' ? npcName(ref.id) : m[1]);
     if (m[2] === undefined && ref && ref.kind === 'npc') markSeen(ref.id);
     const prior = t.slice(0, m.index);
     if (!prior.trim() || /[.!?]["”]?\s*$/.test(prior)) shown = cap(shown);
@@ -430,30 +432,58 @@ function notice(label, text, button) {
 }
 
 // -------------------------------------------------------------------- rooms
-function describe() {
+// The room description: `look`, then each visible noun's and person's
+// `room_line`. On a return visit (`brief`), if the room's own `look` reads as
+// it did last time, it is the room's `brief` line, then only the room lines
+// that changed since the player was last here, then who is still here.
+// `look` always gives the whole description.
+function describe(brief = false) {
   const r = room();
   const e = pick(r.look) || { text: '' };
-  const parts = [e.text];
+  const lines = { look: e.text };
   for (const [id, n] of Object.entries(r.nouns || {})) {
-    if (n.room_line && nounVisible(S.room, id, n)) parts.push(textOf(n.room_line));
+    if (n.room_line && nounVisible(S.room, id, n)) lines[`noun:${id}`] = textOf(n.room_line);
   }
-  for (const id of npcIdsIn(S.room)) {
-    const n = npcDef(id);
-    if (n.room_line) parts.push(textOf(n.room_line));
-  }
+  for (const id of npcIdsIn(S.room)) lines[`npc:${id}`] = textOf(npcDef(id).room_line);
+  const last = S.lines[S.room];
+  S.lines[S.room] = lines;
+  let parts;
+  if (brief && r.brief && last && last.look === e.text) {
+    parts = [textOf(r.brief)];
+    const still = [];
+    const now = [];
+    for (const [k, t] of Object.entries(lines)) {
+      if (k === 'look') continue;
+      const unchanged = k in last && last[k] === t;
+      if (!unchanged && t) parts.push(t);
+      else if (k.startsWith('npc:')) (unchanged ? still : now).push(k.slice(4));
+    }
+    parts.push(presentLine(still, 'still here'), presentLine(now, 'here'));
+  } else parts = Object.values(lines);
   if (String(r.era) === '1830' && CH.fog_lock && ok(CH.fog_lock.when) && CH.fog_lock.room_line) parts.push(CH.fog_lock.room_line);
   say(parts.filter(Boolean).join(' '));
   run(e.do);
+}
+// "Madeline and the boys are still here." / "Everyone is still where you left them."
+function presentLine(ids, where) {
+  if (!ids.length) return '';
+  // a crowd reads better as one word than as a roll call; `look` names them all
+  if (ids.length > 2 && where === 'still here') return 'Everyone is still where you left them.';
+  const refs = ids.map(id => { const n = npcDef(id); return known(id) || n.unknown ? `[${id}]` : `the [${id}]`; });
+  const list = refs.length === 1 ? refs[0] : `${refs.slice(0, -1).join(', ')} and ${refs.at(-1)}`;
+  const plural = ids.length > 1 || npcDef(ids[0]).plural;
+  return `${cap(list)} ${plural ? 'are' : 'is'} ${where}.`;
 }
 function arrive(id, text) {
   if (text) say(text);
   S.room = id;
   S.turns = 0;
   S.parted = new Set();
+  S.spoke = new Set();
   for (const f of [...S.flags]) if (f.startsWith('1830.spooked.')) S.flags.delete(f);
   if (!S.visited.includes(id)) S.visited.push(id);
   say(textOf(room().name), { cls: 'heading' });
-  describe();
+  describe(true);
 }
 // Finds the exit a phrase names: "north", "the stairs", "down the steps to
 // the water", "downstairs". Leading direction and filler words are peeled off
@@ -499,12 +529,15 @@ function go(exit) {
   if (exit.farewell !== false) farewell();
   arrive(exit.to, textOf(exit.text));
 }
+// A parting line for the people you've been talking to this visit (and
+// haven't already said goodbye to). Walking past someone needs no ceremony.
 function farewell() {
-  const here = npcIdsIn(S.room).filter(id => npcDef(id).parting && !S.parted.has(id));
+  const here = npcIdsIn(S.room).filter(id => npcDef(id).parting && S.spoke.has(id) && !S.parted.has(id));
   if (!here.length) return;
   if (here.length === 1) say(textOf(npcDef(here[0]).parting));
-  else say('You nod to the others and take your leave.');
+  else say('You say your goodbyes and take your leave.');
 }
+const spokeTo = id => { if (id && npcHere(id)) S.spoke.add(id); };
 
 // ----------------------------------------------------------------- actions
 function phraseRegex(p) {
@@ -525,6 +558,7 @@ function matchAction(input) {
 function doAction({ a, n }) {
   S.n = n;
   speaker = a.speaker || null;
+  if (speaker && ok(a.when)) spokeTo(speaker);   // asking someone for something is talking to them
   try {
     if (ok(a.when)) return run(a.do);
     for (const e of L(a.else)) {
@@ -607,6 +641,7 @@ function talkTo(name) {
   if (!byPronoun) learnName(c, name);
   if (cold(c.id)) return;
   S.lastNpc = c.id;
+  spokeTo(c.id);
   const e = pick(c.def.talk);
   if (!e) return say(`${cap(npcName(c.id))} looks at you and says nothing.`);
   speak(c.id, e.text);
@@ -628,6 +663,7 @@ function askAbout(who, topic) {
   }
   S.lastNpc = id;
   if (cold(id)) return;
+  spokeTo(id);
   const npc = npcDef(id);
   const t = ` ${cleanNoun(topic)} `;
   const hit = L(npc.topics).find(tp => ok(tp.when) && L(tp.keys).some(k => new RegExp(`\\b${norm(k).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(t)));
@@ -663,7 +699,7 @@ function social(input) {
     }
     const line = textOf((npcDef(id).social || {})[kind]) || `${cap(npcName(id))} nods.`;
     speak(id, line);
-    if (kind === 'bye') S.parted.add(id);
+    if (kind === 'bye') S.parted.add(id); else spokeTo(id);
     return true;
   }
   return false;

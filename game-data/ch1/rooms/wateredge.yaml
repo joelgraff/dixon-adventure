@@ -11,6 +11,11 @@ picture: >-
 # Fog: it builds for two turns; on the third the planks and the voice come
 # (sooner if you look at the water). Then anything that answers the voice or
 # heads toward it crosses. Closed once the chapter is repaired.
+# The return-visit description (see FORMAT.md, Rooms).
+brief:
+  - when: [1830.lease_dixon]
+    text: "The [water] slides past the foot of the [stairway], brown and unhurried, with no mist on it now."
+  - text: "Mist hangs low over the [water] at the foot of the [stairway], and the [walkway] is dark with wet."
 look:
   - when: [1830.lease_dixon, not present.planks]
     text: >-

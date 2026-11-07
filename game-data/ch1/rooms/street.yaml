@@ -7,6 +7,8 @@ picture: >-
   frame houses and big maples, Hennepin running away north to a courthouse at
   the end of the next block.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "Fifth Street is as quiet as before, with the [museum] door open behind you and [Hennepin] running north toward the river."
 look: >-
   The sidewalk is still warm from the day and nearly empty. A [pickup] is
   parked at the [corner], a [porch light] clicks on across the way, and the

@@ -9,6 +9,8 @@ picture: >-
   loaded wagons and oxen at the head of the landing, the far bank empty and
   wooded.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The [dock] runs out into the high brown [river], and the [path] climbs south toward the woodsmoke."
 look: >-
   A rough plank [dock] runs out into the high brown [river], and behind it a
   worn [path] climbs south, away from the water, toward a haze of
@@ -343,7 +345,7 @@ npcs:
     aliases: [eli, young man, teamster, boy, rifle, flintlock]
     room_line:
       - when: [not 1830.dazed]
-        text: "[eli] sits on a wagon tongue among them."
+        text: "[eli] sits on a wagon tongue at the head of the landing."
     look:
       - when: [1830.wagon_free]
         text: He's a young man in patched homespun with an old flintlock across his knees, and now that his uncle's wagons are down at the landing he sits a good deal easier.

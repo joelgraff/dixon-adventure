@@ -92,9 +92,9 @@ tests:
       - {cmd: look at sign, expect: before I knew why, score: 122}
       - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 122}
       - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 123}
-      - {cmd: ask margaret about the desk, expect: [post office desk, next Saturday]}
-      - {cmd: look at key, expect: [DIXON'S FERRY P.O., next Saturday]}
-      - {cmd: open drawer, expect: Next Saturday, the two of us}
+      - {cmd: ask margaret about the desk, expect: [post office desk, nerve to try it]}
+      - {cmd: look at key, expect: [DIXON'S FERRY P.O., thirty-one years], not: next Saturday}
+      - {cmd: open drawer, expect: Not tonight, not: Next Saturday}
       - {cmd: talk to margaret, expect: [DIXON, come back next Saturday], score: 127}
       - {cmd: out, expect: [locks up behind you, The end of Chapter 1, "Final score: 127 of 127"]}
       - {cmd: score, expect: Your score is 127 of 127}

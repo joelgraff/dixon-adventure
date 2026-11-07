@@ -151,6 +151,7 @@ sources: [S1, S2, S4]      # ids from sources.yaml, for the histories panel
 picture: >-                # art brief for the later picture
   ...
 look: ...                  # text or variants; the room's fixed description
+brief: ...                 # text or variants; one sentence for return visits
 listen: ...                # optional
 nouns:   {id: noun, ...}
 npcs:    {id: npc, ...}
@@ -164,6 +165,15 @@ The room description the player sees is `look`, then the `room_line` of each
 visible noun and NPC that has one, in file order. Objects that change between
 states (the pedestal, the clock) put their changing sentence in `room_line`,
 so the description always matches the state.
+
+**Return visits.** Walking back into a room the player has seen prints its
+`brief` instead, then only the room lines that are new or changed since the
+player was last there, then who is still about ("Madeline and the boys are
+still here", or "Everyone is still where you left them" for three or more).
+If the room's own `look` reads differently from last time, the whole
+description is printed instead. `look` always prints the whole thing. A
+`brief` should be one sentence that sets the scene; the checker warns when a
+room has none. An NPC whose name is plural (the boys) takes `plural: true`.
 
 A room's `hold` stops the player acting for a moment: while an entry's `when`
 holds, any command except help, save, restore, restart, version, tour and
@@ -228,7 +238,7 @@ ogee:
   fallback: ...                 # unknown topics, in character; also said when a
                                 #   topic's say variants all fail
   social: {hello: ..., thanks: ..., bye: ..., how: ..., sorry: ...}
-  parting: ...                  # said when the player leaves the room
+  parting: ...                  # said when the player leaves, if they spoke this visit
 ```
 
 Speaker attribution ("Ogee says, ...") is added by the runtime when a spoken

@@ -112,7 +112,7 @@ for (const ch of chapterDirs) {
 
   // Generic walk: every `when` is a condition list, every `do`/`on_look` an
   // effect list, every string is checked for markup.
-  const VARIANT_KEYS = new Set(['hints', 'look', 'room_line', 'talk', 'listen', 'say', 'blocked', 'parting', 'peek', 'fallback', 'text', 'else', 'at', 'take', 'touch', 'push', 'open', 'close', 'sit', 'climb', 'smell', 'taste', 'search', 'sign', 'drink', 'board', 'call', 'use', 'give', 'read']);
+  const VARIANT_KEYS = new Set(['hints', 'look', 'brief', 'room_line', 'talk', 'listen', 'say', 'blocked', 'parting', 'peek', 'fallback', 'text', 'else', 'at', 'take', 'touch', 'push', 'open', 'close', 'sit', 'climb', 'smell', 'taste', 'search', 'sign', 'drink', 'board', 'call', 'use', 'give', 'read']);
   function walk(node, where, rid, onString, parentKey) {
     if (Array.isArray(node)) {
       node.forEach((x, i) => walk(x, `${where}[${i}]`, rid, onString));
@@ -209,6 +209,7 @@ for (const ch of chapterDirs) {
     const where = `${ch}/rooms/${rid}.yaml`;
     counts.rooms++;
     for (const f of ['era', 'name', 'look', 'picture', 'exits']) if (r[f] === undefined) err(where, `missing ${f}`);
+    if (r.brief === undefined) warn(where, `no brief: return visits will repeat the whole description`);
     if (!['present', '1830'].includes(String(r.era))) err(where, `era must be present or 1830`);
     for (const s of asList(r.sources)) if (!(src.sources || {})[s]) err(where, `unknown source ${s}`);
     const labels = labelsFor(rid);

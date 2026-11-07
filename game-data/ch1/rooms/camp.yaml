@@ -13,6 +13,8 @@ picture: >-
   canvas mail sack, two boys with a bucket, a heavy coil of rope on the
   wagon's tailboard.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The [wagon] stands among the [oaks], and the cook [fire] burns low under the [kettle]."
 look: >-
   A canvas-topped [wagon] stands pulled off the trail among the [oaks], with
   its team grazing on a picket line nearby and a cook [fire] burning low
@@ -217,6 +219,7 @@ npcs:
 
   dixonboys:
     name: boys
+    plural: true                # "the boys are", in the return-visit line
     aliases: [boys, two boys, bucket, john w, elijah]
     room_line: Two [dixonboys|boys] go by with a bucket of water between them, arguing as they go.
     look: The boys are thirteen or fourteen, carrying a bucket between them and spilling most of it, and they're far too busy arguing to notice you.

@@ -210,6 +210,7 @@ tests:
 
   - name: leaving before meeting Margaret says "the volunteer", not "a volunteer"
     steps:
+      - {cmd: ask about the river, expect: The volunteer in the cardigan says}
       - {cmd: go outside, expect: [You thank the volunteer, West Fifth Street], not: [a volunteer], room: street}
 
   - name: help on the riverfront points at the marker and the steps, not up Hennepin
@@ -419,7 +420,7 @@ tests:
       - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer, met.volunteer]}
       - {cmd: look, expect: An old brass key lies on the blotter, not: paper tag}
       - {cmd: look at key, expect: no tag, not: "DIXON'S FERRY P.O."}
-      - {cmd: ask margaret about the desk, expect: next Saturday, not: crow}
+      - {cmd: ask margaret about the desk, expect: nerve to try it, not: crow}
 
   - name: leaving after Margaret closes up ends the game
     url: scene=museum
@@ -518,3 +519,45 @@ tests:
     url: scene=museum
     steps:
       - {cmd: "?", expect: The assistant says, turns: 0}
+
+  # Return visits and farewells (0.13.0).
+  - name: a return visit gives a short description, and look gives the whole room
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: south, room: camp, expect: canvas-topped wagon}
+      - {cmd: north, room: cabin, expect: [Smoke still threads up, woman in the dark shawl and the boys are still here], not: [one long log cabin, An axe stands sunk]}
+      - {cmd: look, expect: [one long log cabin, An axe stands sunk, two boys are splitting kindling]}
+
+  - name: a return visit shows what changed since you were last there
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline, 1830.has_axe], items: [phone, axe]}
+      - {cmd: look, expect: A chopping block stands}
+      - {cmd: south, room: camp}
+      - {cmd: north, room: cabin, expect: Madeline and the boys are still here, not: chopping block}
+      - {cmd: give axe to madeline}
+      - {cmd: south, room: camp}
+      - {cmd: north, room: cabin, expect: [An axe stands sunk in the chopping block, Madeline and the boys are still here]}
+
+  - name: the museum on your return lists what has changed
+    url: scene=museum
+    steps:
+      - {cmd: out, room: street}
+      - setup: {flags: [present.returned, 1830.lease_dixon, 1830.shoe_returned]}
+      - {cmd: in, room: museum, expect: [founding panel fills the far wall, iron pole shoe, brass token, clock ticks], not: Late light comes through}
+
+  - name: walking past people needs no farewell, but leaving a conversation does
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, known.dixon, met.dixon]}
+      - {cmd: north, room: cabin, not: You nod}
+      - {cmd: south, room: camp}
+      - {cmd: ask dixon about the lease, expect: hundred in silver}
+      - {cmd: north, room: cabin, expect: touches two fingers to his hat brim}
+
+  - name: a line that tags its own speaker by description isn't tagged twice
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: ask boys about the crow, expect: the younger boy says, not: Boys says}

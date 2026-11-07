@@ -8,6 +8,8 @@ picture: >-
   the wheel.
 
 # Asa is defined in chapter.yaml because he moves to the landing once freed.
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The trail sinks into black [mud] here, and the [willows] crowd in along the edges."
 look: >-
   Here the Peoria trail drops into a low wet stretch where the ruts
   disappear into black [mud], and [willows] crowd in along the edges. Behind

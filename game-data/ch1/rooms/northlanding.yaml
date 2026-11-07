@@ -7,6 +7,8 @@ picture: >-
   waiting wagons and the cabin smoke. A single stout post at the water's edge,
   an empty road behind climbing into the trees.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The north bank is still only the [post], the empty [road] and the [river]."
 look: >-
   The north landing is no more than a stout [post] at the water's edge, with
   the Galena [road] climbing away north behind it into the trees, empty.

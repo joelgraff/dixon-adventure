@@ -8,6 +8,8 @@ picture: >-
   chopping block in front, split oak stacked beside it, a canoe paddle
   hung on pegs under the eaves, trees behind.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "Smoke still threads up from the [cabin] chimney, and the wagon trail runs on south through the oaks."
 look: >-
   The path comes up from the landing into a clearing, where one long log
   [cabin] stands with two doors and a thread of smoke rising from its
@@ -159,6 +161,7 @@ npcs:
 
   boys:
     name: boys
+    plural: true                # "the boys are", in the return-visit line
     aliases: [boys, sons, children, kindling, two boys]
     look: Two boys are splitting kindling with a hatchet and more enthusiasm than skill. They stop to watch you, then pretend they weren't watching at all.
     talk:

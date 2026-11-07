@@ -9,6 +9,8 @@ picture: >-
   right, a green railing along the water, wide steps going down at the far
   right, a raft of mist lying on the river.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The plaza is still nearly empty under the bronze [statue], and at the end of the [railing] the worn [stairway] leads down to the water."
 look: >-
   The riverfront is a broad public plaza of pale paving and limestone walls on
   the south bank, the kind of place that fills up for the farmers market and

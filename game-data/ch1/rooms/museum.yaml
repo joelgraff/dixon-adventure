@@ -8,6 +8,8 @@ picture: >-
   velvet pedestal beside it, a schoolhouse clock by a back door, the
   volunteer's desk in the right foreground, amber light from a side window.
 
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The front room hums under its fluorescent lights, and the founding [panel] fills the far wall."
 look: >-
   The front room is quiet and a little too brightly lit, with fluorescent
   [lights] humming over a row of glass [cases] and a wall of framed [photos].
@@ -293,7 +295,7 @@ nouns:
         text: It's a small brass key, worn smooth, on a loop of string gone stiff with age. The paper tag, in faded ink, reads DIXON'S FERRY P.O.
       - text: It's a small brass key, worn smooth, with no tag and nothing to say where it came from.
     verbs:
-      take: "{volunteer} puts a hand over it. \"That's the museum's. Next Saturday, the two of us, remember?\""
+      take: "{volunteer} puts a hand over it. \"That's the museum's, at least until we know what it opens.\""
     on_look:
       - if:
           when: [not present.noticed_key]
@@ -302,7 +304,7 @@ nouns:
             - if:
                 when: [here:volunteer]
                 do:
-                  - say: "{volunteer} sees you looking. \"It was in the bottom of the clutter drawer this afternoon, under the staples, and I've cleaned out that drawer every spring for thirty-one years.\" She glances at the locked drawer. \"I'll wait for you, and we'll try it next Saturday.\""
+                  - say: "{volunteer} sees you looking. \"It was in the bottom of the clutter drawer this afternoon, under the staples, and I've cleaned out that drawer every spring for thirty-one years.\" She glances at the locked drawer and doesn't finish the thought."
 
   drawer:
     name: locked drawer
@@ -311,7 +313,7 @@ nouns:
     verbs:
       open:
         - when: [1830.lease_dixon]
-          text: "It's locked. The key is right there on the blotter, but {volunteer} puts her hand over it. \"Not tonight. Next Saturday, the two of us.\""
+          text: "It's locked. The key is right there on the blotter, but {volunteer} puts her hand over it. \"Not tonight.\""
         - text: It's locked. The other drawers slide out easily, full of staples and brochures, but this one won't move.
       push: It doesn't budge at all.
       search: The other drawers hold staples, brochures and a stapler, but this one is locked.
@@ -413,11 +415,10 @@ npcs:
         do: [{set: [known.volunteer, met.volunteer]}]
       - when: [1830.lease_dixon, not chapter1.done]
         text: >-
-          "You were in earlier, weren't you?" She frowns at the wall, then at
-          the crossword, and something in her face settles. "It's funny, but I
-          could swear the labels weren't like that this morning, and nobody's
-          touched them." She taps the finished grid, where seven down reads
-          DIXON. "Well, that's one done. Come by again, will you? I've a
+          "You were in earlier, weren't you?" She frowns past you at the wall.
+          "It's funny, but I could swear the labels weren't like that this
+          morning, and nobody's touched them." She taps the finished grid,
+          where seven down reads DIXON. "Well, that's one done, though I've a
           feeling the next puzzle won't be so easy." She looks at the clock,
           which is ticking now, and starts gathering her things. "I've got to
           close up and get home, but come back next Saturday, will you? I'll
@@ -490,7 +491,7 @@ npcs:
       - keys: [desk, drawer, lock, key, plate, provenance]
         say:
           - when: [1830.lease_dixon]
-            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry. Nobody's opened that drawer in my time.\" She touches the key on the blotter. \"This turned up today, though. Come back next Saturday and we'll try it together.\""
+            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry. Nobody's opened that drawer in my time.\" She touches the key on the blotter. \"This turned up today, though, and I haven't had the nerve to try it.\""
           - text: "\"Nobody's quite sure where that desk came from. The board says the old county clerk's office, the clerk's family says otherwise, and the plate on the side was scratched off before anyone thought to read it. The drawers all work except the locked one, and nobody has ever found the key.\""
       - keys: [case, cases, arrowheads, glass]
         say: "\"They've been locked since 1998, and the key's with the board. I dust the empty one at the end every Saturday, out of habit.\""
