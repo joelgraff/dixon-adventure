@@ -75,7 +75,7 @@ tests:
       - {cmd: look, expect: mist has lifted}
       - {cmd: go to museum, expect: Dixon Historic Center, room: museum}
       - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
-      - {cmd: talk to margaret, expect: [DIXON, next puzzle], score: 110}
+      - {cmd: talk to margaret, expect: [DIXON, next puzzle, come back next Saturday], score: 110}
       # Noticing what changed: 2 points each, with Margaret's comments
       - {cmd: read panel, expect: [took over the ferry, reads right now], score: 112}
       - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 114}
@@ -94,7 +94,7 @@ tests:
       - {cmd: south, room: street}
       - {cmd: in, room: museum}
       - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 132}
-      - {cmd: ask margaret about the desk, expect: [post office desk, try it later]}
-      - {cmd: look at key, expect: [DIXON'S FERRY P.O., try it later]}
-      - {cmd: open drawer, expect: try it later}
+      - {cmd: ask margaret about the desk, expect: [post office desk, next Saturday]}
+      - {cmd: look at key, expect: [DIXON'S FERRY P.O., next Saturday]}
+      - {cmd: open drawer, expect: Next Saturday, the two of us}
       - {cmd: score, expect: Your score is 132 of 132}

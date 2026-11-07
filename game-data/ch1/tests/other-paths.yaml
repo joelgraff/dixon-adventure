@@ -419,4 +419,4 @@ tests:
       - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer]}
       - {cmd: look, expect: An old brass key lies on the blotter, not: paper tag}
       - {cmd: look at key, expect: no tag, not: "DIXON'S FERRY P.O."}
-      - {cmd: ask margaret about the desk, expect: try it later, not: crow}
+      - {cmd: ask margaret about the desk, expect: next Saturday, not: crow}
