@@ -316,7 +316,7 @@ tests:
     url: scene=camp
     steps:
       - setup: {flags: [1830.arrived, known.dixon, met.dixon]}
-      - {cmd: ask dixon about lease, expect: [rent will pay off what he owes Rolette, "haven't a coin of silver"]}
+      - {cmd: ask dixon about lease, expect: [rent will pay off what he owes Rolette, "all I have is paper"]}
       - {cmd: ask dixon about paper, expect: [mail pay, good money in Vandalia]}
 
   - name: a line that tags its own speaker isn't tagged twice
@@ -655,7 +655,7 @@ tests:
     url: scene=camp
     steps:
       - setup: {flags: [1830.arrived, known.rebecca, met.rebecca]}
-      - {cmd: ask rebecca about the cabin, expect: [lease comes with the east room, "Rolette's man has it"]}
+      - {cmd: ask rebecca about the cabin, expect: [lease comes with the east room, "Rolette's man is sleeping in it"]}
 
   - name: the pole stays in view on return visits once the rope is across
     url: scene=landing
@@ -828,3 +828,15 @@ tests:
       - setup: {flags: [1830.rope_strung]}
       - {cmd: ask ogee about the rope, expect: "Don't tell him I said so", not: ["I'll not", mind]}
       - {cmd: ask ogee for the pole, expect: Bring her back whole, not: "I've no use"}
+
+  # The camp's voices (VOICES.md): Dixon measured and formal, Rebecca dry, James stiff and worried.
+  - name: the Dixons each sound like themselves
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, known.dixon, met.dixon, known.rebecca, met.rebecca]}
+      - {cmd: ask dixon about the agent, expect: The awkward part is that he isn't wrong}
+      - {cmd: ask dixon about the weather, expect: Mr. Ogee might know}
+      - {cmd: thank dixon, expect: a man should be civil, not: ought}
+      - {cmd: ask rebecca about the road, expect: I am not doing it backwards, not: "I'll not"}
+      - {cmd: talk to james, expect: [lost the mail key, He stops himself]}
+      - {cmd: ask james about the key, expect: One minute, not: postmaster}

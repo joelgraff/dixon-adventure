@@ -87,38 +87,38 @@ npcs:
         text: >-
           "John Dixon," he says. His handshake is firm, though his eyes take
           in your wet clothes before they come back to your face. "I came up
-          from Peoria to lease Ogee's ferry, and found Rolette's man sitting on
-          it, so for now I'm waiting to see how that comes out." He glances at
-          the empty tailboard. "And I see my rope has found a use. That's
-          what I brought it for."
+          from Peoria to lease Mr. Ogee's ferry. As it happens, Rolette's man
+          was sitting on it when I arrived, so I am waiting." He glances at the
+          empty tailboard. "And I see my rope has found a use. I'm obliged to
+          you."
         do: [{set: [known.dixon, met.dixon]}]
       - when: [not met.dixon]
         text: >-
           "John Dixon," he says. His handshake is firm, though his eyes take
           in your wet clothes before they come back to your face. "I came up
-          from Peoria to lease Ogee's ferry, and found Rolette's man sitting on
-          it, so for now I'm waiting to see how that comes out." He glances at
-          the wagon. "If you mean to help Ogee across that river, though,
-          there's rope on the tailboard. I meant to run her on a line."
+          from Peoria to lease Mr. Ogee's ferry. As it happens, Rolette's man
+          was sitting on it when I arrived, so I am waiting." He glances at the
+          wagon. "If you mean to help Mr. Ogee across, there is rope on the
+          tailboard. I meant to run her on a line."
         do: [{set: [known.dixon, met.dixon]}]
       - when: [1830.dixon_short]
-        text: "\"If you hear of a hundred in silver going spare, I'd be glad to know of it.\""
+        text: "\"If you should hear of a hundred in silver going spare, I'd be obliged to know of it.\""
       - text: "{dixon} nods to you. \"I'm still waiting on Rolette's man, and he's in no hurry.\""
     topics:
       - keys: [lease, ferry, ogee, buy, money, silver, hundred, waiting, short, trouble, terms]
-        say: "\"Ogee's agreed to lease me the ferry, and the rent will pay off what he owes Rolette, a little at a time. But Rolette's man wants a hundred in silver today, or he takes the boat.\" He taps the folded paper against his palm. \"And I haven't a coin of silver to my name. My mail pay comes as paper on the governor, and nobody on this riverbank will cash it.\""
+        say: "\"Mr. Ogee has agreed to lease me the ferry, and the rent will pay off what he owes Rolette.\" He taps the folded paper against his palm. \"But Rolette's man wants a hundred in silver today, and all I have is paper on the governor.\""
         do: [{set: 1830.dixon_short}]
       - keys: [agent, rolette, creditor, coat, man]
-        say: "\"That's Rolette's man. The worst of it is that he isn't wrong; the money's owed, and he'll take the boat for it unless somebody puts a hundred in silver in his hand.\" He looks at the paper in his own hand and doesn't say whose silver he means."
+        say: "\"That is Rolette's man. The awkward part is that he isn't wrong. The money is owed.\" He turns the paper in his hand over once more, as though it might have become silver since he last looked."
       - keys: [rope, line, rope ferry, hemp]
         say:
           - when: [1830.rope_strung]
             text: "\"I saw her go over on the rope, and that's the way of it from now on.\" He looks almost pleased."
-          - text: "\"Strung from bank to bank, a line like that lets you pull her over in any water short of a flood. Ogee calls it a fancy.\""
+          - text: "\"A line from bank to bank, and you can pull her over in any water short of a flood. Mr. Ogee calls it a fancy.\""
       - keys: [paper, order, governor, edwards, vandalia, pay, silver]
-        say: "\"It's my mail pay, an order on Governor Edwards. It'll be good money in Vandalia, two hundred miles off, but it's no use to me here.\""
+        say: "\"My mail pay, as it happens: an order on Governor Edwards. It will be good money in Vandalia, two hundred miles off.\" He looks toward the river. \"It is not good money here.\""
       - keys: [mail, contract, route, peoria, galena, post office]
-        say: "\"I carry the mail from Peoria up to Galena. This crossing sits square in the middle of the route, so a man who carries the mail needs the ferry.\""
+        say: "\"I carry the mail from Peoria up to Galena, and this crossing sits in the middle of the route. A mail contractor without a ferry is in a poor way of business.\""
       - keys: [family, wife, rebecca, children, sons, james, boys]
         say: "\"There's Rebecca and the children, and James drives the mail with me. We came the eleventh of April, meaning to be sleeping under a roof by now.\" He looks at the wagon, which is not a roof."
       - keys: [boyd's grove, home, from, bureau]
@@ -126,20 +126,20 @@ npcs:
       - keys: [travelers, loans, lend, money, men]
         say: "\"I've lent money to half the men on this road, and it's a funny thing how none of it is in my pocket today.\""
       - keys: [sauk, fox, black hawk, saukenuk, treaty]
-        say: "{dixon} is quiet a moment. \"The Sauk and Fox come back every spring to their corn at Saukenuk, and the settlers there don't like it. The government says an old treaty sold the land, and Black Hawk says nobody sold it.\" He looks at the river. \"I'd rest easier if I thought that was finished.\""
+        say: "{dixon} is quiet a moment. \"The Sauk come back every spring to their corn at Saukenuk. The government says an old treaty sold the land, and Black Hawk says nobody sold it.\" He looks at the river. \"I'd rest easier if I thought that was settled.\""
       - keys: [lincoln, abraham]
         say: "\"Lincoln? I can't say I know the name.\""
       - keys: ["1832", war, militia]
         say: "{dixon} gives you an odd look. \"Eighteen thirty-two? That's two years off. I don't keep accounts that far ahead.\""
       - keys: [fog, mist]
         say: "\"The mist? It's been odd this year,\" he says. \"Odd enough that I've stopped mentioning it to Rebecca.\""
-    fallback: "{dixon} considers it. \"That's not my line, I'm afraid. Ogee might know.\""
+    fallback: "{dixon} considers it. \"That is not my line of business. Mr. Ogee might know.\""
     social:
       hello: "{dixon} inclines his head. \"Good day to you.\""
-      thanks: "\"You're welcome. A man ought to be civil on a river, of all places.\""
+      thanks: "\"You're welcome. On a river, of all places, a man should be civil.\""
       bye: "\"Safe passage to you.\""
       how: "\"Well enough, and I'd be better with a roof.\""
-      sorry: "\"No offence taken.\""
+      sorry: "\"No offense taken.\""
     parting: "[dixon] touches two fingers to his hat brim as you go."
 
   rebecca:
@@ -152,23 +152,23 @@ npcs:
     look: She wears a plain dress and an apron. She stirs the kettle like someone who has cooked on a great many fires and expects to cook on a great many more.
     talk:
       - when: [not met.rebecca]
-        text: "\"Rebecca Dixon,\" she says, without stopping her stirring. \"You'll be the one helping with the ferry. Good, because I'd like a floor.\""
+        text: "\"Rebecca Dixon,\" she says, without stopping her stirring. \"You're helping with the ferry? Good. I'd like a floor.\""
         do: [{set: [known.rebecca, met.rebecca]}]
-      - text: "\"Supper's a while yet, I'm afraid.\""
+      - text: "\"Supper's a while yet.\" She tastes it and makes a face. \"Longer than that.\""
     topics:
       - keys: [wait, roof, floor, cabin, house]
-        say: "\"The lease comes with the east room at the cabin. That's where we were meant to be sleeping by now, and instead we're living in the wagon while Rolette's man has it.\""
+        say: "She points her spoon up the trail toward the cabin. \"The lease comes with the east room. Rolette's man is sleeping in it.\" The spoon swings to the wagon. \"We're sleeping in that.\""
       - keys: [road, journey, boyd's grove, trip]
-        say: "\"We came from Boyd's Grove to here with the children and everything we own, and I'll not do it backwards.\""
+        say: "\"Boyd's Grove to here, with the children and everything we own.\" She stirs harder. \"I am not doing it backwards.\""
       - keys: [children, boys, sons, james]
         say: "\"The two young ones are hauling water, slowly.\" She raises her voice. \"Very slowly!\""
-    fallback: "\"You'd best ask John about that.\""
+    fallback: "\"Ask John. He likes questions.\""
     social:
       hello: "{rebecca} nods to you without stopping her stirring."
       thanks: "\"Mm-hm,\" she says, still stirring."
-      bye: "\"Mind how you go on the trail.\""
+      bye: "\"Watch your step on the trail.\""
       how: "\"I'm tired. Ask me again when there's a floor.\""
-      sorry: "\"It's no matter.\""
+      sorry: "\"Oh, don't be.\""
 
   james:
     name: James Dixon
@@ -185,14 +185,14 @@ npcs:
       - when: [not met.james, not 1830.key_returned]
         text: >-
           "I'm James," he says, without looking up from the harness. "I drive
-          the mail for Father, and every team bound for the diggings comes
-          through this crossing." He works the harness a moment longer, then
-          lowers his voice. "And I've gone and lost the mail key. I set it on
-          the chopping block at Ogee's while I watered the team, and when I
-          turned round it was gone. Father doesn't know yet."
+          the mail for Father." He works the harness a moment longer, then
+          lowers his voice. "I've lost the mail key. I set it on the chopping
+          block at Mr. Ogee's while I watered the team, and I turned around and
+          it was gone, and if Father finds out before I..." He stops himself.
+          "Never mind. It'll turn up."
         do: [{set: [known.james, met.james, 1830.key_lost]}]
       - when: [not met.james]
-        text: "\"I'm James,\" he says, without looking up from the harness. \"I drive the mail for Father, and every team bound for the diggings comes through this crossing.\""
+        text: "\"I'm James,\" he says, without looking up from the harness. \"I drive the mail for Father.\""
         do: [{set: [known.james, met.james]}]
       - when: [not 1830.key_returned]
         text: "\"No sign of that key, I suppose?\" He doesn't sound hopeful."
@@ -203,16 +203,16 @@ npcs:
       - keys: [key, mail key, lost, lock, chopping block, crow]
         say:
           - when: [1830.key_returned]
-            text: "\"It's on my buttonhole now, where it ought to have been all along.\""
-          - text: "\"It's the key to the mail lock. Any postmaster's key would open the bag, I suppose, but that one's ours, and Father had it from Peoria. I set it down on the chopping block at Ogee's for one minute.\" He looks miserable. \"One minute.\""
+            text: "He touches the key on his buttonhole. \"Where it should have been all along.\""
+          - text: "\"The key to the mail lock. Father had it from Peoria.\" He looks miserable. \"I set it down on the chopping block at Mr. Ogee's for one minute. One minute.\""
             do: [{set: 1830.key_lost}]
       - keys: [teams, diggings, wagons, traffic]
         say: "\"In spring they all go north, and in the fall the ones who made it come back south. Some of them owe Father money.\""
     fallback: "{james} shrugs; he isn't much for talking to strangers yet."
     social:
       hello: "{james} gives you a nod."
-      thanks: "\"Sure thing.\""
-      bye: "\"Mind the slough if you go south.\""
+      thanks: "\"You're welcome, I'm sure.\""
+      bye: "\"Watch the slough if you go south.\""
       how: "\"Busy, same as always.\""
       sorry: "\"Nothing to be sorry for.\""
 
