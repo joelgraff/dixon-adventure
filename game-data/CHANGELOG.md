@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.13 (2026-11-07)
+- When the lever fails, the narration says the whole load settles back, rather than calling the wagon 'she'; Asa still does.
+
 ## 0.14.12 (2026-11-07)
 - The willow for Asa's wheels is called willow branches instead of brush, in what you read and what Asa says; 'brush' still works as a word you type, and 'branches' now works too.
 
