@@ -311,37 +311,38 @@ npcs:
     talk:
       - when: [not met.agent]
         text: >-
-          "I've come down from Galena for Mr. Rolette, who holds Mr. Ogee's
-          notes. Pay a hundred dollars in silver toward what's overdue, and the
-          boat stays where it is. Otherwise, I take her."
+          He lifts the folded papers from his lap without getting up. "I came
+          down from Galena for Mr. Rolette, friend. He holds Mr. Ogee's notes."
+          He taps the top one. "One hundred dollars in silver, due in February.
+          Paid today, the boat stays. Not paid, I take it."
         do: [{set: [known.agent, met.agent]}]
-      - text: "\"The terms haven't changed, friend: a hundred in silver.\""
+      - text: "\"One hundred in silver, friend. Today.\""
     topics:
       - keys: [debt, notes, owe, overdue, installment, mortgage, terms, hundred, silver]
-        say: "\"Mr. Ogee owes a hundred dollars that fell due in February, and a good deal more after it. A hundred in silver today buys him time. Paper buys him nothing.\""
+        say: "He runs a finger down the column of figures. \"One thousand and sixty dollars on the Schellenger note. One hundred of it fell due in February. Silver buys time. Paper buys nothing.\""
       - keys: [lease, rent, tolls, lessee]
-        say: "\"If Mr. Ogee leases her to a man who can pay, the rent comes to Mr. Rolette, and so much the better for everyone. But the first hundred comes in silver, and it comes today.\""
+        say: "\"Mr. Ogee may lease the boat to any man who can pay. The first hundred comes in silver, and it comes today.\""
       - keys: [rolette, master, employer, prairie du chien, trader]
-        say: "\"Mr. Rolette trades out of Prairie du Chien. He's a patient man up to a point, and this is the point.\""
+        say: "\"Mr. Rolette trades out of Prairie du Chien. He has waited since February.\""
       - keys: [boat, ferry, seize, take, court]
-        say: "\"The boat is goods, and goods answer for the debt. The claim is another matter; that's for a court. I don't need a court for a boat.\""
+        say: "He looks at the flatboat, not at {ogee}. \"The boat is goods, and goods answer for the debt. I do not need a court for goods.\""
       - keys: [galena]
-        say: "\"Galena is where the note was recorded, and it's where I'd rather be.\""
+        say: "\"The note is recorded at Galena. I go back there with silver or with the boat.\""
       - keys: [dixon, paper, order]
         say: "\"Mr. Dixon has paper, and paper is not silver.\""
       - keys: [asa, teamster, wagons, freighter]
-        say: "\"The teamster? He has silver, I'd guess, and a great many reasons to want this boat where it is.\""
+        say: "He looks past you at the loaded wagons. \"The teamster is paid in silver, friend. And those wagons do not cross without this boat.\""
       - keys: [name, who]
-        say: "He smiles thinly. \"My name isn't on the note. Mr. Rolette's is.\""
+        say: "He taps the papers. \"My name is not on the note. Mr. Rolette's is.\""
       - keys: [ogee, joseph]
-        say: "\"Mr. Ogee is a good ferryman and a poor bookkeeper. I'm here about the second thing.\""
-    fallback: "\"I'm not paid to chat, friend.\""
+        say: "\"Mr. Ogee signed the note. That is all I need to know about Mr. Ogee.\""
+    fallback: "\"That is not on the note, friend.\""
     social:
-      hello: "He touches his hat brim, though he doesn't get up."
-      thanks: "\"For what, exactly?\""
-      bye: "\"I'll be right here.\""
-      how: "\"I'm waiting, which is what I'm paid to do.\""
-      sorry: "\"Quite.\""
+      hello: He touches his hat brim, though he doesn't get up.
+      thanks: "\"You are welcome, friend.\""
+      bye: "\"Good day, friend.\""
+      how: "\"I am waiting, friend. Mr. Rolette pays me by the day.\""
+      sorry: "\"Sorry does not go against the note.\""
     parting: The agent doesn't bother to look up as you go.
 
   eli:
@@ -516,16 +517,16 @@ actions:
       - set: [1830.lease_player, 1830.fog]
       - say: >-
           The agent weighs the bag, then counts the silver out onto his papers,
-          twice. "Silver's silver, and it goes against the note," he says.
-          "Whose name goes on the lease?" While you're still thinking about
-          that, he writes yours. {ogee} looks away. Up the trail, a tall figure
+          twice. "One hundred, against the note," he says, and dips his pen.
+          "The lessee's name?" While you're still thinking about that, he
+          writes yours. {ogee} looks away. Up the trail, a tall figure
           turns and walks back toward the camp.
       - say: >-
           A chill comes off the river, and within a few breaths the fog is on
           you. {ogee's} voice comes from close by, flatter than before: "Easy
           now. Take my arm."
     else:
-      - say: "\"A hundred in silver, friend, and not a coin less.\" He glances at your pockets and plainly doesn't expect it."
+      - say: "He glances at your pockets. \"One hundred in silver, friend. Not one coin less.\""
 
 exits:
   - names: [south, path, cabin, smoke, woodsmoke, clearing, up]

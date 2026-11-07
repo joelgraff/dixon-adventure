@@ -3,7 +3,7 @@ tests:
     url: scene=landing
     steps:
       - setup: {flags: [present.returned, known.ogee, met.ogee, known.agent, met.agent, known.volunteer, met.volunteer, known.asa, met.asa, 1830.arrived, 1830.rope_strung, 1830.wagon_free]}
-      - {cmd: ask asa to pay agent, expect: [Whose name goes on the paper, "Not mine", Take my arm]}
+      - {cmd: ask asa to pay agent, expect: ["The lessee's name", "Not mine", Take my arm]}
       - {cmd: take arm, room: wateredge}
       - {cmd: go to museum, room: museum}
       - {cmd: read panel, expect: newcomer whose name was not recorded}
@@ -80,7 +80,7 @@ tests:
     url: scene=landing
     steps:
       - setup: {flags: [1830.arrived, known.agent, met.agent], money: 1}
-      - {cmd: pay agent, expect: not a coin less, money: 1}
+      - {cmd: pay agent, expect: Not one coin less, money: 1}
 
   - name: clarifications use display names
     url: scene=landing
@@ -242,7 +242,7 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free]}
       - {cmd: talk to asa, expect: "What I need is a ferry"}
-      - {cmd: ask agent about asa, expect: reasons to want this boat}
+      - {cmd: ask agent about asa, expect: wagons do not cross without this boat}
       - {cmd: tell asa about dixon, expect: what he's short of, not: season of crossings}
       - setup: {flags: [1830.dixon_short, known.dixon, met.dixon]}
       - {cmd: ask asa about dixon, expect: [season of crossings, Take that up to Dixon]}
@@ -264,7 +264,7 @@ tests:
       - {cmd: answer, room: landing}
       - {cmd: wait, expect: "A man in a good coat sits", not: "The man in the good coat"}
       - {cmd: look, expect: "The man in the good coat sits", not: "A man in a good coat"}
-      - {cmd: talk to man in good coat, expect: "The man in the good coat says"}
+      - {cmd: ask man in good coat about galena, expect: "The man in the good coat says"}
 
   - name: after the rescue, the room already calls Ogee "the man"
     url: scene=wateredge
@@ -596,7 +596,7 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.dixon_short, known.dixon, met.dixon]}
       - {cmd: tell asa about dixon, expect: Take that up to Dixon}
-      - {cmd: give silver to agent, expect: [Whose name goes on the lease, writes yours, Take my arm]}
+      - {cmd: give silver to agent, expect: ["The lessee's name", writes yours, Take my arm]}
       - {cmd: "take ogee's arm", room: wateredge}
       - {cmd: up, room: riverwalk}
       - {cmd: read marker, expect: was not recorded}
@@ -729,7 +729,7 @@ tests:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.asa_needs_ferry]}
       - {cmd: ask asa about the agent, expect: Find me the man who means to run her}
       - {cmd: ask ogee about asa, expect: as stuck on this bank}
-      - {cmd: ask agent about the lease, expect: leases her to a man who can pay, not: Dixon}
+      - {cmd: ask agent about the lease, expect: any man who can pay, not: Dixon}
       - {cmd: help, expect: Ask Dixon about the lease}
       - {cmd: talk to ogee, expect: [still sitting on my boat, find a hundred in silver], not: silver in this landing}
       - {cmd: help, expect: Tell Asa about Dixon, not: James}
@@ -802,3 +802,16 @@ tests:
       - setup: {flags: [1830.arrived]}
       - {cmd: talk to big man, expect: [snapped in two, dollar in it]}
       - {cmd: look at broken bar, expect: snapped clean in two}
+
+  # The agent's voice (VOICES.md): clipped and exact, no contractions, no opinions.
+  - name: Rolette's agent talks in terms
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: talk to man in good coat, expect: ["One hundred dollars in silver, due in February", "Not paid, I take it"], not: ["I've", "what's", "I'll"]}
+      - setup: {flags: [known.agent, met.agent]}
+      - {cmd: talk to agent, expect: "One hundred in silver, friend. Today."}
+      - {cmd: ask agent about the debt, expect: [Schellenger note, Paper buys nothing], not: [a good deal, "isn't"]}
+      - {cmd: ask agent about ogee, expect: That is all I need to know, not: good ferryman}
+      - {cmd: ask agent about the weather, expect: not on the note}
+      - {cmd: say sorry to agent, expect: Sorry does not go against the note}

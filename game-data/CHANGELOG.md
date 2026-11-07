@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.23 (2026-11-07)
+- Rolette's agent talks in terms now: clipped, exact, no contractions, no opinions. He taps his papers and names the figures (a thousand and sixty on the Schellenger note, a hundred of it due in February) instead of explaining himself, and closes every conversation politely: "That is not on the note, friend."
+
 ## 0.14.22 (2026-11-07)
 - Asa says less and shows more: he nods at his broken bar instead of explaining it, points at his flour and pats the silver in his coat, and speaks in plain, short lines. The voice sheets now say how dialogue works in this game: short, one idea at a time, facts shown rather than told.
 

@@ -229,8 +229,8 @@ actions:
     do:
       - set: [1830.lease_player, 1830.fog]
       - say: >-
-          {asa} shrugs and counts a hundred in silver onto the agent's papers. The agent counts it again. "Silver's silver, and it goes against
-          the note. Whose name goes on the paper?" "Not mine," says {asa}. "I'm
+          {asa} shrugs and counts a hundred in silver onto the agent's papers. The agent counts it again. "One hundred, against
+          the note. The lessee's name?" "Not mine," says {asa}. "I'm
           for Galena." So the agent writes yours, though you couldn't run
           a ferry if your life depended on it. {ogee} looks away. Up the
           trail, a tall figure turns and walks back toward the camp. Then a
