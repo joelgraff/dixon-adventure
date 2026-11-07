@@ -649,3 +649,9 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
       - {cmd: ask madeline for paddle, expect: [What do you want with it, keeps that man off the ferry, bring it home]}
+
+  - name: Rebecca says why they expected to be in the cabin
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, known.rebecca, met.rebecca]}
+      - {cmd: ask rebecca about the cabin, expect: [lease comes with the east room, "Rolette's man has it"]}

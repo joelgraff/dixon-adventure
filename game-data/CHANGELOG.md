@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.8 (2026-11-07)
+- Rebecca says why her family expected to be in Ogee's cabin by now: the lease comes with its east room, where Rolette's man is sleeping instead. The histories panel marks this as invented.
+
 ## 0.14.7 (2026-11-07)
 - Madeline wants to know what you want her father's paddle for before she lends it, and lends it because it may keep Rolette's man off the ferry.
 

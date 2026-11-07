@@ -74,3 +74,4 @@ claims:
   C29: {status: invented, rooms: [museum], sources: [], claim: "The museum desk was the Dixon's Ferry post office desk, used by John Dixon as postmaster from 1831; its drawer lock is older than the desk. Dixon's commission as postmaster (Sept 1830) is record, C19."}
   C30: {status: record, rooms: [camp], sources: [S9], claim: "By 1823 the principal mails travelled in locked portmanteaus, opened only at distributing offices."}
   C31: {status: invented, rooms: [cabin, camp, museum], sources: [], claim: "James Dixon losing the mail key to a crow at Ogee's cabin, and the key turning up with the post office desk."}
+  C32: {status: invented, rooms: [camp, cabin], sources: [], claim: "Dixon's lease included the cabin's east room for his family, and Rolette's agent was lodging there while the lease waited."}

@@ -157,7 +157,7 @@ npcs:
       - text: "\"Supper's a while yet, I'm afraid.\""
     topics:
       - keys: [wait, roof, floor, cabin, house]
-        say: "\"We were meant to be in that cabin by now. Instead we're living in the wagon, and that man's sleeping in the east room.\""
+        say: "\"The lease comes with the east room at the cabin. That's where we were meant to be sleeping by now, and instead we're living in the wagon while Rolette's man has it.\""
       - keys: [road, journey, boyd's grove, trip]
         say: "\"We came from Boyd's Grove to here with the children and everything we own, and I'll not do it backwards.\""
       - keys: [children, boys, sons, james]
