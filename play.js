@@ -602,7 +602,7 @@ function askAbout(who, topic) {
   if (e) run(e.do);
 }
 const SOCIAL = [
-  ['thanks', /^(?:say\s+)?(?:thanks|thank you|thank-you|thx|cheers)(?:\s+(?:so much|very much|a lot))?(?:\s+(?:to\s+)?(.+))?$/],
+  ['thanks', /^(?:say\s+)?(?:thanks|thank you|thank-you|thx|cheers|thank)(?:\s+(?:so much|very much|a lot))?(?:\s+(?:to\s+)?(.+))?$/],
   ['hello', /^(?:say\s+)?(?:hello|hi|hey|howdy|greetings|good (?:morning|afternoon|evening|day))(?:\s+(?:to\s+)?(.+))?$/],
   ['bye', /^(?:say\s+)?(?:goodbye|good-bye|bye|farewell|see you|see you later|take care|good night)(?:\s+(?:to\s+)?(.+))?$/],
   ['how', /^(?:how are you|how's it going|how are things|how do you do|how have you been)(?:\s+(.+))?$/],

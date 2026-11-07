@@ -124,8 +124,11 @@ npcs:
           - text: "\"That was my father's.\" She looks at it for a moment, then reaches up and lifts it down from the pegs. \"He'd laugh to see it back on the water. Mind you bring it home.\""
             do: [{give: paddle}, {set: 1830.has_paddle}]
       - keys: [axe, borrow, chopping, block]
-        say: "\"Take it if you need it. Just bring it back.\""
-        do: [{set: 1830.axe_ok}]
+        say:
+          - when: [has:axe]
+            text: "\"You've got it. Just bring it back when you're done.\""
+          - text: "\"Take it if you need it. Just bring it back.\""
+            do: [{set: 1830.axe_ok}]
     fallback: "{madeline} only shakes her head; it isn't something she means to discuss with a stranger."
     social:
       hello: "{madeline} nods to you from the doorway."

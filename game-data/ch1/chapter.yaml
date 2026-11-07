@@ -161,7 +161,7 @@ deal_text: &deal >-
   voice comes from close by: "Easy now. Don't go wandering in this. Take my
   arm."
 deal_do: &deal_do
-  - set: [1830.lease_dixon, 1830.fog, known.dixon]
+  - set: [1830.asa_needs_ferry, 1830.lease_dixon, 1830.fog, known.dixon]
 
 actions:
   - id: asa_deal
@@ -174,7 +174,7 @@ actions:
           do:
             - set: 1830.asa_needs_ferry
             - say: *deal
-            - set: [1830.lease_dixon, 1830.fog, known.dixon]
+            - set: [1830.asa_needs_ferry, 1830.lease_dixon, 1830.fog, known.dixon]
           else:
             - say: "\"Dixon? The mail man, up at the camp? If he's the one who means to run her, I'd like to hear from him what he's short of before I put my hand in my coat.\""
     else:
@@ -306,8 +306,21 @@ npcs:
       - when: [1830.wagon_free]
         text: "[asa] stands by his wagons, in a better temper than before."
       - text: "[asa] stands at the wheel, swearing at all of it."
-    look: He's a big man in a sweat-dark shirt, mud to the thighs, with the look of someone who has been losing an argument with a wagon since sunup.
+    look:
+      - when: [1830.wagon_free]
+        text: He's a big man in a sweat-dark shirt with the mud drying on him to the thighs, and for once he looks fairly pleased with the world.
+      - text: He's a big man in a sweat-dark shirt, mud to the thighs, with the look of someone who has been losing an argument with a wagon since sunup.
     talk:
+      - when: [not known.asa, 1830.wagon_free]
+        text: >-
+          "Asa. I'm that boy's uncle, and you're the one who got me out of that
+          slough." He jerks his head at the man on the crate. "I've a train to
+          get over this river and on to Galena, and that one means to take the
+          boat out from under us. If she goes, I'm stuck on this bank until
+          somebody builds another, and my flour won't keep that long." He pats
+          his coat, where something heavy chinks. "I've silver enough. What I
+          haven't got is a ferry."
+        do: [{set: [known.asa, 1830.asa_needs_ferry]}]
       - when: [not known.asa]
         text: >-
           "Asa. I'm that boy's uncle." He wipes his hands on his shirt, which
@@ -327,10 +340,18 @@ npcs:
         do: [{set: 1830.asa_needs_ferry}]
       - when: [1830.wagon_free]
         text: "\"I owe you, and I don't like owing. If there's anything I can do, say so.\""
+      - when: [1830.brush_placed]
+        text: "\"The brush is down. Now get something long under that axle.\""
       - text: "\"Brush and a lever, that's all I need. I'm not getting any younger, and neither is that wagon.\""
     topics:
       - keys: [wagon, wheels, slough, mud, stuck, bar, lever, brush]
-        say: "\"I want willow brush under the hind wheels and something long under the axle. Ogee's got a setting pole that would do, if he'd part with it.\""
+        say:
+          - when: [1830.wagon_free]
+            text: "\"She's out and down at the landing, thanks to you, and she'll stay out of sloughs if I have any say in it.\""
+          - when: [1830.brush_placed]
+            text: "\"The brush is under her. Now I want something long under that axle. Ogee's got a setting pole that would do, if he'd part with it.\""
+          - text: "\"I want willow brush under the hind wheels and something long under the axle. Ogee's got a setting pole that would do, if he'd part with it.\""
+
       - keys: [galena, diggings, mines, lead, flour, tools]
         say: "\"We're bound for the diggings with flour and tools, and the merchants in Galena pay in silver. I make this run four or five times a season.\""
       - keys: [silver, money, cash, coin]
@@ -339,10 +360,10 @@ npcs:
         say:
           - when: [1830.lease_dixon]
             text: "\"Dixon's a fair man to do business with. My wagons cross free till the hundred's worked off.\""
-          - when: [1830.dixon_short, 1830.asa_needs_ferry]
+          - when: [1830.dixon_short, 1830.wagon_free]
             text: *deal
             do: *deal_do
-          - when: [1830.asa_needs_ferry]
+          - when: [1830.wagon_free]
             text: "\"Dixon? The mail man, up at the camp? If he's the one who means to run her, I'd like to hear what he's short of.\""
           - text: "\"I've a wagon in the mud, and that's all the business I've got today.\""
       - keys: [eli, nephew, boy]
@@ -355,11 +376,17 @@ npcs:
     fallback: "{asa} spits into the mud. \"I've no idea, and I've no time to find out.\""
     social:
       hello: "{asa} grunts something that might be a greeting."
-      thanks: "\"Thank me when she's out of the mud.\""
+      thanks:
+        - when: [1830.wagon_free]
+          text: "\"It's me that ought to be thanking you.\""
+        - text: "\"Thank me when she's out of the mud.\""
       bye: "\"Mind your boots on the way.\""
       how: "\"Muddy. How does it look like I am?\""
       sorry: "\"There's nothing to be sorry about.\""
-    parting: You nod to [asa], who nods back without letting go of the wheel.
+    parting:
+      - when: [1830.wagon_free]
+        text: You nod to [asa], who lifts a muddy hand.
+      - text: You nod to [asa], who nods back without letting go of the wheel.
 
 # What `help` says: the first entry whose `when` holds. Help is the one place
 # the game may name commands outright.

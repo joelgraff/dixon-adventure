@@ -3,7 +3,7 @@
 
 # Release version (see CHANGELOG.md for the rules). Bump it, the ?v= in
 # play.html and the changelog together; the checker verifies they match.
-version: 0.8.5
+version: 0.8.6
 # Bump when a change would break saved games (renamed or removed flags,
 # items or rooms). Saves from another save_compat are refused, not loaded.
 save_compat: 2

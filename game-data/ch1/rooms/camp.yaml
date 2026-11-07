@@ -82,6 +82,15 @@ npcs:
     room_line: "[dixon] stands looking down toward the river, turning a folded [paper] over in his hands."
     look: He is a tall man in his forties, in a dark coat, with a careful face, and he looks like a man doing sums he doesn't like the answer to.
     talk:
+      - when: [not known.dixon, {any: [1830.has_rope, 1830.rope_strung]}]
+        text: >-
+          "John Dixon," he says, and his handshake is firm, though his eyes
+          take in your wet clothes before they come back to your face. "I came
+          up from Peoria to lease Ogee's ferry, and found Rolette's man sitting
+          on it, so for now I'm waiting to see how that comes out." He glances
+          at the empty tailboard. "And I see my rope has found a use. That's
+          what I brought it for."
+        do: [{set: known.dixon}]
       - when: [not known.dixon]
         text: >-
           "John Dixon," he says, and his handshake is firm, though his eyes

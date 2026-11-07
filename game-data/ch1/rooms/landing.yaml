@@ -185,6 +185,16 @@ npcs:
       - text: "[ogee] stands at the ferry's lines, holding her against the current, a setting [pole] leaning on the post beside him."
     look: He is a broad man in a buckskin shirt with his sleeves rolled over scarred forearms, and he looks at the river the way a man looks at a horse that has thrown him before.
     talk:
+      - when: [not known.ogee, 1830.canoe_tarred, not 1830.rope_strung]
+        text: >-
+          "Joseph Ogee," he says, hauling at the ferry's lines. "I see you've
+          tarred her already, and made a fair job of it." He nods at the man in
+          the good coat. "I can't leave these lines while that one sits there,
+          so it's you. There's a fellow camped up the Peoria trail, Dixon, with
+          rope enough to run a line bank to bank. Carry it over in her and tie
+          it off on the far side. You'll want a paddle; Madeline keeps her
+          father's old one up at the cabin."
+        do: [{set: [known.ogee, 1830.met_ogee, heard.dixon]}]
       - when: [not known.ogee]
         text: >-
           "Joseph Ogee," he says, already back at the ferry's lines and hauling
@@ -218,9 +228,23 @@ npcs:
             text: "\"It was Dixon's notion, and I'll admit it works. I'll not admit it to him, mind.\""
           - text: "\"It's Dixon's notion: a line from bank to bank, and you pull her over hand over hand. Only you can't get the line over without a boat, and I can't get a boat over in this.\""
       - keys: [canoe, dugout, seam, tar, paddle]
-        say: "\"She split on my own piling while I was fishing you out. The oakum's by the pot and the swab's standing in it, so pack the split first and then tar it over. You'll want a paddle as well, since mine went downriver. Madeline keeps her father's old one up at the cabin, under the eaves. Ask her nicely.\""
+        say:
+          - when: [{any: [1830.canoe_across, 1830.rope_strung]}]
+            text: "\"She's done her work and she's resting on the far bank. I'll fetch her home when the water drops.\""
+          - when: [1830.canoe_tarred, has:paddle]
+            text: "\"She'll float now, and you've a paddle. All she wants is Dixon's rope in her and somebody fool enough to cross.\""
+          - when: [1830.canoe_tarred]
+            text: "\"She'll float now. You'll still want a paddle; Madeline keeps her father's old one up at the cabin, under the eaves. Ask her nicely.\""
+          - when: [has:paddle]
+            text: "\"You've a paddle, I see. She split on my own piling while I was fishing you out, so pack the split with the oakum by the pot and swab the tar over it.\""
+          - text: "\"She split on my own piling while I was fishing you out. The oakum's by the pot and the swab's standing in it, so pack the split first and then tar it over. You'll want a paddle as well, since mine went downriver. Madeline keeps her father's old one up at the cabin, under the eaves. Ask her nicely.\""
+
       - keys: [help, yourself, why me, why, you, cross, carry, fix, repair, lines]
-        say: "\"If I let go of these lines in this water, she's gone. If I step off this dock, that one says I've left her and she's Rolette's. The boy up there won't go near the river, and Dixon doesn't know it the way I do.\" He takes a fresh turn of line around the post. \"You've two hands, and you owe me the use of them.\""
+        say:
+          - when: [1830.rope_strung]
+            text: "\"You've paid that canoe off, and then some. She runs on the rope now, and I can let go of her lines for the first time this week.\""
+          - text: "\"If I let go of these lines in this water, she's gone. If I step off this dock, that one says I've left her and she's Rolette's. The boy up there won't go near the river, and Dixon doesn't know it the way I do.\" He takes a fresh turn of line around the post. \"You've two hands, and you owe me the use of them.\""
+
       - keys: [rescue, saving, saved, fall, fell, drowning, swim]
         say: "\"Folks come out of that fog and walk straight off the end of the dock. You're the third this year, and the first I've lost a canoe over.\""
       - keys: [axe, oak, wood, cabin]
@@ -239,6 +263,14 @@ npcs:
         say: "\"Every spring they come up from the south bound for the diggings, and every one of them has to cross here. The lead goes down from Galena by boat, but the men come up by road.\""
       - keys: [pole, shoe, smith, iron]
         say:
+          - when: [1830.shoe_returned]
+            text: "\"She's got her shoe back, and I'm obliged to you for it. I'd not have found that in the slough in a hundred years.\""
+          - when: [has:pole, 1830.shoe_lost]
+            text: "\"You've still got her, and I can see from here she's lost her shoe. That was the smith's work.\""
+          - when: [has:pole]
+            text: "\"You've got her. Bring her back whole.\""
+          - when: [1830.shoe_lost]
+            text: "\"She lost her shoe somewhere in that slough. I had the smith make that shoe.\""
           - when: [1830.rope_strung]
             text: "\"She's an ash pole with an iron shoe, and I had the smith make that shoe. I've no use for her now the rope's across, so you can borrow her if you need a long lever.\""
           - text: "\"She's an ash pole with an iron shoe. I had the smith make that shoe, and it'll outlast me.\""
@@ -252,7 +284,10 @@ npcs:
       thanks: "{ogee} grunts. \"Don't thank me yet. The river's not done with any of us.\""
       bye: "\"Watch the water as you go.\""
       how: "\"I'm alive and the dock's still standing, which makes it a good week.\""
-      sorry: "\"You'll be sorrier when you're working that tar.\""
+      sorry:
+        - when: [not 1830.canoe_tarred]
+          text: "\"You'll be sorrier when you're working that tar.\""
+        - text: "\"You've made it good. Don't trouble yourself.\""
     parting: You nod to [ogee], and he lifts his chin without looking away from the water.
 
   agent:

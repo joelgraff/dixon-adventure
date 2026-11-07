@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.8.6 (2026-11-06)
+- Characters' lines follow what has already happened, whatever order you do things in: Ogee on the canoe, the rope, the pole and its shoe, and meeting him after you've tarred the canoe; Dixon when you've already taken his rope; Asa's look, talk and thanks once the brush is down or the wagon is free, including meeting him first at the landing; Madeline once you have the axe. 'thank <name>' now works.
+
 ## 0.8.5 (2026-11-06)
 - Eli knows when his uncle is free: met for the first time after the rescue, he thanks you for getting Asa out of the slough, and his description, his talk about his uncle and his shrug all follow the wagon being free.
 

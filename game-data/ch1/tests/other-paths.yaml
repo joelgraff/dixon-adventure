@@ -348,3 +348,46 @@ tests:
       - {cmd: look at young man, expect: sits a good deal easier}
       - {cmd: talk to young man, expect: [I'm Eli, got Uncle Asa out of the slough], not: down to the hubs}
       - {cmd: ask eli about his uncle, expect: fine mood, not: back in the slough}
+
+  - name: Ogee's lines follow the canoe, the rope and the pole
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, 1830.canoe_tarred]}
+      - {cmd: talk to man in buckskin, expect: [tarred her already, Joseph Ogee], not: Pack that split}
+      - {cmd: ask ogee about the canoe, expect: She'll float now, not: pack the split}
+      - {cmd: sorry ogee, expect: made it good}
+      - setup: {flags: [1830.rope_strung, 1830.canoe_across, 1830.has_pole, 1830.shoe_lost], items: [phone, pole]}
+      - {cmd: ask ogee about the canoe, expect: far bank}
+      - {cmd: ask ogee why, expect: paid that canoe off}
+      - {cmd: ask ogee about the pole, expect: lost her shoe}
+
+  - name: Dixon knows you've taken his rope if you meet him after
+    url: scene=camp
+    steps:
+      - setup: {flags: [1830.arrived, 1830.has_rope], items: [phone, rope]}
+      - {cmd: talk to tall man, expect: [John Dixon, my rope has found a use], not: rope on the tailboard}
+
+  - name: Asa met for the first time after his wagon is free
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.rope_strung, 1830.wagon_free, known.dixon, 1830.dixon_short]}
+      - {cmd: look at big man, expect: pleased with the world}
+      - {cmd: talk to big man, expect: [got me out of that slough, What I haven't got is a ferry]}
+      - {cmd: ask asa about the wagon, expect: thanks to you}
+      - {cmd: thank asa, expect: ought to be thanking you}
+      - {cmd: ask asa about dixon, expect: [season of crossings, Take my arm]}
+      - {cmd: score, expect: Your score is}
+
+  - name: Asa's lines once the brush is down
+    url: scene=slough
+    steps:
+      - setup: {flags: [1830.arrived, known.asa, 1830.brush_placed]}
+      - {cmd: talk to asa, expect: The brush is down}
+      - {cmd: ask asa about the wheels, expect: The brush is under her}
+
+  - name: Madeline's axe line once you have it
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, 1830.axe_ok, 1830.has_axe], items: [phone, axe]}
+      - {cmd: ask madeline about the axe, expect: already have it}
+      - {cmd: ask madeline about the chopping block, expect: "You've got it"}
