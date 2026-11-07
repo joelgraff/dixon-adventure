@@ -337,7 +337,7 @@ npcs:
       - room: slough
     room_line:
       - when: [1830.wagon_free]
-        text: "[asa] stands by his wagons, in a better temper than before."
+        text: "[asa] leans on the nearest of his wagons, in a far better temper than you first found him."
       - text: "[asa] stands at the wheel, swearing at all of it."
     look:
       - when: [1830.wagon_free]
@@ -346,8 +346,8 @@ npcs:
     talk:
       - when: [not met.asa, 1830.wagon_free]
         text: >-
-          "Asa. I'm that boy's uncle, and you're the one who got me out of that
-          slough." He jerks his head at the man on the crate. "I've a train to
+          "Asa. That's my nephew on the wagon tongue, and you're the one who got
+          me out of that slough." He jerks his head at the man on the crate. "I've a train to
           get over this river and on to Galena, and that one means to take the
           boat out from under us. If she goes, I'm stuck on this bank until
           somebody builds another, and my flour won't keep that long." He pats
@@ -356,7 +356,8 @@ npcs:
         do: [{set: [known.asa, met.asa, 1830.asa_needs_ferry]}]
       - when: [not met.asa]
         text: >-
-          "Asa. I'm that boy's uncle." He wipes his hands on his shirt, which
+          "Asa. If you came by the landing, you'll have seen my nephew there,
+          fretting on a wagon tongue." He wipes his hands on his shirt, which
           only makes them muddier. "My bar broke an hour back. The wheels want
           brush under them, something to bite on, and I want a long lever under
           that hind axle. Get me both and you'll have my thanks, and a dollar
@@ -418,8 +419,8 @@ npcs:
       sorry: "\"There's nothing to be sorry about.\""
     parting:
       - when: [1830.wagon_free]
-        text: You nod to [asa], who lifts a muddy hand.
-      - text: You nod to [asa], who nods back without letting go of the wheel.
+        text: "[asa] lifts a muddy hand as you go."
+      - text: "[asa] grunts a goodbye without letting go of the wheel."
 
 # What `help` says: the first entry whose `when` holds. Help is the one place
 # the game may name commands outright.

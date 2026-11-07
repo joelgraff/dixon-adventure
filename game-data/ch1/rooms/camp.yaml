@@ -16,17 +16,17 @@ picture: >-
 # The return-visit description (see FORMAT.md, Rooms).
 brief: "The [wagon] stands among the [oaks], and the cook [fire] burns low under the [kettle]."
 look: >-
-  A canvas-topped [wagon] stands pulled off the trail among the [oaks], with
-  its team grazing on a picket line nearby and a cook [fire] burning low
-  under a [kettle]. From here the trail runs back north toward the river and
-  on south toward Peoria.
+  Somebody has pulled a canvas-topped [wagon] off the trail and made a home
+  of the ground around it. The team grazes on a picket line among the
+  [oaks], and a cook [fire] has burned down to coals under an iron [kettle].
+  The trail runs on north to the river and south toward Peoria.
 listen: The kettle ticks as it heats, a horse stamps on the picket line, and two boys are arguing about whose turn it is with the bucket.
 
 nouns:
   wagon:
     name: wagon
     aliases: [canvas, tailboard, wagon cover, team, horses, picket line]
-    look: It's a farm wagon with a canvas cover and everything the family owns lashed inside it, and they have been living out of it since they came up from Boyd's Grove.
+    look: The wagon is an ordinary farm wagon with a canvas cover and everything the family owns lashed inside it. They have been living out of it since they came up from Boyd's Grove.
     verbs:
       search: You keep your hands out of other people's wagons, as a rule.
 
@@ -34,8 +34,8 @@ nouns:
     name: coil of rope
     when: [not 1830.has_rope]
     aliases: [rope, coil, hemp, line]
-    room_line: A heavy coil of [rope] sits on the wagon's tailboard.
-    look: It's a great heavy coil of new hemp, far more rope than any family needs, unless the family means to run a ferry on it.
+    room_line: The wagon's tailboard sags under a heavy coil of new [rope].
+    look: There's far more new hemp in this coil than any family needs, unless the family means to run a ferry on it.
     verbs:
       take: "{dixon} says, \"Ask, and it's yours. Don't ask, and it isn't.\""
 
@@ -52,7 +52,7 @@ nouns:
   paper:
     name: folded paper
     aliases: [folded paper, order, government order, document, seal]
-    look: It's a folded paper with a state seal on it, worn soft at the creases from being turned over and over, and whatever it says, it isn't making him any happier.
+    look: The paper bears a state seal and has gone soft at the creases from being turned over and over. Whatever it says, it isn't making him any happier.
     verbs:
       take: "{dixon} folds it away. \"Ask me, if you've a use for it.\""
 
@@ -107,7 +107,7 @@ npcs:
       - text: "{dixon} nods to you. \"I'm still waiting on Rolette's man, and he's in no hurry.\""
     topics:
       - keys: [lease, ferry, ogee, buy, money, silver, hundred, waiting, short, trouble, terms]
-        say: "\"Ogee and I have come to terms. I lease the ferry from him, and the rent goes against Rolette's notes, so Rolette is paid in time and Ogee keeps a roof over his family. But the first of it has to be a hundred in silver, today, or Rolette's man takes the boat, and that's the trouble.\" He turns the folded paper over in his hands. \"I haven't a coin of silver to my name. My mail pay comes as paper on the governor, and nobody on this riverbank will cash it.\""
+        say: "\"Ogee and I have come to terms. I lease the ferry from him, and the rent goes against Rolette's notes, so Rolette is paid in time and Ogee keeps a roof over his family. But the first of it has to be a hundred in silver, today, or Rolette's man takes the boat, and that's the trouble.\" He taps the folded paper against his palm. \"I haven't a coin of silver to my name. My mail pay comes as paper on the governor, and nobody on this riverbank will cash it.\""
         do: [{set: 1830.dixon_short}]
       - keys: [agent, rolette, creditor, coat, man]
         say: "\"That's Rolette's man. The worst of it is that he isn't wrong; the money's owed, and he'll take the boat for it unless somebody puts a hundred in silver in his hand.\" He looks at the paper in his own hand and doesn't say whose silver he means."
@@ -115,13 +115,13 @@ npcs:
         say:
           - when: [1830.rope_strung]
             text: "\"I saw her go over on the rope, and that's the way of it from now on.\" He looks almost pleased."
-          - text: "\"That's every foot of hemp I could buy in Peoria. Strung from bank to bank, it lets you pull her over in any water short of a flood. Ogee calls it a fancy.\""
+          - text: "\"Strung from bank to bank, a line like that lets you pull her over in any water short of a flood. Ogee calls it a fancy.\""
       - keys: [paper, order, governor, edwards, vandalia, pay, silver]
         say: "\"It's my mail pay, an order on Governor Edwards. It'll be good money in Vandalia, two hundred miles off, but it's no use to me here.\""
       - keys: [mail, contract, route, peoria, galena, post office]
         say: "\"I carry the mail from Peoria up to Galena, and this crossing sits square in the middle of the route, so a man who carries the mail needs the ferry.\""
       - keys: [family, wife, rebecca, children, sons, james, boys]
-        say: "\"There's Rebecca and the children, and James drives the mail with me. We came the eleventh of April, meaning to be sleeping under a roof by now.\" He looks at the wagon and leaves it there."
+        say: "\"There's Rebecca and the children, and James drives the mail with me. We came the eleventh of April, meaning to be sleeping under a roof by now.\" He looks at the wagon, which is not a roof."
       - keys: [boyd's grove, home, from, bureau]
         say: "\"Boyd's Grove, down in the Bureau country. We had two years there, and Peoria before that.\""
       - keys: [travelers, loans, lend, money, men]
@@ -133,7 +133,7 @@ npcs:
       - keys: ["1832", war, militia]
         say: "{dixon} gives you an odd look. \"Eighteen thirty-two? That's two years off. I don't keep accounts that far ahead.\""
       - keys: [fog, mist]
-        say: "\"The mist? It's been odd this year,\" he says, and doesn't say anything more."
+        say: "\"The mist? It's been odd this year,\" he says. \"Odd enough that I've stopped mentioning it to Rebecca.\""
     fallback: "{dixon} considers it. \"That's not my line, I'm afraid. Ogee might know.\""
     social:
       hello: "{dixon} inclines his head. \"Good day to you.\""
@@ -141,7 +141,7 @@ npcs:
       bye: "\"Safe passage to you.\""
       how: "\"Well enough, and I'd be better with a roof.\""
       sorry: "\"No offence taken.\""
-    parting: You nod to [dixon], and he touches two fingers to his hat brim.
+    parting: "[dixon] touches two fingers to his hat brim as you go."
 
   rebecca:
     name: Rebecca Dixon
@@ -150,7 +150,7 @@ npcs:
     ref: the woman at the fire
     aliases: [rebecca, woman, wife, mrs. dixon, rebecca dixon, woman in apron]
     room_line: "[rebecca] is tending the fire."
-    look: She wears a plain dress and an apron, and she stirs the kettle with the patience of someone who has cooked on a great many fires.
+    look: She wears a plain dress and an apron, and she stirs the kettle like someone who has cooked on a great many fires and expects to cook on a great many more.
     talk:
       - when: [not met.rebecca]
         text: "\"Rebecca Dixon,\" she says, without stopping her stirring. \"You'll be the one helping with the ferry. Good, because I'd like a floor.\""

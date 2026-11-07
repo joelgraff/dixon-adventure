@@ -11,9 +11,9 @@ picture: >-
 # The return-visit description (see FORMAT.md, Rooms).
 brief: "The trail sinks into black [mud] here, and the [willows] crowd in along the edges."
 look: >-
-  Here the Peoria trail drops into a low wet stretch where the ruts
-  disappear into black [mud], and [willows] crowd in along the edges. Behind
-  you the trail climbs back north toward {dixon's} camp.
+  Behind you the trail climbs back north toward {dixon's} camp. Ahead, the
+  ruts vanish into black [mud], and the [willows] crowd so close along the
+  edges that there's no going round.
 listen:
   - when: [1830.wagon_free]
     text: Now that the oxen are gone you can hear the frogs, and water trickling back into the ruts.
@@ -26,9 +26,9 @@ nouns:
     aliases: [mired wagon, stuck wagon, flour, sacks, tools, freight]
     room_line:
       - when: [1830.brush_placed]
-        text: A loaded [wagon] sits sunk to its hubs with willow brush packed under its [wheels], and four [oxen] stand blowing in the traces.
-      - text: A loaded [wagon] sits sunk to its hubs, and four [oxen] stand blowing in the traces.
-    look: It's a supply wagon loaded with flour sacks and tools, tilted hard where the hind wheels have gone into the mud, and the hind axle sits a hand's width below the surface.
+        text: In the middle of it a loaded [wagon] sits down to its hubs on willow brush packed under its [wheels], and four [oxen] stand blowing in the traces.
+      - text: In the middle of it a loaded [wagon] has gone down to its hubs, and four [oxen] stand blowing in the traces.
+    look: The supply wagon is loaded with flour sacks and tools and tilted hard backwards, where the hind wheels have gone into the mud until the axle sits a hand's width below the surface.
 
   wheels:
     name: wheels

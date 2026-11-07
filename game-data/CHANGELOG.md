@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.13.4 (2026-11-07)
+- The camp and the slough get the same prose pass. The camp opens on a family making a home around a wagon; Dixon taps his paper instead of turning it over yet again, says the mist is odd enough that he's stopped mentioning it to Rebecca, and looks at a wagon that is not a roof; his rope line isn't said twice. Rebecca expects to cook on a great many more fires. The slough no longer repeats the wet ground you've just walked into, and Asa introduces himself by his fretting nephew instead of assuming you've met him. Partings with Dixon and Asa no longer start 'You nod'.
+
 ## 0.13.3 (2026-11-07)
 - The cabin's prose gets the same pass as the landing. The room no longer repeats the clearing you've just walked into, and its lines vary their shape. Madeline has mending to go back to and watches you to the edge of the clearing; her look, her ferry line and the paddle no longer all use 'the way you'd'. Giving back the axe is plain business, so the softening is saved for her father's paddle. The paddle, the crow and the axe no longer open with 'It's a'.
 
