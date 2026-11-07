@@ -353,7 +353,7 @@ nouns:
               - if:
                   when: [here:volunteer]
                   do:
-                    - say: "\"I put that up this afternoon,\" {volunteer} says, \"before I knew why. I suppose somebody ought to ask.\""
+                    - say: "\"I put that up this afternoon,\" {volunteer} says, \"before I knew why. I suppose somebody should ask.\""
 
   window:
     name: window
@@ -397,21 +397,20 @@ npcs:
     talk:
       - when: [not met.volunteer]
         text: >-
-          "Oh, hello. Have you been in before? You've a familiar face." She
+          "Oh, hello. Have you been in before? You have a familiar face." She
           sets down her pencil. "I'm Margaret, and I'm here Saturdays, mostly.
           Feel free to look around, and do sign the [guestbook] before you go."
         do: [{set: [known.volunteer, met.volunteer]}]
       - when: [1830.lease_dixon, not chapter1.done]
         text: >-
           "You were in earlier, weren't you?" She frowns past you at the wall.
-          "It's funny, but I could swear the labels weren't like that this
-          morning, and nobody's touched them." She taps the finished grid,
-          where seven down reads DIXON. "Well, that's one done, though I've a
-          feeling the next puzzle won't be so easy." She looks at the clock,
-          which is ticking now, and starts gathering her things. "I've got to
-          close up and get home, but come back next Saturday, will you? I'll
-          wait for you, and we'll try that old key in the drawer together." She
-          nods at the room. "I'll be a few minutes yet, so take your time."
+          "Funny. I could swear the labels weren't like that this morning, and
+          nobody's touched them." She taps the finished grid, where seven down
+          reads DIXON. "Well, that's one done. I have a feeling the next one
+          won't be so easy." She looks at the clock, which is ticking now, and
+          starts gathering her things. "Come back next Saturday, will you? We'll
+          try that old key in the drawer together." She nods at the room.
+          "Take your time. I'll be a few minutes yet."
         do: [{set: chapter1.done}]
       - when: [1830.lease_player]
         text: >-
@@ -480,8 +479,8 @@ npcs:
       - keys: [desk, drawer, lock, key, plate, provenance]
         say:
           - when: [1830.lease_dixon]
-            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry. Nobody's opened that drawer in my time.\" She touches the key on the blotter. \"This turned up today, though, and I haven't had the nerve to try it.\""
-          - text: "\"Nobody's quite sure where that desk came from. The board says the old county clerk's office, the clerk's family says otherwise, and the plate on the side was scratched off before anyone thought to read it. The drawers all work except the locked one, and nobody has ever found the key.\""
+            text: "\"That was the post office desk at Dixon's Ferry, if you can believe it. John Dixon sorted the mail on it.\" She touches the key on the blotter. \"And this turned up today. I haven't had the nerve to try it.\""
+          - text: "\"Nobody's quite sure where that desk came from. The board says the old county clerk's office, and the clerk's family says otherwise.\" She pats the locked drawer. \"And nobody's ever found the key to this one. Thirty-one years, and I still try it now and then. Silly, I know.\""
       - keys: [case, cases, arrowheads, glass]
         say: "\"They've been locked since 1998, and the key's with the board. I dust the empty one at the end every Saturday, out of habit.\""
       - keys: [guestbook, book, sign, visitors]
@@ -491,7 +490,7 @@ npcs:
       - keys: [labels, label, changed, different, change]
         say:
           - when: [present.returned]
-            text: "She hesitates. \"I'd rather not say it out loud, but the labels have changed, and nobody's touched them. That's all.\""
+            text: "She hesitates. \"I'd rather not say it out loud, but the labels have changed, and nobody's touched them. That's all. That's all I'm going to...\" She picks up her pencil and puts it down again."
           - text: "\"The labels? They've been the same since the nineties.\""
       - keys: [museum, center, historic center, building, hours, collection]
         do: [{reveal: riverwalk}]
@@ -504,13 +503,13 @@ npcs:
     social:
       hello: "\"Hello, hello.\" She smiles over her glasses."
       thanks: "\"Oh, you're very welcome. Nobody thanks the volunteers, or not often.\""
-      bye: "\"Mind the fog on your way; it comes up quick this time of year.\""
+      bye: "\"Watch out for the fog on your way. It comes up quick this time of year.\""
       how: "\"I can't complain. A quiet Saturday, a crossword and someone to talk to make a good day.\""
       sorry: "\"Don't mention it.\""
     parting:
       - when: [present.returned]
         text: "\"Take care out there,\" {volunteer} says as you go, still watching the panel."
-      - text: "You thank {volunteer} and say you'll be back. \"Do come again,\" she says, pencil already moving. \"And mind the fog, it comes up quick.\""
+      - text: "You thank {volunteer} and say you'll be back. \"Do come again,\" she says, pencil already moving. \"And watch out for the fog. It comes up quick.\""
 
 actions:
   - id: close_up

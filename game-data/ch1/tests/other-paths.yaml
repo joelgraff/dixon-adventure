@@ -853,3 +853,11 @@ tests:
       - {cmd: talk to young man, expect: [I'm Eli, back yonder], not: "You'll be the one"}
       - {cmd: ask eli about his father, expect: Anyhow, not: never came home}
       - {cmd: ask eli about the river, expect: "don't guess I want to know it", not: "I'd sooner"}
+
+  # Margaret's voice (VOICES.md): contemporary, chatty, hedging, nothing old-fashioned.
+  - name: Margaret talks like Margaret
+    url: scene=museum
+    steps:
+      - {cmd: talk to margaret, expect: You have a familiar face, not: "You've a"}
+      - {cmd: ask margaret about the desk, expect: [Nobody's quite sure, Silly, I know]}
+      - {cmd: say goodbye to margaret, expect: Watch out for the fog, not: Mind the fog}

@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.27 (2026-11-07)
+- Margaret sounds like herself: no "You've a familiar face" or "mind the fog", shorter lines at the chapter's end, and she trails off when the labels unsettle her. A last sweep removed the remaining bookish turns from everyone's dialogue.
+
 ## 0.14.26 (2026-11-07)
 - Madeline, the boys and Eli get their own voices: Madeline says as little as will do and answers a question she doesn't trust with one of her own; Ogee's boys interrupt each other; Eli runs his sentences together with "and", quotes his pa and his uncle, and stops himself mid-thought.
 

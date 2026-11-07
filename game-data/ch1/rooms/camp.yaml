@@ -53,7 +53,7 @@ nouns:
     aliases: [folded paper, order, government order, document, seal]
     look: The paper bears a state seal and has gone soft at the creases from being turned over and over. Whatever it says, it isn't making him any happier.
     verbs:
-      take: "{dixon} folds it away. \"Ask me, if you've a use for it.\""
+      take: "{dixon} folds it away. \"Ask me, if you have a use for it.\""
 
   mailsack:
     name: mail sack
