@@ -728,9 +728,22 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.asa_needs_ferry]}
       - {cmd: ask asa about the agent, expect: Find me the man who means to run her}
-      - {cmd: ask ogee about asa, expect: who means to run her}
+      - {cmd: ask ogee about asa, expect: as stuck on this bank}
       - {cmd: ask agent about the lease, expect: leases her to a man who can pay, not: Dixon}
       - {cmd: help, expect: Ask Dixon about the lease}
-      - {cmd: talk to ogee, expect: [one train out of the mud, find a hundred in silver, silver in this landing]}
+      - {cmd: talk to ogee, expect: [still sitting on my boat, find a hundred in silver], not: silver in this landing}
       - {cmd: help, expect: Tell Asa about Dixon, not: James}
       - {cmd: tell asa about dixon, expect: Take that up to Dixon}
+
+  - name: the crow can be offered the dollar in many ways
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, 1830.wagon_free, 1830.key_lost], money: 1}
+      - {cmd: entice the crow with the silver dollar, expect: small brass key, money: 0}
+
+  - name: Ogee says Dixon needs silver, not where to find it
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, 1830.rope_strung, 1830.wagon_free]}
+      - {cmd: talk to ogee, expect: find a hundred in silver, not: [silver in this landing, "Asa's"]}
+      - {cmd: ask ogee about asa, expect: as stuck on this bank as I am, not: silver}

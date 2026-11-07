@@ -214,7 +214,7 @@ npcs:
       - when: [not 1830.wagon_free]
         text: "\"She runs. I never thought I'd see her pulled across like a bucket on a well rope.\" He nods at the waiting wagons. \"Now if only that train would move.\""
       - when: [not 1830.lease_dixon, not has:silver]
-        text: "{ogee} nods up the landing at {asa's} wagons, then at the man on the crate. \"That's one train out of the mud, and that one still sitting on my boat. Dixon would have his lease and I'd have my ferry, if he could find a hundred in silver.\" He looks back at the wagons. \"There's silver in this landing somewhere.\""
+        text: "{ogee} glances at the man on the crate. \"That one's still sitting on my boat. Dixon would have his lease and I'd have my ferry, if he could find a hundred in silver.\""
         do: [{set: [1830.dixon_short, heard.dixon]}]
       - text: "\"You've the look of somebody with a question,\" he says. \"Ask it, then.\""
     topics:
@@ -256,7 +256,7 @@ npcs:
       - keys: [asa, teamster, freighter, uncle]
         say:
           - when: [1830.wagon_free]
-            text: "\"Asa's got silver in his coat and a train that has to cross, and the man on the crate knows it as well as I do. He'll not hand it over for nothing, mind. He'd want to know who means to run her.\""
+            text: "\"Asa's out of the mud, thanks to you, and he's a train that has to cross. If that one takes my boat, Asa's as stuck on this bank as I am.\""
           - text: "\"That's the boy's uncle, stuck in the slough with his second wagon. His train won't move without him.\""
       - keys: [schellenger, partner, half]
         say: "\"George Schellenger bought half the ferry off me last fall and wanted out again by winter. Now I owe him more than I sold it for, and he's gone and sold the debt to Rolette.\""

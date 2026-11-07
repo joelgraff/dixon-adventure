@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.17 (2026-11-07)
+- Ogee no longer hints at where the silver is: he says Dixon would have his lease if he could find a hundred in silver, and that if the agent takes the boat Asa is as stuck as he is. The crow can now be tempted with the silver dollar in many more ways (entice, lure, tempt or bait it, wave or hold up the dollar, drop or place it on the block, and so on).
+
 ## 0.14.16 (2026-11-07)
 - The agent no longer cares who leases the ferry. Instead Ogee raises it himself once Asa's wagon is free: one train out of the mud, the agent still on his boat, and Dixon would have his lease if he could find a hundred in silver, and there's silver in this landing somewhere.
 
