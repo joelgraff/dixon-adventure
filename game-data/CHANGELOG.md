@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.24 (2026-11-07)
+- Ogee talks like a ferryman now: short, practical lines, French-leaning word order ("That one, he holds my paper for Rolette"), dry jokes at his own expense, and the odd bon or mon Dieu. Gone are the bookish turns ("I'll not", "mind", "I've no use for her", "obliged"); his first meeting is a few short lines and gestures instead of a speech.
+
 ## 0.14.23 (2026-11-07)
 - Rolette's agent talks in terms now: clipped, exact, no contractions, no opinions. He taps his papers and names the figures (a thousand and sixty on the Schellenger note, a hundred of it due in February) instead of explaining himself, and closes every conversation politely: "That is not on the note, friend."
 

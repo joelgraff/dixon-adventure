@@ -186,116 +186,114 @@ npcs:
     talk:
       - when: [not met.ogee, 1830.canoe_tarred, not 1830.rope_strung]
         text: >-
-          "Joseph Ogee," he says, without letting go of the lines. "You've
-          tarred her already, I see, and made a fair job of it. That's more
-          than I'd have asked of somebody who was drowning an hour ago." He
-          tips his head at the man in the good coat. "I can't leave these lines
-          while that one sits there waiting for me to. There's a man camped up
-          the Peoria trail, Dixon, with hemp enough to run a line from bank to
-          bank. If somebody carried it over in her, I'd have a ferry again."
+          "Joseph Ogee," he says, without letting go of the lines. He looks
+          over the fresh tar on his canoe. "You don't swim much. You tar all
+          right." He tips his head at the man in the good coat. "I let go of
+          her, that one says I left her. So I hold on." He nods up the trail.
+          "Dixon is camped up the Peoria trail with hemp enough for a line, bank
+          to bank. Somebody carries it over in that canoe, I have a ferry again."
         do: [{set: [known.ogee, met.ogee, 1830.met_ogee, heard.dixon]}]
       - when: [not met.ogee]
         text: >-
           "Joseph Ogee," he says, already back at the ferry's lines and taking
-          up the slack. "The river's up past the pole. If I put her out in
-          this, she goes to St. Louis without me." He tips his head at the man
-          in the good coat. "And I'll not step off this dock while that one
-          sits there waiting for me to do it. There's a man camped up the
-          Peoria trail, Dixon, with hemp enough to run a line from bank to bank.
-          I was calling for somebody to paddle it across, and you're what came."
-          He looks at the split canoe. "So it's you, I'm afraid. I'm sorry to
-          ask it of somebody I've only just pulled out of the river."
+          up the slack. He nods at the brown water. "River's up past the pole. I
+          put the flat out in this, she goes to St. Louis without me." He tips
+          his head at the man in the good coat. "And I let go of these lines,
+          that one says I left her." He nods up the trail. "Dixon is camped up
+          the Peoria trail with hemp enough for a line, bank to bank. I was
+          calling for somebody to paddle it across, and you're what came." He
+          looks at the split canoe, then at you. "So it's you, eh. Mon Dieu."
         do: [{set: [known.ogee, met.ogee, 1830.met_ogee, heard.dixon]}]
       - when: [not 1830.met_ogee]
-        text: "\"Back again, are you? The river's still up past the pole. Dixon has the rope, you owe me a canoe, and the tar's hot.\""
+        text: "\"Back again, eh.\" He nods at the river, then up the trail, then at the smoking pot. \"Still up past the pole. Dixon has the rope. You owe me a canoe, and the tar is hot.\""
         do: [{set: 1830.met_ogee}]
       - when: [not 1830.rope_strung]
-        text: "\"The rope's the thing. Dixon has it, I have the canoe, and the river has opinions about both.\""
+        text: "\"Dixon has the rope. I have the canoe. The river has opinions.\""
       - when: [not 1830.wagon_free]
-        text: "\"She runs. I never thought I'd see her pulled across like a bucket on a well rope.\" He nods at the waiting wagons. \"Now if only that train would move.\""
+        text: "He pats the rope where it runs over her rail. \"Look at her. Pulled across like a bucket on a well.\" He nods at the waiting wagons. \"Those, they don't move.\""
       - when: [not 1830.lease_dixon, not has:silver]
-        text: "{ogee} glances at the man on the crate. \"That one's still sitting on my boat. Dixon would have his lease and I'd have my ferry, if he could find a hundred in silver.\""
+        text: "{ogee} glances at the man on the crate. \"That one is still sitting on my boat.\" He looks up the trail. \"Dixon has his lease ready. All he has to do is find a hundred in silver.\""
         do: [{set: [1830.dixon_short, heard.dixon]}]
-      - text: "\"You've the look of somebody with a question,\" he says. \"Ask it, then.\""
+      - text: "\"You have a question in your face, eh,\" he says. \"Ask it.\""
     topics:
       - keys: [river, water, high water, flood, rise, current]
-        say: "\"She comes up every spring. I've rebuilt this dock four times, and you can't pole a flat when the river's deeper than the pole is long.\""
+        say: "\"Every spring, up she comes. Four times I built this dock.\" He nods at the brown water. \"Now she's deeper than my pole is long, and you don't pole a flat in that.\""
       - keys: [rope, line, rope ferry]
         say:
           - when: [1830.rope_strung]
-            text: "\"It was Dixon's notion, and I'll admit it works. I'll not admit it to him, mind.\""
-          - text: "\"It's Dixon's notion: a line from bank to bank, and you pull her over hand over hand. Only you can't get the line over without a boat, and I can't get a boat over in this.\""
+            text: "\"Dixon's notion. It works.\" He shrugs. \"Don't tell him I said so.\""
+          - text: "\"Dixon's notion. A line bank to bank, and you pull her over hand over hand.\" He looks at the split canoe. \"Only somebody has to carry the line over first.\""
       - keys: [canoe, dugout, seam, tar, paddle]
         say:
           - when: [{any: [1830.canoe_across, 1830.rope_strung]}]
-            text: "\"She's done her work and she's resting on the far bank. I'll fetch her home when the water drops.\""
+            text: "\"She did her work. She rests on the far bank till the water drops.\""
           - when: [1830.canoe_tarred, has:paddle]
-            text: "\"She'll float now, and you've a paddle. All she wants is Dixon's rope in her and somebody fool enough to cross.\""
+            text: "\"She'll float now, and you have a paddle.\" He nods up the trail. \"All she wants is Dixon's rope, and a fool to cross.\""
           - when: [1830.canoe_tarred]
-            text: "\"She'll float now. You'll still want a paddle; Madeline keeps her father's old one up at the cabin, under the eaves. Ask her nicely.\""
+            text: "\"She'll float now. My paddle, that's gone to St. Louis.\" He looks up the path toward the cabin. \"Madeline keeps her father's paddle under the eaves. Be polite.\""
           - when: [has:paddle]
-            text: "\"You've a paddle, I see. She split on my own piling while I was fishing you out, so pack the split with the oakum by the pot and swab the tar over it.\""
-          - text: "\"She split on my own piling while I was fishing you out. Pack the split with oakum and tar it over, and she'll float.\" He glances downriver. \"You'll want a paddle, too. Mine's halfway to St. Louis.\""
+            text: "\"You have a paddle. Bon.\" He nods at the split. \"She hit my own piling while I was fishing you out. Oakum in the split, tar over it. The swab is by the pot.\""
+          - text: "\"She hit my own piling while I was fishing you out.\" He runs a thumb along the split. \"Oakum in there, tar over it, and she floats.\" He glances downriver. \"You'll want a paddle too. Mine's halfway to St. Louis.\""
 
       - keys: [help, yourself, why me, why, you, cross, carry, fix, repair, lines]
         say:
           - when: [1830.rope_strung]
-            text: "\"You've paid that canoe off, and then some. She runs on the rope now. For the first time this week, I can let go of her lines.\""
-          - text: "\"If I let go of these lines in this water, she's gone. If I step off this dock, that one says I've left her and she's Rolette's. The boy up there won't go near the river, and Dixon doesn't know it the way I do.\" He takes a fresh turn of line around the post. \"You've two hands, and you owe me the use of them.\""
+            text: "\"You paid that canoe off, and then some.\" He lets go of the line and shows you his empty hands. \"First time this week.\""
+          - text: "\"I let go of these lines, she's gone downriver. I step off this dock, that one says I left her.\" He takes a fresh turn of line around the post. \"You have two hands, and you owe me the use of them.\""
 
       - keys: [rescue, saving, saved, fall, fell, drowning, swim]
-        say: "\"Folks come out of that fog and walk straight off the end of the dock. You're the third this year, and the first I've lost a canoe over.\""
+        say: "\"Folks come out of that fog and walk straight off the dock. You're the third this year. The first that cost me a canoe.\""
       - keys: [axe, oak, wood, cabin]
-        say: "\"There's an axe in the block up by the cabin. Ask Madeline for it; she'll let you have it, and she'll want it back.\""
+        say: "\"The axe is in the block up at the cabin. Ask Madeline. She'll want it back.\""
       - keys: [agent, man, coat, creditor, rolette, debt, debts, notes, owe, money]
-        say: "{ogee's} jaw works for a moment. \"He's come for my creditors. I owe more than this ferry takes in a year, and Rolette holds the paper now, and that man holds it for him.\" He looks up the trail. \"Dixon would lease her off me and pay it down out of the rent, only that one wants a hundred in silver first, and Dixon hasn't got it.\""
+        say: "{ogee's} jaw works for a moment. \"That one, he holds my paper for Rolette. I owe more than she takes in a year.\" He looks up the trail. \"Dixon would lease her and pay it down. Only that one wants a hundred in silver first, and Dixon has none.\""
         do: [{set: [1830.dixon_short, heard.dixon]}]
       - keys: [lease, rent, terms, offer, deal]
-        say: "\"Dixon means to lease her off me and pay Rolette out of the rent. It would suit everybody, only Rolette's man wants a hundred in silver first, and Dixon hasn't got it.\""
+        say: "\"Dixon leases her, the rent pays Rolette. Good for everybody.\" He shrugs. \"Except it starts with a hundred in silver, and Dixon has paper.\""
         do: [{set: [1830.dixon_short, heard.dixon]}]
       - keys: [asa, teamster, freighter, uncle]
         say:
           - when: [1830.wagon_free]
-            text: "\"Asa's out of the mud, thanks to you, and he's a train that has to cross. If that one takes my boat, Asa's as stuck on this bank as I am.\""
-          - text: "\"That's the boy's uncle, stuck in the slough with his second wagon. His train won't move without him.\""
+            text: "\"Asa's out of the mud, thanks to you. Now he has a whole train to cross.\" He tips his head at the man in the good coat. \"That one takes my boat, Asa's as stuck on this bank as I am.\""
+          - text: "\"The boy's uncle. Stuck in the slough with his second wagon, and his train won't move without him.\""
       - keys: [schellenger, partner, half]
-        say: "\"George Schellenger bought half the ferry off me last fall and wanted out again by winter. Now I owe him more than I sold it for, and he's gone and sold the debt to Rolette.\""
+        say: "\"Schellenger bought half of her last fall. By winter he wanted out.\" He laughs, not much. \"Now I owe him more than he paid me, and he sold the debt to Rolette.\""
       - keys: [dixon, trader, mail, john]
-        say: "\"John Dixon carries the mail up from Peoria. He came to lease the ferry off me and found that one sitting on it.\" He jerks his chin at the agent. \"He's a fair man; he just hasn't any silver.\""
+        say: "\"John Dixon. He carries the mail up from Peoria, and he came to lease her.\" He jerks his chin at the agent. \"Found that one sitting on her. Dixon, he's a fair man. No silver, but fair.\""
         do: [{set: [1830.dixon_short, heard.dixon]}]
       - keys: [madeline, wife, family, sons, boys]
-        say: "\"That's Madeline. Her people are Potawatomi, and her father traded on Franklin Creek. It's on her account that nobody burns my boat the way they burned Bogardus's.\""
+        say: "\"Madeline. Her people are Potawatomi, and her father traded on Franklin Creek.\" He almost smiles. \"Because of her, nobody burns my boat. Ask Bogardus how that goes.\""
       - keys: [bogardus]
-        say: "\"He tried a ferry here before me and got the boat half built before somebody burned it. I had the sense to marry well.\""
+        say: "\"Bogardus tried a ferry here before me. Somebody burned his boat half built.\" He shrugs. \"Me, I married well.\""
       - keys: [wagons, teams, train, diggings, galena, mines, lead, teamsters]
-        say: "\"Every spring they come up from the south bound for the diggings, and every one of them has to cross here. The lead goes down from Galena by boat, but the men come up by road.\""
+        say: "\"Every spring they come up from the south for the diggings, and every one crosses here.\" He nods at the river. \"The lead goes down by boat. The men come up by road, and by me.\""
       - keys: [pole, shoe, smith, iron]
         say:
           - when: [1830.shoe_returned]
-            text: "\"She's got her shoe back, and I'm obliged to you for it. I'd not have found that in the slough in a hundred years.\""
+            text: "\"She has her shoe back.\" He knocks the iron against the dock. \"A hundred years, I wouldn't find that in the slough. Merci.\""
           - when: [has:pole, 1830.shoe_lost]
-            text: "\"You've still got her. I can see from here she's lost her shoe, and that was the smith's work.\""
+            text: "\"You still have her.\" His eyes go to the bare foot of the pole. \"And she's lost her shoe. That was smith's work.\""
           - when: [has:pole]
-            text: "\"You've got her. Bring her back whole.\""
+            text: "\"You have her. Bring her back whole.\""
           - when: [1830.shoe_lost]
-            text: "\"She lost her shoe somewhere in that slough. I had the smith make that shoe.\""
+            text: "\"She lost her shoe in that slough. Smith made that shoe.\""
           - when: [1830.rope_strung]
-            text: "\"She's ash, with an iron shoe I had the smith make. I've no use for her now the rope's across, so you're welcome to borrow her.\""
-          - text: "\"She's an ash pole with an iron shoe. I had the smith make that shoe, and it'll outlast me.\""
+            text: "\"Ash, with an iron shoe the smith made.\" He glances at the rope. \"With the rope across, I don't need her. You're welcome to borrow her.\""
+          - text: "\"Ash, with an iron shoe. Smith made that shoe. It'll outlast me.\""
       - keys: [toll, fare, price, cost, rates]
-        say: "\"It's two bits for a man and his horse, and two dollars six bits for a wagon and four yoke, when they pay it.\""
+        say: "\"Two bits, a man and his horse. Two dollars six bits, a wagon and four yoke.\" He shrugs. \"When they pay.\""
       - keys: [fog, mist, where, from]
         say: "{ogee} looks upriver for a long moment. \"It comes and goes. Folks walk into it and don't always walk out the same,\" he says, and turns back to the river."
-    fallback: "He gives a small shrug. \"I couldn't tell you. I've spent most of my life on this river, and it doesn't teach you much else.\""
+    fallback: "He gives a small shrug. \"That, I don't know. The river doesn't teach much else.\""
     social:
       hello: "\"You came through the fog, eh? I could tell.\""
       thanks: "{ogee} grunts. \"Don't thank me yet. The river's not done with any of us.\""
       bye: "\"Watch the water as you go.\""
-      how: "\"I'm alive and the dock's still standing, which makes it a good week.\""
+      how: "\"I'm alive, and the dock's still standing. For this week, that's good.\""
       sorry:
         - when: [not 1830.canoe_tarred]
           text: "\"You'll be sorrier when you're working that tar.\""
-        - text: "\"You've made it good. Don't trouble yourself.\""
+        - text: "\"You made it good. Forget it.\""
     parting: "[ogee] lifts his chin to you as you go, without taking his eyes off the water."
 
   agent:
@@ -450,7 +448,7 @@ actions:
         do: [{death: canoe_sinks}]
       - when: [not has:paddle]
         do: [{death: no_paddle}]
-      - say: "{ogee} catches the bow. \"There's no sense going over empty. Fetch Dixon's rope first.\""
+      - say: "{ogee} catches the bow. \"Not empty. Fetch Dixon's rope first.\""
 
   - id: borrow_pole
     speaker: ogee
@@ -459,11 +457,11 @@ actions:
     do:
       - give: pole
       - set: 1830.has_pole
-      - say: "\"Take her. I've no use for her now the rope's across. Bring her back whole.\""
+      - say: "\"Take her. The rope's across, so I don't need her. Bring her back whole.\""
     else:
       - when: [has:pole]
         say: You already have it.
-      - say: "{ogee} keeps his hand on it. \"I need her, such as she is, until there's a rope across.\""
+      - say: "{ogee} keeps his hand on it. \"Not yet. Till there's a rope across, I need her.\""
 
   - id: give_shoe
     phrases: [give shoe to ogee, give ogee shoe, return shoe, give shoe, give pole shoe to ogee, give iron to ogee, give shoe back, give shoe back to ogee, return shoe to ogee, give iron shoe to ogee, give pole shoe, give ogee the iron, put shoe on pole, fix pole, give shoe to ferryman, give shoe to him, give him shoe, give him the shoe, return pole shoe]
@@ -501,7 +499,7 @@ actions:
                 do:
                   - say: "{ogee} takes her and runs a thumb over the bare foot. \"Lost her shoe in that slough, did you,\" he says, and it isn't a question. \"Smith made that shoe.\""
                 else:
-                  - say: "\"Obliged to you,\" {ogee} says, and leans her back against the post."
+                  - say: "\"Bon,\" {ogee} says, and leans her back against the post."
     else:
       - when: [not has:pole]
         say: You haven't got it.

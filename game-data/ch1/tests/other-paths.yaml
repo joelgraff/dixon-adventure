@@ -355,7 +355,7 @@ tests:
     url: scene=landing
     steps:
       - setup: {flags: [1830.arrived, 1830.canoe_tarred]}
-      - {cmd: talk to man in buckskin, expect: [tarred her already, Joseph Ogee], not: Pack that split}
+      - {cmd: talk to man in buckskin, expect: [You tar all right, Joseph Ogee], not: Pack that split}
       - {cmd: ask ogee about the canoe, expect: She'll float now, not: pack the split}
       - {cmd: sorry ogee, expect: made it good}
       - setup: {flags: [1830.rope_strung, 1830.canoe_across, 1830.has_pole, 1830.shoe_lost], items: [phone, pole]}
@@ -815,3 +815,16 @@ tests:
       - {cmd: ask agent about ogee, expect: That is all I need to know, not: good ferryman}
       - {cmd: ask agent about the weather, expect: not on the note}
       - {cmd: say sorry to agent, expect: Sorry does not go against the note}
+
+  # Ogee's voice (VOICES.md): short and practical, French-leaning order, dry.
+  - name: Ogee talks like a ferryman
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee]}
+      - {cmd: ask ogee about the rope, expect: Only somebody has to carry the line over first, not: ["I'll not", mind]}
+      - {cmd: ask ogee about the agent, expect: "That one, he holds my paper", not: ["I've", "hasn't got it"]}
+      - {cmd: ask ogee about the pole, expect: "It'll outlast me", not: "I've no"}
+      - {cmd: ask ogee about the weather, expect: "That, I don't know"}
+      - setup: {flags: [1830.rope_strung]}
+      - {cmd: ask ogee about the rope, expect: "Don't tell him I said so", not: ["I'll not", mind]}
+      - {cmd: ask ogee for the pole, expect: Bring her back whole, not: "I've no use"}
