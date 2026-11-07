@@ -340,3 +340,11 @@ tests:
       - {cmd: give the paddle back to madeline, expect: "been on the water again"}
       - {cmd: inventory, not: paddle}
       - {cmd: look, expect: hangs on wooden pegs}
+
+  - name: Eli knows his uncle is free if you meet him afterward
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, 1830.rope_strung, 1830.wagon_free, known.asa]}
+      - {cmd: look at young man, expect: sits a good deal easier}
+      - {cmd: talk to young man, expect: [I'm Eli, got Uncle Asa out of the slough], not: down to the hubs}
+      - {cmd: ask eli about his uncle, expect: fine mood, not: back in the slough}

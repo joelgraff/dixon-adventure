@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.8.5 (2026-11-06)
+- Eli knows when his uncle is free: met for the first time after the rescue, he thanks you for getting Asa out of the slough, and his description, his talk about his uncle and his shrug all follow the wagon being free.
+
 ## 0.8.4 (2026-11-06)
 - You can give Madeline's father's paddle back (give the paddle back, return paddle, hang it on the pegs); she hangs it under the eaves again, and you can borrow it again if you need it.
 

@@ -309,8 +309,18 @@ npcs:
     room_line:
       - when: [not 1830.dazed]
         text: "[eli] sits on a wagon tongue among them."
-    look: He's a young man in patched homespun with an old flintlock across his knees, and he keeps looking back up the trail.
+    look:
+      - when: [1830.wagon_free]
+        text: He's a young man in patched homespun with an old flintlock across his knees, and now that his uncle's wagons are down at the landing he sits a good deal easier.
+      - text: He's a young man in patched homespun with an old flintlock across his knees, and he keeps looking back up the trail.
     talk:
+      - when: [not known.eli, 1830.wagon_free]
+        text: >-
+          "I'm Eli." He grins and jerks a thumb at the wagons. "You'll be the one
+          who got Uncle Asa out of the slough. He says you've got more back than
+          sense, and from him that's high praise. We're bound for the diggings,
+          soon as there's a boat to carry us."
+        do: [{set: [known.eli, 1830.met_eli]}]
       - when: [not known.eli]
         text: >-
           "I'm Eli." He nods back up the trail. "We're bound for the diggings,
@@ -323,8 +333,11 @@ npcs:
       - text: "\"He's still stuck. Uncle says he'll be out by dark or know the reason why.\""
     topics:
       - keys: [uncle, asa, wagon, slough, stuck, mud]
-        say: "\"That's Asa. He's back in the slough past Dixon's camp, cussing at the oxen, because his bar broke. He needs a lever and something under the wheels.\""
-        do: [{set: heard.dixon}]
+        say:
+          - when: [1830.wagon_free]
+            text: "\"That's Asa, over by the wagons, and he's in a fine mood now that you've got him out of that slough. I've not seen him this cheerful all week.\""
+          - text: "\"That's Asa. He's back in the slough past Dixon's camp, cussing at the oxen, because his bar broke. He needs a lever and something under the wheels.\""
+            do: [{set: heard.dixon}]
       - keys: [father, pa, militia, winnebago, "1827", war]
         say: "\"Pa went out with the militia in '27, the Winnebago trouble. Took sick on the march and never came home.\" He looks at the rifle. \"Ma says the diggings pay better than corn.\""
       - keys: [rifle, gun, flintlock]
@@ -333,7 +346,10 @@ npcs:
         say: "\"Uncle says a man can make more in a summer at the diggings than in five years farming. Uncle says a lot of things.\""
       - keys: [river, crossing, ferry]
         say: "\"I've never seen a river this big, and I'd sooner not get to know it any better.\""
-    fallback: "{eli} shrugs and looks back up the trail again."
+    fallback:
+      - when: [1830.wagon_free]
+        text: "{eli} shrugs and looks over at his uncle's wagons."
+      - text: "{eli} shrugs and looks back up the trail again."
     social:
       hello: "{eli} gives a quick, nervous nod."
       thanks: "\"Oh. Sure. Anytime.\" He looks pleased and a little surprised."
