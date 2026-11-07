@@ -9,21 +9,19 @@ picture: >-
   volunteer's desk in the right foreground, amber light from a side window.
 
 # The return-visit description (see FORMAT.md, Rooms).
-brief: "The front room hums under its fluorescent lights, and the founding [panel] fills the far wall."
+brief: "The front room hums under its fluorescent lights. The founding [panel] fills the far wall."
 look: >-
-  The front room is quiet and a little too brightly lit, with fluorescent
-  [lights] humming over a row of glass [cases] and a wall of framed [photos].
-  The founding [panel] takes up most of the far wall.
+  The front room is quiet and a little too brightly lit, with fluorescent [lights] humming over a row of glass [cases] and a wall of framed [photos]. Behind you, the glass [door] to the street stands propped open. The founding [panel] takes up most of the far wall.
 listen:
   - when: [1830.lease_dixon]
-    text: The lights hum, and by the back door a clock ticks along a little behind the others, as though it had never stopped.
-  - text: The lights hum, and by the back door one clock is silent.
+    text: The lights hum. By the back door a clock ticks along a little behind the others, as though it had never stopped.
+  - text: The lights hum. By the back door, one clock is silent.
 
 nouns:
   lights:
     name: lights
     aliases: [fluorescent lights, tubes, fluorescents, ceiling]
-    look: Long fluorescent tubes run across the ceiling, one of them flickering at the end of its run, and their hum is the loudest thing in the room.
+    look: Long fluorescent tubes run across the ceiling, one of them flickering at the end of its run. Their hum is the loudest thing in the room.
 
   panel:
     name: founding panel
@@ -43,8 +41,7 @@ nouns:
       - when: [1830.lease_dixon]
         text: >-
           THE FOUNDING OF DIXON. "Joseph Ogee kept a ferry here from about
-          1828." The paragraph runs the full length of the panel now, and it
-          ends: "In April 1830 John Dixon took over the ferry from Joseph Ogee,
+          1828." The paragraph runs the full length of the panel now. It ends: "In April 1830 John Dixon took over the ferry from Joseph Ogee,
           and the settlement took his name."
       - when: [1830.lease_player]
         text: >-
@@ -69,8 +66,7 @@ nouns:
       - when: [1830.lease_dixon, 1830.shoe_returned]
         text: On the velvet, where there was only a faded ring this morning, sits a corroded iron [poleshoe|pole shoe] from a river flatboat.
       - text: >-
-          The pedestal is waist-high, and its velvet has a ring pressed into
-          it, as if something heavy and round sat here for decades. A small
+          The pedestal is waist-high. Its velvet has a ring pressed into it, as if something heavy and round sat here for decades. A small
           typed [card] is propped against its base.
     verbs:
       touch:
@@ -84,7 +80,7 @@ nouns:
     when: [1830.lease_dixon, 1830.shoe_returned]
     aliases: [shoe, pole shoe, iron shoe, iron]
     look: >-
-      The shoe is a cone of forged iron, dented on one side, and its new card reads:
+      The shoe is a cone of forged iron, dented on one side. Its new card reads:
       "Pole shoe from a river flatboat, c. 1830. Donor unknown." You know
       exactly where the dent came from.
     verbs:
@@ -141,8 +137,7 @@ nouns:
     aliases: [brass token, ferry token]
     room_line: The last glass case holds a brass [token].
     look: >-
-      The token is worn brass, stamped with a flatboat and the initials J.O.,
-      and its new card reads: "Ferry token, c. 1830. Donor unknown."
+      The token is worn brass, stamped with a flatboat and the initials J.O. Its new card reads: "Ferry token, c. 1830. Donor unknown."
     on_look:
       - if:
           when: [1830.lease_dixon, not present.noticed_token]
@@ -194,8 +189,7 @@ nouns:
           masking tape that says DO NOT WIND has come loose at one end.
       - text: >-
           The schoolhouse clock by the back door has stopped at 4:17. Every
-          other clock in the building runs a little fast or slow, but this one
-          has stopped dead, and a strip of masking tape on the case reads DO NOT
+          other clock in the building runs a little fast or slow, but this one has stopped dead. A strip of masking tape on the case reads DO NOT
           WIND in someone's careful hand.
     verbs:
       touch: The wooden case is cool and slightly dusty.
@@ -219,14 +213,12 @@ nouns:
         text: >-
           The desk is tidy and older than everything around it, with the usual
           [clutter] on top. The [guestbook] lies open at the corner nearest the
-          door, and below the blotter the middle [drawer] has a small brass
-          lock. A brass plate screwed to its side reads POST OFFICE, DIXON'S
+          door. Below the blotter, the middle [drawer] has a small brass lock. A brass plate screwed to its side reads POST OFFICE, DIXON'S
           FERRY, 1831. J. DIXON, P.M.
       - text: >-
           The desk is tidy and older than everything around it, with the usual
           [clutter] on top. The [guestbook] lies open at the corner nearest the
-          door, and below the blotter the middle [drawer] has a small brass
-          lock. A brass plate is screwed to its side, but somebody scratched it
+          door. Below the blotter, the middle [drawer] has a small brass lock. A brass plate is screwed to its side, but somebody scratched it
           blank long ago.
     on_look:
       - if:
@@ -309,7 +301,7 @@ nouns:
   drawer:
     name: locked drawer
     aliases: [middle drawer, lock, keyhole, drawers]
-    look: The middle drawer is shallow, with a small brass lock much older than the rest of the desk's hardware, and its keyhole is worn bright.
+    look: The middle drawer is shallow, with a small brass lock much older than the rest of the desk's hardware. Its keyhole is worn bright.
     verbs:
       open:
         - when: [1830.lease_dixon]
@@ -345,10 +337,9 @@ nouns:
           The newspaper crossword is nearly finished in neat pencil. Four
           across, four letters, "Rock River ferryman," has been filled in with
           OGEE, in ink. Seven down, five letters, "Founder of the ferry town,"
-          is blank, its squares rubbed raw from erasing, and in the margin
-          someone has written the same word over and over: john.
+          is blank, its squares rubbed raw from erasing. In the margin someone has written the same word over and over: john.
     verbs:
-      touch: The paper has gone soft where the eraser has been at it, and when {volunteer} glances over you take your hand away.
+      touch: The paper has gone soft where the eraser has been at it. When {volunteer} glances over, you take your hand away.
       take: "{volunteer's} hand comes down over it, politely but firmly."
 
   sign:
@@ -356,7 +347,7 @@ nouns:
     when: [present.returned]
     aliases: [hand-lettered sign, labels sign]
     room_line: A hand-lettered [sign] is taped to the front of the desk.
-    look: The sign says ASK ABOUT THE LATEST LABELS in marker, in {volunteer's} handwriting, and it's taped to the front of the desk.
+    look: The sign says ASK ABOUT THE LATEST LABELS in marker, in {volunteer's} handwriting.
     on_look:
       - if:
           when: [1830.lease_dixon, not present.noticed_sign]
@@ -370,8 +361,8 @@ nouns:
   window:
     name: window
     aliases: [view, pane, parking lot, light]
-    room_line: Late light the color of weak tea comes through the [window], and the glass [door] to the street has been propped open.
-    look: The window looks out on a parking lot, the back of a neighbor's garage and a power line with two crows on it. The light is going brown, and a thin haze sits low over the roofs.
+    
+    look: Late light the color of weak tea comes through the window, which looks out on a parking lot, the back of a neighbor's garage and a power line with two crows on it. A thin haze sits low over the roofs.
     verbs:
       open: It's painted shut, and the sash hasn't moved in decades.
       touch: The glass is cool and faintly damp on the outside.
@@ -379,7 +370,7 @@ nouns:
   door:
     name: glass door
     aliases: [glass door, entrance, front door, wedge]
-    look: The glass door is propped open with a rubber wedge, and the street beyond it is warm and quiet.
+    look: A rubber wedge holds the glass door open on a warm, quiet street.
     verbs:
       close: "{volunteer} likes it open, so you leave it alone."
 
@@ -388,7 +379,7 @@ nouns:
     hidden: true
     key: true
     aliases: [river walk, riverfront, river, walk]
-    look: The riverfront walk {volunteer} mentioned is four blocks north up Hennepin, and you can't see it from in here.
+    look: The riverfront walk {volunteer} mentioned is four blocks north up Hennepin, out of sight from in here.
 
 npcs:
   volunteer:
@@ -403,8 +394,8 @@ npcs:
     look:
       - when: [present.returned]
         do: [{set: known.volunteer}]
-        text: "Her name tag says MARGARET. She's sixty or so, with reading glasses pushed up into grey hair, and she is looking at the panel with her head tilted, the way you'd look at a picture hung slightly crooked."
-      - text: She's a woman of sixty or so in a cardigan, with reading glasses pushed up into grey hair and a name tag that says MARGARET, and she works the crossword with the patience of long habit.
+        text: "Her name tag says MARGARET. She's sixty or so, with reading glasses pushed up into grey hair. She's looking at the panel with her head tilted, the way you'd look at a picture hung slightly crooked."
+      - text: She's a woman of sixty or so in a cardigan, with reading glasses pushed up into grey hair and a name tag that says MARGARET. She works the crossword with the patience of long habit.
         do: [{set: known.volunteer}]
     talk:
       - when: [not met.volunteer]
@@ -532,8 +523,7 @@ actions:
       - set: chapter1.ended
       - say: >-
           You hold the door while {volunteer} switches off the fluorescents one
-          bank at a time. She locks up behind you, tries the handle twice, and
-          tells you goodnight, and then she walks off up Fifth Street with her
+          bank at a time. She locks up behind you, tries the handle twice and tells you goodnight. Then she walks off up Fifth Street with her
           coat collar turned up against the river damp. The street is quiet.
           Behind you, in the dark front room, the schoolhouse clock is ticking.
       - end: true
@@ -545,4 +535,4 @@ exits:
     to: street
     action: close_up           # once the chapter is done, leaving ends it
     action_when: [chapter1.done]
-    text: You step through the propped door and out onto the sidewalk, and the hum of the fluorescents fades behind you.
+    text: You step through the propped door onto the sidewalk. Behind you, the hum of the fluorescents fades.

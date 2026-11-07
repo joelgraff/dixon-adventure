@@ -15,11 +15,14 @@ How the demo should feel. These rules come from playtest feedback and are meant 
 - Join what belongs together. A place, what stands in it and how it feels can share a sentence or two; vary sentence length so the text reads like a person describing something, not a teletype.
 - Characters keep their voices. A laconic man still speaks in natural sentences, with the rhythm of real speech; terseness comes from what he chooses not to say, not from clipped telegraph phrasing.
 - Short replies are fine when the moment is small, but they are still sentences.
+- Don't build every sentence as "clause, and clause". Narration should mostly use one clause per sentence, a participle, or "while"/"with"; keep the comma-and where it carries rhythm (a joke's timing, a list, a character's way of talking).
+- Characters say what's wrong and what they want, not how to fix it. The fix is for the player to find in the things around them; the phone's help is where steps are spelled out.
+- Keep player-run deals simple: one clear thing to do at a time (the silver goes from Asa to Dixon), not a chain of terms to work out.
 - The 1980s brevity we borrow is about how much a room tells you at once, not about the shape of the sentences.
 - Repeated phrasing is a tic unless it's a refrain on purpose. The one refrain is "not to think about it": the narrator says it when you wake in 1830 and when you walk back out of the fog, and Margaret says it about the clock. They're the two people who have brushed against what really happened, and neither wants to look straight at it. Keep it to them, and don't spend it anywhere else.
 
 ## Progressive Discovery
-- The top-level room description lists only what a visitor would notice first. Further detail is found by examining things.
+- The top-level room description lists only what a visitor would notice first: the major features and the people. Small things that matter to a puzzle (the tar pot, the paddle on its pegs, the axe in the block) are found by looking at the thing they belong to, not listed. A detail may "jump out" when it would in life (the crow's glint), but as a rule it waits to be found.
 - Objects carry `reveals`: examining one makes new nouns visible. Revealed nouns are added to the room description (`extras`) and become valid targets. Until then they are "not here" to the parser.
 - Every prose cue must have a target or a natural reading. Do not tell the player something "looks wrong in a way you can't place". If a thing is not examinable, describe it plainly and let an NPC explain it (the empty photo frames are described by Margaret, not examined).
 - Reveal character names when the player learns them in the scene. Before an introduction or other in-world identification, describe an unfamiliar person by appearance or role rather than using a name the player cannot yet know.

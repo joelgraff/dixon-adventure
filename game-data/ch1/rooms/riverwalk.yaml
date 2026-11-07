@@ -10,22 +10,16 @@ picture: >-
   right, a raft of mist lying on the river.
 
 # The return-visit description (see FORMAT.md, Rooms).
-brief: "The plaza is still nearly empty under the bronze [statue], and at the end of the [railing] the worn [stairway] leads down to the water."
+brief: "The plaza is still nearly empty under the bronze [statue]. At the end of the [railing], the worn [stairway] leads down to the water."
 look: >-
   The plaza was built for crowds, with pale paving and limestone walls
   stepping down toward the water, but tonight you nearly have it to
-  yourself. A bronze [statue] of a man on a horse rises in the middle of it,
-  and nearby a green historical [marker] stands on a post. Along the water a
-  green iron [railing] follows the curve of the wall, past a stone [pavilion]
-  and a [bench] that faces the river. The [river] is wide and brown and slow,
-  and a long raft of mist lies on it. At the far end of the railing a worn
-  [stairway] goes down to the water, and behind you [hennepin|Hennepin] runs
-  back south through downtown.
+  yourself. A bronze [statue] of a man on a horse rises in the middle of it, with a green historical [marker] on a post nearby. A green iron [railing] follows the curve of the wall above the [river], which is wide and brown and slow, with a long raft of mist lying on it. At the far end of the railing a worn [stairway] goes down to the water. Behind you, [hennepin|Hennepin] runs back south through downtown.
 listen: You hear water against stone and, somewhere, a halyard clinking against a pole, though there are no boats anywhere.
 
 on_turn:
   - when: [turns==3, not 1830.lease_dixon]
-    say: The mist on the water has crept toward the wall, and somewhere below the railing the river laps at the lowest steps, a sound you didn't notice a minute ago.
+    say: The mist on the water has crept toward the wall. Somewhere below the railing the river laps at the lowest steps, a sound you didn't notice a minute ago.
   - when: [turns==6, not 1830.lease_dixon]
     say: The evening has gone very quiet. Even the fountains seem to have stopped, and the only thing still moving is the river, slowly, past the foot of the stairs.
 
@@ -80,7 +74,7 @@ nouns:
     name: statue
     aliases: [horse, rider, bronze, monument, granite, flagpoles, flags, fountains, fountain, plaza]
     reveals: [plaque]
-    look: A bronze rider on a palomino, nine feet of him, sits high on a block of dark granite between two flagpoles, with a bronze [plaque] set into the paving at his feet. Low fountains play in the plaza around him, and the flags hang limp in the damp air.
+    look: A bronze rider on a palomino, nine feet of him, sits high on a block of dark granite between two flagpoles, with a bronze [plaque] set into the paving at his feet. Low fountains play in the plaza around him while the flags hang limp in the damp air.
     verbs:
       touch: The granite is cold and beaded with damp.
       climb: It's a long way up, and it wouldn't be respectful anyway.
@@ -90,8 +84,7 @@ nouns:
     hidden: true
     aliases: [statue plaque, bronze plaque, dedication, begins the trail]
     look: >-
-      The plaque is titled BEGINS THE TRAIL, and under the title it quotes
-      Ronald Reagan, who lived here from 1920 to 1933: "It was in {town_in}
+      The plaque is titled BEGINS THE TRAIL. Under the title it quotes Ronald Reagan, who lived here from 1920 to 1933: "It was in {town_in}
       that I really found myself." The rest tells how he came back in 1950 to
       ride a palomino in a parade, which is where the statue comes from, and
       how he is said to have saved 77 lives as a lifeguard on the Rock River.
@@ -108,7 +101,7 @@ nouns:
     name: bench
     aliases: [seat]
     reveals: [plate]
-    look: The slats of the bench are damp, though it hasn't rained, and a brass [plate] is screwed to its back.
+    look: A brass [plate] is screwed to the back of the bench. The slats are damp, though it hasn't rained.
     verbs:
       sit:
         say: You sit for a while with a brass [plate] on the backrest pressing into your shoulders. The mist on the water doesn't move, and neither, you notice after a while, does anything else.
@@ -132,7 +125,7 @@ nouns:
     name: railing
     aliases: [rail, fence, wall, limestone wall]
     reveals: [ringbolt]
-    look: The railing is painted iron, cold and a little wet, and past it the bank drops away to riprap and the water. Down at the base of the wall, an old iron [ringbolt] is set into the stone.
+    look: The railing is painted iron, cold and a little wet. Past it the bank drops away to riprap and the water, and down at the base of the wall an old iron [ringbolt] is set into the stone. A little way along stands a stone [pavilion], with a [bench] facing the river.
     verbs:
       touch: The iron is cold and wet, and someone has scratched their initials into the paint.
 
@@ -147,7 +140,7 @@ nouns:
   river:
     name: river
     aliases: [water, rock river, mist, bridge, far shore]
-    look: The river is broad and brown and slow, and the mist lies on it in a single bank, as if something were keeping it there, so that the far shore is only mist. The [stairway] goes down to the water's edge, and the marker says the old ferry crossed at about this spot.
+    look: The river is broad and brown and slow. The mist lies on it in a single bank, as if something were keeping it there, so that the far shore is only mist. The [stairway] goes down to the water's edge, near where the marker says the old ferry crossed.
     verbs:
       touch: You can't reach it from the walk.
       drink: You'd rather not, from up here or anywhere else.
@@ -156,7 +149,7 @@ nouns:
   stairway:
     name: stairway
     aliases: [stairs, steps, stair]
-    look: Wide concrete steps, worn hollow in the middle, curve down to the lower walkway beside the water, and the lowest few vanish into the mist.
+    look: Wide concrete steps, worn hollow in the middle, curve down to the lower walkway beside the water. The lowest few vanish into the mist.
     verbs:
       climb: These stairs only go down from here.
 

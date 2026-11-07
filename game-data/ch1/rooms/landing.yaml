@@ -12,11 +12,7 @@ picture: >-
 # The return-visit description (see FORMAT.md, Rooms).
 brief: "The [river] still runs high past the [dock], below the [path] that climbs south toward the woodsmoke."
 look: >-
-  The [river] is the loudest thing here. It comes down high and brown past a
-  rough plank [dock], close enough under the boards to wet them. On the far
-  side the north [northbank|bank] is empty but for a lone post and a road
-  into the trees. A worn [path] climbs the slope behind you toward
-  [woodsmoke].
+  The [river] is the loudest thing here, running high and brown past a rough plank [dock]. Across it the north [northbank|bank] is empty but for a lone post. A worn [path] climbs the slope behind you toward [woodsmoke].
 listen:
   - when: [1830.rope_strung]
     text: You hear water slapping the hull, the rope creaking as it takes the strain, and the oxen complaining at the head of the landing.
@@ -339,7 +335,7 @@ npcs:
     aliases: [eli, young man, teamster, boy, rifle, flintlock]
     room_line:
       - when: [not 1830.dazed]
-        text: "[eli] perches on a wagon tongue, keeping an eye on the trail rather than the river."
+        text: "[eli] perches on a wagon tongue, his eyes on the trail instead of the river."
     look:
       - when: [1830.wagon_free]
         text: He's a young man in patched homespun with an old flintlock across his knees. Now that his uncle's wagons are down at the landing, he sits a good deal easier.

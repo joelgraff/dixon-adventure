@@ -264,7 +264,8 @@ function refName(id) {
 function learnName(c, typed) {
   if (c.kind !== 'npc' || known(c.id)) return;
   const n = c.def;
-  const names = [n.name, n.short, ...String(n.name).split(' ')].filter(w => w && w.length >= 4).map(norm);
+  // Only proper names count ("Ogee", "James Dixon"), not "boys".
+  const names = [n.name, n.short, ...String(n.name).split(' ')].filter(w => w && w.length >= 4 && /^[A-Z]/.test(w)).map(norm);
   if (names.includes(cleanNoun(typed))) S.flags.add(`known.${c.id}`);
 }
 function pronoun(t) { return /^(him|her|them|he|she)$/.test(cleanNoun(t)); }
@@ -469,7 +470,8 @@ function presentLine(ids, where) {
   if (!ids.length) return '';
   // a crowd reads better as one word than as a roll call; `look` names them all
   if (ids.length > 2 && where === 'still here') return 'Everyone is still where you left them.';
-  const refs = ids.map(id => { const n = npcDef(id); return known(id) || n.unknown ? `[${id}]` : `the [${id}]`; });
+  // a common noun ("boys") takes "the"; a name or a description doesn't
+  const refs = ids.map(id => (/^(?:[A-Z]|the |a |an )/.test(npcName(id)) ? `[${id}]` : `the [${id}]`));
   const list = refs.length === 1 ? refs[0] : `${refs.slice(0, -1).join(', ')} and ${refs.at(-1)}`;
   const plural = ids.length > 1 || npcDef(ids[0]).plural;
   return `${cap(list)} ${plural ? 'are' : 'is'} ${where}.`;

@@ -607,3 +607,11 @@ tests:
       - {cmd: look, expect: [loudest thing here, ferry, canoe, wagons], not: [tar pot, teamsters]}
       - {cmd: look at canoe, expect: tar pot}
       - {cmd: look at tar pot, expect: [swab, oakum]}
+
+  - name: the boys stay "the boys" after you've talked to them
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
+      - {cmd: talk to boys}
+      - {cmd: south, room: camp}
+      - {cmd: north, room: cabin, expect: Madeline and the boys are still here}

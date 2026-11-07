@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.2 (2026-11-07)
+- The present-day rooms show their major features too (the porch light, the pavilion and bench, the driftwood and the museum window turn up when you look closer), the landing reads lighter, and every room's prose has had a sentence-by-sentence pass: about a fifth of sentences now join two clauses with ', and', down from a third. Fixed: the boys are 'the boys' again after you've talked to them.
+
 ## 0.14.1 (2026-11-07)
 - The cabin, the camp, the slough and the north landing show their major features: the cabin shows the cabin, the crow and the people (the paddle is on the cabin and the axe is in the block when you look); the camp loses its picket line and kettle to closer looks. Asa no longer tells you what his wagon needs, and Dixon explains the lease more simply. Their prose, and the chapter's shared text, is rewritten sentence by sentence.
 
