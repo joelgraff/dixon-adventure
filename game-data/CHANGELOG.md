@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.8.3 (2026-11-06)
+- Laying the brush accepts the words you'd use for what you just cut: put, lay, pack, wedge or stuff the willow, willows, bundle or branches under the wheels, wagon or axle, in the mud or ruts, and so on.
+
 ## 0.8.2 (2026-11-06)
 - Madeline no longer offers the axe when you meet her; you have to ask for it. Help points you to her when you need it for the willow brush.
 

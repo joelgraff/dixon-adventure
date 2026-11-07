@@ -307,6 +307,8 @@ tests:
       - {cmd: take brush, expect: you'd want an axe}
       - setup: {items: [phone, axe]}
       - {cmd: take willow brush, expect: hack down an armful of willow}
+      - setup: {flags: [1830.has_brush], items: [phone, axe, brush]}
+      - {cmd: put the willow under the wheels, expect: Now the lever}
 
   - name: Dixon's pay is paper, not silver
     url: scene=camp
