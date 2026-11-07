@@ -101,5 +101,5 @@ tests:
       - {cmd: look at key, expect: [DIXON'S FERRY P.O., thirty-one years], not: next Saturday}
       - {cmd: open drawer, expect: Not tonight, not: Next Saturday}
       - {cmd: talk to margaret, expect: [DIXON, come back next Saturday], score: 127}
-      - {cmd: out, expect: [locks up behind you, The end of Chapter 1, "Final score: 127 of 127"]}
+      - {cmd: out, expect: [locks up behind you, "brass token, J.O.", The end of Chapter 1, "Final score: 127 of 127"]}
       - {cmd: score, expect: Your score is 127 of 127}

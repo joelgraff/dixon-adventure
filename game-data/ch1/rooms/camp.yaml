@@ -57,6 +57,7 @@ nouns:
 
   mailsack:
     name: mail sack
+    when: [not 1830.key_returned]     # James takes it north once he has the key
     aliases: [mail sack, mail, sack, mailbag, pouch, letters]
     look: The canvas mail sack is tagged OGEE'S FERRY, ILL. It's full of letters for the post office here and on up the road to Galena.
     verbs:
@@ -173,6 +174,7 @@ npcs:
   james:
     name: James Dixon
     short: James
+    when: [not 1830.key_returned]     # gone north with the mail (landing.yaml, mailteam)
     unknown: a young man of nineteen or so
     ref: the young man at the harness
     aliases: [james, young man, son, james dixon, mail driver]
@@ -248,7 +250,10 @@ actions:
       - say: You walk down to the river together, past the cabin and down the path. He doesn't say another word the whole way.
       - move: landing
       - say: >-
-          {dixon} counts the hundred out onto the agent's papers. The agent
+          The sun is in the trees. The agent is already on the ferry with one
+          hand on the rope, and {ogee} stands on the dock with nothing in his
+          hands at all. {dixon} walks straight down onto the boat and counts
+          the hundred out onto the agent's papers, there on the deck. The agent
           counts it again and writes it against the February note. Then {ogee}
           signs the ferry over to {dixon} on a lease, with the rent to go to
           Rolette, and the agent witnesses it with the look of a man who came to
@@ -271,7 +276,7 @@ actions:
     do:
       - take: key
       - set: 1830.key_returned
-      - say: "{james} stares at it, then at you, and lets out a long breath. \"Where did you find it? No, never mind. Thank you.\" He threads the string through his buttonhole and pats it twice. \"Father need never know.\""
+      - say: "{james} stares at it, then at you, and lets out a long breath. \"Where did you find it? No, never mind. Thank you.\" He threads the string through his buttonhole and pats it twice. \"Father need never know.\" Then he swings the mail sack up onto his shoulder. \"The mail goes north today,\" he says, and he's off up the trail toward the river with it before his father can ask what kept him."
     else:
       - when: [not has:key]
         say: You haven't got it.

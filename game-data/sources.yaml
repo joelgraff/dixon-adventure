@@ -75,3 +75,5 @@ claims:
   C30: {status: record, rooms: [camp], sources: [S9], claim: "By 1823 the principal mails travelled in locked portmanteaus, opened only at distributing offices."}
   C31: {status: invented, rooms: [cabin, camp, museum], sources: [], claim: "James Dixon losing the mail key to a crow at Ogee's cabin, and the key turning up with the post office desk."}
   C32: {status: invented, rooms: [camp, cabin], sources: [], claim: "Dixon's lease included the cabin's east room for his family, and Rolette's agent was lodging there while the lease waited."}
+  C33: {status: invented, rooms: [landing, camp], sources: [], claim: "Rolette's agent giving Ogee until sundown, and standing on the ferry ready to take her when Dixon arrives with the silver."}
+  C34: {status: invented, rooms: [landing, camp], sources: [], claim: "James Dixon carrying the mail north over the new rope ferry the day it was strung, and Asa waiting to see the mail move before paying for a season of crossings."}

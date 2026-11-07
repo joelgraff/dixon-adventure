@@ -194,7 +194,9 @@ deaths:
 # down with you and pays the agent (camp.yaml, deliver_silver). Paying the
 # agent yourself puts your name on the lease (landing.yaml, pay_agent).
 deal_text: &deal >-
-  {asa} hears you out with his arms folded, looking from the man on the crate to his wagons to the river. "Season of crossings," he says at last. "A hundred in silver now, and my wagons cross free till it's worked off." He counts the coins into a canvas bag, knots it and puts it in your hands. "Take that up to Dixon. I'm not leaving my wagons with that fella sitting there."
+  {asa} hears you out with his arms folded, looking across the river to where {james} is leading his team up the Galena road with the mail. "Mail's moving," he says. "Fella means to stay." He turns back to you. "Season of crossings. A hundred in silver now, and my wagons cross free till it's worked off." He counts the coins into a canvas bag, knots it and puts it in your hands. "Take that up to Dixon. I'm not leaving my wagons with that fella standing there."
+mail_sits: &mail_sits >-
+  {asa} looks up the trail toward the camp. "Dixon? Rope's been across since noon, and his mail ain't moved off that camp." He folds his arms. "I don't pay a season to a mail man whose mail sits."
 deal_do: &deal_do
   - give: silver
   - set: [1830.asa_needs_ferry, known.dixon]
@@ -206,13 +208,18 @@ actions:
     when: [here:asa, 1830.wagon_free, not 1830.lease_dixon, not 1830.lease_player, not has:silver]
     do:
       - if:
-          when: [1830.dixon_short]
+          when: [1830.dixon_short, 1830.key_returned]
           do:
             - say: *deal
             - give: silver
             - set: [1830.asa_needs_ferry, known.dixon]
           else:
-            - say: "\"Dixon? The mail fella, up at the camp?\" He folds his arms. \"Before I go into my coat, I want to hear from him what he's short of.\""
+            - if:
+                when: [1830.dixon_short]
+                do:
+                  - say: *mail_sits
+                else:
+                  - say: "\"Dixon? The mail fella, up at the camp?\" He folds his arms. \"Before I go into my coat, I want to hear from him what he's short of.\""
     else:
       - when: [not here:asa]
         say: There's nobody here who can help with that.
@@ -245,8 +252,21 @@ actions:
     do:
       - clear: [1830.fog, present.planks, present.voice]
       - set: present.returned
+      # Ogee's goodbye (#4), only when the ferry went the right way.
+      - if:
+          when: [1830.lease_dixon]
+          do:
+            - say: >-
+                You take {ogee's} arm and walk blind through the white, step by
+                step. For a while neither of you says anything. "Canoe's paid
+                off," he says at last. "And then some." A few steps more. "She's
+                Dixon's now. Me, I pull the rope." Behind you the knocking of the
+                hull grows faint. "The last one walked out this way too," he
+                says, so quietly you nearly miss it. "She held on tighter."
+          else:
+            - say: You take {ogee's} arm and walk blind through the white, step by step. He doesn't say a word the whole way.
       - say: >-
-          You take {ogee's} arm and walk blind through the white, step by step. Somewhere along the way his hand lets go of your sleeve. The
+          Somewhere along the way his hand lets go of your sleeve. The
           planks give way to concrete, the knocking fades, and the city sounds
           come back one by one. Your own clothes are back, and dry, and your
           pockets hold your phone and nothing else. Whatever you were carrying
@@ -346,7 +366,7 @@ npcs:
     talk:
       - when: [not met.asa, 1830.wagon_free]
         text: >-
-          "Asa," he says, and shakes your hand hard enough to hurt. "You're the one got me out of that slough." He jerks his head at the man on the crate. "That fella means to take the only boat on this river." He points at the flour he's hauling to Galena, then pats his coat, and something heavy inside it clinks. "I've got the silver. What I need is a ferry."
+          "Asa," he says, and shakes your hand hard enough to hurt. "You're the one got me out of that slough." He jerks his head at the man in the good coat. "That fella means to take the only boat on this river." He points at the flour he's hauling to Galena, then pats his coat, and something heavy inside it clinks. "I've got the silver. What I need is a ferry."
         do: [{set: [known.asa, met.asa, 1830.asa_needs_ferry]}]
       - when: [not met.asa]
         text: >-
@@ -354,7 +374,7 @@ npcs:
         do: [{set: [known.asa, met.asa]}]
       - when: [1830.wagon_free, not 1830.asa_needs_ferry]
         text: >-
-          "Out of the mud and into this," he says, with a jerk of his head at the man on the crate. "That fella means to take the only boat on this river." He points at the flour he's hauling to Galena, then pats his coat, and something heavy inside it clinks. "I've got the silver. What I need is a ferry."
+          "Out of the mud and into this," he says, with a jerk of his head at the man in the good coat. "That fella means to take the only boat on this river." He points at the flour he's hauling to Galena, then pats his coat, and something heavy inside it clinks. "I've got the silver. What I need is a ferry."
         do: [{set: 1830.asa_needs_ferry}]
       - when: [1830.wagon_free]
         text: "\"I owe you. Anything you need, say so.\""
@@ -385,9 +405,11 @@ npcs:
             text: "\"Dixon's square. My wagons cross free till the hundred's worked off.\""
           - when: [has:silver]
             text: "\"You've got it,\" {asa} says, with a nod at the bag. \"Dixon's up at the camp.\""
-          - when: [1830.dixon_short, 1830.wagon_free]
+          - when: [1830.dixon_short, 1830.wagon_free, 1830.key_returned]
             text: *deal
             do: *deal_do
+          - when: [1830.dixon_short, 1830.wagon_free]
+            text: *mail_sits
           - when: [1830.wagon_free]
             text: "\"Dixon? The mail fella, up at the camp? If he means to run her, I want to hear what he's short of.\""
           - text: "\"Got a wagon in the mud. That's all the business I've got today.\""
@@ -452,6 +474,8 @@ hints:
     text: The crow on the cabin roof has James's key. The boys say it only trades up, for something shinier. Asa's silver dollar is shiny. Put it on the chopping block.
   - when: [era:1830, has:key]
     text: Give the key back to James at the camp.
+  - when: [era:1830, 1830.dixon_short, 1830.asa_needs_ferry, 1830.wagon_free, not 1830.key_returned]
+    text: Asa won't pay a season of crossings to Dixon while Dixon's mail sits at the camp. James drives the mail. Find out what's holding him up.
   - when: [era:1830, not 1830.dixon_short]
     text: Ask Dixon about the lease, and what's standing in his way.
   - when: [era:1830, not 1830.asa_needs_ferry]

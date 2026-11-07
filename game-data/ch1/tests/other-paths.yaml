@@ -244,7 +244,7 @@ tests:
       - {cmd: talk to asa, expect: "What I need is a ferry"}
       - {cmd: ask agent about asa, expect: wagons do not cross without this boat}
       - {cmd: tell asa about dixon, expect: what he's short of, not: season of crossings}
-      - setup: {flags: [1830.dixon_short, known.dixon, met.dixon]}
+      - setup: {flags: [1830.key_returned, known.james, 1830.dixon_short, known.dixon, met.dixon]}
       - {cmd: ask asa about dixon, expect: [season of crossings, Take that up to Dixon]}
 
   - name: while you're still dazed, help and save work but don't use up the moment
@@ -372,7 +372,7 @@ tests:
   - name: Asa met for the first time after his wagon is free
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.rope_strung, 1830.wagon_free, known.dixon, met.dixon, 1830.dixon_short]}
+      - setup: {flags: [1830.key_returned, known.james, 1830.arrived, known.ogee, met.ogee, 1830.rope_strung, 1830.wagon_free, known.dixon, met.dixon, 1830.dixon_short]}
       - {cmd: look at big man, expect: pleased with the world}
       - {cmd: talk to big man, expect: [got me out of that slough, What I need is a ferry]}
       - {cmd: ask asa about the wagon, expect: thanks to you}
@@ -577,7 +577,7 @@ tests:
   - name: Asa's silver goes up to Dixon, and Dixon pays the agent at the landing
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.dixon_short, known.dixon, met.dixon]}
+      - setup: {flags: [1830.key_returned, known.james, 1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.dixon_short, known.dixon, met.dixon]}
       - {cmd: tell asa about dixon, expect: Take that up to Dixon, not: Take my arm}
       - {cmd: inventory, expect: "Asa's silver"}
       - {cmd: tell asa about dixon, expect: "Dixon's up at the camp"}
@@ -594,7 +594,7 @@ tests:
   - name: paying the agent with Asa's silver puts your name on the lease
     url: scene=landing
     steps:
-      - setup: {flags: [1830.arrived, known.ogee, met.ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.dixon_short, known.dixon, met.dixon]}
+      - setup: {flags: [1830.key_returned, known.james, 1830.arrived, known.ogee, met.ogee, known.asa, met.asa, known.agent, met.agent, 1830.rope_strung, 1830.wagon_free, 1830.dixon_short, known.dixon, met.dixon]}
       - {cmd: tell asa about dixon, expect: Take that up to Dixon}
       - {cmd: give silver to agent, expect: ["The lessee's name", writes yours, Take my arm]}
       - {cmd: "take ogee's arm", room: wateredge}
@@ -731,7 +731,10 @@ tests:
       - {cmd: ask ogee about asa, expect: as stuck on this bank}
       - {cmd: ask agent about the lease, expect: any man who can pay, not: Dixon}
       - {cmd: help, expect: Ask Dixon about the lease}
-      - {cmd: talk to ogee, expect: [still sitting on my boat, find a hundred in silver], not: silver in this landing}
+      - {cmd: talk to ogee, expect: [Sundown, that one says, find a hundred in silver], not: silver in this landing}
+      - {cmd: help, expect: "Dixon's mail sits at the camp"}
+      - {cmd: tell asa about dixon, expect: "mail ain't moved", not: Take that up to Dixon}
+      - setup: {flags: [1830.key_returned, known.james]}
       - {cmd: help, expect: Tell Asa about Dixon, not: James}
       - {cmd: tell asa about dixon, expect: Take that up to Dixon}
 
@@ -861,3 +864,44 @@ tests:
       - {cmd: talk to margaret, expect: You have a familiar face, not: "You've a"}
       - {cmd: ask margaret about the desk, expect: [Nobody's quite sure, Silly, I know]}
       - {cmd: say goodbye to margaret, expect: Watch out for the fog, not: Mind the fog}
+
+
+  # The deadline, the mail and Ogee's goodbye (0.15.0).
+  - name: the agent watches the sun once the rope is across
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.agent, met.agent]}
+      - {cmd: look, expect: sits on a crate, not: sundown}
+      - setup: {flags: [1830.rope_strung]}
+      - {cmd: look, expect: got up off his crate}
+      - {cmd: talk to agent, expect: [A boat that runs can be moved, until sundown]}
+      - setup: {flags: [1830.wagon_free]}
+      - {cmd: talk to agent, expect: put his own man on the rope}
+      - setup: {flags: [1830.key_returned, known.james]}
+      - {cmd: look, expect: [stands on the ferry with one hand on the rope, first mail over your rope]}
+      - {cmd: look at mail, expect: small and brass on his buttonhole}
+
+  - name: Asa won't pay while Dixon's mail sits, and James keeps his secret
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, known.asa, met.asa, 1830.asa_needs_ferry, 1830.rope_strung, 1830.wagon_free, 1830.dixon_short, known.dixon, met.dixon, 1830.key_lost, known.james, met.james]}
+      - {cmd: tell asa about dixon, expect: "mail ain't moved", not: [key, season of crossings]}
+      - {cmd: help, expect: "Dixon's mail sits at the camp"}
+      - setup: {room: camp, items: [phone, key]}
+      - {cmd: give key to james, expect: [Father need never know, The mail goes north today]}
+      - {cmd: look, not: [mail sack, oiling harness]}
+      - {cmd: north, room: cabin}
+      - {cmd: north, room: landing, expect: first mail over your rope}
+      - {cmd: tell asa about dixon, expect: ["Mail's moving", season of crossings, Take that up to Dixon], not: key}
+
+  - name: Ogee says goodbye in the fog, but only if the ferry went to Dixon
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.lease_dixon, 1830.fog]}
+      - {cmd: "take ogee's arm", expect: ["Canoe's paid off", "Me, I pull the rope", The last one walked out this way too, held on tighter], room: wateredge}
+
+  - name: after the wrong fix, Ogee walks you out in silence
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.lease_player, 1830.fog]}
+      - {cmd: "take ogee's arm", expect: "doesn't say a word", not: [The last one, "Me, I pull the rope"], room: wateredge}

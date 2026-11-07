@@ -111,6 +111,15 @@ nouns:
     verbs:
       push: It slides a little way in the gravel and stops.
 
+  # #3: once James has his key, the mail goes north over your rope, and Asa
+  # sees it go. James keeps his secret; all anyone sees is the mail moving.
+  mailteam:
+    name: mail
+    when: [1830.key_returned, not 1830.lease_dixon]
+    aliases: [james, james dixon, mail, mail team, mail sack, team, galena road]
+    room_line: "Across the river, {james} is leading his team up the Galena road with the [mailteam|mail sack] strapped on behind, the first mail over your rope."
+    look: "{james} is too far off to hail now, a small figure leading his team up the Galena road with the mail sack strapped on behind. If you look hard you can make out something small and brass on his buttonhole."
+
   crate:
     name: crate
     when: [here:agent]
@@ -212,7 +221,7 @@ npcs:
       - when: [not 1830.wagon_free]
         text: "He pats the rope where it runs over her rail. \"Look at her. Pulled across like a bucket on a well.\" He nods at the waiting wagons. \"Those, they don't move.\""
       - when: [not 1830.lease_dixon, not has:silver]
-        text: "{ogee} glances at the man on the crate. \"That one is still sitting on my boat.\" He looks up the trail. \"Dixon has his lease ready. All he has to do is find a hundred in silver.\""
+        text: "{ogee} glances at the man in the good coat. \"Sundown, that one says.\" He looks up the trail. \"Dixon has his lease ready. All he has to do is find a hundred in silver before then.\""
         do: [{set: [1830.dixon_short, heard.dixon]}]
       - text: "\"You have a question in your face, eh,\" he says. \"Ask it.\""
     topics:
@@ -302,7 +311,15 @@ npcs:
     ref: the man in the good coat
     aliases: [agent, man in coat, man in good coat, coat, stranger, creditor's man, rolette's man, rolette's agent]
     when: [not 1830.lease_dixon, not 1830.lease_player]
+    # The deadline (#1): the rope makes the boat worth taking, and from then
+    # on the agent's room line and talk move toward sundown with the story.
     room_line:
+      - when: [not 1830.dazed, 1830.key_returned]
+        text: "[agent] stands on the ferry with one hand on the rope and his [papers] buttoned inside his coat. Behind him the sun is going down into the trees on the far bank."
+      - when: [not 1830.dazed, 1830.wagon_free]
+        text: "[agent] stands at the head of the dock with his [papers] buttoned inside his coat, watching the sun come down the sky."
+      - when: [not 1830.dazed, 1830.rope_strung]
+        text: "[agent] has got up off his [crate] to watch the ferry run on the rope, with his [papers] under his arm."
       - when: [not 1830.dazed]
         text: "[agent] sits on a [crate] with [papers] folded in his lap, watching the ferry as if it were already his."
     look: His coat is well made and muddy to the knee. He watches {ogee} the way a man watches a horse he means to take.
@@ -314,6 +331,12 @@ npcs:
           He taps the top one. "One hundred dollars in silver, due in February.
           Paid today, the boat stays. Not paid, I take it."
         do: [{set: [known.agent, met.agent]}]
+      - when: [1830.key_returned]
+        text: "He doesn't take his eyes off the sun. \"Sundown, friend. Then the boat is Mr. Rolette's, and Mr. Ogee pulls her for me or I find a man who will.\""
+      - when: [1830.wagon_free]
+        text: "He nods at the sun, low over the far bank. \"At sundown the boat is Mr. Rolette's, friend. He will put his own man on the rope.\""
+      - when: [1830.rope_strung]
+        text: "\"The boat runs again. Good.\" He looks along your rope to the far bank, and then at the sky. \"A boat that runs can be moved. Mr. Ogee has until sundown, friend.\""
       - text: "\"One hundred in silver, friend. Today.\""
     topics:
       - keys: [debt, notes, owe, overdue, installment, mortgage, terms, hundred, silver]

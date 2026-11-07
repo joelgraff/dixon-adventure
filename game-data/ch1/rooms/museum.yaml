@@ -521,7 +521,8 @@ actions:
           You hold the door while {volunteer} switches off the fluorescents one
           bank at a time. She locks up behind you, tries the handle twice and tells you goodnight. Then she walks off up Fifth Street with her
           coat collar turned up against the river damp. The street is quiet.
-          Behind you, in the dark front room, the schoolhouse clock is ticking.
+          Behind you, in the dark front room, the schoolhouse clock is ticking,
+          and in the last glass case a streetlight finds the brass token, J.O.
       - end: true
     else:
       - say: "{volunteer} is here till closing, and you've nowhere you need to be just yet."
