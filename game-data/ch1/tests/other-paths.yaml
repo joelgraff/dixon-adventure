@@ -631,3 +631,9 @@ tests:
       - {cmd: look at ferry, expect: [On the dock beside her, tar pot, doing her seams]}
       - {cmd: look at tar pot, expect: [beside the ferry, swab, oakum]}
       - {cmd: look at canoe, expect: beside the ferry}
+
+  - name: Eli says where his uncle is, not how to get him out
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.eli, met.eli]}
+      - {cmd: ask eli about his uncle, expect: [back in the slough, bar broke], not: [lever, under the wheels]}

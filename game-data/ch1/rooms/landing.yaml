@@ -365,7 +365,7 @@ npcs:
         say:
           - when: [1830.wagon_free]
             text: "\"That's Asa, over by the wagons, in the best mood I've seen him in all week. You did that, getting him out of the slough.\""
-          - text: "\"That's Asa. He's back in the slough past Dixon's camp, cussing at the oxen, because his bar broke. He needs a lever and something under the wheels.\""
+          - text: "\"That's Asa. He's back in the slough past Dixon's camp, cussing at the oxen, because his bar broke.\" He shakes his head. \"He won't leave that wagon, and he won't let me help either.\""
             do: [{set: heard.dixon}]
       - keys: [father, pa, militia, winnebago, "1827", war]
         say: "\"Pa went out with the militia in '27, the Winnebago trouble. Took sick on the march and never came home.\" He looks at the rifle. \"Ma says the diggings pay better than corn.\""

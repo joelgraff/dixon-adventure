@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.5 (2026-11-07)
+- Eli tells you where his uncle is stuck and that his bar broke, but no longer what the wagon needs to get out.
+
 ## 0.14.4 (2026-11-07)
 - The tar pot sits on the dock beside the ferry, where Ogee was doing her seams, and the ferry's description shows it; the canoe points you there too.
 
