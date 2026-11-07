@@ -224,8 +224,10 @@ actions:
           You take {ogee's} arm and walk blind through the white, step by step,
           and somewhere along the way his hand lets go of your sleeve. The
           planks give way to concrete, the knocking fades, and the city sounds
-          come back one by one. Your own clothes are back, and dry, and you
-          decide not to think about that either.
+          come back one by one. Your own clothes are back, and dry, and your
+          pockets hold your phone and nothing else. Whatever you were carrying
+          in 1830 has stayed there. You decide not to think about that either.
+      - leave_behind: 1830
       - move: wateredge
     else:
       - say: There's nobody to follow just now.

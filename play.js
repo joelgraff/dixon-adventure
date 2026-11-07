@@ -6,7 +6,7 @@ const DATA = 'game-data/';
 const params = new URLSearchParams(location.search);
 const $ = id => document.getElementById(id);
 const L = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
-const EFFECTS = ['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'describe', 'if'];
+const EFFECTS = ['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'if'];
 const SAVE_KEY = 'dixon.ch1.save';
 const AUTO_KEY = 'dixon.ch1.auto';
 const SETTINGS_KEY = 'dixon.settings';
@@ -145,6 +145,8 @@ function run(list) {
       case 'move': arrive(v); break;
       case 'death': die(v); break;
       case 'rewind': rewind(); break;
+      // Nothing from the past comes back through the fog: its items and silver stay there.
+      case 'leave_behind': S.items = S.items.filter(i => String((CH.items[i] || {}).era) !== String(v)); S.money = 0; break;
       case 'describe': describe(); break;
       case 'if': run(ok(v.when) ? v.do : v.else); break;
       default: break;

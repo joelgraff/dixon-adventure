@@ -107,6 +107,7 @@ A list of one-key maps, run in order.
 | `say: text` | print a line (text variants allowed) |
 | `move: room` | go to a room (no farewell lines) |
 | `death: id` | show that death and the Restore / Restart / Retry prompt |
+| `leave_behind: 1830` | drop every 1830 item and all money (the fog lets nothing through) |
 | `rewind: 1830` | clear every `1830.` flag and 1830 item, set money to 0, take back their points |
 | `if: {when: [...], do: [...], else: [...]}` | conditional effects (`else` optional) |
 | `describe: true` | print the room description again, as `look` would |

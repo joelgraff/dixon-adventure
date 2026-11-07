@@ -26,7 +26,7 @@ const src = load(path.join(root, 'sources.yaml')) || {};
 const chapterDirs = fs.readdirSync(root).filter(d => /^ch\d+$/.test(d));
 
 const COND_RE = /^(money|score|turns|n)\s*(>=|<=|==|>|<)\s*(-?\d+)$/;
-const EFFECTS = new Set(['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'describe', 'if']);
+const EFFECTS = new Set(['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'if']);
 const BUILTIN_VARS = new Set(['money', 'score', 'max_score', 'picked', 'n']);
 const asList = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
 
@@ -103,7 +103,7 @@ for (const ch of chapterDirs) {
       const r = rooms[rid];
       asList(v).forEach(n => { if (!r || !(r.nouns || {})[n]) err(where, `reveal: no noun "${n}" in room ${rid}`); });
     }
-    if (k === 'rewind' && String(v) !== '1830') err(where, `rewind: unknown era ${v}`);
+    if ((k === 'rewind' || k === 'leave_behind') && String(v) !== '1830') err(where, `${k}: unknown era ${v}`);
     if (k === 'if') {
       asList(v.when).forEach(c => checkCond(c, where));
       asList(v.do).forEach(x => checkEffect(x, where, rid));
