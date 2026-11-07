@@ -31,7 +31,7 @@ nouns:
   crow:
     name: crow
     key: true
-    aliases: [bird, big crow, roof, ridge, glint, something shiny, shiny thing, brass thing, key, brass key]
+    aliases: [bird, big crow, roof, ridge]
     room_line:
       - when: [not 1830.crow_traded]
         text: Up on the roof ridge a big [crow] keeps watch by the chimney, with something small glinting at its feet.
@@ -46,6 +46,29 @@ nouns:
       touch: The crow is well out of reach, and it knows it.
       call: The crow looks at you, says something rude, and stays where it is.
       push: The crow is well out of reach, and it knows it.
+
+  # What the crow is guarding, until it trades.
+  glint:
+    name: something brass
+    when: [not 1830.crow_traded]
+    aliases: [glint, something shiny, shiny thing, brass thing, something brass, something small, key, brass key, mail key]
+    look: Something small and brass is wedged between two shingles at the crow's feet, winking in the light. From down here you can't make out what it is.
+    verbs:
+      take: It's up on the roof with the crow, and the crow has no intention of parting with it.
+
+  # What the crow leaves on the block when it trades. You pick it up yourself.
+  blockkey:
+    name: brass key
+    key: true
+    when: [1830.crow_traded, not has:key, not 1830.key_returned]
+    always: true
+    aliases: [key, brass key, small key, small brass key, mail key, string]
+    room_line: A small brass [blockkey|key] lies on the chopping block where the crow dropped it.
+    look: A small brass key, worn smooth, lies on the block on a loop of greasy string.
+    verbs:
+      take:
+        say: You pick the key up off the block. Up on the ridge, the crow doesn't so much as look at you.
+        do: [{give: key}, {set: 1830.has_key}]
 
   cabin:
     name: cabin
@@ -192,8 +215,7 @@ actions:
     when: [money>=1, not 1830.crow_traded]
     do:
       - money: -1
-      - set: [1830.crow_traded, 1830.has_key]
-      - give: key
+      - set: 1830.crow_traded
       - say: >-
           You set Asa's silver dollar on the chopping block, where it catches the light, and step back. The
           crow cocks its head, looks at the dollar, looks at you, and looks at

@@ -63,6 +63,7 @@ tests:
       - {cmd: talk to boys, expect: [He's a thief, something shiny], not: shinier}
       - {cmd: ask boys about the crow, expect: only up}
       - {cmd: put dollar on chopping block, expect: small brass key, money: 0}
+      - {cmd: take key, expect: pick the key up}
       - {cmd: give the paddle back to madeline, expect: been on the water again}
       - {cmd: return axe, expect: You hand the axe back}
       - {cmd: south, room: camp}

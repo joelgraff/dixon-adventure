@@ -411,7 +411,7 @@ tests:
     url: scene=cabin
     steps:
       - setup: {flags: [1830.arrived]}
-      - {cmd: take key, expect: no place for you}
+      - {cmd: take key, expect: no intention of parting with it}
       - {cmd: climb roof, expect: think better of it}
       - {cmd: give crow dollar, expect: nothing shiny to offer}
 
@@ -764,3 +764,19 @@ tests:
       - {cmd: x coin, expect: worn smooth at the rim}
       - {cmd: take dollar, expect: already in your pocket}
       - {click: "#inventory button[data-look='silver dollar']", shows: {"#output": "catches the light"}}
+
+  - name: the crow drops the key on the block, and you pick it up
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, 1830.met_ogee, 1830.rope_strung, 1830.wagon_free, 1830.key_lost], money: 1}
+      - {cmd: take key, expect: no intention of parting with it}
+      - {cmd: look at glint, expect: "can't make out what it is"}
+      - {cmd: put dollar on block, expect: small brass key}
+      - {cmd: inventory, not: brass key}
+      - {cmd: look, expect: lies on the chopping block where the crow dropped it}
+      - {cmd: help, expect: Take it}
+      - {cmd: south, room: camp}
+      - {cmd: north, room: cabin, expect: lies on the chopping block}
+      - {cmd: take key, expect: pick the key up}
+      - {cmd: inventory, expect: brass key}
+      - {cmd: look, not: where the crow dropped it}

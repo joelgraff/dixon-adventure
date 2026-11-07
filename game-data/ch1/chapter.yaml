@@ -466,6 +466,8 @@ hints:
     text: Take Asa's silver up to Dixon at the camp, and give it to him. Not to the agent.
   - when: [in:camp, 1830.wagon_free, not 1830.key_returned, not 1830.key_lost]
     text: James Dixon, at the camp, has lost something. Talk to him.
+  - when: [in:cabin, 1830.crow_traded, not has:key, not 1830.key_returned]
+    text: The crow dropped James's key on the chopping block. Take it.
   - when: [in:cabin, 1830.wagon_free, 1830.key_lost, not 1830.key_returned, not 1830.crow_traded]
     text: The crow on the cabin roof has James's key. The boys say it only trades up, for something shinier. Asa's silver dollar is shiny. Put it on the chopping block.
   - when: [era:1830, has:key]

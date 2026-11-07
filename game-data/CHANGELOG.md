@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.20 (2026-11-07)
+- When the crow trades, it leaves James's key on the chopping block, and you have to pick it up yourself; until you do, it stays in view on the block and help reminds you. Before the trade, the glint at the crow's feet is something you can look at, though you can't make out what it is.
+
 ## 0.14.19 (2026-11-07)
 - The silver dollar in your pocket is something you can look at anywhere (look at dollar, x coin), and the silver in the inventory panel can be clicked like any other item.
 

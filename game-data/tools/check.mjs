@@ -235,14 +235,21 @@ for (const ch of chapterDirs) {
       if (!npc.fallback) warn(`${where} npcs.${nid}`, `no fallback line for unknown topics`);
     }
     // labels used twice in one room are ambiguous to the parser
+    // Two things that are never here at once (one needs X, the other "not X")
+    // may share a word.
     const seen = new Map();
-    const addLabel = (l, owner) => {
-      l = String(l).toLowerCase();
-      if (seen.has(l) && seen.get(l) !== owner) warn(where, `"${l}" names both ${seen.get(l)} and ${owner} (the parser will ask which)`);
-      seen.set(l, owner);
+    const exclusive = (a, b) => {
+      const wa = asList(a.when).map(String), wb = asList(b.when).map(String);
+      return wa.some(c => wb.includes(`not ${c}`)) || wb.some(c => wa.includes(`not ${c}`));
     };
-    for (const [id, n] of Object.entries(nouns)) [id, n.name, ...(n.aliases || [])].forEach(l => addLabel(l, `noun ${id}`));
-    for (const [id, n] of Object.entries(r.npcs || {})) [id, ...(n.aliases || [])].forEach(l => addLabel(l, `npc ${id}`));
+    const addLabel = (l, owner, def) => {
+      l = String(l).toLowerCase();
+      const prev = seen.get(l);
+      if (prev && prev.owner !== owner && !exclusive(prev.def, def)) warn(where, `"${l}" names both ${prev.owner} and ${owner} (the parser will ask which)`);
+      seen.set(l, { owner, def });
+    };
+    for (const [id, n] of Object.entries(nouns)) [id, n.name, ...(n.aliases || [])].forEach(l => addLabel(l, `noun ${id}`, n));
+    for (const [id, n] of Object.entries(r.npcs || {})) [id, ...(n.aliases || [])].forEach(l => addLabel(l, `npc ${id}`, n));
 
     for (const [i, e] of asList(r.exits).entries()) {
       if (!e.names || !e.names.length) err(`${where} exits[${i}]`, `exit has no names`);
