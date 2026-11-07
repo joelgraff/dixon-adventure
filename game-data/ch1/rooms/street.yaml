@@ -50,6 +50,11 @@ nouns:
           say: The older one is stuck fast, as you'd expect of something that has been there for years.
         - say: The curled corner lifts easily, and when you peel the top sticker back, the older one beneath it is clear enough to read. It says DIXON'S FERRY DAYS beside the same cartoon ferry, though nobody on this block would call the town that.
           do: [{set: present.sticker_peeled}]
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_sticker]
+          do:
+              - set: present.noticed_sticker
 
   corner:
     name: corner

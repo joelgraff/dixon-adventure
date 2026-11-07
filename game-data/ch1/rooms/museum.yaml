@@ -27,7 +27,16 @@ nouns:
     name: founding panel
     key: true
     aliases: [exhibit, founding, display, wall panel, founding exhibit, paragraph]
-    on_look: [{set: present.panel_read}]
+    on_look:
+      - {set: present.panel_read}
+      - if:
+          when: [1830.lease_dixon, not present.noticed_panel]
+          do:
+              - set: present.noticed_panel
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "{volunteer} glances up from the desk. \"It reads right now, doesn't it? I'd swear it ended a line short this morning.\""
     look:
       - when: [1830.lease_dixon]
         text: >-
@@ -78,6 +87,15 @@ nouns:
       exactly where the dent came from.
     verbs:
       take: It belongs to the museum now, and {volunteer} is watching.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, 1830.shoe_returned, not present.noticed_shoe]
+          do:
+              - set: present.noticed_shoe
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"That wasn't there this morning,\" {volunteer} says from the desk. \"Don't ask me where it came from, because I couldn't tell you.\""
 
   card:
     name: typed card
@@ -123,6 +141,15 @@ nouns:
     look: >-
       It's a worn brass token stamped with a flatboat and the initials J.O.,
       and its new card reads: "Ferry token, c. 1830. Donor unknown."
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_token]
+          do:
+              - set: present.noticed_token
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"J.O.,\" {volunteer} says, coming to look over your shoulder. \"Joseph Ogee, I suppose. I dust that case every Saturday, and it was empty last week. I'd stake my life on it.\""
 
   photos:
     name: photos
@@ -140,6 +167,15 @@ nouns:
           Galena Avenue, the theatre marquee lit up at night, and a flooded
           riverbank with men in rowboats. The last two frames in the row are
           empty, with nothing in them but bare mats.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_engraving]
+          do:
+              - set: present.noticed_engraving
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"Somebody's filled that frame,\" {volunteer} says, \"and nobody told me. That's a tall man at the pole, isn't it?\""
 
   clock:
     name: schoolhouse clock
@@ -163,6 +199,15 @@ nouns:
       touch: The wooden case is cool and slightly dusty.
       take: It's bolted firmly to the wall.
       open: You'd have to wind it, and the tape says not to.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_clock]
+          do:
+              - set: present.noticed_clock
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"It started again this afternoon, all by itself,\" {volunteer} says, not looking at it. \"I'm choosing not to think about it.\""
 
   desk:
     name: desk
@@ -229,7 +274,16 @@ nouns:
     name: crossword
     key: true
     aliases: [puzzle, grid, clue, clues, seven down, newspaper, margin]
-    on_look: [{set: present.crossword_read}]
+    on_look:
+      - {set: present.crossword_read}
+      - if:
+          when: [1830.lease_dixon, not present.noticed_crossword]
+          do:
+              - set: present.noticed_crossword
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"Dixon,\" {volunteer} says, tapping seven down. \"Five letters. It was on the tip of my pencil all week.\""
     look:
       - when: [1830.lease_dixon]
         text: >-
@@ -255,6 +309,15 @@ nouns:
     aliases: [hand-lettered sign, labels sign]
     room_line: A hand-lettered [sign] is taped to the front of the desk.
     look: The sign says ASK ABOUT THE LATEST LABELS in marker, in {volunteer's} handwriting, and it's taped to the front of the desk.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_sign]
+          do:
+              - set: present.noticed_sign
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"I put that up this afternoon,\" {volunteer} says, \"before I knew why. I suppose somebody ought to ask.\""
 
   window:
     name: window

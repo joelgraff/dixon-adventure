@@ -1,6 +1,6 @@
 # The winning path, from the Walkthrough tab of the chapter 1 design doc.
 tests:
-  - name: winning path, 100 points
+  - name: winning path, 120 points
     steps:
       # Part 1: the museum to the water's edge
       - {cmd: look, expect: [glass cases, founding panel, silent], score: 0}
@@ -68,5 +68,19 @@ tests:
       - {cmd: go to museum, expect: Dixon Historic Center, room: museum}
       - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
       - {cmd: talk to margaret, expect: [DIXON, next puzzle], score: 100}
-      - {cmd: read panel, expect: took over the ferry}
-      - {cmd: score, expect: Your score is 100 of 100}
+      # Noticing what changed: 2 points each, with Margaret's comments
+      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 102}
+      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 104}
+      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 106}
+      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 108}
+      - {cmd: look at clock, expect: all by itself, score: 110}
+      - {cmd: look at crossword, expect: tip of my pencil, score: 112}
+      - {cmd: look at sign, expect: before I knew why, score: 114}
+      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 114}
+      - {cmd: out, room: street}
+      - {cmd: look at sticker, score: 116}
+      - {cmd: north, room: riverwalk}
+      - {cmd: read marker, score: 118}
+      - {cmd: look at statue}
+      - {cmd: read plaque, expect: Dixon, score: 120}
+      - {cmd: score, expect: Your score is 120 of 120}

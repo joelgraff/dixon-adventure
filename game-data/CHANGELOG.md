@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.9.0 (2026-11-06)
+- Back in the present after the repair, noticing what changed earns 2 points each (the panel, the pole shoe, the token, the engraving, the clock, the crossword, the sign, the bumper sticker, the marker and the statue plaque), and Margaret comments the first time you look at each thing in the museum. Chapter 1 is now out of 120.
+
 ## 0.8.6 (2026-11-06)
 - Characters' lines follow what has already happened, whatever order you do things in: Ogee on the canoe, the rope, the pole and its shoe, and meeting him after you've tarred the canoe; Dixon when you've already taken his rope; Asa's look, talk and thanks once the brush is down or the wagon is free, including meeting him first at the landing; Madeline once you have the axe. 'thank <name>' now works.
 

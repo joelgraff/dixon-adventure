@@ -59,6 +59,11 @@ nouns:
         - when: [1830.lease_dixon]
           say: The paint is gritty with old salt, and unbroken all the way down.
         - say: The paint is gritty with old salt, and you can feel exactly where the sanding stopped.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_marker]
+          do:
+              - set: present.noticed_marker
 
   sanded:
     name: sanded line
@@ -94,6 +99,11 @@ nouns:
       the statue was dedicated on August 14, 2009.
     verbs:
       touch: The raised letters are cool under your fingers and slightly gritty.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_plaque]
+          do:
+              - set: present.noticed_plaque
 
   bench:
     name: bench
