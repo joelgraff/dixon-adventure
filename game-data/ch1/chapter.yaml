@@ -1,7 +1,7 @@
 id: ch1
 title: "Chapter 1: Ogee's Ferry"
 start: museum
-max_score: 122
+max_score: 132
 
 # Every room file, in the order the browser loads them (it can't list folders).
 rooms: [museum, street, riverwalk, wateredge, landing, cabin, camp, northlanding, slough]
@@ -24,6 +24,10 @@ flags:
   1830.has_axe:            {score: 1, desc: Took the axe}
   1830.has_paddle:         {score: 4, desc: Borrowed Madeline's father's paddle}
   1830.paddle_returned:    {desc: Gave the paddle back to Madeline}
+  1830.key_lost:           {desc: Heard from James that the mail key is gone}
+  1830.crow_traded:        {score: 4, desc: Traded Asa's dollar to the crow for the key}
+  1830.has_key:            {desc: Holding James's mail key}
+  1830.key_returned:       {score: 6, desc: Gave the mail key back to James}
   1830.pole_returned:      {desc: Gave the setting pole back to Ogee}
   1830.canoe_tarred:       {score: 5, desc: Tarred the canoe}
   1830.canoe_across:       {desc: The canoe is at the north landing}
@@ -52,9 +56,10 @@ flags:
   present.noticed_marker:  {score: 2, desc: Noticed the change to the marker}
   present.noticed_plaque:  {score: 2, desc: Noticed the change to the plaque}
   present.noticed_desk:    {score: 2, desc: Noticed the desk's plate}
+  present.noticed_key:     {desc: Saw the old key on the blotter}
 
-# Score check: 13 present + 83 in 1830 + 4 at the end = 100, plus 22 for noticing
-# what changed in the present after the repair = 122.
+# Score check: 13 present + 93 in 1830 + 4 at the end = 110, plus 22 for noticing
+# what changed in the present after the repair = 132.
 
 vars:
   town:
@@ -110,6 +115,11 @@ items:
     name: paddle
     aliases: [oar]
     look: "It's {madeline's} father's paddle, one piece of ash, the grip worn dark and smooth by somebody's hands for a long time before yours."
+  key:
+    era: 1830
+    name: brass key
+    aliases: [key, brass key, mail key, little key, string]
+    look: It's a small brass key, worn smooth, on a loop of greasy string, and it's the kind of key that fits one lock and no other.
   pole:
     era: 1830
     name: setting pole
@@ -431,6 +441,12 @@ hints:
     text: Put the brush under the wagon's wheels.
   - when: [era:1830, not 1830.wagon_free]
     text: Lever the wagon out with Ogee's pole.
+  - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not known.james]
+    text: James Dixon, at the camp, has lost something. Talk to him.
+  - when: [era:1830, 1830.wagon_free, not 1830.key_returned, not 1830.crow_traded]
+    text: The crow on the cabin roof has James's key. The boys say it only trades up, for something shinier. Asa's silver dollar is shiny. Put it on the chopping block.
+  - when: [era:1830, has:key]
+    text: Give the key back to James at the camp.
   - when: [era:1830, not 1830.dixon_short]
     text: Ask Dixon about the lease, and what's standing in his way.
   - when: [era:1830, not 1830.asa_needs_ferry]
@@ -441,6 +457,8 @@ hints:
     text: Something went wrong in 1830. Go back to the water's edge, wait for the fog, and cross again.
   - when: [chapter1.done]
     text: Chapter 1 is finished. Margaret's next puzzle is still to come.
+  - when: [present.returned, 1830.lease_dixon, not 1830.key_returned]
+    text: The drawer's key was lost in 1830, at Ogee's cabin. Margaret knows the story. Ask her about the desk.
   - when: [present.returned, 1830.lease_dixon]
     text: Go to the museum and talk to Margaret.
   - when: [in:riverwalk]

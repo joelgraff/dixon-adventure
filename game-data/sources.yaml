@@ -36,6 +36,11 @@ sources:
     url: https://en.wikipedia.org/wiki/Jean_Joseph_Rolette
     supports: Rolette at Prairie du Chien, American Fur Company agent.
 
+  S9:
+    title: Portmanteau (luggage) (Wikipedia)
+    url: https://en.wikipedia.org/wiki/Portmanteau_(luggage)
+    supports: Locks on the portmanteaus carrying the principal mails, from an 1823 Congressional resolution.
+
 # status: record | disputed | guess | invented | needs-source
 claims:
   C1:  {status: record, rooms: [landing, museum, riverwalk], sources: [S4], claim: "Ogee kept a ferry at the site from spring 1828, propelled by poles."}
@@ -67,3 +72,5 @@ claims:
   C27: {status: guess, rooms: [camp, landing], sources: [S1], claim: "The terms of the 1830 lease: that Dixon's first payment went to the overdue installment on Rolette's notes and the rent after it toward the rest. The record has the lease and the notes but not the terms."}
   C28: {status: guess, rooms: [landing], sources: [], claim: "A Galena freighter paying a ferry a hundred dollars in advance for a season of crossings. No ferry rates for Dixon's crossing in 1830 are cited; the 1838 Staten Island ferry charged 12 1/2 cents a person."}
   C29: {status: invented, rooms: [museum], sources: [], claim: "The museum desk was the Dixon's Ferry post office desk, used by John Dixon as postmaster from 1831; its drawer lock is older than the desk. Dixon's commission as postmaster (Sept 1830) is record, C19."}
+  C30: {status: record, rooms: [camp], sources: [S9], claim: "By 1823 the principal mails travelled in locked portmanteaus, opened only at distributing offices."}
+  C31: {status: invented, rooms: [cabin, camp, museum], sources: [], claim: "James Dixon losing the mail key to a crow at Ogee's cabin, and the key turning up with the post office desk."}

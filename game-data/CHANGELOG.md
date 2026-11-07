@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.10.0 (2026-11-06)
+- The mail key: James has lost the post office mail key at Ogee's chopping block, and a crow on the cabin roof has it. The boys say it only trades up, for something shinier; set Asa's silver dollar on the chopping block and the crow swaps. Give the key back to James (10 points in all). In the present, the key turns up on Margaret's desk tagged DIXON'S FERRY P.O. and fits the locked drawer, which she'll open with you on Saturday (chapter 2). Without it, she tells the family story of the crow. Chapter 1 is out of 132. 'Dollar' is no longer dropped from what you type.
+
 ## 0.9.2 (2026-11-06)
 - The museum desk has a provenance that history can lose: before the repair its brass plate is scratched blank and nobody's sure where it came from; after, the plate reads POST OFFICE, DIXON'S FERRY, 1831. J. DIXON, P.M., and Margaret calls it Dixon's post office desk. Noticing the plate is 2 more points (122 in all).
 

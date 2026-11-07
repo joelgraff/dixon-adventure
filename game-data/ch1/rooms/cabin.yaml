@@ -28,6 +28,25 @@ nouns:
           say: "{madeline} says, \"That was my father's,\" quietly, and you take your hand back. If you need it, you could ask her."
         - say: You'd want to ask before taking it down.
 
+  crow:
+    name: crow
+    key: true
+    aliases: [bird, big crow, roof, ridge, glint, something shiny, shiny thing, brass thing, key, brass key]
+    room_line:
+      - when: [not 1830.crow_traded]
+        text: A big [crow] sits on the roof ridge by the chimney, with something small glinting at its feet.
+      - text: The [crow] sits on the roof ridge, turning a silver dollar over with its beak.
+    look:
+      - when: [not 1830.crow_traded]
+        text: It's a big glossy crow, and it's watching you with one eye and then the other. At its feet, wedged between two shingles, something small and brass winks in the light.
+      - text: The crow is far too pleased with its silver dollar to pay you any attention.
+    verbs:
+      take: The crow watches you come, then hops a little further along the ridge, and the roof is no place for you to follow.
+      climb: The roof is steep, the shingles are wet, and the crow would only move. You think better of it.
+      touch: The crow is well out of reach, and it knows it.
+      call: The crow looks at you, says something rude, and stays where it is.
+      push: The crow is well out of reach, and it knows it.
+
   cabin:
     name: cabin
     aliases: [log cabin, doors, door, house]
@@ -143,10 +162,38 @@ npcs:
     aliases: [boys, sons, children, kindling, two boys]
     look: Two boys are splitting kindling with a hatchet and more enthusiasm than skill. They stop to watch you, then pretend they weren't watching at all.
     talk:
+      - when: [not 1830.crow_traded]
+        text: "The older boy jerks his chin at the roof. \"He's a thief, that one. He's always finding something shiny, and you never get it back unless you give him something shinier.\" The younger one nods hard."
       - text: The boys look at each other and say nothing, though one of them can't quite hide a grin.
+    topics:
+      - keys: [crow, bird, thief, shiny, key, roof]
+        say:
+          - when: [not 1830.crow_traded]
+            text: "\"He took Mother's thimble once,\" the younger boy says. \"Pa got it back with a brass button. He'll trade, but only up.\""
+          - text: "\"You've made a friend for life,\" the older boy says, grinning."
     fallback: The boys giggle and go back to their kindling.
 
 actions:
+  - id: crow_trade
+    phrases: [put dollar on block, put dollar on chopping block, put dollar down, lay dollar on block, leave dollar on block, leave dollar for crow, set dollar on block, set dollar on chopping block, put dollar on stump, toss dollar to crow, throw dollar to crow, show dollar to crow, offer dollar to crow, give dollar to crow, hold up dollar, offer crow dollar, give crow dollar, show crow dollar, trade dollar for key, trade dollar with crow, swap dollar for key, trade crow dollar, put silver dollar on block, put silver dollar on chopping block, put silver dollar down, lay silver dollar on block, leave silver dollar on block, leave silver dollar for crow, set silver dollar on block, set silver dollar on chopping block, put silver dollar on stump, toss silver dollar to crow, throw silver dollar to crow, show silver dollar to crow, offer silver dollar to crow, give silver dollar to crow, hold up silver dollar, offer crow silver dollar, give crow silver dollar, show crow silver dollar, trade silver dollar for key, trade silver dollar with crow, swap silver dollar for key, trade crow silver dollar, put silver on block, put silver on chopping block, put silver down, lay silver on block, leave silver on block, leave silver for crow, set silver on block, set silver on chopping block, put silver on stump, toss silver to crow, throw silver to crow, show silver to crow, offer silver to crow, give silver to crow, hold up silver, offer crow silver, give crow silver, show crow silver, trade silver for key, trade silver with crow, swap silver for key, trade crow silver, put coin on block, put coin on chopping block, put coin down, lay coin on block, leave coin on block, leave coin for crow, set coin on block, set coin on chopping block, put coin on stump, toss coin to crow, throw coin to crow, show coin to crow, offer coin to crow, give coin to crow, hold up coin, offer crow coin, give crow coin, show crow coin, trade coin for key, trade coin with crow, swap coin for key, trade crow coin, put money on block, put money on chopping block, put money down, lay money on block, leave money on block, leave money for crow, set money on block, set money on chopping block, put money on stump, toss money to crow, throw money to crow, show money to crow, offer money to crow, give money to crow, hold up money, offer crow money, give crow money, show crow money, trade money for key, trade money with crow, swap money for key, trade crow money, trade with crow, trade crow, bribe crow, make a trade]
+    when: [money>=1, not 1830.crow_traded]
+    do:
+      - money: -1
+      - set: [1830.crow_traded, 1830.has_key]
+      - give: key
+      - say: >-
+          You set Asa's silver dollar on the chopping block and step back. The
+          crow cocks its head, looks at the dollar, looks at you, and looks at
+          the dollar again. Then it drops down off the roof in one black swoop,
+          lets the brass thing fall from its beak onto the block to free it,
+          snatches up the dollar instead, and is back on the ridge before you
+          can blink. On the block lies a small brass key on a loop of greasy
+          string.
+    else:
+      - when: [1830.crow_traded]
+        say: The crow has what it wants, and so do you.
+      - say: You've nothing shiny to offer it. The crow seems to know that.
+
   - id: borrow_paddle
     speaker: madeline
     phrases: [ask for paddle, borrow paddle, ask madeline for paddle, ask woman for paddle, ask her for paddle, ask madeline for the paddle, ask for the paddle, ask to borrow paddle, can i borrow paddle, may i borrow paddle, can i borrow the paddle, may i borrow the paddle, ask for spare paddle, ask for father's paddle, ask for oar, borrow oar]

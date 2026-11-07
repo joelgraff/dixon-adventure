@@ -487,7 +487,7 @@ function phraseRegex(p) {
   return new RegExp(`^${body}$`);
 }
 function matchAction(input) {
-  const t = norm(input).replace(/\$/g, '').replace(/\b(dollars?|bucks)\b/g, '').replace(/\b(the|a|an)\b/g, ' ').replace(/\s+/g, ' ').trim();
+  const t = norm(input).replace(/\$/g, '').replace(/(\d)\s*(dollars?|bucks)\b/g, '$1').replace(/\b(the|a|an)\b/g, ' ').replace(/\s+/g, ' ').trim();
   for (const a of [...L(room().actions), ...L(CH.actions)]) {
     for (const p of L(a.phrases)) {
       const m = t.match(phraseRegex(p));

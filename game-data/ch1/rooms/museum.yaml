@@ -280,12 +280,33 @@ nouns:
           do: [{set: present.signed}]
       close: You flip the cover shut and then open it again, because it feels rude to hide it.
 
+  oldkey:
+    name: old brass key
+    when: [1830.lease_dixon, 1830.key_returned]
+    aliases: [key, brass key, old key, tag, paper tag, mail key]
+    room_line: An old brass [oldkey|key] with a paper tag lies on the blotter.
+    look: It's a small brass key, worn smooth, on a loop of string gone stiff with age. The paper tag, in faded ink, reads DIXON'S FERRY P.O.
+    verbs:
+      take: "{volunteer} puts a hand over it. \"Not yet. Come back on Saturday, and we'll open it together.\""
+    on_look:
+      - if:
+          when: [not present.noticed_key]
+          do:
+            - set: present.noticed_key
+            - if:
+                when: [here:volunteer]
+                do:
+                  - say: "{volunteer} sees you looking. \"It was in the bottom of the clutter drawer this afternoon, under the staples. I've cleaned out that drawer every spring for thirty-one years.\" She looks at the locked drawer, then at you. \"It fits. I tried it. I haven't turned it yet.\""
+
   drawer:
     name: locked drawer
     aliases: [middle drawer, lock, keyhole, drawers]
     look: It's a shallow middle drawer with a small brass lock, much older than the rest of the desk's hardware, and its keyhole is worn bright.
     verbs:
-      open: It's locked. The other drawers slide out easily, full of staples and brochures, but this one won't move.
+      open:
+        - when: [1830.lease_dixon, 1830.key_returned]
+          text: "The key is right there on the blotter, but {volunteer} puts her hand over it. \"Not tonight. Come back on Saturday, and we'll open it together.\""
+        - text: It's locked. The other drawers slide out easily, full of staples and brochures, but this one won't move.
       push: It doesn't budge at all.
       search: The other drawers hold staples, brochures and a stapler, but this one is locked.
 
@@ -458,8 +479,10 @@ npcs:
           - text: "\"That clock has been stopped since before I started here. The tape says not to wind it, so I don't.\""
       - keys: [desk, drawer, lock, key, plate, provenance]
         say:
+          - when: [1830.lease_dixon, 1830.key_returned]
+            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry.\" She touches the key on the blotter. \"And this turned up today. Come back on Saturday, and we'll open that drawer together.\""
           - when: [1830.lease_dixon]
-            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry. The drawers all work except the locked one, and nobody has ever found the key. I've always wondered what's in it.\""
+            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry. Nobody has ever found the key to that drawer. There's an old story in the family that James Dixon lost the post office key the spring they came, at Ogee's cabin, and that a crow took it off the chopping block, if you can believe that, and it was never seen again.\" She smiles. \"If anybody had found it then, I suppose it would be here now.\""
           - text: "\"Nobody's quite sure where that desk came from. The board says the old county clerk's office, the clerk's family says otherwise, and the plate on the side was scratched off before anyone thought to read it. The drawers all work except the locked one, and nobody has ever found the key.\""
       - keys: [case, cases, arrowheads, glass]
         say: "\"They've been locked since 1998, and the key's with the board. I dust the empty one at the end every Saturday, out of habit.\""

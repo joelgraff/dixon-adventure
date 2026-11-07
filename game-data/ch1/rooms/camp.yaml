@@ -6,7 +6,7 @@ name:
   - when: [heard.dixon]
     text: Dixon's camp, 1830
   - text: A wagon camp, 1830
-sources: [S1, S2, S3, S4, S5]
+sources: [S1, S2, S3, S4, S5, S9]
 picture: >-
   A wagon camp among oaks, the trail bending away south. A tall man in a dark
   coat standing, a woman at a cook fire, a young man oiling harness beside a
@@ -175,16 +175,36 @@ npcs:
     unknown: a young man of nineteen or so
     ref: the young man at the harness
     aliases: [james, young man, son, james dixon, mail driver]
-    room_line: "[james] is oiling harness beside a [mailsack|mail sack]."
+    room_line:
+      - when: [not 1830.key_returned]
+        text: "[james] is oiling harness beside a [mailsack|mail sack], glancing now and then at the ground as if he'd dropped something."
+      - text: "[james] is oiling harness beside a [mailsack|mail sack]."
     look: He's a young man of nineteen or so, oiling harness with his sleeves rolled up, and he has his father's careful face.
     talk:
+      - when: [not known.james, not 1830.key_returned]
+        text: >-
+          "I'm James," he says, without looking up from the harness. "I drive
+          the mail for Father, and every team bound for the diggings comes
+          through this crossing." He works the harness a moment longer, then
+          lowers his voice. "And I've gone and lost the mail key. I set it on
+          the chopping block at Ogee's while I watered the team, and when I
+          turned round it was gone. Father doesn't know yet."
+        do: [{set: [known.james, 1830.key_lost]}]
       - when: [not known.james]
         text: "\"I'm James,\" he says, without looking up from the harness. \"I drive the mail for Father, and every team bound for the diggings comes through this crossing.\""
         do: [{set: known.james}]
+      - when: [not 1830.key_returned]
+        text: "\"No sign of that key, I suppose?\" He doesn't sound hopeful."
       - text: "{james} nods to you and keeps working."
     topics:
       - keys: [mail, route, peoria, galena, road]
         say: "\"It runs from Peoria to Galena and back, and you get to know every slough on the way.\""
+      - keys: [key, mail key, lost, lock, chopping block, crow]
+        say:
+          - when: [1830.key_returned]
+            text: "\"It's on my buttonhole now, where it ought to have been all along.\""
+          - text: "\"It's the key to the mail lock. Any postmaster's key would open the bag, I suppose, but that one's ours, and Father had it from Peoria. I set it down on the chopping block at Ogee's for one minute.\" He looks miserable. \"One minute.\""
+            do: [{set: 1830.key_lost}]
       - keys: [teams, diggings, wagons, traffic]
         say: "\"In spring they all go north, and in the fall the ones who made it come back south. Some of them owe Father money.\""
     fallback: "{james} shrugs; he isn't much for talking to strangers yet."
@@ -216,6 +236,18 @@ actions:
     else:
       - say: You've already got {dixon's} rope.
 
+  - id: return_key
+    speaker: james
+    phrases: [give key to james, give james key, give james the key, return key, return key to james, give key back, give key back to james, give back key, give key, give mail key to james, give james mail key, give key to young man, give him key, give him the key, show key to james, show james key, hand key to james]
+    when: [has:key, here:james]
+    do:
+      - take: key
+      - set: 1830.key_returned
+      - say: "{james} stares at it, and then at you. \"Where did you find it?\" You tell him about the crow, and he laughs out loud for the first time since you've known him. \"Of course it was the crow.\" He threads the string through his buttonhole and pats it twice. \"Father need never know.\""
+    else:
+      - when: [not has:key]
+        say: You haven't got it.
+      - say: There's nobody here to give it to.
 
 exits:
   - names: [north, trail, river, cabin, landing, back]

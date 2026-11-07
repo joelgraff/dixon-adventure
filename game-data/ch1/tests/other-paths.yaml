@@ -404,3 +404,19 @@ tests:
     steps:
       - {cmd: look at desk, expect: scratched it blank, not: DIXON'S FERRY}
       - {cmd: ask volunteer about the desk, expect: Nobody's quite sure where that desk came from}
+
+  - name: the crow won't trade without something shiny
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived]}
+      - {cmd: take key, expect: no place for you}
+      - {cmd: climb roof, expect: think better of it}
+      - {cmd: give crow dollar, expect: nothing shiny to offer}
+
+  - name: without the key, Margaret tells the story
+    url: scene=museum
+    steps:
+      - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer]}
+      - {cmd: look, not: key with a paper tag}
+      - {cmd: ask margaret about the desk, expect: [a crow took it, it would be here now]}
+      - {cmd: open drawer, expect: "It's locked"}

@@ -1,6 +1,6 @@
 # The winning path, from the Walkthrough tab of the chapter 1 design doc.
 tests:
-  - name: winning path, 122 points
+  - name: winning path, 132 points
     steps:
       # Part 1: the museum to the water's edge
       - {cmd: look, expect: [glass cases, founding panel, silent], score: 0}
@@ -54,8 +54,15 @@ tests:
       - {cmd: put brush under wheels, expect: Now the lever}
       - {cmd: lever wagon with pole, expect: [silver dollar, shoe is gone], money: 1}
       - {cmd: dig in mud, expect: forged iron}
-      # Part 4: the deal
+      # Part 4: the key, the deal
       - {cmd: north, room: camp}
+      - {cmd: talk to young man, expect: [I'm James, lost the mail key]}
+      - {cmd: north, room: cabin}
+      - {cmd: look at crow, expect: winks in the light}
+      - {cmd: talk to boys, expect: [He's a thief, something shinier]}
+      - {cmd: put dollar on chopping block, expect: small brass key, money: 0}
+      - {cmd: south, room: camp}
+      - {cmd: give key to james, expect: [Of course it was the crow, Father need never know]}
       - {cmd: north, room: cabin}
       - {cmd: north, room: landing}
       - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
@@ -67,24 +74,26 @@ tests:
       - {cmd: look, expect: mist has lifted}
       - {cmd: go to museum, expect: Dixon Historic Center, room: museum}
       - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
-      - {cmd: talk to margaret, expect: [DIXON, next puzzle], score: 100}
+      - {cmd: talk to margaret, expect: [DIXON, next puzzle], score: 110}
       # Noticing what changed: 2 points each, with Margaret's comments
-      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 102}
-      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 104}
-      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 106}
-      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 108}
-      - {cmd: look at clock, expect: all by itself, score: 110}
-      - {cmd: look at crossword, expect: tip of my pencil, score: 112}
-      - {cmd: look at sign, expect: before I knew why, score: 114}
-      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 114}
+      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 112}
+      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 114}
+      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 116}
+      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 118}
+      - {cmd: look at clock, expect: all by itself, score: 120}
+      - {cmd: look at crossword, expect: tip of my pencil, score: 122}
+      - {cmd: look at sign, expect: before I knew why, score: 124}
+      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 124}
       - {cmd: out, room: street}
-      - {cmd: look at sticker, score: 116}
+      - {cmd: look at sticker, score: 126}
       - {cmd: north, room: riverwalk}
-      - {cmd: read marker, score: 118}
+      - {cmd: read marker, score: 128}
       - {cmd: look at statue}
-      - {cmd: read plaque, expect: Dixon, score: 120}
+      - {cmd: read plaque, expect: Dixon, score: 130}
       - {cmd: south, room: street}
       - {cmd: in, room: museum}
-      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 122}
-      - {cmd: ask margaret about the desk, expect: post office desk}
-      - {cmd: score, expect: Your score is 122 of 122}
+      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 132}
+      - {cmd: ask margaret about the desk, expect: [post office desk, Come back on Saturday]}
+      - {cmd: look at key, expect: [DIXON'S FERRY P.O., It fits]}
+      - {cmd: open drawer, expect: Not tonight}
+      - {cmd: score, expect: Your score is 132 of 132}
