@@ -25,8 +25,8 @@ nouns:
         text: "{dixon's} [rope] runs taut from the post across the water."
     look:
       - when: [1830.rope_strung]
-        text: It's a stout oak post with {dixon's} rope made fast around it, humming faintly with the current.
-      - text: It's a stout oak post, set deep, as if somebody always meant for something to be tied to it one day.
+        text: The post is stout oak, with {dixon's} rope made fast around it and humming faintly with the current.
+      - text: The post is stout oak and set deep, as if somebody always meant for something to be tied to it one day.
 
   rope:
     name: rope
@@ -50,7 +50,7 @@ nouns:
     name: canoe
     when: [1830.canoe_across]
     aliases: [dugout]
-    look: "{ogee's} canoe is pulled up on the gravel with its tarred seam holding, and it has done its work."
+    look: "{ogee's} canoe is pulled up on the gravel with its tarred seam holding. It has done its work."
 
 actions:
   - id: tie_rope
@@ -61,8 +61,8 @@ actions:
       - set: 1830.rope_strung
       - say: >-
           You make the rope fast around the post. Across the water {ogee} hauls
-          it taut, and before long the ferry comes over hand over hand along the
-          rope with {ogee} at the line. "Well," he says as he lands. "Dixon's
+          it taut. Before long the ferry comes over hand over hand along the
+          rope, with {ogee} at the line. "Well," he says as he lands. "Dixon's
           rope, and it holds."
     else:
       - say: The rope is already tied off and holding.

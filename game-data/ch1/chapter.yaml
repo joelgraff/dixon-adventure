@@ -98,20 +98,20 @@ items:
       - when: [era:1830]
         text: It looks like a flat tin case, the kind a man keeps tobacco in, but when you open it, it's your phone, which came through the river better than you did. There are no bars and the clock is stuck at 4:17, but the battery reads 61 percent and the assistant still opens, so you could ask it for help. To anyone watching, you suspect, it would look like a great deal more than a tin.
       - when: [in:wateredge, turns>=2, not 1830.lease_dixon]
-        text: The screen has gone dim and the bars are gone, and the clock reads 4:17 and does not change while you watch it.
+        text: The screen has gone dim and the bars are gone. The clock reads 4:17, and it doesn't change while you watch it.
       - when: [1830.lease_dixon]
-        text: The battery is at 58 percent with a full signal, and the clock reads 4:21 and, while you watch, turns over to 4:22.
+        text: The battery is at 58 percent with a full signal. The clock reads 4:21, and while you watch, it turns over to 4:22.
       - text: The battery is at 61 percent with a full signal, and there's nothing new.
   rope:
     era: 1830
     name: coil of rope
     aliases: [rope, coil, hemp, line]
-    look: It's a heavy coil of new hemp, every foot that {dixon} could buy in Peoria.
+    look: "The coil of new hemp is heavy: every foot that {dixon} could buy in Peoria."
   axe:
     era: 1830
     name: axe
     aliases: [hatchet]
-    look: "This is {ogee's} axe, and its edge is sharp enough to catch a thumbnail."
+    look: "This is {ogee's} axe, with an edge still sharp enough to catch a thumbnail."
   paddle:
     era: 1830
     name: paddle
@@ -126,7 +126,7 @@ items:
     era: 1830
     name: brass key
     aliases: [key, brass key, mail key, little key, string]
-    look: It's a small brass key, worn smooth, on a loop of greasy string, and it's the kind of key that fits one lock and no other.
+    look: A small brass key, worn smooth, hangs from a loop of greasy string. It looks like the kind of key that fits one lock and no other.
   pole:
     era: 1830
     name: setting pole
@@ -224,14 +224,12 @@ actions:
     do:
       - set: [1830.lease_player, 1830.fog]
       - say: >-
-          {asa} shrugs and counts a hundred in silver onto the agent's papers,
-          and the agent counts it again. "Silver's silver, and it goes against
+          {asa} shrugs and counts a hundred in silver onto the agent's papers. The agent counts it again. "Silver's silver, and it goes against
           the note. Whose name goes on the paper?" "Not mine," says {asa}. "I'm
           bound for Galena." So the agent writes yours, though you couldn't run
-          a ferry if your life depended on it, and {ogee} looks away. Up the
+          a ferry if your life depended on it. {ogee} looks away. Up the
           trail, a tall figure turns and walks back toward the camp. Then a
-          chill comes off the river, and within a few breaths the fog is on
-          you, and {ogee's} voice comes from close by, flatter than before:
+          chill comes off the river, and within a few breaths the fog is on you. {ogee's} voice comes from close by, flatter than before:
           "Easy now. Take my arm."
     else:
       - say: That would take {asa} and the agent in the same place.
@@ -243,8 +241,7 @@ actions:
       - clear: [1830.fog, present.planks, present.voice]
       - set: present.returned
       - say: >-
-          You take {ogee's} arm and walk blind through the white, step by step,
-          and somewhere along the way his hand lets go of your sleeve. The
+          You take {ogee's} arm and walk blind through the white, step by step. Somewhere along the way his hand lets go of your sleeve. The
           planks give way to concrete, the knocking fades, and the city sounds
           come back one by one. Your own clothes are back, and dry, and your
           pockets hold your phone and nothing else. Whatever you were carrying
@@ -307,8 +304,7 @@ veil:
       says, "keep it off my wagon."
     default: Whoever saw it goes very still, and then very busy somewhere else.
   warning: >-
-    Out over the river the air thickens for a moment, as though something has
-    noticed, and you put the phone away. You'd better not do that again.
+    Out over the river the air thickens for a moment, as though something has noticed. You put the phone away. You'd better not do that again.
   cold:
     dixon: "[dixon] keeps his eyes on the river. \"Not now.\""
     madeline: "[madeline] shakes her head and keeps the boys behind her."
@@ -318,10 +314,7 @@ veil:
   again:
     - say: >-
         This time the fog doesn't wait. It comes up off the river all at once,
-        thick and white and cold, and the voices around you go thin and far
-        away. When it clears you're standing on concrete in your own dry
-        clothes with your phone in your hand, and whatever you did in 1830 has
-        come undone.
+        thick and white and cold. The voices around you go thin and far away. When it clears, you're standing on concrete in your own dry clothes with your phone in your hand. Whatever you did in 1830 has come undone.
     - rewind: 1830
     - clear: [present.planks, present.voice]
     - move: wateredge
@@ -343,7 +336,7 @@ npcs:
       - text: "[asa] stands at the wheel, swearing at all of it."
     look:
       - when: [1830.wagon_free]
-        text: He's a big man in a sweat-dark shirt with the mud drying on him to the thighs, and for once he looks fairly pleased with the world.
+        text: He's a big man in a sweat-dark shirt with the mud drying on him to the thighs. For once he looks fairly pleased with the world.
       - text: He's a big man in a sweat-dark shirt, mud to the thighs, with the look of someone who has been losing an argument with a wagon since sunup.
     talk:
       - when: [not met.asa, 1830.wagon_free]
@@ -360,9 +353,8 @@ npcs:
         text: >-
           "Asa. If you came by the landing, you'll have seen my nephew there,
           fretting on a wagon tongue." He wipes his hands on his shirt, which
-          only makes them muddier. "My bar broke an hour back. The wheels want
-          brush under them, something to bite on, and I want a long lever under
-          that hind axle. Get me both and you'll have my thanks, and a dollar
+          only makes them muddier. "My bar broke an hour back, and she's in to
+          the hubs. Get her out and you'll have my thanks, and a dollar
           besides."
         do: [{set: [known.asa, met.asa]}]
       - when: [1830.wagon_free, not 1830.asa_needs_ferry]
@@ -378,7 +370,7 @@ npcs:
         text: "\"I owe you, and I don't like owing. If there's anything I can do, say so.\""
       - when: [1830.brush_placed]
         text: "\"The brush is down. Now get something long under that axle.\""
-      - text: "\"Brush and a lever, that's all I need. I'm not getting any younger, and neither is that wagon.\""
+      - text: "\"I'm not getting any younger, and neither is that wagon.\""
     topics:
       - keys: [wagon, wheels, slough, mud, stuck, bar, lever, brush]
         say:

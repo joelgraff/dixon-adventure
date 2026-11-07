@@ -14,19 +14,18 @@ picture: >-
   wagon's tailboard.
 
 # The return-visit description (see FORMAT.md, Rooms).
-brief: "The [wagon] stands among the [oaks], and the cook [fire] burns low under the [kettle]."
+brief: "The [wagon] stands among the [oaks] with the cook [fire] burning low beside it."
 look: >-
-  Somebody has pulled a canvas-topped [wagon] off the trail and made a home
-  of the ground around it. The team grazes on a picket line among the
-  [oaks], and a cook [fire] has burned down to coals under an iron [kettle].
-  The trail runs on north to the river and south toward Peoria.
+  Somebody has pulled a canvas-topped [wagon] off the trail among the [oaks]
+  and made a home of the ground around it, with a cook [fire] burned down to
+  coals. The trail runs on north to the river and south toward Peoria.
 listen: The kettle ticks as it heats, a horse stamps on the picket line, and two boys are arguing about whose turn it is with the bucket.
 
 nouns:
   wagon:
     name: wagon
     aliases: [canvas, tailboard, wagon cover, team, horses, picket line]
-    look: The wagon is an ordinary farm wagon with a canvas cover and everything the family owns lashed inside it. They have been living out of it since they came up from Boyd's Grove.
+    look: The wagon is an ordinary farm wagon with a canvas cover and everything the family owns lashed inside it. Its team grazes on a picket line nearby. They have been living out of it since they came up from Boyd's Grove.
     verbs:
       search: You keep your hands out of other people's wagons, as a rule.
 
@@ -42,7 +41,7 @@ nouns:
   fire:
     name: cook fire
     aliases: [cook fire, campfire]
-    look: The fire is oak, burned down low to coals for cooking.
+    look: The fire is oak, burned down low to coals for cooking, with an iron [kettle] hanging over it.
 
   kettle:
     name: kettle
@@ -59,7 +58,7 @@ nouns:
   mailsack:
     name: mail sack
     aliases: [mail sack, mail, sack, mailbag, pouch, letters]
-    look: The canvas mail sack is tagged OGEE'S FERRY, ILL., and it's full of letters for the post office here and on up the road to Galena.
+    look: The canvas mail sack is tagged OGEE'S FERRY, ILL. It's full of letters for the post office here and on up the road to Galena.
     verbs:
       open: Other people's letters are other people's business, and you leave the sack shut.
       take: "The young man's hand lands on it. \"The mail stays with me.\""
@@ -67,12 +66,12 @@ nouns:
   harness:
     name: harness
     aliases: [tack, tallow]
-    look: The leather harness is cracked in places, and it's being worked over carefully with tallow.
+    look: Someone is working tallow carefully into the leather harness, which is cracked in places.
 
   oaks:
     name: oaks
     aliases: [oak, trees, woods, trail, peoria trail]
-    look: The bur oaks stand wide apart with the grass between them already green, and the trail runs north between them to the river and south toward Peoria.
+    look: The bur oaks stand wide apart with the grass already green between them. The trail runs through them north to the river and south toward Peoria.
 
 npcs:
   dixon:
@@ -82,24 +81,24 @@ npcs:
     ref: the tall man
     aliases: [dixon, john, john dixon, tall man, man in dark coat, man]
     room_line: "[dixon] stands looking down toward the river, turning a folded [paper] over in his hands."
-    look: He is a tall man in his forties, in a dark coat, with a careful face, and he looks like a man doing sums he doesn't like the answer to.
+    look: He is a tall man in his forties, in a dark coat, with a careful face. He looks like a man doing sums he doesn't like the answer to.
     talk:
       - when: [not met.dixon, {any: [1830.has_rope, 1830.rope_strung]}]
         text: >-
-          "John Dixon," he says, and his handshake is firm, though his eyes
-          take in your wet clothes before they come back to your face. "I came
-          up from Peoria to lease Ogee's ferry, and found Rolette's man sitting
-          on it, so for now I'm waiting to see how that comes out." He glances
-          at the empty tailboard. "And I see my rope has found a use. That's
+          "John Dixon," he says. His handshake is firm, though his eyes take
+          in your wet clothes before they come back to your face. "I came up
+          from Peoria to lease Ogee's ferry, and found Rolette's man sitting on
+          it, so for now I'm waiting to see how that comes out." He glances at
+          the empty tailboard. "And I see my rope has found a use. That's
           what I brought it for."
         do: [{set: [known.dixon, met.dixon]}]
       - when: [not met.dixon]
         text: >-
-          "John Dixon," he says, and his handshake is firm, though his eyes
-          take in your wet clothes before they come back to your face. "I came
-          up from Peoria to lease Ogee's ferry, and found Rolette's man sitting
-          on it, so for now I'm waiting to see how that comes out." He glances
-          at the wagon. "If you mean to help Ogee across that river, though,
+          "John Dixon," he says. His handshake is firm, though his eyes take
+          in your wet clothes before they come back to your face. "I came up
+          from Peoria to lease Ogee's ferry, and found Rolette's man sitting on
+          it, so for now I'm waiting to see how that comes out." He glances at
+          the wagon. "If you mean to help Ogee across that river, though,
           there's rope on the tailboard. I meant to run her on a line."
         do: [{set: [known.dixon, met.dixon]}]
       - when: [1830.dixon_short]
@@ -107,7 +106,7 @@ npcs:
       - text: "{dixon} nods to you. \"I'm still waiting on Rolette's man, and he's in no hurry.\""
     topics:
       - keys: [lease, ferry, ogee, buy, money, silver, hundred, waiting, short, trouble, terms]
-        say: "\"Ogee and I have come to terms. I lease the ferry from him, and the rent goes against Rolette's notes, so Rolette is paid in time and Ogee keeps a roof over his family. But the first of it has to be a hundred in silver, today, or Rolette's man takes the boat, and that's the trouble.\" He taps the folded paper against his palm. \"I haven't a coin of silver to my name. My mail pay comes as paper on the governor, and nobody on this riverbank will cash it.\""
+        say: "\"Ogee's agreed to lease me the ferry, and the rent will pay off what he owes Rolette, a little at a time. But Rolette's man wants a hundred in silver today, or he takes the boat.\" He taps the folded paper against his palm. \"And I haven't a coin of silver to my name. My mail pay comes as paper on the governor, and nobody on this riverbank will cash it.\""
         do: [{set: 1830.dixon_short}]
       - keys: [agent, rolette, creditor, coat, man]
         say: "\"That's Rolette's man. The worst of it is that he isn't wrong; the money's owed, and he'll take the boat for it unless somebody puts a hundred in silver in his hand.\" He looks at the paper in his own hand and doesn't say whose silver he means."
@@ -119,7 +118,7 @@ npcs:
       - keys: [paper, order, governor, edwards, vandalia, pay, silver]
         say: "\"It's my mail pay, an order on Governor Edwards. It'll be good money in Vandalia, two hundred miles off, but it's no use to me here.\""
       - keys: [mail, contract, route, peoria, galena, post office]
-        say: "\"I carry the mail from Peoria up to Galena, and this crossing sits square in the middle of the route, so a man who carries the mail needs the ferry.\""
+        say: "\"I carry the mail from Peoria up to Galena. This crossing sits square in the middle of the route, so a man who carries the mail needs the ferry.\""
       - keys: [family, wife, rebecca, children, sons, james, boys]
         say: "\"There's Rebecca and the children, and James drives the mail with me. We came the eleventh of April, meaning to be sleeping under a roof by now.\" He looks at the wagon, which is not a roof."
       - keys: [boyd's grove, home, from, bureau]
@@ -150,7 +149,7 @@ npcs:
     ref: the woman at the fire
     aliases: [rebecca, woman, wife, mrs. dixon, rebecca dixon, woman in apron]
     room_line: "[rebecca] is tending the fire."
-    look: She wears a plain dress and an apron, and she stirs the kettle like someone who has cooked on a great many fires and expects to cook on a great many more.
+    look: She wears a plain dress and an apron. She stirs the kettle like someone who has cooked on a great many fires and expects to cook on a great many more.
     talk:
       - when: [not met.rebecca]
         text: "\"Rebecca Dixon,\" she says, without stopping her stirring. \"You'll be the one helping with the ferry. Good, because I'd like a floor.\""
@@ -181,7 +180,7 @@ npcs:
       - when: [not 1830.key_returned]
         text: "[james] is oiling harness beside a [mailsack|mail sack], glancing now and then at the ground as if he'd dropped something."
       - text: "[james] is oiling harness beside a [mailsack|mail sack]."
-    look: He's a young man of nineteen or so, oiling harness with his sleeves rolled up, and he has his father's careful face.
+    look: He's a young man of nineteen or so, oiling harness with his sleeves rolled up. He has his father's careful face.
     talk:
       - when: [not met.james, not 1830.key_returned]
         text: >-
@@ -222,7 +221,7 @@ npcs:
     plural: true                # "the boys are", in the return-visit line
     aliases: [boys, two boys, bucket, john w, elijah]
     room_line: Two [dixonboys|boys] go by with a bucket of water between them, arguing as they go.
-    look: The boys are thirteen or fourteen, carrying a bucket between them and spilling most of it, and they're far too busy arguing to notice you.
+    look: The boys are thirteen or fourteen, carrying a bucket between them and spilling most of it. They're far too busy arguing to notice you.
     talk:
       - text: "\"He's not holding his end!\" says one, and \"I am so!\" says the other, so you leave them to it."
     fallback: The boys are too busy arguing to answer.
@@ -235,7 +234,7 @@ actions:
     do:
       - give: rope
       - set: 1830.has_rope
-      - say: "\"Take it. That's every foot of hemp I could buy in Peoria.\" He helps you get the coil over your shoulder, and it's heavier than it looks."
+      - say: "\"Take it. That's every foot of hemp I could buy in Peoria.\" He helps you get the coil over your shoulder. It's heavier than it looks."
     else:
       - say: You've already got {dixon's} rope.
 
@@ -246,7 +245,7 @@ actions:
     do:
       - take: silver
       - say: "{dixon} weighs the bag in his hand and looks inside. \"From the teamster? A season of crossings, paid in advance.\" For a moment he only stands there. Then he puts on his hat. \"Well. Let's not keep Rolette's man waiting.\""
-      - say: You walk down to the river together, past the cabin and down the path, and he doesn't say another word the whole way.
+      - say: You walk down to the river together, past the cabin and down the path. He doesn't say another word the whole way.
       - move: landing
       - say: >-
           {dixon} counts the hundred out onto the agent's papers. The agent
@@ -257,7 +256,7 @@ actions:
           {asa} lifts a hand to you.
       - say: >-
           A chill comes off the river. Within a few breaths the fog is on you,
-          thick and white and wet, and {ogee's} voice comes from close by:
+          thick and white and wet. {ogee's} voice comes from close by:
           "Easy now. Don't go wandering in this. Take my arm."
       - set: [1830.lease_dixon, 1830.fog, known.dixon]
     else:

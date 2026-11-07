@@ -9,11 +9,11 @@ picture: >-
 
 # Asa is defined in chapter.yaml because he moves to the landing once freed.
 # The return-visit description (see FORMAT.md, Rooms).
-brief: "The trail sinks into black [mud] here, and the [willows] crowd in along the edges."
+brief: "The trail sinks into black [mud] here between crowding [willows]."
 look: >-
-  Behind you the trail climbs back north toward {dixon's} camp. Ahead, the
-  ruts vanish into black [mud], and the [willows] crowd so close along the
-  edges that there's no going round.
+  Behind you the trail climbs back north toward {dixon's} camp. Here the
+  [willows] crowd so close along its edges that there's no going round, and
+  ahead the ruts vanish into black [mud].
 listen:
   - when: [1830.wagon_free]
     text: Now that the oxen are gone you can hear the frogs, and water trickling back into the ruts.
@@ -26,8 +26,8 @@ nouns:
     aliases: [mired wagon, stuck wagon, flour, sacks, tools, freight]
     room_line:
       - when: [1830.brush_placed]
-        text: In the middle of it a loaded [wagon] sits down to its hubs on willow brush packed under its [wheels], and four [oxen] stand blowing in the traces.
-      - text: In the middle of it a loaded [wagon] has gone down to its hubs, and four [oxen] stand blowing in the traces.
+        text: In the middle of it a loaded [wagon] sits down to its hubs on willow brush packed under its [wheels], while four [oxen] stand blowing in the traces.
+      - text: In the middle of it a loaded [wagon] has gone down to its hubs. Four [oxen] stand blowing in the traces.
     look: The supply wagon is loaded with flour sacks and tools and tilted hard backwards, where the hind wheels have gone into the mud until the axle sits a hand's width below the surface.
 
   wheels:
@@ -36,14 +36,14 @@ nouns:
     aliases: [wheel, hind wheels, axle, hind axle, hubs]
     look:
       - when: [1830.brush_placed]
-        text: The hind wheels sit on a mat of willow now, and what's wanted is a long lever under the axle.
+        text: The hind wheels sit on a mat of willow now. What's wanted is something long to lever the axle up.
       - text: The hind wheels are down to the hubs, with nothing under them for the oxen to pull against but more mud.
 
   oxen:
     name: oxen
     when: [not 1830.wagon_free]
     aliases: [ox, team, cattle, traces]
-    look: The four oxen are mud to the shoulder, leaning into their yokes and getting nowhere, and they look at you with a deep, wet resentment.
+    look: The four oxen are mud to the shoulder, leaning into their yokes and getting nowhere. They look at you with a deep, wet resentment.
     verbs:
       push: You put your shoulder to the nearest ox, and it remains unmoved in every sense.
 
@@ -55,7 +55,7 @@ nouns:
         text: Where the pole went in, the [mud] has a narrow hole in it.
     look:
       - when: [1830.shoe_lost, not has:shoe, not 1830.shoe_returned]
-        text: The mud is black and cold and deep. Where the pole went in there's a narrow hole, slowly filling, and anything iron that came off would be down there still.
+        text: The mud is black and cold and deep. Where the pole went in there's a narrow hole, slowly filling. Anything iron that came off would be down there still.
       - text: The mud is black and cold, and deep enough to lose a boot in.
     verbs:
       touch: It's cold, and it doesn't want to let go of your hand.
@@ -63,7 +63,7 @@ nouns:
   willows:
     name: willows
     aliases: [willow, brush, saplings, willow brush, willow saplings]
-    look: Willow saplings grow thick along the wet edges, whippy and straight, and an armful of them would make good footing under a wheel, if you had something to cut them with.
+    look: Willow saplings grow thick along the wet edges, whippy and straight. An armful of them would make good footing under a wheel.
     verbs:
       take: Willow is tougher than it looks, and you'd need an axe to cut it.
 
@@ -127,4 +127,4 @@ exits:
     peek: The trail climbs back north out of the wet toward {dixon's} camp.
     text: You climb out of the wet and walk back north to {dixon's} camp.
   - names: [south, peoria, trail south]
-    blocked: The trail goes on south to Peoria, which is a long way off, and your business is back at the river.
+    blocked: The trail goes on south to Peoria, a long way off. Your business is back at the river.
