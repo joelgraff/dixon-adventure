@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.18 (2026-11-07)
+- More ways to show the crow the silver dollar: use it, put or set it down or out, shine or polish it, hold it in the light, put it where the crow can see it, and 'bird' works wherever 'crow' does. The dollar now catches the light on the chopping block.
+
 ## 0.14.17 (2026-11-07)
 - Ogee no longer hints at where the silver is: he says Dixon would have his lease if he could find a hundred in silver, and that if the agent takes the boat Asa is as stuck as he is. The crow can now be tempted with the silver dollar in many more ways (entice, lure, tempt or bait it, wave or hold up the dollar, drop or place it on the block, and so on).
 
