@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.7 (2026-11-07)
+- Madeline wants to know what you want her father's paddle for before she lends it, and lends it because it may keep Rolette's man off the ferry.
+
 ## 0.14.6 (2026-11-07)
 - Ogee offers to lend his pole once the rope is across, without saying what it might be good for.
 

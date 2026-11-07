@@ -643,3 +643,9 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.rope_strung]}
       - {cmd: ask ogee about the pole, expect: welcome to borrow her, not: lever}
+
+  - name: Madeline lends the paddle to keep Rolette's man off the ferry
+    url: scene=cabin
+    steps:
+      - setup: {flags: [1830.arrived, known.madeline, met.madeline]}
+      - {cmd: ask madeline for paddle, expect: [What do you want with it, keeps that man off the ferry, bring it home]}

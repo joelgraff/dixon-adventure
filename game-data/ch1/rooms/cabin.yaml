@@ -142,7 +142,7 @@ npcs:
         say:
           - when: [has:paddle]
             text: "\"Bring it home when you're done with it.\""
-          - text: "\"That was my father's.\" She looks at it for a moment, then reaches up and lifts it down from the pegs. \"He'd laugh to see it back on the water. Mind you bring it home.\""
+          - text: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
             do: [{give: paddle}, {set: 1830.has_paddle}]
       - keys: [axe, borrow, chopping, block]
         say:
@@ -206,7 +206,7 @@ actions:
     do:
       - give: paddle
       - set: 1830.has_paddle
-      - say: "\"That was my father's.\" She looks at it for a moment, then reaches up and lifts it down from the pegs. \"He'd laugh to see it back on the water. Mind you bring it home.\""
+      - say: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Mind you bring it home.\""
     else:
       - when: [has:paddle]
         say: You already have the paddle.
