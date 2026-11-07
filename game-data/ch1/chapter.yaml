@@ -1,7 +1,7 @@
 id: ch1
 title: "Chapter 1: Ogee's Ferry"
 start: museum
-max_score: 132
+max_score: 121
 
 # Every room file, in the order the browser loads them (it can't list folders).
 rooms: [museum, street, riverwalk, wateredge, landing, cabin, camp, northlanding, slough]
@@ -46,21 +46,21 @@ flags:
   1830.fog:                {desc: The chapter-end fog has come in}
   chapter1.done:           {score: 4, desc: Talked to Margaret after the repair}
   chapter1.ended:          {desc: Left the museum with Margaret; the chapter is over}
-  present.noticed_panel:   {score: 2, desc: Noticed the change to the panel}
-  present.noticed_shoe:    {score: 2, desc: Noticed the pole shoe on the pedestal}
-  present.noticed_token:   {score: 2, desc: Noticed the change to the token}
-  present.noticed_engraving: {score: 2, desc: Noticed the engraving in the empty frame}
-  present.noticed_clock:   {score: 2, desc: Noticed the change to the clock}
-  present.noticed_crossword: {score: 2, desc: Noticed the change to the crossword}
-  present.noticed_sign:    {score: 2, desc: Noticed the change to the sign}
-  present.noticed_sticker: {score: 2, desc: Noticed the change to the sticker}
-  present.noticed_marker:  {score: 2, desc: Noticed the change to the marker}
-  present.noticed_plaque:  {score: 2, desc: Noticed the change to the plaque}
-  present.noticed_desk:    {score: 2, desc: Noticed the desk's plate}
+  present.noticed_panel:   {score: 1, desc: Noticed the change to the panel}
+  present.noticed_shoe:    {score: 1, desc: Noticed the pole shoe on the pedestal}
+  present.noticed_token:   {score: 1, desc: Noticed the change to the token}
+  present.noticed_engraving: {score: 1, desc: Noticed the engraving in the empty frame}
+  present.noticed_clock:   {score: 1, desc: Noticed the change to the clock}
+  present.noticed_crossword: {score: 1, desc: Noticed the change to the crossword}
+  present.noticed_sign:    {score: 1, desc: Noticed the change to the sign}
+  present.noticed_sticker: {score: 1, desc: Noticed the change to the sticker}
+  present.noticed_marker:  {score: 1, desc: Noticed the change to the marker}
+  present.noticed_plaque:  {score: 1, desc: Noticed the change to the plaque}
+  present.noticed_desk:    {score: 1, desc: Noticed the desk's plate}
   present.noticed_key:     {desc: Saw the old key on the blotter}
 
-# Score check: 13 present + 93 in 1830 + 4 at the end = 110, plus 22 for noticing
-# what changed in the present after the repair = 132.
+# Score check: 13 present + 93 in 1830 + 4 at the end = 110, plus 11 for noticing
+# what changed in the present after the repair = 121.
 
 vars:
   town:
