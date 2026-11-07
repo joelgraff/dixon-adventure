@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.9 (2026-11-07)
+- Fixed: Ogee's setting pole had dropped out of the landing's description. It now leans against the post at the end of the dock (useless in this water, then forgotten once the rope is across), and once the rope is across it stays in view every time you come back until you borrow it.
+
 ## 0.14.8 (2026-11-07)
 - Rebecca says why her family expected to be in Ogee's cabin by now: the lease comes with its east room, where Rolette's man is sleeping instead. The histories panel marks this as invented.
 

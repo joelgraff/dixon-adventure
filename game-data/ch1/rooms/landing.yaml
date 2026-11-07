@@ -48,6 +48,11 @@ nouns:
   pole:
     name: setting pole
     when: [not has:pole]
+    always: [1830.rope_strung]   # once it's needed, return visits still show it
+    room_line:
+      - when: [1830.rope_strung]
+        text: "{ogee's} setting [pole] leans forgotten against the post at the end of the dock."
+      - text: "{ogee's} setting [pole] leans against the post at the end of the dock, useless in this water."
     aliases: [pole, setting pole, ash pole]
     reveals: [shoe]
     look:
@@ -174,10 +179,8 @@ npcs:
     ref: the ferryman
     aliases: [ogee, joseph, joseph ogee, ferryman, man in buckskin, man in buckskin shirt, man]
     room_line:
-      - when: [1830.rope_strung, has:pole]
-        text: "[ogee] brings the ferry along the rope hand over hand, as easily as drawing water."
       - when: [1830.rope_strung]
-        text: "[ogee] brings the ferry along the rope hand over hand. His setting [pole] leans forgotten against the post."
+        text: "[ogee] brings the ferry along the rope hand over hand, as easily as drawing water."
       - text: "[ogee] stands at the ferry's lines, holding her against the current with his whole weight."
     look: He is a broad man in a buckskin shirt with the sleeves rolled over scarred forearms. Whatever he's doing, he keeps the river at the edge of his eye and never quite turns his back on it.
     talk:

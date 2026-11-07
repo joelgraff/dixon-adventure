@@ -174,6 +174,9 @@ If the room's own `look` reads differently from last time, the whole
 description is printed instead. `look` always prints the whole thing. A
 `brief` should be one sentence that sets the scene; the checker warns when a
 room has none. An NPC whose name is plural (the boys) takes `plural: true`.
+A noun the player must be able to find again (the pole, once it's needed)
+takes `always`, and its room line is printed on return visits even when it
+hasn't changed.
 
 A room's `hold` stops the player acting for a moment: while an entry's `when`
 holds, any command except help, save, restore, restart, version, tour and
@@ -198,6 +201,7 @@ pedestal:
   when: [not 1830.shoe_returned]   # visible only while this holds
   look: ...                     # text or variants
   room_line: ...                # optional sentence added to the room text
+  always: [1830.rope_strung]    # optional: keep room_line in return visits while this holds (or true)
   reveals: [card]               # looking at it reveals these nouns
   on_look: [{set: present.panel_read}]   # effects run every time it is looked at
   pick:                         # random entries for {picked} in its text

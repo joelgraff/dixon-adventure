@@ -128,6 +128,7 @@ for (const ch of chapterDirs) {
       for (const [k, v] of Object.entries(node)) {
         const w = `${where}.${k}`;
         if (k === 'when') asList(v).forEach(c => checkCond(c, w));
+        else if (k === 'always') asList(v).filter(c => c !== true).forEach(c => checkCond(c, w));
         else if (k === 'do' || k === 'on_look') asList(v).forEach(e => checkEffect(e, w, rid));
         else if (k === 'aliases' || k === 'phrases' || k === 'names' || k === 'keys' || k === 'sources') continue;
         else walk(v, w, rid, onString, k);

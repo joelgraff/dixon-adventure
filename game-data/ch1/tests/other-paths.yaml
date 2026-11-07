@@ -655,3 +655,17 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.rebecca, met.rebecca]}
       - {cmd: ask rebecca about the cabin, expect: [lease comes with the east room, "Rolette's man has it"]}
+
+  - name: the pole stays in view on return visits once the rope is across
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee]}
+      - {cmd: look, expect: setting pole leans against the post at the end of the dock}
+      - setup: {flags: [1830.rope_strung]}
+      - {cmd: south, room: cabin}
+      - {cmd: north, room: landing, expect: setting pole leans forgotten against the post}
+      - {cmd: south, room: cabin}
+      - {cmd: north, room: landing, expect: setting pole leans forgotten against the post}
+      - {cmd: ask ogee for the pole, expect: Take her}
+      - {cmd: south, room: cabin}
+      - {cmd: north, room: landing, not: setting pole}

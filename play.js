@@ -451,12 +451,18 @@ function describe(brief = false) {
   let parts;
   if (brief && r.brief && last && last.look === e.text) {
     parts = [textOf(r.brief)];
+    // a noun with `always` (true, or a condition list) keeps its line even when unchanged
+    const always = k => {
+      if (!k.startsWith('noun:')) return false;
+      const a = ((r.nouns || {})[k.slice(5)] || {}).always;
+      return a === true || (Array.isArray(a) && ok(a));
+    };
     const still = [];
     const now = [];
     for (const [k, t] of Object.entries(lines)) {
       if (k === 'look') continue;
       const unchanged = k in last && last[k] === t;
-      if (!unchanged && t) parts.push(t);
+      if (t && (!unchanged || always(k))) parts.push(t);
       else if (k.startsWith('npc:')) (unchanged ? still : now).push(k.slice(4));
     }
     parts.push(presentLine(still, 'still here'), presentLine(now, 'here'));
