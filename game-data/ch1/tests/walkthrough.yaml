@@ -49,7 +49,7 @@ tests:
       - {cmd: south, room: cabin}
       - {cmd: south, room: camp}
       - {cmd: south, expect: swearing, room: slough}
-      - {cmd: talk to big man, expect: [Asa, a dollar besides]}
+      - {cmd: talk to big man, expect: [Asa, Dollar besides]}
       - {cmd: ask asa about galena, expect: pay in silver}
       - {cmd: cut brush, expect: willow}
       - {cmd: put brush under wheels, expect: Now the lever}
@@ -70,7 +70,7 @@ tests:
       - {cmd: give key to james, expect: Father need never know, not: crow}
       - {cmd: north, room: cabin}
       - {cmd: north, room: landing}
-      - {cmd: talk to asa, expect: "What I haven't got is a ferry"}
+      - {cmd: talk to asa, expect: "What I ain't got is a ferry"}
       - {cmd: give shoe to ogee, expect: Smith made that}
       - {cmd: tell asa about dixon, expect: [season of crossings, Take that up to Dixon], room: landing}
       - {cmd: south, room: cabin}

@@ -375,6 +375,7 @@ function vars(extra = {}) {
 function smartQuotes(t) {
   return t
     .replace(/(^|[\s(\[—-])"/g, '$1“').replace(/"/g, '”')
+    .replace(/'(?=\d)/g, '’')   // '27 is an apostrophe, not an opening quote
     .replace(/(^|[\s(\[—-])'/g, '$1‘').replace(/'/g, '’');
 }
 // Text markup -> HTML: {vars}, [noun|shown], speaker capitalisation.

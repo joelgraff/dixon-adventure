@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.21 (2026-11-07)
+- Asa talks like a teamster now: short and blunt, loose grammar, frontier words (fella, fixing to, yonder, ain't), and none of the bookish turns everyone shared. New voice sheets for every character set out how each of them should sound. Fixed: a year like '27 shows an apostrophe, not an opening quote.
+
 ## 0.14.20 (2026-11-07)
 - When the crow trades, it leaves James's key on the chopping block, and you have to pick it up yourself; until you do, it stays in view on the block and help reminds you. Before the trade, the glint at the crow's feet is something you can look at, though you can't make out what it is.
 
