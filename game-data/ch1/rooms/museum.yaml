@@ -212,10 +212,29 @@ nouns:
   desk:
     name: desk
     aliases: [volunteer desk, table, chair, blotter]
-    look: >-
-      The desk is tidy and older than everything around it, with the usual
-      [clutter] on top. The [guestbook] lies open at the corner nearest the
-      door, and below the blotter the middle [drawer] has a small brass lock.
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          The desk is tidy and older than everything around it, with the usual
+          [clutter] on top. The [guestbook] lies open at the corner nearest the
+          door, and below the blotter the middle [drawer] has a small brass
+          lock. A brass plate screwed to its side reads POST OFFICE, DIXON'S
+          FERRY, 1831. J. DIXON, P.M.
+      - text: >-
+          The desk is tidy and older than everything around it, with the usual
+          [clutter] on top. The [guestbook] lies open at the corner nearest the
+          door, and below the blotter the middle [drawer] has a small brass
+          lock. A brass plate is screwed to its side, but somebody scratched it
+          blank long ago.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_desk]
+          do:
+            - set: present.noticed_desk
+            - if:
+                when: [here:volunteer]
+                do:
+                  - say: "{volunteer} sees you reading the plate. \"It's always said that,\" she says, and then, less certainly, \"Hasn't it?\""
     verbs:
       sit: You glance at the chair, and {volunteer} looks at you over her glasses until you think better of it.
 
@@ -437,8 +456,11 @@ npcs:
           - when: [1830.lease_dixon]
             text: "\"It started again this afternoon, all by itself. I'm choosing not to think about it.\""
           - text: "\"That clock has been stopped since before I started here. The tape says not to wind it, so I don't.\""
-      - keys: [desk, drawer, lock, key]
-        say: "\"That desk came out of the old county clerk's office in the seventies. The drawers still work, except the locked one. I've always wondered what's in it.\""
+      - keys: [desk, drawer, lock, key, plate, provenance]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"That was the post office desk at Dixon's Ferry. John Dixon sorted the mail on it, they say, from the year after he took the ferry. The drawers all work except the locked one, and nobody has ever found the key. I've always wondered what's in it.\""
+          - text: "\"Nobody's quite sure where that desk came from. The board says the old county clerk's office, the clerk's family says otherwise, and the plate on the side was scratched off before anyone thought to read it. The drawers all work except the locked one, and nobody has ever found the key.\""
       - keys: [case, cases, arrowheads, glass]
         say: "\"They've been locked since 1998, and the key's with the board. I dust the empty one at the end every Saturday, out of habit.\""
       - keys: [guestbook, book, sign, visitors]

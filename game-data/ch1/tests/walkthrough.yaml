@@ -1,6 +1,6 @@
 # The winning path, from the Walkthrough tab of the chapter 1 design doc.
 tests:
-  - name: winning path, 120 points
+  - name: winning path, 122 points
     steps:
       # Part 1: the museum to the water's edge
       - {cmd: look, expect: [glass cases, founding panel, silent], score: 0}
@@ -83,4 +83,8 @@ tests:
       - {cmd: read marker, score: 118}
       - {cmd: look at statue}
       - {cmd: read plaque, expect: Dixon, score: 120}
-      - {cmd: score, expect: Your score is 120 of 120}
+      - {cmd: south, room: street}
+      - {cmd: in, room: museum}
+      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 122}
+      - {cmd: ask margaret about the desk, expect: post office desk}
+      - {cmd: score, expect: Your score is 122 of 122}

@@ -1,7 +1,7 @@
 id: ch1
 title: "Chapter 1: Ogee's Ferry"
 start: museum
-max_score: 120
+max_score: 122
 
 # Every room file, in the order the browser loads them (it can't list folders).
 rooms: [museum, street, riverwalk, wateredge, landing, cabin, camp, northlanding, slough]
@@ -51,9 +51,10 @@ flags:
   present.noticed_sticker: {score: 2, desc: Noticed the change to the sticker}
   present.noticed_marker:  {score: 2, desc: Noticed the change to the marker}
   present.noticed_plaque:  {score: 2, desc: Noticed the change to the plaque}
+  present.noticed_desk:    {score: 2, desc: Noticed the desk's plate}
 
-# Score check: 13 present + 83 in 1830 + 4 at the end = 100, plus 20 for noticing
-# what changed in the present after the repair = 120.
+# Score check: 13 present + 83 in 1830 + 4 at the end = 100, plus 22 for noticing
+# what changed in the present after the repair = 122.
 
 vars:
   town:

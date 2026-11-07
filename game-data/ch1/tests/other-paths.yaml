@@ -398,3 +398,9 @@ tests:
       - setup: {flags: [1830.arrived, known.ogee, 1830.lease_dixon, 1830.fog], items: [phone, pole, shoe, axe], money: 1}
       - {cmd: take ogee's arm, expect: has stayed there, room: wateredge, money: 0}
       - {cmd: inventory, expect: phone, not: [pole, shoe, axe, silver]}
+
+  - name: the desk's provenance is lost until the repair
+    url: scene=museum
+    steps:
+      - {cmd: look at desk, expect: scratched it blank, not: DIXON'S FERRY}
+      - {cmd: ask volunteer about the desk, expect: Nobody's quite sure where that desk came from}

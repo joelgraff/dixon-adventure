@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.9.2 (2026-11-06)
+- The museum desk has a provenance that history can lose: before the repair its brass plate is scratched blank and nobody's sure where it came from; after, the plate reads POST OFFICE, DIXON'S FERRY, 1831. J. DIXON, P.M., and Margaret calls it Dixon's post office desk. Noticing the plate is 2 more points (122 in all).
+
 ## 0.9.1 (2026-11-06)
 - Nothing from 1830 comes back through the fog: the pole, the shoe, the axe, the paddle and Asa's silver dollar stay behind when you take Ogee's arm, and the walk home says so.
 
