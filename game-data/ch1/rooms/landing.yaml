@@ -264,7 +264,7 @@ npcs:
           - when: [1830.shoe_lost]
             text: "\"She lost her shoe somewhere in that slough. I had the smith make that shoe.\""
           - when: [1830.rope_strung]
-            text: "\"She's ash, with an iron shoe I had the smith make. I've no use for her now the rope's across, so you can borrow her if you need a long lever.\""
+            text: "\"She's ash, with an iron shoe I had the smith make. I've no use for her now the rope's across, so you're welcome to borrow her.\""
           - text: "\"She's an ash pole with an iron shoe. I had the smith make that shoe, and it'll outlast me.\""
       - keys: [toll, fare, price, cost, rates]
         say: "\"It's two bits for a man and his horse, and two dollars six bits for a wagon and four yoke, when they pay it.\""

@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.14.6 (2026-11-07)
+- Ogee offers to lend his pole once the rope is across, without saying what it might be good for.
+
 ## 0.14.5 (2026-11-07)
 - Eli tells you where his uncle is stuck and that his bar broke, but no longer what the wagon needs to get out.
 

@@ -637,3 +637,9 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.eli, met.eli]}
       - {cmd: ask eli about his uncle, expect: [back in the slough, bar broke], not: [lever, under the wheels]}
+
+  - name: Ogee offers to lend the pole without saying what it's for
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.rope_strung]}
+      - {cmd: ask ogee about the pole, expect: welcome to borrow her, not: lever}
