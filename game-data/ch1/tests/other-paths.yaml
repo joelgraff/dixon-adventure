@@ -436,3 +436,14 @@ tests:
     steps:
       - setup: {flags: [1830.lease_dixon, present.returned, known.volunteer]}
       - {cmd: out, room: street, not: The end of Chapter 1}
+
+  - name: the inventory panel shows what you carry, and clicking looks
+    url: scene=landing
+    steps:
+      - setup: {flags: [1830.arrived], items: [phone, paddle], money: 1}
+      - {cmd: look, shows: {"#inventory": "Paddle"}}
+      - {visible: "#inventory", shows: {"#inventory": "$1 in silver"}}
+      - {click: "#inventory button[data-look=paddle]", shows: {"#output": "one piece of ash"}}
+      - {click: "#gear"}
+      - {click: "#opt-inventory", hidden: "#inventory"}
+

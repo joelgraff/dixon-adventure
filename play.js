@@ -18,7 +18,7 @@ let halted = false;              // a death stops the rest of a command
 let pending = null;              // {kind: 'death' | 'restart'}
 let speaker = null;              // NPC whose lines an action's quoted says belong to
 let seed = params.has('seed') ? Number(params.get('seed')) || 1 : null;
-const settings = { sidebar: true, highlight: 'off', clickable: false, histories: false };
+const settings = { inventory: true, sidebar: true, highlight: 'off', clickable: false, histories: false };
 
 // ---------------------------------------------------------------- utilities
 function rand() {
@@ -810,7 +810,22 @@ function status() {
   $('place').textContent = render(textOf(room().name)).replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
   $('score').textContent = `Score: ${score()} of ${CH.max_score}`;
 }
+// The inventory panel: what you carry and any silver; click an item to look at it.
+function renderInventory() {
+  const panel = $('inventory');
+  if (!panel) return;
+  const items = S.items.map(i => CH.items[i]).filter(Boolean);
+  let html = '<h2 class="panel">Carrying</h2>';
+  if (!items.length && !S.money) html += '<div class="empty">Nothing at all.</div>';
+  else {
+    html += '<ul>' + items.map(it => `<li><button class="item" data-look="${esc(it.name)}">${esc(cap(it.name))}</button></li>`).join('');
+    if (S.money) html += `<li class="silver">$${S.money} in silver</li>`;
+    html += '</ul>';
+  }
+  panel.innerHTML = html;
+}
 function renderNotes() {
+  renderInventory();
   const panel = $('notes');
   const open = new Set([...panel.querySelectorAll('details[open]')].map(d => d.dataset.id));
   const order = [S.room, ...S.visited.filter(id => id !== S.room).reverse()];
@@ -851,6 +866,8 @@ function renderHistories() {
 }
 function applySettings() {
   document.body.classList.toggle('nosidebar', !settings.sidebar);
+  document.body.classList.toggle('noinventory', !settings.inventory);
+  $('opt-inventory').checked = settings.inventory;
   document.body.classList.toggle('clickable', settings.clickable);
   document.body.classList.remove('hl-key', 'hl-all');
   if (settings.highlight !== 'off') document.body.classList.add(`hl-${settings.highlight}`);
@@ -951,6 +968,11 @@ function wireUI() {
     $('gear').setAttribute('aria-expanded', open);
   });
   $('opt-sidebar').addEventListener('change', e => { settings.sidebar = e.target.checked; applySettings(); });
+  $('opt-inventory').addEventListener('change', e => { settings.inventory = e.target.checked; applySettings(); });
+  $('inventory').addEventListener('click', e => {
+    const b = e.target.closest('button[data-look]');
+    if (b) { command(`look at ${b.dataset.look}`); $('cmd').focus(); }
+  });
   $('opt-clicks').addEventListener('change', e => { settings.clickable = e.target.checked; applySettings(); });
   $('opt-hl').addEventListener('change', e => { settings.highlight = e.target.value; applySettings(); });
   $('opt-histories').addEventListener('change', e => { settings.histories = e.target.checked; applySettings(); });

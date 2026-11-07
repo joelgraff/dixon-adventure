@@ -7,7 +7,7 @@ tests:
       - {shows: {"#tour-text": "quick look around", "#tour-count": "1 of"}, hidden: "#settings"}
       - {click: "#tour-next", shows: {"#tour-text": "top bar"}}
       - {click: "#tour-back", shows: {"#tour-text": "quick look around"}}
-      - {click: "#tour-next", times: 6, visible: "#settings", shows: {"#tour-text": "Looked-at sidebar: on by default"}}
+      - {click: "#tour-next", times: 8, visible: "#settings", shows: {"#tour-text": "Looked-at sidebar: on by default"}}
       - {click: "#tour-next", times: 5, shows: {"#tour-text": "type tour any time"}}
       - {click: "#tour-next", hidden: ["#tour-card", "#settings"]}
   - name: Settings has a Take the tour button
@@ -22,4 +22,5 @@ tests:
   - name: the tour skips the touch-screen buttons on a desktop
     steps:
       - {cmd: tour}
-      - {click: "#tour-next", times: 4, shows: {"#tour-text": "looked-at sidebar lists"}}
+      - {click: "#tour-next", times: 4, shows: {"#tour-text": "What you're carrying"}}
+      - {click: "#tour-next", shows: {"#tour-text": "looked-at sidebar lists"}}

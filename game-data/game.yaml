@@ -3,7 +3,7 @@
 
 # Release version (see CHANGELOG.md for the rules). Bump it, the ?v= in
 # play.html and the changelog together; the checker verifies they match.
-version: 0.11.2
+version: 0.12.0
 # Bump when a change would break saved games (renamed or removed flags,
 # items or rooms). Saves from another save_compat are refused, not loaded.
 save_compat: 2
@@ -109,10 +109,16 @@ tour:
     text: "Type commands here, up to 40 characters, and press Enter. Try look, look at the panel, talk to someone, ask someone about something, or go north."
   - target: "#quick"
     text: "On a touch screen, these buttons type common commands for you."
+  - target: "#inventory"
+    text: "What you're carrying, and any silver. Click an item to look at it."
   - target: "#notes"
     text: "The looked-at sidebar lists what you've examined, by place. Click an entry to reread it."
   - target: "#gear"
     text: "Settings live behind this button, and your browser remembers whatever you choose."
+  - target: "#opt-inventory"
+    label: true
+    settings: true
+    text: "Inventory panel: on by default. Turn it off if you'd rather type inventory."
   - target: "#opt-sidebar"
     label: true
     settings: true
@@ -136,6 +142,7 @@ tour:
     text: "When you're stuck, type help. Type tour any time to see this again. Good luck."
 
 settings:
+  inventory: true            # what you're carrying, in the side panel
   sidebar: true              # looked-at sidebar
   highlight: off             # off | key | all
   clickable: false

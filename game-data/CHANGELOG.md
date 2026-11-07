@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.12.0 (2026-11-06)
+- An inventory panel at the top of the side panel shows what you're carrying and any silver; click an item to look at it. It's on by default and can be switched off in Settings, and the tour covers it. Also, learning what Dixon is short of is worth 4 points (was 8) and the lease 19 (was 15): the points sit on the deed, not the question.
+
 ## 0.11.2 (2026-11-06)
 - Giving back what you borrowed is worth 2 points each: Madeline's axe, her father's paddle and Ogee's setting pole. Chapter 1 is out of 127.
 

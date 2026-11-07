@@ -66,6 +66,13 @@ aside h3.current { color: #d8d4c8; }
 .status { font-family: monospace; font-size: 0.75rem; padding: 0 0.3em; border: 1px solid #555; border-radius: 3px; color: #d8d4c8; }
 .status.invented { border-color: #8a6a9e; } .status.guess, .status.disputed { border-color: #b7a77a; } .status.needs-source { border-color: #a05a4a; }
 body.nosidebar #notes { display: none; }
+#inventory { border-top: 1px solid #333; padding: 0.3rem 0.8rem 0.5rem; margin-bottom: 0.6rem; font-size: 0.95rem; line-height: 1.4; }
+#inventory ul { list-style: none; padding: 0; margin: 0.2rem 0 0; }
+#inventory li { margin: 0.15rem 0; }
+#inventory button.item { background: none; border: none; padding: 0; min-height: 0; color: #7ec8e3; font: inherit; cursor: pointer; text-align: left; }
+#inventory button.item:hover { text-decoration: underline; }
+#inventory .silver { color: #b8b4a8; }
+body.noinventory #inventory { display: none; }
 #bar { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
 #cmd { flex: 1; background: #202325; color: #e8e4d8; border: 1px solid #444; padding: 0.6rem; font-family: monospace; font-size: 1rem; }
 button { background: #2a2e30; color: #d8d4c8; border: 1px solid #444; padding: 0.6rem 1rem; font-family: monospace; cursor: pointer; }
@@ -81,6 +88,8 @@ select { background: #202325; color: #d8d4c8; border: 1px solid #444; font-famil
   #output { flex: 1; height: auto; min-height: 0; padding: 0.4rem 0.2rem; font-size: 1rem; }
   aside { width: 100%; }
   #notes { height: auto; max-height: 11dvh; }
+  #inventory { margin-bottom: 0.3rem; padding: 0.2rem 0.4rem; }
+  #inventory ul { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; }
   #histories:not(:empty) { max-height: 11dvh; margin-top: 0.3rem; }
   #score { font-size: 0.85rem; }
   #cmd { font-size: 16px; padding: 0.7rem; }
@@ -105,6 +114,7 @@ select { background: #202325; color: #d8d4c8; border: 1px solid #444; font-famil
   <button id="gear" aria-expanded="false">Settings</button>
 </div>
 <div id="settings">
+  <label><input type="checkbox" id="opt-inventory"> Inventory panel<small>Shows what you're carrying. Click an item to look at it.</small></label>
   <label><input type="checkbox" id="opt-sidebar"> Looked-at sidebar<small>Keeps a list of what you've examined, by place.</small></label>
   <label>Highlighted words
     <select id="opt-hl">
@@ -143,12 +153,13 @@ select { background: #202325; color: #d8d4c8; border: 1px solid #444; font-famil
     </div>
   </div>
   <aside>
+    <div id="inventory" aria-label="What you are carrying"></div>
     <div id="notes" aria-label="Things you have looked at"></div>
     <div id="histories" aria-label="Histories"></div>
   </aside>
 </div>
 </main>
 <script src="vendor/js-yaml-4.1.0.min.js"></script>
-<script type="module" src="play.js?v=0.11.2"></script>
+<script type="module" src="play.js?v=0.12.0"></script>
 </body>
 </html>

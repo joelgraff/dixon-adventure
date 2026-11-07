@@ -39,9 +39,9 @@ flags:
   1830.brush_placed:       {desc: Brush is under the wheels}
   1830.wagon_free:         {score: 10, desc: Freed Asa's wagon}
   1830.shoe_lost:          {desc: The pole shoe is in the mud}
-  1830.dixon_short:        {score: 8, desc: Learned Dixon has no silver for the overdue hundred}
+  1830.dixon_short:        {score: 4, desc: Learned Dixon has no silver for the overdue hundred}
   1830.asa_needs_ferry:    {score: 5, desc: Heard why Asa needs the ferry running}
-  1830.lease_dixon:        {score: 15, desc: Brought Asa and Dixon together; the lease is in Dixon's name}
+  1830.lease_dixon:        {score: 19, desc: Brought Asa and Dixon together; the lease is in Dixon's name}
   1830.lease_player:       {desc: Wrong fix - had Asa pay the agent, with your name on the paper}
   1830.shoe_returned:      {score: 8, desc: Returned the pole shoe to Ogee}
   1830.fog:                {desc: The chapter-end fog has come in}
