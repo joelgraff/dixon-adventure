@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.13.1 (2026-11-07)
+- A rewrite of the ferry landing's prose, as a sample of a fuller pass. The room opens on the river instead of a list of objects, and its lines vary their shape and hold on to each other. The agent watches the ferry as though he'd already counted it, and Eli keeps an eye on the trail. Ogee no longer looks at the canoe and then at you, apologizes for putting a half-drowned stranger to work, and coaches you through the tarring. Eli mentions his Pa, and his uncle whistling alarms him. Fewer 'It's a ...' openings, and no more 'the way a man' three times in one room.
+
 ## 0.13.0 (2026-11-07)
 - Return visits are brief: walking back into a room gives one line for the place, then only what has changed since you were last there and who is still about, so the cabin and the camp no longer reprint in full every time (type look for the whole description). On your return to the museum, that makes the changed room read as a list of what's different. You only take your leave of people you've actually been talking to, so walking past someone no longer costs a nod. Fixes: Margaret offers next Saturday and the key once, in her closing talk, instead of four times; Asa no longer repeats his four or five runs, and calls them a season, not a year; the agent goes home with silver instead of a horse; Eli sits at the head of the landing; the boys' crow line is no longer tagged twice; names like Rolette's take the same curly apostrophe as the rest of the text.
 

@@ -123,10 +123,10 @@ tests:
     url: scene=wateredge
     steps:
       - setup: {flags: [present.planks, present.voice]}
-      - {cmd: answer, expect: ["the planks aren't there", hauls you over the side, "somebody who needed one", cracked canoe], room: landing, not: [Ogee, homespun shirt, Loaded wagons, good coat]}
+      - {cmd: answer, expect: ["the planks aren't there", hauls you over the side, "somebody who needed one", split and still draining], room: landing, not: [Ogee, homespun shirt, Loaded wagons, good coat]}
       - {cmd: tar the split, expect: [legs have other ideas, Sit a moment, homespun shirt, flat tin case, world comes back, tar pot, swab, good coat], not: [pack the split, Joseph Ogee]}
       - {cmd: look at canoe, expect: fished you out of the river, not: Sit a moment}
-      - {cmd: talk to man in buckskin, expect: [Joseph Ogee, "So it's you", "Mine's halfway to St. Louis"]}
+      - {cmd: talk to man in buckskin, expect: [Joseph Ogee, "So it's you", "My own paddle went off downriver"]}
       - {cmd: ask ogee why, expect: "you owe me the use of them"}
       - {cmd: ask ogee about canoe, expect: fishing you out}
       - {cmd: look, expect: [swab, oakum]}
@@ -295,11 +295,11 @@ tests:
     url: scene=landing
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.met_ogee, 1830.rope_strung]}
-      - {cmd: look, expect: setting pole leans idle against the post}
+      - {cmd: look, expect: setting pole leans forgotten against the post}
       - {cmd: ask ogee for pole, expect: Take her}
-      - {cmd: look, not: leans idle}
+      - {cmd: look, not: leans forgotten}
       - {cmd: give pole back}
-      - {cmd: look, expect: leans idle against the post}
+      - {cmd: look, expect: leans forgotten against the post}
 
   - name: taking the willow brush with the axe cuts it
     url: scene=slough
