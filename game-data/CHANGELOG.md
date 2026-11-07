@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.16.0 (2026-11-07)
+- Earlier text fades back: when you type a command, everything already on screen dims, so the newest reply is the only bright text, even when one command sets off two replies. On by default; Settings > Dim earlier text turns it off.
+
 ## 0.15.0 (2026-11-07)
 - Rolette's agent watches the sun once the rope is across: he gets up off his crate, gives Ogee until sundown, and is standing on the ferry with his hand on the rope when Dixon comes down with the silver. Asa won't pay a season of crossings to a mail man whose mail sits, so the deal now waits on James's key: once he has it back, the mail goes north over your rope, Asa sees it go, and he pays. James's secret stays his. Ogee says goodbye in the fog, and the last thing you see as Margaret locks up is his token.
 

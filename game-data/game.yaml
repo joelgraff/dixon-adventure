@@ -3,7 +3,7 @@
 
 # Release version (see CHANGELOG.md for the rules). Bump it, the ?v= in
 # play.html and the changelog together; the checker verifies they match.
-version: 0.15.0
+version: 0.16.0
 # Bump when a change would break saved games (renamed or removed flags,
 # items or rooms). Saves from another save_compat are refused, not loaded.
 save_compat: 2
@@ -104,7 +104,7 @@ tour:
   - target: "#bar-top"
     text: "The top bar shows the game's version, where you are, and your score."
   - target: "#output"
-    text: "This is the story so far. Every reply is added to this log and nothing is ever cleared, so you can scroll back to reread anything."
+    text: "This is the story so far. Every reply is added to this log and nothing is ever cleared, so you can scroll back to reread anything. The newest reply is bright, and everything before it fades back."
   - target: "#bar"
     text: "Type commands here, up to 40 characters, and press Enter. Try look, look at the panel, talk to someone, ask someone about something, or go north."
   - target: "#quick"
@@ -127,6 +127,10 @@ tour:
     label: true
     settings: true
     text: "Highlighted words: off by default. Key items only colors what moves the story in blue. All adds look-only scenery in tan."
+  - target: "#opt-dim"
+    label: true
+    settings: true
+    text: "Dim earlier text: on by default. Everything before your latest command fades back, so you can see where the newest reply starts, even when one command sets off two."
   - target: "#opt-clicks"
     label: true
     settings: true
@@ -147,6 +151,7 @@ settings:
   highlight: off             # off | key | all
   clickable: false
   histories: false           # the optional histories (citations) panel
+  dim: true                  # fade everything before the latest command
 
 # Help comes from the assistant on the player's phone, so it is introduced
 # in the fiction: offline in 1830, online in the present.

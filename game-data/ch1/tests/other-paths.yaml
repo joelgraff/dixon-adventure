@@ -905,3 +905,13 @@ tests:
     steps:
       - setup: {flags: [1830.arrived, known.ogee, met.ogee, 1830.lease_player, 1830.fog]}
       - {cmd: "take ogee's arm", expect: "doesn't say a word", not: [The last one, "Me, I pull the rope"], room: wateredge}
+  # Earlier text fades so the newest reply stands out (Settings: dim).
+  - name: everything before the latest command is dimmed, and the setting turns it off
+    steps:
+      - {cmd: look}
+      - {cmd: read panel}
+      - {visible: "#output p.past"}
+      - {visible: "body.dim #output p.echo:not(.past)"}
+      - {click: "#gear"}
+      - {click: "#opt-dim", hidden: "body.dim"}
+      - {click: "#opt-dim", visible: "body.dim"}

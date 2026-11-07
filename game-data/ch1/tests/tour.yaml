@@ -8,7 +8,8 @@ tests:
       - {click: "#tour-next", shows: {"#tour-text": "top bar"}}
       - {click: "#tour-back", shows: {"#tour-text": "quick look around"}}
       - {click: "#tour-next", times: 8, visible: "#settings", shows: {"#tour-text": "Looked-at sidebar: on by default"}}
-      - {click: "#tour-next", times: 5, shows: {"#tour-text": "type tour any time"}}
+      - {click: "#tour-next", times: 2, shows: {"#tour-text": "Dim earlier text: on by default"}}
+      - {click: "#tour-next", times: 4, shows: {"#tour-text": "type tour any time"}}
       - {click: "#tour-next", hidden: ["#tour-card", "#settings"]}
   - name: Settings has a Take the tour button
     steps:

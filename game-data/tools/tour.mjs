@@ -113,6 +113,7 @@ scene(); await cap('The top bar: the game, its version, where you are, and your 
 scene(); await cap('The story. Every reply is added to this log; nothing is cleared, so you can scroll back.', '#output'); await snap(4.5);
 scene(); await cap('Type commands here, Sierra-style, up to 40 characters. Enter or the button sends them.', '#bar'); await type('look at the panel', 3.2);
 scene(); await cap('People go by a description until they introduce themselves.', '#output'); await type('talk to volunteer', 4.5);
+scene(); await cap('Earlier text fades back, so the newest reply stands out. Settings can turn this off.', '#output'); await snap(4);
 scene(); await cap('The inventory panel lists what you are carrying, and any silver. Click an item to look at it.', '#inventory'); await snap(4.2);
 scene(); await page.click('#notes summary');
 await cap('The looked-at sidebar lists what you have examined, by place. Click an entry to reread it.', '#notes'); await snap(4.8);

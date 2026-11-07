@@ -19,7 +19,7 @@ let pending = null;              // {kind: 'death' | 'restart'}
 let speaker = null;              // NPC whose lines an action's quoted says belong to
 let untimed = false;             // the current command took no time (see UNTIMED)
 let seed = params.has('seed') ? Number(params.get('seed')) || 1 : null;
-const settings = { inventory: true, sidebar: true, highlight: 'off', clickable: false, histories: false };
+const settings = { inventory: true, sidebar: true, highlight: 'off', clickable: false, histories: false, dim: true };
 
 // ---------------------------------------------------------------- utilities
 function rand() {
@@ -809,6 +809,9 @@ function help() {
 function command(raw) {
   const input = raw.trim().slice(0, G.input_limit || 40);
   if (!input) return;
+  // Everything already on screen fades back, so the newest reply, however
+  // many paragraphs it runs to, is the only bright text (Settings: dim).
+  for (const el of $('output').querySelectorAll(':scope > :not(.past)')) el.classList.add('past');
   say(`> ${input}`, { cls: 'echo', raw: true });
   if (pending) { answerPending(input); return finish(false); }
   snapshot = clone(S);
@@ -958,6 +961,8 @@ function applySettings() {
   document.body.classList.toggle('noinventory', !settings.inventory);
   $('opt-inventory').checked = settings.inventory;
   document.body.classList.toggle('clickable', settings.clickable);
+  document.body.classList.toggle('dim', settings.dim);
+  $('opt-dim').checked = settings.dim;
   document.body.classList.remove('hl-key', 'hl-all');
   if (settings.highlight !== 'off') document.body.classList.add(`hl-${settings.highlight}`);
   $('opt-sidebar').checked = settings.sidebar;
@@ -1063,6 +1068,7 @@ function wireUI() {
     if (b) { command(`look at ${b.dataset.look}`); $('cmd').focus(); }
   });
   $('opt-clicks').addEventListener('change', e => { settings.clickable = e.target.checked; applySettings(); });
+  $('opt-dim').addEventListener('change', e => { settings.dim = e.target.checked; applySettings(); });
   $('opt-hl').addEventListener('change', e => { settings.highlight = e.target.value; applySettings(); });
   $('opt-histories').addEventListener('change', e => { settings.histories = e.target.checked; applySettings(); });
   $('tour-btn').addEventListener('click', startTour);
