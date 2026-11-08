@@ -1,6 +1,6 @@
 # Changelog
 
-The game (docs/play.html and docs/game-data) gets a new version on every
+The game (play.html and game-data) gets a new version on every
 push. The version shows in the top bar of play.html, in Settings, and with the
 `version` command, so you can always tell which build you are playing.
 
@@ -13,7 +13,7 @@ push. The version shows in the top bar of play.html, in Settings, and with the
 - Bump `save_compat` in game.yaml as well when a change would break saved
   games (renamed or removed flags, items or rooms). Older saves are then
   refused with a message instead of loading half-broken.
-- To bump: `cd docs/game-data/tools && npm run bump -- patch "what changed"`.
+- To bump: `cd game-data/tools && npm run bump -- patch "what changed"`.
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 

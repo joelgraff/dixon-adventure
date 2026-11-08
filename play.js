@@ -1,4 +1,4 @@
-// Dixon: the scene-card runtime. Reads docs/game-data/*.yaml and plays it.
+// Dixon: the scene-card runtime. Reads game-data/*.yaml and plays it.
 // No story text lives here; see game-data/FORMAT.md for the data format.
 /* global jsyaml */
 

@@ -1,4 +1,4 @@
-// Films a captioned tour of docs/play.html: every part of the screen and every
+// Films a captioned tour of play.html: every part of the screen and every
 // setting, with a gold outline on whatever the caption describes.
 //   npm run tour             full video  -> tools/out/dixon-ui-tour-v<version>.mp4
 //   npm run tour -- preview  one still per scene (quick check of the look)

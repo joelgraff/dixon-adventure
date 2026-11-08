@@ -1,7 +1,7 @@
 # Voices
 
 How each character talks. The narrator writes in complete, flowing sentences
-(see "Prose" in docs/skill/references/interaction-design.md); characters
+(see "Prose" in skill/references/interaction-design.md); characters
 don't have to. Speech should sound like the person: their origin, their work,
 their temper and what they want from you. Two characters should never be
 interchangeable on the page.

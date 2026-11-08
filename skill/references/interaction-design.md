@@ -13,7 +13,7 @@ How the demo should feel. These rules come from playtest feedback and are meant 
 ## Prose
 - Write in complete sentences. Each sentence carries a whole thought, image or feeling; never a list of noun-phrase fragments ("A clearing above the landing. One long log cabin. A woodpecker.").
 - Join what belongs together. A place, what stands in it and how it feels can share a sentence or two; vary sentence length so the text reads like a person describing something, not a teletype.
-- Narration is written in complete sentences. Speech is not bound by that: each character talks the way docs/game-data/VOICES.md says they do, with their own sentence length, grammar and words. Fragments, interruptions and loose grammar belong to the people who'd use them.
+- Narration is written in complete sentences. Speech is not bound by that: each character talks the way game-data/VOICES.md says they do, with their own sentence length, grammar and words. Fragments, interruptions and loose grammar belong to the people who'd use them.
 - Short replies are fine when the moment is small, but they are still sentences.
 - Don't build every sentence as "clause, and clause". Narration should mostly use one clause per sentence, a participle, or "while"/"with"; keep the comma-and where it carries rhythm (a joke's timing, a list, a character's way of talking).
 - Characters say what's wrong and what they want, not how to fix it. The fix is for the player to find in the things around them; the phone's help is where steps are spelled out.

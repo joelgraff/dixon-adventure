@@ -4,7 +4,7 @@ The game's content lives here as YAML data. The browser runtime reads it; the
 runtime holds no story text of its own. Writing a room's text now also writes
 the art brief for the picture that may later replace it.
 
-The game page is `docs/play.html` (engine: `docs/play.js`). It loads these
+The game page is `play.html` (engine: `play.js`). It loads these
 files over HTTP, so open it through GitHub Pages or a local server, not as a
 file. Test URLs: `play.html?fresh` starts over, `?scene=landing` starts in a
 room, `?seed=1` makes random picks repeatable.
@@ -12,7 +12,7 @@ room, `?seed=1` makes random picks repeatable.
 Run the checker after every change, and the playthrough tests before pushing:
 
 ```
-cd docs/game-data/tools && npm install && npm run check
+cd game-data/tools && npm install && npm run check
 npm install playwright && npx playwright install chromium   # once
 node test.mjs              # all tests; node test.mjs wrong   runs matching ones
 ```

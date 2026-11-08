@@ -1,4 +1,4 @@
-// Plays the test scripts in ch*/tests/*.yaml against docs/play.html in a
+// Plays the test scripts in ch*/tests/*.yaml against play.html in a
 // headless browser. Run from this folder:  node test.mjs  [filter]
 //
 // Needs Playwright with Chromium:  npm install playwright && npx playwright install chromium

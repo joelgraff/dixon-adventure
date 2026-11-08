@@ -118,7 +118,7 @@ Stevens's note on the name: **"Pronounced Ozha."** Atkinson's order of May 11,
   Winnebago held the land the band would cross and his friends would not be
   harmed (Local, single blog source).
 - **About May 12:** militia gather at Dixon's Ferry. Lincoln's company camps
-  about a mile west (repo note, docs/references/lincoln_statue.md).
+  about a mile west (dixon_dem repo, docs/references/lincoln_statue.md).
 - **May 13-14, Stillman's Run:** about 275 militia under Majors Stillman and
   Bailey ride out from Dixon's Ferry to Old Man's Creek. They are routed at
   dusk on the 14th, and the rest flee about 30 miles back to Dixon's,
