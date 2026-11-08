@@ -1,0 +1,590 @@
+id: landing
+era: 1830
+name: The ferry landing, 1830
+sources: [S1, S2, S4, S6, S7, S8]
+picture: >-
+  Low south-bank landing at the foot of a wooded slope. Plank dock at centre,
+  the flatboat tugging at its lines in high brown water, a tar pot smoking on
+  a small fire, a canoe in the gravel, a seated man in a dark coat at right,
+  loaded wagons and oxen at the head of the landing, the far bank empty and
+  wooded.
+
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The [river] still runs high past the [dock], below the [path] that climbs south toward the woodsmoke."
+look: >-
+  The [river] is the loudest thing here, running high and brown past a rough plank [dock]. Across it the north [northbank|bank] is empty but for a lone post. A worn [path] climbs the slope behind you toward [woodsmoke].
+listen:
+  - when: [1830.rope_strung]
+    text: You hear water slapping the hull, the rope creaking as it takes the strain, and the oxen complaining at the head of the landing.
+  - text: Water slaps the hull. Again and again the ferry knocks against the dock, like someone asking to be let in.
+
+nouns:
+  dock:
+    name: dock
+    aliases: [landing, wharf, pilings, flood lines, lines, planks]
+    look: The dock is rough planks on posts with its edges half under water. Four green bands mark the pilings below it, one above another, where the river has stood in other springs. One piling has a fresh pale gouge at the waterline. {ogee} has been flooded out more than once and has rebuilt in the same place every time.
+    verbs:
+      sit: You sit on the edge of the dock, with the river very close below you and in a hurry to be somewhere else.
+
+  ferry:
+    name: ferry
+    key: true
+    aliases: [boat, flatboat, flat, raft]
+    room_line:
+      - when: [1830.rope_strung]
+        text: The [ferry] rides easy at the dock now, tethered to a new [rope] that runs from bank to bank.
+      - text: A flat-bottomed [ferry] tugs at her lines, rocking hard in the high water.
+    look:
+      - when: [1830.rope_strung]
+        text: "This is {ogee's} flatboat, with a new rope running from the bank through a block on her rail and across to the far side. She sits steadier on it than she has any right to. On the dock beside her, a [tarpot|tar pot] still smokes over a small fire."
+      - text: "This is {ogee's} flatboat, broad and low and big enough for a wagon and its team. She was built to be poled, but right now the river runs deeper than any pole is long. On the dock beside her, a [tarpot|tar pot] smokes over a small fire, where {ogee} was doing her seams."
+
+  rope:
+    name: rope
+    when: [1830.rope_strung]
+    aliases: [line, new rope, hemp]
+    look: "{dixon's} hemp is tied off on the south bank and runs taut across the water to the post on the far side. As far as anyone here knows, it makes the first rope ferry on this river."
+
+  pole:
+    name: setting pole
+    when: [not has:pole]
+    always: [1830.rope_strung]   # once it's needed, return visits still show it
+    room_line:
+      - when: [1830.rope_strung]
+        text: "{ogee's} setting [pole] leans forgotten against the post at the end of the dock."
+      - text: "{ogee's} setting [pole] leans against the post at the end of the dock, useless in this water."
+    aliases: [pole, setting pole, ash pole]
+    reveals: [shoe]
+    look:
+      - when: [1830.shoe_lost, not 1830.shoe_returned]
+        text: "{ogee's} setting pole is a long shaft of ash with a bare, pale foot where the iron shoe used to be."
+      - text: "{ogee's} setting pole is a long shaft of ash, worn smooth where the hands go. The iron [shoe] on its foot has been polished bright on the side that bears against the riverbed."
+    verbs:
+      push: You lean on it and find it heavier than it looks.
+
+  shoe:
+    name: pole shoe
+    hidden: true
+    when: [not has:pole, {any: [not 1830.shoe_lost, 1830.shoe_returned]}]
+    aliases: [iron shoe, pole shoe, iron]
+    look: The shoe is a cone of forged iron, dented on one side, the kind of thing a museum would set on a velvet pedestal if anyone ever thought to save it.
+    verbs:
+      take: It's riveted to the pole and isn't coming off.
+
+  tarpot:
+    name: tar pot
+    aliases: [tar pot, tar, pot, fire, small fire]
+    look: An iron pot of pine tar bubbles over a small fire on the dock beside the ferry, where {ogee} was doing her seams, and it smells like a shipyard. A [swab] stands up in it, with a hank of [oakum] beside it, just where {ogee} dropped them when he ran for the canoe.
+    verbs:
+      touch: You think better of it about an inch away, because it's very hot.
+      take: You'd need something to carry it in, and you'd have to want burned hands.
+
+  swab:
+    name: swab
+    key: true
+    aliases: [tar swab, mop, pitch mop, tar brush, stick, applicator, rag]
+    look: The swab is a stick with a wad of rag lashed to its end, black and stiff with old tar. It stands up in the pot like a spoon left in porridge, ready to work hot tar into a seam.
+    verbs:
+      take: You lift it out, dripping, and think better of carrying it around; it's meant to be used here.
+
+  oakum:
+    name: oakum
+    aliases: [hank, fiber, fibre, tow, caulking, rope fiber]
+    look: The oakum is old rope picked apart into loose, tarry fiber, which is what gets packed into a seam before the tar goes over it.
+    verbs:
+      take: It's meant to be used here, on whatever needs caulking.
+      smell: It smells of tar and old hemp.
+
+  canoe:
+    name: canoe
+    key: true
+    when: [not 1830.canoe_across]
+    aliases: [dugout, seam, split, crack]
+    room_line:
+      - when: [1830.canoe_tarred]
+        text: The [canoe] waits at the water's edge, its seam black under fresh tar.
+      - text: The [canoe] that fished you out lies on its side in the gravel, split and still draining.
+    look:
+      - when: [1830.canoe_tarred]
+        text: "{ogee's} dugout has its split seam packed and black with fresh tar. It might even float."
+      - text: This is the dugout that fished you out of the river. It split along one seam when it struck the piling, and its paddle went on toward St. Louis without it. Patched, it would carry one person and a coil of rope. On the dock beside the ferry, {ogee's} [tarpot|tar pot] is still smoking.
+    verbs:
+      push: It slides a little way in the gravel and stops.
+
+  # #3: once James has his key, the mail goes north over your rope, and Asa
+  # sees it go. James keeps his secret; all anyone sees is the mail moving.
+  mailteam:
+    name: mail
+    when: [1830.key_returned, not 1830.lease_dixon]
+    aliases: [james, james dixon, mail, mail team, mail sack, team, galena road]
+    room_line: "Across the river, {james} is leading his team up the Galena road with the [mailteam|mail sack] strapped on behind, the first mail over your rope."
+    look: "{james} is too far off to hail now, a small figure leading his team up the Galena road with the mail sack strapped on behind. If you look hard you can make out something small and brass on his buttonhole."
+
+  crate:
+    name: crate
+    when: [here:agent]
+    aliases: [box]
+    look: The agent has made a chair of a packing crate stenciled GALENA.
+
+  papers:
+    name: papers
+    when: [here:agent]
+    aliases: [note, notes, mortgage, documents]
+    look: The papers are notes and a mortgage, folded small. You catch the names Schellenger and Rolette, and a column of figures that does not end well for {ogee}.
+    verbs:
+      take: The agent's hand settles over them before you get close, though he never looks up.
+
+  wagons:
+    name: wagons
+    aliases: [wagon, train, oxen, teams, freight, kegs, flour]
+    room_line:
+      - when: [1830.wagon_free]
+        text: "{asa's} [wagons], five of them now, wait at the head of the landing for their turn on the rope."
+      - when: [not 1830.dazed]
+        text: Loaded [wagons] wait in a line at the head of the landing.
+    look:
+      - when: [1830.wagon_free]
+        text: Five ox-drawn wagons stand loaded with flour, tools and kegs, bound north for the Galena diggings. The fifth is still black with slough mud up to the hubs.
+      - text: Four ox-drawn wagons stand loaded with flour, tools and kegs for the Galena diggings, with a gap in the line where a fifth ought to be. Their [teamsters] doze in the shade.
+    verbs:
+      search: You find flour, picks and shovels, and kegs that slosh when you touch them, but nothing that's yours.
+
+  teamsters:
+    name: teamsters
+    aliases: [men, drivers]
+    look: The teamsters doze in the shade of the wagons in sweat-stained shirts, all but one, who is whittling. None of them looks at the river; they've seen it already.
+
+  river:
+    name: river
+    aliases: [water, high water, rock river, current]
+    look: The Rock River runs brown and high and fast with the spring, carrying whole branches past the end of the dock. Nobody is going to pole anything across it.
+    verbs:
+      drink: You've already swallowed more of it than you wanted.
+      touch: The water is cold enough to make your fingers ache.
+
+  northbank:
+    name: north bank
+    aliases: [north bank, far bank, far side, other side, post]
+    look:
+      - when: [1830.rope_strung]
+        text: On the north bank the rope runs to its post, with the Galena road climbing away into the trees behind it.
+      - text: The north bank is empty except for a stout post at the water's edge and the Galena road climbing away into the trees.
+
+  path:
+    name: path
+    aliases: [trail, south path]
+    look: A worn path climbs south from the landing toward woodsmoke and a clearing.
+
+  woodsmoke:
+    name: woodsmoke
+    aliases: [smoke, chimney smoke]
+    look: The smoke comes from a chimney up the slope, and from a cook fire somewhere farther off.
+
+npcs:
+  ogee:
+    name: Joseph Ogee
+    short: Ogee
+    unknown: a man in a buckskin shirt
+    ref: the ferryman
+    aliases: [ogee, joseph, joseph ogee, ferryman, man in buckskin, man in buckskin shirt, man]
+    room_line:
+      - when: [1830.rope_strung]
+        text: "[ogee] brings the ferry along the rope hand over hand, as easily as drawing water."
+      - text: "[ogee] stands at the ferry's lines, holding her against the current with his whole weight."
+    look: He is a broad man in a buckskin shirt with the sleeves rolled over scarred forearms. Whatever he's doing, he keeps the river at the edge of his eye and never quite turns his back on it.
+    talk:
+      - when: [not met.ogee, 1830.canoe_tarred, not 1830.rope_strung]
+        text: >-
+          "Joseph Ogee," he says, without letting go of the lines. He looks
+          over the fresh tar on his canoe. "You don't swim much. You tar all
+          right." He tips his head at the man in the good coat. "I let go of
+          her, that one says I left her. So I hold on." He nods up the trail.
+          "Dixon is camped up the Peoria trail with hemp enough for a line, bank
+          to bank. Somebody carries it over in that canoe, I have a ferry again."
+        do: [{set: [known.ogee, met.ogee, 1830.met_ogee, heard.dixon]}]
+      - when: [not met.ogee]
+        text: >-
+          "Joseph Ogee," he says, already back at the ferry's lines and taking
+          up the slack. He nods at the brown water. "River's up past the pole. I
+          put the flat out in this, she goes to St. Louis without me." He tips
+          his head at the man in the good coat. "And I let go of these lines,
+          that one says I left her." He nods up the trail. "Dixon is camped up
+          the Peoria trail with hemp enough for a line, bank to bank. I was
+          calling for somebody to paddle it across, and you're what came." He
+          looks at the split canoe, then at you. "So it's you, eh. Mon Dieu."
+        do: [{set: [known.ogee, met.ogee, 1830.met_ogee, heard.dixon]}]
+      - when: [not 1830.met_ogee]
+        text: "\"Back again, eh.\" He nods at the river, then up the trail, then at the smoking pot. \"Still up past the pole. Dixon has the rope. You owe me a canoe, and the tar is hot.\""
+        do: [{set: 1830.met_ogee}]
+      - when: [not 1830.rope_strung]
+        text: "\"Dixon has the rope. I have the canoe. The river has opinions.\""
+      - when: [not 1830.wagon_free]
+        text: "He pats the rope where it runs over her rail. \"Look at her. Pulled across like a bucket on a well.\" He nods at the waiting wagons. \"Those, they don't move.\""
+      - when: [not 1830.lease_dixon, not has:silver]
+        text: "{ogee} glances at the man in the good coat. \"Sundown, that one says.\" He looks up the trail. \"Dixon has his lease ready. All he has to do is find a hundred in silver before then.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
+      - text: "\"You have a question in your face, eh,\" he says. \"Ask it.\""
+    topics:
+      - keys: [river, water, high water, flood, rise, current]
+        say: "\"Every spring, up she comes. Four times I built this dock.\" He nods at the brown water. \"Now she's deeper than my pole is long, and you don't pole a flat in that.\""
+      - keys: [rope, line, rope ferry]
+        say:
+          - when: [1830.rope_strung]
+            text: "\"Dixon's notion. It works.\" He shrugs. \"Don't tell him I said so.\""
+          - text: "\"Dixon's notion. A line bank to bank, and you pull her over hand over hand.\" He looks at the split canoe. \"Only somebody has to carry the line over first.\""
+      - keys: [canoe, dugout, seam, tar, paddle]
+        say:
+          - when: [{any: [1830.canoe_across, 1830.rope_strung]}]
+            text: "\"She did her work. She rests on the far bank till the water drops.\""
+          - when: [1830.canoe_tarred, has:paddle]
+            text: "\"She'll float now, and you have a paddle.\" He nods up the trail. \"All she wants is Dixon's rope, and a fool to cross.\""
+          - when: [1830.canoe_tarred]
+            text: "\"She'll float now. My paddle, that's gone to St. Louis.\" He looks up the path toward the cabin. \"Madeline keeps her father's paddle under the eaves. Be polite.\""
+          - when: [has:paddle]
+            text: "\"You have a paddle. Bon.\" He nods at the split. \"She hit my own piling while I was fishing you out. Oakum in the split, tar over it. The swab is by the pot.\""
+          - text: "\"She hit my own piling while I was fishing you out.\" He runs a thumb along the split. \"Oakum in there, tar over it, and she floats.\" He glances downriver. \"You'll want a paddle too. Mine's halfway to St. Louis.\""
+
+      - keys: [help, yourself, why me, why, you, cross, carry, fix, repair, lines]
+        say:
+          - when: [1830.rope_strung]
+            text: "\"You paid that canoe off, and then some.\" He lets go of the line and shows you his empty hands. \"First time this week.\""
+          - text: "\"I let go of these lines, she's gone downriver. I step off this dock, that one says I left her.\" He takes a fresh turn of line around the post. \"You have two hands, and you owe me the use of them.\""
+
+      - keys: [rescue, saving, saved, fall, fell, drowning, swim]
+        say: "\"Folks come out of that fog and walk straight off the dock. You're the third this year. The first that cost me a canoe.\""
+      - keys: [axe, oak, wood, cabin]
+        say: "\"The axe is in the block up at the cabin. Ask Madeline. She'll want it back.\""
+      - keys: [agent, man, coat, creditor, rolette, debt, debts, notes, owe, money]
+        say: "{ogee's} jaw works for a moment. \"That one, he holds my paper for Rolette. I owe more than she takes in a year.\" He looks up the trail. \"Dixon would lease her and pay it down. Only that one wants a hundred in silver first, and Dixon has none.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
+      - keys: [lease, rent, terms, offer, deal]
+        say: "\"Dixon leases her, the rent pays Rolette. Good for everybody.\" He shrugs. \"Except it starts with a hundred in silver, and Dixon has paper.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
+      - keys: [asa, teamster, freighter, uncle]
+        say:
+          - when: [1830.wagon_free]
+            text: "\"Asa's out of the mud, thanks to you. Now he has a whole train to cross.\" He tips his head at the man in the good coat. \"That one takes my boat, Asa's as stuck on this bank as I am.\""
+          - text: "\"The boy's uncle. Stuck in the slough with his second wagon, and his train won't move without him.\""
+      - keys: [schellenger, partner, half]
+        say: "\"Schellenger bought half of her last fall. By winter he wanted out.\" He laughs, not much. \"Now I owe him more than he paid me, and he sold the debt to Rolette.\""
+      - keys: [dixon, trader, mail, john]
+        say: "\"John Dixon. He carries the mail up from Peoria, and he came to lease her.\" He jerks his chin at the agent. \"Found that one sitting on her. Dixon, he's a fair man. No silver, but fair.\""
+        do: [{set: [1830.dixon_short, heard.dixon]}]
+      - keys: [madeline, wife, family, sons, boys]
+        say: "\"Madeline. Her people are Potawatomi, and her father traded on Franklin Creek.\" He almost smiles. \"Because of her, nobody burns my boat. Ask Bogardus how that goes.\""
+      - keys: [bogardus]
+        say: "\"Bogardus tried a ferry here before me. Somebody burned his boat half built.\" He shrugs. \"Me, I married well.\""
+      - keys: [wagons, teams, train, diggings, galena, mines, lead, teamsters]
+        say: "\"Every spring they come up from the south for the diggings, and every one crosses here.\" He nods at the river. \"The lead goes down by boat. The men come up by road, and by me.\""
+      - keys: [pole, shoe, smith, iron]
+        say:
+          - when: [1830.shoe_returned]
+            text: "\"She has her shoe back.\" He knocks the iron against the dock. \"A hundred years, I wouldn't find that in the slough. Merci.\""
+          - when: [has:pole, 1830.shoe_lost]
+            text: "\"You still have her.\" His eyes go to the bare foot of the pole. \"And she's lost her shoe. That was smith's work.\""
+          - when: [has:pole]
+            text: "\"You have her. Bring her back whole.\""
+          - when: [1830.shoe_lost]
+            text: "\"She lost her shoe in that slough. Smith made that shoe.\""
+          - when: [1830.rope_strung]
+            text: "\"Ash, with an iron shoe the smith made.\" He glances at the rope. \"With the rope across, I don't need her. You're welcome to borrow her.\""
+          - text: "\"Ash, with an iron shoe. Smith made that shoe. It'll outlast me.\""
+      - keys: [toll, fare, price, cost, rates]
+        say: "\"Two bits, a man and his horse. Two dollars six bits, a wagon and four yoke.\" He shrugs. \"When they pay.\""
+      - keys: [fog, mist, where, from]
+        say: "{ogee} looks upriver for a long moment. \"It comes and goes. Folks walk into it and don't always walk out the same,\" he says, and turns back to the river."
+    fallback: "He gives a small shrug. \"That, I don't know. The river doesn't teach much else.\""
+    social:
+      hello: "\"You came through the fog, eh? I could tell.\""
+      thanks: "{ogee} grunts. \"Don't thank me yet. The river's not done with any of us.\""
+      bye: "\"Watch the water as you go.\""
+      how: "\"I'm alive, and the dock's still standing. For this week, that's good.\""
+      sorry:
+        - when: [not 1830.canoe_tarred]
+          text: "\"You'll be sorrier when you're working that tar.\""
+        - text: "\"You made it good. Forget it.\""
+    parting: "[ogee] lifts his chin to you as you go, without taking his eyes off the water."
+
+  agent:
+    name: Rolette's agent
+    unknown: a man in a good coat
+    ref: the man in the good coat
+    aliases: [agent, man in coat, man in good coat, coat, stranger, creditor's man, rolette's man, rolette's agent]
+    when: [not 1830.lease_dixon, not 1830.lease_player]
+    # The deadline (#1): the rope makes the boat worth taking, and from then
+    # on the agent's room line and talk move toward sundown with the story.
+    room_line:
+      - when: [not 1830.dazed, 1830.key_returned]
+        text: "[agent] stands on the ferry with one hand on the rope and his [papers] buttoned inside his coat. Behind him the sun is going down into the trees on the far bank."
+      - when: [not 1830.dazed, 1830.wagon_free]
+        text: "[agent] stands at the head of the dock with his [papers] buttoned inside his coat, watching the sun come down the sky."
+      - when: [not 1830.dazed, 1830.rope_strung]
+        text: "[agent] has got up off his [crate] to watch the ferry run on the rope, with his [papers] under his arm."
+      - when: [not 1830.dazed]
+        text: "[agent] sits on a [crate] with [papers] folded in his lap, watching the ferry as if it were already his."
+    look: His coat is well made and muddy to the knee. He watches {ogee} the way a man watches a horse he means to take.
+    talk:
+      - when: [not met.agent]
+        text: >-
+          He lifts the folded papers from his lap without getting up. "I came
+          down from Galena for Mr. Rolette, friend. He holds Mr. Ogee's notes."
+          He taps the top one. "One hundred dollars in silver, due in February.
+          Paid today, the boat stays. Not paid, I take it."
+        do: [{set: [known.agent, met.agent]}]
+      - when: [1830.key_returned]
+        text: "He doesn't take his eyes off the sun. \"Sundown, friend. Then the boat is Mr. Rolette's, and Mr. Ogee pulls her for me or I find a man who will.\""
+      - when: [1830.wagon_free]
+        text: "He nods at the sun, low over the far bank. \"At sundown the boat is Mr. Rolette's, friend. He will put his own man on the rope.\""
+      - when: [1830.rope_strung]
+        text: "\"The boat runs again. Good.\" He looks along your rope to the far bank, and then at the sky. \"A boat that runs can be moved. Mr. Ogee has until sundown, friend.\""
+      - text: "\"One hundred in silver, friend. Today.\""
+    topics:
+      - keys: [debt, notes, owe, overdue, installment, mortgage, terms, hundred, silver]
+        say: "He runs a finger down the column of figures. \"One thousand and sixty dollars on the Schellenger note. One hundred of it fell due in February. Silver buys time. Paper buys nothing.\""
+      - keys: [lease, rent, tolls, lessee]
+        say: "\"Mr. Ogee may lease the boat to any man who can pay. The first hundred comes in silver, and it comes today.\""
+      - keys: [rolette, master, employer, prairie du chien, trader]
+        say: "\"Mr. Rolette trades out of Prairie du Chien. He has waited since February.\""
+      - keys: [boat, ferry, seize, take, court]
+        say: "He looks at the flatboat, not at {ogee}. \"The boat is goods, and goods answer for the debt. I do not need a court for goods.\""
+      - keys: [galena]
+        say: "\"The note is recorded at Galena. I go back there with silver or with the boat.\""
+      - keys: [dixon, paper, order]
+        say: "\"Mr. Dixon has paper, and paper is not silver.\""
+      - keys: [asa, teamster, wagons, freighter]
+        say: "He looks past you at the loaded wagons. \"The teamster is paid in silver, friend. And those wagons do not cross without this boat.\""
+      - keys: [name, who]
+        say: "He taps the papers. \"My name is not on the note. Mr. Rolette's is.\""
+      - keys: [ogee, joseph]
+        say: "\"Mr. Ogee signed the note. That is all I need to know about Mr. Ogee.\""
+    fallback: "\"That is not on the note, friend.\""
+    social:
+      hello: He touches his hat brim, though he doesn't get up.
+      thanks: "\"You are welcome, friend.\""
+      bye: "\"Good day, friend.\""
+      how: "\"I am waiting, friend. Mr. Rolette pays me by the day.\""
+      sorry: "\"Sorry does not go against the note.\""
+    parting: The agent doesn't bother to look up as you go.
+
+  eli:
+    name: Eli
+    unknown: a young man with an old rifle
+    ref: the young man with the rifle
+    aliases: [eli, young man, teamster, boy, rifle, flintlock]
+    room_line:
+      - when: [not 1830.dazed]
+        text: "[eli] perches on a wagon tongue, his eyes on the trail instead of the river."
+    look:
+      - when: [1830.wagon_free]
+        text: He's a young man in patched homespun with an old flintlock across his knees. Now that his uncle's wagons are down at the landing, he sits a good deal easier.
+      - text: He's a young man in patched homespun with an old flintlock across his knees, who keeps looking back up the trail.
+    talk:
+      - when: [not met.eli, 1830.wagon_free]
+        text: >-
+          "I'm Eli." He grins and jerks a thumb at the wagons. "You got Uncle
+          Asa out of the slough, and he says you've got more back than sense,
+          and from him that's... well, that's praise, honest. Anyhow, we're
+          bound for the diggings, soon as there's a boat."
+        do: [{set: [known.eli, met.eli, 1830.met_eli]}]
+      - when: [not met.eli]
+        text: >-
+          "I'm Eli." He says it to the trail more than to you, then remembers
+          his manners and looks around. "We're bound for the diggings, my uncle
+          and me, only his second wagon's down to the hubs in the slough back
+          yonder, and he won't cross the train without it, and..." He shifts
+          the old rifle on his knees. "Not that anybody's crossing today. Pa
+          always said a river in flood is the devil's own road."
+        do: [{set: [known.eli, met.eli, 1830.met_eli]}]
+      - when: [1830.wagon_free]
+        text: "\"Uncle's whistling,\" he says, sounding faintly alarmed. \"I didn't know he could.\""
+      - text: "\"He's still stuck. Uncle says he'll be out by dark or know the reason why.\""
+    topics:
+      - keys: [uncle, asa, wagon, slough, stuck, mud]
+        say:
+          - when: [1830.wagon_free]
+            text: "\"That's Uncle Asa, over by the wagons, and that's the best mood I've seen him in all week, and that's you, honest. Getting him out.\""
+          - text: "\"Uncle Asa? He's back in the slough past Dixon's camp, and his bar broke, and he's cussing at the oxen like it's their fault.\" He shakes his head. \"He won't leave that wagon and he won't let me help. Uncle says I'd only be in the way.\""
+            do: [{set: heard.dixon}]
+      - keys: [father, pa, militia, winnebago, "1827", war]
+        say: "\"Pa went with the militia in '27, the Winnebago trouble, and he took sick on the march, and he...\" He looks at the rifle. \"Anyhow. Ma says the diggings pay better than corn.\""
+      - keys: [rifle, gun, flintlock]
+        say: "\"It was Pa's. Pa always said it shoots true if you hold your breath, and I guess I hold it pretty good.\""
+      - keys: [diggings, galena, mines, lead]
+        say: "\"Uncle says a man can make more in a summer at the diggings than in five years farming. Uncle says a lot of things.\""
+      - keys: [river, crossing, ferry]
+        say: "\"I never saw a river this big, not back home, not anywhere, and I don't guess I want to know it any better.\""
+    fallback:
+      - when: [1830.wagon_free]
+        text: "{eli} shrugs and looks over at his uncle's wagons."
+      - text: "{eli} shrugs and looks back up the trail again."
+    social:
+      hello: "{eli} gives a quick, nervous nod."
+      thanks: "\"Oh. Sure. Anytime.\" He looks pleased and a little surprised."
+      bye: "\"Watch the river, now. Pa always said...\" He trails off. \"Just watch it.\""
+      how: "\"Jumpy, I guess. Folks keep saying the war's coming back, and Uncle says it won't, and...\" He shrugs."
+      sorry: "\"It's all right, honest.\""
+    parting: "[eli] bobs his head as you go and turns back to watching the trail."
+
+actions:
+  - id: pole_ferry
+    phrases: [pole ferry, pole across, push off, push off ferry, use pole on ferry, pole the ferry, untie ferry]
+    when: [not 1830.rope_strung]
+    do:
+      - death: pole_high_water
+    else:
+      - say: With the rope strung there's no call for poling. {ogee} would be insulted if you tried.
+
+  - id: ride_ferry
+    phrases: [ride ferry, take ferry, board ferry, cross, cross on ferry, pull across, ride across, get on ferry]
+    when: [1830.rope_strung]
+    do:
+      - say: "{ogee} works you across on the rope, hand over hand, and when the current leans on the line, the line holds."
+      - move: northlanding
+    else:
+      - when: [1830.canoe_tarred, has:paddle, has:rope, not 1830.canoe_across]
+        say: "{ogee's} arm bars the way. \"Not on the ferry, not in this water.\" He nods at the canoe. \"That's what you tarred her for.\""
+      - say: "{ogee's} arm bars the way. \"Not in this water.\""
+
+  - id: tar_canoe
+    phrases: [tar canoe, tar seam, tar split, tar crack, tar dugout, tar hole, tar leak, tar boat, tar it, patch canoe, patch seam, patch split, patch crack, patch dugout, patch hole, patch leak, patch boat, patch it, fix canoe, fix seam, fix split, fix crack, fix dugout, fix hole, fix leak, fix boat, fix it, repair canoe, repair seam, repair split, repair crack, repair dugout, repair hole, repair leak, repair boat, repair it, seal canoe, seal seam, seal split, seal crack, seal dugout, seal hole, seal leak, seal boat, seal it, caulk canoe, caulk seam, caulk split, caulk crack, caulk dugout, caulk hole, caulk leak, caulk boat, caulk it, pitch canoe, pitch seam, pitch split, pitch crack, pitch dugout, pitch hole, pitch leak, pitch boat, pitch it, mend canoe, mend seam, mend split, mend crack, mend dugout, mend hole, mend leak, mend boat, mend it, plug canoe, plug seam, plug split, plug crack, plug dugout, plug hole, plug leak, plug boat, plug it, fill canoe, fill seam, fill split, fill crack, fill dugout, fill hole, fill leak, fill boat, fill it, use tar on canoe, put tar on canoe, put tar in canoe, apply tar to canoe, spread tar on canoe, rub tar on canoe, work tar into canoe, fill canoe with tar, seal canoe with tar, patch canoe with tar, fix canoe with tar, tar canoe with stick, use tar on seam, put tar on seam, put tar in seam, apply tar to seam, spread tar on seam, rub tar on seam, work tar into seam, fill seam with tar, seal seam with tar, patch seam with tar, fix seam with tar, tar seam with stick, use tar on split, put tar on split, put tar in split, apply tar to split, spread tar on split, rub tar on split, work tar into split, fill split with tar, seal split with tar, patch split with tar, fix split with tar, tar split with stick, use tar on crack, put tar on crack, put tar in crack, apply tar to crack, spread tar on crack, rub tar on crack, work tar into crack, fill crack with tar, seal crack with tar, patch crack with tar, fix crack with tar, tar crack with stick, use tar on dugout, put tar on dugout, put tar in dugout, apply tar to dugout, spread tar on dugout, rub tar on dugout, work tar into dugout, fill dugout with tar, seal dugout with tar, patch dugout with tar, fix dugout with tar, tar dugout with stick, use tar on hole, put tar on hole, put tar in hole, apply tar to hole, spread tar on hole, rub tar on hole, work tar into hole, fill hole with tar, seal hole with tar, patch hole with tar, fix hole with tar, tar hole with stick, use tar on leak, put tar on leak, put tar in leak, apply tar to leak, spread tar on leak, rub tar on leak, work tar into leak, fill leak with tar, seal leak with tar, patch leak with tar, fix leak with tar, tar leak with stick, use tar on boat, put tar on boat, put tar in boat, apply tar to boat, spread tar on boat, rub tar on boat, work tar into boat, fill boat with tar, seal boat with tar, patch boat with tar, fix boat with tar, tar boat with stick, use tar on it, put tar on it, put tar in it, apply tar to it, spread tar on it, rub tar on it, work tar into it, fill it with tar, seal it with tar, patch it with tar, fix it with tar, tar it with stick, use tar, use tar pot, use pot, apply tar, spread tar, use pine tar, dip stick in tar, use swab, use swab on canoe, use swab on split, use swab on seam, use swab on crack, swab canoe, swab split, swab seam, swab crack, tar canoe with swab, tar split with swab, tar seam with swab, use oakum, use oakum on canoe, use oakum on split, use oakum on seam, use oakum on crack, pack split, pack seam, pack crack, pack canoe, pack split with oakum, pack seam with oakum, pack crack with oakum, stuff oakum in split, put oakum in split, put oakum in seam, put oakum in crack, dip swab in tar, use mop on canoe, use brush on canoe, use brush on split]
+    when: [not 1830.canoe_tarred, not 1830.canoe_across]
+    do:
+      - set: 1830.canoe_tarred
+      - say: "You pack the split with oakum and then work hot tar into it with the swab, over and over, until the seam stops weeping river water. {ogee} watches over his shoulder. \"Again, along the bottom,\" he says, and when you've done that, \"That'll hold.\""
+    else:
+      - say: The seam is already tarred.
+
+  - id: launch_canoe
+    phrases: [launch canoe, paddle across, cross in canoe, get in canoe, row across, take canoe, use canoe, paddle canoe, canoe across, push off canoe, paddle across with rope, take rope across, carry rope across, take rope across river, carry rope over, take rope over, paddle to north bank, paddle to other side, paddle to far bank, cross in dugout, put canoe in water, put canoe in river, launch dugout, get in dugout, paddle dugout, push canoe in, push canoe into river, go in canoe, canoe, board canoe, ride canoe, paddle over, cross river in canoe]
+    when: [1830.canoe_tarred, has:paddle, has:rope, not 1830.rope_strung, not 1830.canoe_across]
+    do:
+      - set: 1830.canoe_across
+      - say: >-
+          {ogee} makes the rope's end fast on the south bank. You push off and
+          pay out the coil while the current leans on it the whole way over,
+          and you come ashore wet to the knees at the north landing.
+      - move: northlanding
+    else:
+      - when: [{any: [1830.rope_strung, 1830.canoe_across]}]
+        say: The canoe has done its work. The ferry runs on the rope now.
+      - when: [not 1830.canoe_tarred]
+        do: [{death: canoe_sinks}]
+      - when: [not has:paddle]
+        do: [{death: no_paddle}]
+      - say: "{ogee} catches the bow. \"Not empty. Fetch Dixon's rope first.\""
+
+  - id: borrow_pole
+    speaker: ogee
+    phrases: [ask ogee for pole, ask ogee for the pole, borrow pole, take pole, get pole, borrow setting pole, ask for pole, ask for setting pole, ask ogee for setting pole, borrow ogee's pole, ask him for pole, ask ferryman for pole, ask man for pole, can i borrow pole, may i borrow pole, borrow the pole, take setting pole, ask to borrow pole, ask for lever, borrow lever]
+    when: [1830.rope_strung, not has:pole, here:ogee]
+    do:
+      - give: pole
+      - set: 1830.has_pole
+      - say: "\"Take her. The rope's across, so I don't need her. Bring her back whole.\""
+    else:
+      - when: [has:pole]
+        say: You already have it.
+      - say: "{ogee} keeps his hand on it. \"Not yet. Till there's a rope across, I need her.\""
+
+  - id: give_shoe
+    phrases: [give shoe to ogee, give ogee shoe, return shoe, give shoe, give pole shoe to ogee, give iron to ogee, give shoe back, give shoe back to ogee, return shoe to ogee, give iron shoe to ogee, give pole shoe, give ogee the iron, put shoe on pole, fix pole, give shoe to ferryman, give shoe to him, give him shoe, give him the shoe, return pole shoe]
+    when: [has:shoe, here:ogee]
+    do:
+      - take: shoe
+      - set: 1830.shoe_returned
+      - if:
+          when: [has:pole]
+          do:
+            - take: pole
+            - set: 1830.pole_returned
+            - say: "{ogee} turns it over in his hands. \"Smith made that. I thought it was gone for good,\" he says, and he takes the pole from you and fits the shoe back on her."
+          else:
+            - say: "{ogee} turns it over in his hands. \"Smith made that. I thought it was gone for good,\" he says, and he fits it back on the pole."
+    else:
+      - say: You have nothing of his to give back.
+
+  - id: return_pole
+    speaker: ogee
+    phrases: [return pole, give pole to ogee, give ogee pole, give pole back, give pole back to ogee, give back pole, return pole to ogee, return setting pole, give setting pole to ogee, give pole to ferryman, give him pole, give him the pole, put pole back]
+    when: [has:pole, here:ogee]
+    do:
+      - take: pole
+      - set: 1830.pole_returned
+      - if:
+          when: [has:shoe]
+          do:
+            - take: shoe
+            - set: 1830.shoe_returned
+            - say: "{ogee} takes her, and then the iron shoe, and turns it over in his hands. \"Smith made that. I thought it was gone for good,\" he says, and fits it back on."
+          else:
+            - if:
+                when: [1830.shoe_lost, not 1830.shoe_returned]
+                do:
+                  - say: "{ogee} takes her and runs a thumb over the bare foot. \"Lost her shoe in that slough, did you,\" he says, and it isn't a question. \"Smith made that shoe.\""
+                else:
+                  - say: "\"Bon,\" {ogee} says, and leans her back against the post."
+    else:
+      - when: [not has:pole]
+        say: You haven't got it.
+      - say: There's nobody here to give it to.
+
+  # The wrong fix: Asa's silver was for Dixon. Paid by you, the lease is yours.
+  - id: pay_agent
+    speaker: agent
+    phrases: [pay agent, give agent 100, give agent money, give money to agent, give 100 to agent, pay the debt, pay debt, pay rolette's man, give agent silver, give silver to agent, pay agent 100, give bag to agent, give agent bag, give agent the bag, give asa's silver to agent, pay agent with silver, give silver to rolette's man, give silver to man in coat]
+    when: [has:silver, here:agent, not 1830.lease_dixon, not 1830.lease_player]
+    do:
+      - take: silver
+      - set: [1830.lease_player, 1830.fog]
+      - say: >-
+          The agent weighs the bag, then counts the silver out onto his papers,
+          twice. "One hundred, against the note," he says, and dips his pen.
+          "The lessee's name?" While you're still thinking about that, he
+          writes yours. {ogee} looks away. Up the trail, a tall figure
+          turns and walks back toward the camp.
+      - say: >-
+          A chill comes off the river, and within a few breaths the fog is on
+          you. {ogee's} voice comes from close by, flatter than before: "Easy
+          now. Take my arm."
+    else:
+      - say: "He glances at your pockets. \"One hundred in silver, friend. Not one coin less.\""
+
+exits:
+  - names: [south, path, cabin, smoke, woodsmoke, clearing, up]
+    to: cabin
+    peek: A worn path climbs south, away from the water, toward woodsmoke and a clearing.
+    text: You walk up the path through the trees and come out in a clearing.
+  - names: [north, across, far bank, north bank, other side]
+    to: northlanding
+    when: [1830.rope_strung]
+    farewell: false
+    blocked:
+      - when: [1830.canoe_tarred, has:paddle, has:rope, not 1830.canoe_across]
+        text: Nobody is taking the ferry out in this water, but the canoe is ready, and so is the rope.
+      - text: Not in this water. {ogee} would stop you, and if he didn't, the river would.
+    text: "{ogee} works you across on the rope, hand over hand."
+  - names: [east, west, upstream, downstream]
+    blocked: The bank runs on in both directions, thick with willow and brush, with no path that way and no reason to push into it.
+
+# The arrival comes in three beats: the rescue (wateredge answer_voice), then
+# a held turn: whatever you try first, you're still in shock, Ogee tells you to
+# sit, and your senses come back (the clothes, the tin case, then the whole
+# landing). 1830.dazed keeps the busier parts of the room out of the
+# description until then, so nothing can be used before it's been seen.
+hold:
+  - when: [1830.dazed]
+    say: >-
+      You try to get up, but your legs have other ideas and your hands won't
+      stop shaking. {ogee} puts a hand on your shoulder and presses you back
+      down onto the gravel. "Sit a moment," he says. "Get the river out of you
+      first."
+    do:
+      - say: >-
+          You sit and breathe until, slowly, the shaking stops. Somewhere in
+          the river you lost your own clothes and came out in wet wool trousers,
+          a homespun shirt and a pair of cracked boots. The only thing in your
+          pocket is a flat tin case. You decide not to think about that just
+          yet.
+      - say: Gradually the world comes back to you, and the landing with it.
+      - clear: 1830.dazed
+      - describe: true

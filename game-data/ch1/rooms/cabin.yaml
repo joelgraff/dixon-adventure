@@ -1,0 +1,322 @@
+id: cabin
+era: 1830
+name: "{ogee's} cabin, 1830"
+sources: [S1, S2]
+picture: >-
+  A single long log cabin with two doors and smoke from the chimney, in a
+  clearing above the river. A woman in the left doorway, two boys at a
+  chopping block in front, split oak stacked beside it, a canoe paddle
+  hung on pegs under the eaves, trees behind.
+
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "Smoke still threads up from the [cabin] chimney into the still air."
+look: >-
+  One long log [cabin] fills the clearing, with a door at each end and a
+  thread of smoke going straight up from its [chimney]. Behind you the [path]
+  drops back to the river. A wagon [trail] leads on south through the oaks.
+listen: Someone is splitting kindling with quick, uneven strokes, a woodpecker is working somewhere in the trees, and below it all you can hear the river, the way you always can here.
+
+nouns:
+  paddle:
+    name: paddle
+    when: [not has:paddle]
+    aliases: [canoe paddle, spare paddle, ash paddle, oar, pegs, eaves, father's paddle]
+    look: The paddle was carved from a single piece of ash, longer and narrower than you'd expect. Its grip has been worn dark and smooth by somebody's hands over a great many years. Whoever hung it on these pegs, out of the weather, meant to keep it.
+    verbs:
+      take:
+        - when: [here:madeline]
+          say: "{madeline} says, \"That was my father's,\" quietly, and you take your hand back. If you need it, you could ask her."
+        - say: You'd want to ask before taking it down.
+
+  crow:
+    name: crow
+    key: true
+    aliases: [bird, big crow, roof, ridge]
+    room_line:
+      - when: [not 1830.crow_traded]
+        text: Up on the roof ridge a big [crow] keeps watch by the chimney, with something small glinting at its feet.
+      - text: Up on the ridge, the [crow] turns a silver dollar over and over with its beak.
+    look:
+      - when: [not 1830.crow_traded]
+        text: The big, glossy crow studies you with one eye and then the other. At its feet, wedged between two shingles, something small and brass winks in the light.
+      - text: The crow is far too pleased with its silver dollar to pay you any attention.
+    verbs:
+      take: The crow watches you come and hops a little further along the ridge, where the roof is no place for you to follow.
+      climb: The roof is steep, the shingles are wet, and the crow would only move. You think better of it.
+      touch: The crow is well out of reach, and it knows it.
+      call: The crow looks at you, says something rude, and stays where it is.
+      push: The crow is well out of reach, and it knows it.
+
+  # What the crow is guarding, until it trades.
+  glint:
+    name: something brass
+    when: [not 1830.crow_traded]
+    aliases: [glint, something shiny, shiny thing, brass thing, something brass, something small, key, brass key, mail key]
+    look: Something small and brass is wedged between two shingles at the crow's feet, winking in the light. From down here you can't make out what it is.
+    verbs:
+      take: It's up on the roof with the crow, and the crow has no intention of parting with it.
+
+  # What the crow leaves on the block when it trades. You pick it up yourself.
+  blockkey:
+    name: brass key
+    key: true
+    when: [1830.crow_traded, not has:key, not 1830.key_returned]
+    always: true
+    aliases: [key, brass key, small key, small brass key, mail key, string]
+    room_line: A small brass [blockkey|key] lies on the chopping block where the crow dropped it.
+    look: A small brass key, worn smooth, lies on the block on a loop of greasy string.
+    verbs:
+      take:
+        say: You pick the key up off the block. Up on the ridge, the crow doesn't so much as look at you.
+        do: [{give: key}, {set: 1830.has_key}]
+
+  cabin:
+    name: cabin
+    aliases: [log cabin, doors, door, house]
+    reveals: [westroom, eastroom]
+    look:
+      - when: [has:paddle]
+        text: It is one long cabin of squared logs with a door at each end. The [westroom|west room] belongs to the family. The [eastroom|east room], about eighteen feet square, is kept for travelers and hired help. Under the eaves, a pair of wooden pegs stands empty.
+      - text: It is one long cabin of squared logs with a door at each end. The [westroom|west room] belongs to the family. The [eastroom|east room], about eighteen feet square, is kept for travelers and hired help. Under the eaves, a canoe [paddle] hangs on a pair of wooden pegs.
+    verbs:
+      open: Both doors already stand open to the spring air.
+      smell: The cabin smells of woodsmoke and tallow, with wet wool drying somewhere inside.
+
+  westroom:
+    name: west room
+    hidden: true
+    aliases: [west room, family room, sitting room]
+    look: Through the west door you can see the family's room, with two beds, a table and a few chairs, all of it kept neat. It isn't a room you'd walk into uninvited.
+    verbs:
+      search: You keep to the doorway, since it isn't your house to go through.
+
+  eastroom:
+    name: east room
+    hidden: true
+    aliases: [east room, travelers' room, travelers room, beds]
+    look: The east room holds four beds for travelers. At the foot of one sits a carpetbag marked GALENA, with a good coat folded over it, so the agent must be lodging here.
+    verbs:
+      search: You leave the agent's bag alone. It's tempting, but it isn't yours.
+
+  chimney:
+    name: chimney
+    aliases: [smoke, chimney smoke]
+    look: The chimney is built of sticks and clay. It draws well, sending the smoke straight up into the still air.
+
+  block:
+    name: chopping block
+    aliases: [chopping block, stump, split oak, oak, stack, woodpile, wood]
+    room_line:
+      - when: [not 1830.has_axe]
+        text: An [axe] is sunk in the chopping [block] beside a stack of split oak.
+    always: [not 1830.has_axe, not 1830.axe_returned]   # you'll need it, so return visits show it
+    look:
+      - when: [1830.has_axe]
+        text: The block is an old stump worn smooth on top by years of axes, with no axe in it now. Beside it, someone has stacked enough split white oak to last the summer.
+      - text: The block is an old stump worn smooth on top by years of axes. An [axe] is sunk in it. Beside it, someone has stacked enough split white oak to last the summer.
+    verbs:
+      sit: You sit on the block for a moment, then think better of it and stand up again.
+
+  axe:
+    name: axe
+    when: [not 1830.has_axe]
+    aliases: [hatchet]
+    look: The axe is old and its handle is dark with sweat, but the edge is still sharp enough to catch a thumbnail.
+    verbs:
+      take:
+        - when: [not 1830.axe_ok]
+          say: "{madeline} looks up from the door. \"That's ours,\" she says, not unkindly, and you leave it in the block. If you need it, you could ask."
+        - say: You work the axe free of the block while {madeline} watches you do it.
+          do: [{give: axe}, {set: 1830.has_axe}]
+
+  path:
+    name: path
+    aliases: [river path]
+    look: The path runs back down through the trees to the landing and the river.
+
+  trail:
+    name: wagon trail
+    aliases: [trail, peoria trail, wagon trail, oaks]
+    look: Wagon ruts run south through the oaks toward Peoria. A little way along them, the smoke of a cook fire rises between the trees.
+
+npcs:
+  madeline:
+    name: Madeline
+    unknown: a woman in a dark shawl
+    ref: the woman in the shawl
+    aliases: [madeline, woman, wife, madeline ogee, mrs. ogee]
+    room_line: "[madeline] waits in the west doorway with a basket of mending on her hip, while two [boys|boys] split kindling by the [block|woodpile]."
+    look: She wears a dark dress and a shawl, with her sleeves pushed up from work. She hasn't taken her eyes off you since you came into the clearing.
+    talk:
+      - when: [not met.madeline]
+        text: "\"Madeline Ogee. My husband keeps the ferry.\" She looks at the river water dripping off you onto her doorstep. \"He fished you out, then.\" She looks you over, from your wet hair down to your cracked boots, and leaves it at that."
+        do: [{set: [known.madeline, met.madeline]}]
+      - text: "{madeline} gives you a short nod and goes back to her mending."
+    topics:
+      - keys: [father, lasallier, trader, franklin creek, post]
+        say: "\"My father keeps a post on Franklin Creek, up the river.\" She leaves it there."
+      - keys: [ferry, burn, burned, bogardus, safe]
+        say: "\"Nobody is going to burn this ferry.\" She says it as if she were telling you the time."
+      - keys: [potawatomi, people, family, relatives]
+        say: She looks at you for a long moment. "Why do you want to know?" It doesn't sound like a question she wants answered.
+      - keys: [boys, sons, children]
+        say: "She watches them a moment. \"Good boys. Better once that pile is split.\""
+      - keys: [agent, coat, rolette, debt, creditor, guest]
+        say: "Her mouth thins. \"He eats at our table and sleeps in our east room, and all the while he means to take the boat. My husband says that's business.\""
+      - keys: [joseph, ogee, husband]
+        say: "\"He worries at that river like it owes him money.\" She pauses. \"It's the other way around.\""
+      - keys: [paddle, oar, father's paddle, spare paddle, canoe paddle]
+        say:
+          - when: [has:paddle]
+            text: "\"Bring it home when you're done.\""
+          - when: [1830.madeline_told]
+            text: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs and puts it in your hands. \"Bring it home.\""
+            do: [{give: paddle}, {set: 1830.has_paddle}]
+          - text: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Bring it home.\""
+            do: [{give: paddle}, {set: [1830.has_paddle, 1830.madeline_told]}]
+      - keys: [axe, borrow, chopping, block]
+        say:
+          - when: [has:axe]
+            text: "\"You've got it. Bring it back.\""
+          - when: [1830.madeline_told]
+            text: "\"Take it. Just bring it back.\""
+            do: [{set: 1830.axe_ok}]
+          - text: "\"What do you want with an axe?\" You tell her you're helping her husband keep the ferry, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"Take it, then,\" she says at last. \"Just bring it back.\""
+            do: [{set: [1830.axe_ok, 1830.madeline_told]}]
+    fallback: "{madeline} only shakes her head; it isn't something she means to discuss with a stranger."
+    social:
+      hello: "{madeline} nods to you from the doorway."
+      thanks: "\"Mm,\" she says, which seems to cover it."
+      bye: She lifts a hand as you go.
+      how: "\"Busy.\""
+      sorry: "\"It's nothing.\""
+    parting: "[madeline] watches you all the way to the edge of the clearing."
+
+  boys:
+    name: boys
+    plural: true                # "the boys are", in the return-visit line
+    aliases: [boys, sons, children, kindling, two boys]
+    look: Two boys are splitting kindling with a hatchet and more enthusiasm than skill. They stop to watch you, then pretend they weren't watching at all.
+    talk:
+      - when: [not 1830.crow_traded]
+        text: "The older boy jerks his chin at the roof. \"He's a thief, that one, he's always...\" \"Something shiny!\" the younger one cuts in. \"Every time!\" \"I was telling it.\""
+      - text: The boys look at each other and say nothing, though one of them can't quite hide a grin.
+    topics:
+      - keys: [crow, bird, thief, shiny, key, roof]
+        say:
+          - when: [not 1830.crow_traded]
+            text: "\"He took Mother's thimble once,\" the younger boy says. \"Pa got it back with a...\" \"Brass button,\" says the older one. \"He'll trade, but only up.\" \"I was telling it!\""
+          - text: "\"You've made a friend for life,\" the older boy says, grinning."
+    fallback: The boys giggle and go back to their kindling.
+
+actions:
+  - id: crow_trade
+    phrases: [put dollar on block, put dollar on chopping block, put dollar down, lay dollar on block, leave dollar on block, leave dollar for crow, set dollar on block, set dollar on chopping block, put dollar on stump, toss dollar to crow, throw dollar to crow, show dollar to crow, offer dollar to crow, give dollar to crow, hold up dollar, offer crow dollar, give crow dollar, show crow dollar, trade dollar for key, trade dollar with crow, swap dollar for key, trade crow dollar, put silver dollar on block, put silver dollar on chopping block, put silver dollar down, lay silver dollar on block, leave silver dollar on block, leave silver dollar for crow, set silver dollar on block, set silver dollar on chopping block, put silver dollar on stump, toss silver dollar to crow, throw silver dollar to crow, show silver dollar to crow, offer silver dollar to crow, give silver dollar to crow, hold up silver dollar, offer crow silver dollar, give crow silver dollar, show crow silver dollar, trade silver dollar for key, trade silver dollar with crow, swap silver dollar for key, trade crow silver dollar, put silver on block, put silver on chopping block, put silver down, lay silver on block, leave silver on block, leave silver for crow, set silver on block, set silver on chopping block, put silver on stump, toss silver to crow, throw silver to crow, show silver to crow, offer silver to crow, give silver to crow, hold up silver, offer crow silver, give crow silver, show crow silver, trade silver for key, trade silver with crow, swap silver for key, trade crow silver, put coin on block, put coin on chopping block, put coin down, lay coin on block, leave coin on block, leave coin for crow, set coin on block, set coin on chopping block, put coin on stump, toss coin to crow, throw coin to crow, show coin to crow, offer coin to crow, give coin to crow, hold up coin, offer crow coin, give crow coin, show crow coin, trade coin for key, trade coin with crow, swap coin for key, trade crow coin, put money on block, put money on chopping block, put money down, lay money on block, leave money on block, leave money for crow, set money on block, set money on chopping block, put money on stump, toss money to crow, throw money to crow, show money to crow, offer money to crow, give money to crow, hold up money, offer crow money, give crow money, show crow money, trade money for key, trade money with crow, swap money for key, trade crow money, trade with crow, trade crow, bribe crow, make a trade, entice crow with dollar, lure crow with dollar, tempt crow with dollar, bait crow with dollar, attract crow with dollar, distract crow with dollar, bribe crow with dollar, wave dollar at crow, flash dollar at crow, hold up dollar at crow, shine dollar at crow, throw dollar at crow, toss dollar at crow, flick dollar at crow, show dollar at crow, hold up dollar to crow, hold dollar to crow, wave dollar to crow, put dollar on roof, put dollar on ground, place dollar on block, place dollar on chopping block, place dollar on stump, place dollar on roof, place dollar on ground, set dollar on stump, set dollar on roof, set dollar on ground, lay dollar on chopping block, lay dollar on stump, lay dollar on roof, lay dollar on ground, leave dollar on chopping block, leave dollar on stump, leave dollar on roof, leave dollar on ground, drop dollar on block, drop dollar on chopping block, drop dollar on stump, drop dollar on roof, drop dollar on ground, throw dollar on block, throw dollar on chopping block, throw dollar on stump, throw dollar on roof, throw dollar on ground, toss dollar on block, toss dollar on chopping block, toss dollar on stump, toss dollar on roof, toss dollar on ground, set down dollar on block, set down dollar on chopping block, set down dollar on stump, set down dollar on roof, set down dollar on ground, put down dollar on block, put down dollar on chopping block, put down dollar on stump, put down dollar on roof, put down dollar on ground, drop dollar, leave dollar, show dollar, toss dollar, throw dollar, flash dollar, wave dollar, offer dollar, place dollar, put down dollar, set down dollar, use dollar on crow, use dollar on block, use dollar on chopping block, swap dollar with crow, exchange dollar for key, exchange dollar with crow, entice crow with silver dollar, lure crow with silver dollar, tempt crow with silver dollar, bait crow with silver dollar, attract crow with silver dollar, distract crow with silver dollar, bribe crow with silver dollar, wave silver dollar at crow, flash silver dollar at crow, hold up silver dollar at crow, shine silver dollar at crow, throw silver dollar at crow, toss silver dollar at crow, flick silver dollar at crow, show silver dollar at crow, hold up silver dollar to crow, hold silver dollar to crow, wave silver dollar to crow, put silver dollar on roof, put silver dollar on ground, place silver dollar on block, place silver dollar on chopping block, place silver dollar on stump, place silver dollar on roof, place silver dollar on ground, set silver dollar on stump, set silver dollar on roof, set silver dollar on ground, lay silver dollar on chopping block, lay silver dollar on stump, lay silver dollar on roof, lay silver dollar on ground, leave silver dollar on chopping block, leave silver dollar on stump, leave silver dollar on roof, leave silver dollar on ground, drop silver dollar on block, drop silver dollar on chopping block, drop silver dollar on stump, drop silver dollar on roof, drop silver dollar on ground, throw silver dollar on block, throw silver dollar on chopping block, throw silver dollar on stump, throw silver dollar on roof, throw silver dollar on ground, toss silver dollar on block, toss silver dollar on chopping block, toss silver dollar on stump, toss silver dollar on roof, toss silver dollar on ground, set down silver dollar on block, set down silver dollar on chopping block, set down silver dollar on stump, set down silver dollar on roof, set down silver dollar on ground, put down silver dollar on block, put down silver dollar on chopping block, put down silver dollar on stump, put down silver dollar on roof, put down silver dollar on ground, drop silver dollar, leave silver dollar, show silver dollar, toss silver dollar, throw silver dollar, flash silver dollar, wave silver dollar, offer silver dollar, place silver dollar, put down silver dollar, set down silver dollar, use silver dollar on crow, use silver dollar on block, use silver dollar on chopping block, swap silver dollar with crow, exchange silver dollar for key, exchange silver dollar with crow, entice crow with coin, lure crow with coin, tempt crow with coin, bait crow with coin, attract crow with coin, distract crow with coin, bribe crow with coin, wave coin at crow, flash coin at crow, hold up coin at crow, shine coin at crow, throw coin at crow, toss coin at crow, flick coin at crow, show coin at crow, hold up coin to crow, hold coin to crow, wave coin to crow, put coin on roof, put coin on ground, place coin on block, place coin on chopping block, place coin on stump, place coin on roof, place coin on ground, set coin on stump, set coin on roof, set coin on ground, lay coin on chopping block, lay coin on stump, lay coin on roof, lay coin on ground, leave coin on chopping block, leave coin on stump, leave coin on roof, leave coin on ground, drop coin on block, drop coin on chopping block, drop coin on stump, drop coin on roof, drop coin on ground, throw coin on block, throw coin on chopping block, throw coin on stump, throw coin on roof, throw coin on ground, toss coin on block, toss coin on chopping block, toss coin on stump, toss coin on roof, toss coin on ground, set down coin on block, set down coin on chopping block, set down coin on stump, set down coin on roof, set down coin on ground, put down coin on block, put down coin on chopping block, put down coin on stump, put down coin on roof, put down coin on ground, drop coin, leave coin, show coin, toss coin, throw coin, flash coin, wave coin, offer coin, place coin, put down coin, set down coin, use coin on crow, use coin on block, use coin on chopping block, swap coin with crow, exchange coin for key, exchange coin with crow, entice crow with silver, lure crow with silver, tempt crow with silver, bait crow with silver, attract crow with silver, distract crow with silver, bribe crow with silver, wave silver at crow, flash silver at crow, hold up silver at crow, shine silver at crow, throw silver at crow, toss silver at crow, flick silver at crow, show silver at crow, hold up silver to crow, hold silver to crow, wave silver to crow, put silver on roof, put silver on ground, place silver on block, place silver on chopping block, place silver on stump, place silver on roof, place silver on ground, set silver on stump, set silver on roof, set silver on ground, lay silver on chopping block, lay silver on stump, lay silver on roof, lay silver on ground, leave silver on chopping block, leave silver on stump, leave silver on roof, leave silver on ground, drop silver on block, drop silver on chopping block, drop silver on stump, drop silver on roof, drop silver on ground, throw silver on block, throw silver on chopping block, throw silver on stump, throw silver on roof, throw silver on ground, toss silver on block, toss silver on chopping block, toss silver on stump, toss silver on roof, toss silver on ground, set down silver on block, set down silver on chopping block, set down silver on stump, set down silver on roof, set down silver on ground, put down silver on block, put down silver on chopping block, put down silver on stump, put down silver on roof, put down silver on ground, drop silver, leave silver, show silver, toss silver, throw silver, flash silver, wave silver, offer silver, place silver, put down silver, set down silver, use silver on crow, use silver on block, use silver on chopping block, swap silver with crow, exchange silver for key, exchange silver with crow, entice crow with money, lure crow with money, tempt crow with money, bait crow with money, attract crow with money, distract crow with money, bribe crow with money, wave money at crow, flash money at crow, hold up money at crow, shine money at crow, throw money at crow, toss money at crow, flick money at crow, show money at crow, hold up money to crow, hold money to crow, wave money to crow, put money on roof, put money on ground, place money on block, place money on chopping block, place money on stump, place money on roof, place money on ground, set money on stump, set money on roof, set money on ground, lay money on chopping block, lay money on stump, lay money on roof, lay money on ground, leave money on chopping block, leave money on stump, leave money on roof, leave money on ground, drop money on block, drop money on chopping block, drop money on stump, drop money on roof, drop money on ground, throw money on block, throw money on chopping block, throw money on stump, throw money on roof, throw money on ground, toss money on block, toss money on chopping block, toss money on stump, toss money on roof, toss money on ground, set down money on block, set down money on chopping block, set down money on stump, set down money on roof, set down money on ground, put down money on block, put down money on chopping block, put down money on stump, put down money on roof, put down money on ground, drop money, leave money, show money, toss money, throw money, flash money, wave money, offer money, place money, put down money, set down money, use money on crow, use money on block, use money on chopping block, swap money with crow, exchange money for key, exchange money with crow, entice crow with asa's dollar, lure crow with asa's dollar, tempt crow with asa's dollar, bait crow with asa's dollar, attract crow with asa's dollar, distract crow with asa's dollar, bribe crow with asa's dollar, wave asa's dollar at crow, flash asa's dollar at crow, hold up asa's dollar at crow, shine asa's dollar at crow, throw asa's dollar at crow, toss asa's dollar at crow, flick asa's dollar at crow, show asa's dollar at crow, show asa's dollar to crow, give asa's dollar to crow, offer asa's dollar to crow, toss asa's dollar to crow, throw asa's dollar to crow, hold up asa's dollar to crow, hold asa's dollar to crow, wave asa's dollar to crow, show crow asa's dollar, give crow asa's dollar, offer crow asa's dollar, put asa's dollar on block, put asa's dollar on chopping block, put asa's dollar on stump, put asa's dollar on roof, put asa's dollar on ground, place asa's dollar on block, place asa's dollar on chopping block, place asa's dollar on stump, place asa's dollar on roof, place asa's dollar on ground, set asa's dollar on block, set asa's dollar on chopping block, set asa's dollar on stump, set asa's dollar on roof, set asa's dollar on ground, lay asa's dollar on block, lay asa's dollar on chopping block, lay asa's dollar on stump, lay asa's dollar on roof, lay asa's dollar on ground, leave asa's dollar on block, leave asa's dollar on chopping block, leave asa's dollar on stump, leave asa's dollar on roof, leave asa's dollar on ground, drop asa's dollar on block, drop asa's dollar on chopping block, drop asa's dollar on stump, drop asa's dollar on roof, drop asa's dollar on ground, throw asa's dollar on block, throw asa's dollar on chopping block, throw asa's dollar on stump, throw asa's dollar on roof, throw asa's dollar on ground, toss asa's dollar on block, toss asa's dollar on chopping block, toss asa's dollar on stump, toss asa's dollar on roof, toss asa's dollar on ground, set down asa's dollar on block, set down asa's dollar on chopping block, set down asa's dollar on stump, set down asa's dollar on roof, set down asa's dollar on ground, put down asa's dollar on block, put down asa's dollar on chopping block, put down asa's dollar on stump, put down asa's dollar on roof, put down asa's dollar on ground, drop asa's dollar, leave asa's dollar, show asa's dollar, toss asa's dollar, throw asa's dollar, flash asa's dollar, hold up asa's dollar, wave asa's dollar, offer asa's dollar, place asa's dollar, put down asa's dollar, set down asa's dollar, use asa's dollar on crow, use asa's dollar on block, use asa's dollar on chopping block, trade asa's dollar for key, trade asa's dollar with crow, swap asa's dollar for key, swap asa's dollar with crow, exchange asa's dollar for key, exchange asa's dollar with crow, trade crow asa's dollar, entice crow with asa's silver dollar, lure crow with asa's silver dollar, tempt crow with asa's silver dollar, bait crow with asa's silver dollar, attract crow with asa's silver dollar, distract crow with asa's silver dollar, bribe crow with asa's silver dollar, wave asa's silver dollar at crow, flash asa's silver dollar at crow, hold up asa's silver dollar at crow, shine asa's silver dollar at crow, throw asa's silver dollar at crow, toss asa's silver dollar at crow, flick asa's silver dollar at crow, show asa's silver dollar at crow, show asa's silver dollar to crow, give asa's silver dollar to crow, offer asa's silver dollar to crow, toss asa's silver dollar to crow, throw asa's silver dollar to crow, hold up asa's silver dollar to crow, hold asa's silver dollar to crow, wave asa's silver dollar to crow, show crow asa's silver dollar, give crow asa's silver dollar, offer crow asa's silver dollar, put asa's silver dollar on block, put asa's silver dollar on chopping block, put asa's silver dollar on stump, put asa's silver dollar on roof, put asa's silver dollar on ground, place asa's silver dollar on block, place asa's silver dollar on chopping block, place asa's silver dollar on stump, place asa's silver dollar on roof, place asa's silver dollar on ground, set asa's silver dollar on block, set asa's silver dollar on chopping block, set asa's silver dollar on stump, set asa's silver dollar on roof, set asa's silver dollar on ground, lay asa's silver dollar on block, lay asa's silver dollar on chopping block, lay asa's silver dollar on stump, lay asa's silver dollar on roof, lay asa's silver dollar on ground, leave asa's silver dollar on block, leave asa's silver dollar on chopping block, leave asa's silver dollar on stump, leave asa's silver dollar on roof, leave asa's silver dollar on ground, drop asa's silver dollar on block, drop asa's silver dollar on chopping block, drop asa's silver dollar on stump, drop asa's silver dollar on roof, drop asa's silver dollar on ground, throw asa's silver dollar on block, throw asa's silver dollar on chopping block, throw asa's silver dollar on stump, throw asa's silver dollar on roof, throw asa's silver dollar on ground, toss asa's silver dollar on block, toss asa's silver dollar on chopping block, toss asa's silver dollar on stump, toss asa's silver dollar on roof, toss asa's silver dollar on ground, set down asa's silver dollar on block, set down asa's silver dollar on chopping block, set down asa's silver dollar on stump, set down asa's silver dollar on roof, set down asa's silver dollar on ground, put down asa's silver dollar on block, put down asa's silver dollar on chopping block, put down asa's silver dollar on stump, put down asa's silver dollar on roof, put down asa's silver dollar on ground, drop asa's silver dollar, leave asa's silver dollar, show asa's silver dollar, toss asa's silver dollar, throw asa's silver dollar, flash asa's silver dollar, hold up asa's silver dollar, wave asa's silver dollar, offer asa's silver dollar, place asa's silver dollar, put down asa's silver dollar, set down asa's silver dollar, use asa's silver dollar on crow, use asa's silver dollar on block, use asa's silver dollar on chopping block, trade asa's silver dollar for key, trade asa's silver dollar with crow, swap asa's silver dollar for key, swap asa's silver dollar with crow, exchange asa's silver dollar for key, exchange asa's silver dollar with crow, trade crow asa's silver dollar, entice crow, lure crow, tempt crow, bait crow, lure crow down, get key from crow, trade for key, hold dollar up, hold dollar up to crow, hold dollar out to crow, hold out dollar to crow, hold dollar up for crow, hold silver dollar up, hold silver dollar up to crow, hold silver dollar out to crow, hold out silver dollar to crow, hold silver dollar up for crow, hold coin up, hold coin up to crow, hold coin out to crow, hold out coin to crow, hold coin up for crow, hold silver up, hold silver up to crow, hold silver out to crow, hold out silver to crow, hold silver up for crow, hold asa's dollar up, hold asa's dollar up to crow, hold asa's dollar out to crow, hold out asa's dollar to crow, hold asa's dollar up for crow, use dollar, put dollar out, put dollar where crow can see it, put dollar where crow can see, put dollar in sun, put dollar in sunlight, set dollar down, set dollar out, set dollar where crow can see it, set dollar where crow can see, set dollar in sun, set dollar in sunlight, lay dollar down, lay dollar out, lay dollar where crow can see it, lay dollar where crow can see, lay dollar in sun, lay dollar in sunlight, leave dollar down, leave dollar out, leave dollar where crow can see it, leave dollar where crow can see, leave dollar in sun, leave dollar in sunlight, shine dollar, shine dollar in sun, shine dollar in light, polish dollar, polish dollar in sun, polish dollar in light, rub dollar, rub dollar in sun, rub dollar in light, flash dollar in sun, flash dollar in light, tilt dollar, tilt dollar in sun, tilt dollar in light, turn dollar, turn dollar in sun, turn dollar in light, let crow see dollar, make dollar shine, catch light with dollar, hold dollar in sun, hold dollar in light, make crow see dollar, show dollar to bird, give dollar to bird, offer dollar to bird, toss dollar to bird, throw dollar to bird, hold up dollar to bird, wave dollar to bird, wave dollar at bird, flash dollar at bird, hold up dollar at bird, shine dollar at bird, throw dollar at bird, toss dollar at bird, show dollar at bird, entice bird with dollar, lure bird with dollar, tempt bird with dollar, bait bird with dollar, attract bird with dollar, bribe bird with dollar, use dollar on bird, let bird see dollar, show bird dollar, give bird dollar, offer bird dollar, use silver dollar, put silver dollar out, put silver dollar where crow can see it, put silver dollar where crow can see, put silver dollar in sun, put silver dollar in sunlight, set silver dollar down, set silver dollar out, set silver dollar where crow can see it, set silver dollar where crow can see, set silver dollar in sun, set silver dollar in sunlight, lay silver dollar down, lay silver dollar out, lay silver dollar where crow can see it, lay silver dollar where crow can see, lay silver dollar in sun, lay silver dollar in sunlight, leave silver dollar down, leave silver dollar out, leave silver dollar where crow can see it, leave silver dollar where crow can see, leave silver dollar in sun, leave silver dollar in sunlight, shine silver dollar, shine silver dollar in sun, shine silver dollar in light, polish silver dollar, polish silver dollar in sun, polish silver dollar in light, rub silver dollar, rub silver dollar in sun, rub silver dollar in light, flash silver dollar in sun, flash silver dollar in light, tilt silver dollar, tilt silver dollar in sun, tilt silver dollar in light, turn silver dollar, turn silver dollar in sun, turn silver dollar in light, let crow see silver dollar, make silver dollar shine, catch light with silver dollar, hold silver dollar in sun, hold silver dollar in light, make crow see silver dollar, show silver dollar to bird, give silver dollar to bird, offer silver dollar to bird, toss silver dollar to bird, throw silver dollar to bird, hold up silver dollar to bird, wave silver dollar to bird, wave silver dollar at bird, flash silver dollar at bird, hold up silver dollar at bird, shine silver dollar at bird, throw silver dollar at bird, toss silver dollar at bird, show silver dollar at bird, entice bird with silver dollar, lure bird with silver dollar, tempt bird with silver dollar, bait bird with silver dollar, attract bird with silver dollar, bribe bird with silver dollar, use silver dollar on bird, let bird see silver dollar, show bird silver dollar, give bird silver dollar, offer bird silver dollar, use coin, put coin out, put coin where crow can see it, put coin where crow can see, put coin in sun, put coin in sunlight, set coin down, set coin out, set coin where crow can see it, set coin where crow can see, set coin in sun, set coin in sunlight, lay coin down, lay coin out, lay coin where crow can see it, lay coin where crow can see, lay coin in sun, lay coin in sunlight, leave coin down, leave coin out, leave coin where crow can see it, leave coin where crow can see, leave coin in sun, leave coin in sunlight, shine coin, shine coin in sun, shine coin in light, polish coin, polish coin in sun, polish coin in light, rub coin, rub coin in sun, rub coin in light, flash coin in sun, flash coin in light, tilt coin, tilt coin in sun, tilt coin in light, turn coin, turn coin in sun, turn coin in light, let crow see coin, make coin shine, catch light with coin, hold coin in sun, hold coin in light, make crow see coin, show coin to bird, give coin to bird, offer coin to bird, toss coin to bird, throw coin to bird, hold up coin to bird, wave coin to bird, wave coin at bird, flash coin at bird, hold up coin at bird, shine coin at bird, throw coin at bird, toss coin at bird, show coin at bird, entice bird with coin, lure bird with coin, tempt bird with coin, bait bird with coin, attract bird with coin, bribe bird with coin, use coin on bird, let bird see coin, show bird coin, give bird coin, offer bird coin, use silver, put silver out, put silver where crow can see it, put silver where crow can see, put silver in sun, put silver in sunlight, set silver down, set silver out, set silver where crow can see it, set silver where crow can see, set silver in sun, set silver in sunlight, lay silver down, lay silver out, lay silver where crow can see it, lay silver where crow can see, lay silver in sun, lay silver in sunlight, leave silver down, leave silver out, leave silver where crow can see it, leave silver where crow can see, leave silver in sun, leave silver in sunlight, shine silver, shine silver in sun, shine silver in light, polish silver, polish silver in sun, polish silver in light, rub silver, rub silver in sun, rub silver in light, flash silver in sun, flash silver in light, tilt silver, tilt silver in sun, tilt silver in light, turn silver, turn silver in sun, turn silver in light, let crow see silver, make silver shine, catch light with silver, hold silver in sun, hold silver in light, make crow see silver, show silver to bird, give silver to bird, offer silver to bird, toss silver to bird, throw silver to bird, hold up silver to bird, wave silver to bird, wave silver at bird, flash silver at bird, hold up silver at bird, shine silver at bird, throw silver at bird, toss silver at bird, show silver at bird, entice bird with silver, lure bird with silver, tempt bird with silver, bait bird with silver, attract bird with silver, bribe bird with silver, use silver on bird, let bird see silver, show bird silver, give bird silver, offer bird silver, use asa's dollar, put asa's dollar down, put asa's dollar out, put asa's dollar where crow can see it, put asa's dollar where crow can see, put asa's dollar in sun, put asa's dollar in sunlight, set asa's dollar down, set asa's dollar out, set asa's dollar where crow can see it, set asa's dollar where crow can see, set asa's dollar in sun, set asa's dollar in sunlight, lay asa's dollar down, lay asa's dollar out, lay asa's dollar where crow can see it, lay asa's dollar where crow can see, lay asa's dollar in sun, lay asa's dollar in sunlight, leave asa's dollar down, leave asa's dollar out, leave asa's dollar where crow can see it, leave asa's dollar where crow can see, leave asa's dollar in sun, leave asa's dollar in sunlight, shine asa's dollar, shine asa's dollar in sun, shine asa's dollar in light, polish asa's dollar, polish asa's dollar in sun, polish asa's dollar in light, rub asa's dollar, rub asa's dollar in sun, rub asa's dollar in light, flash asa's dollar in sun, flash asa's dollar in light, tilt asa's dollar, tilt asa's dollar in sun, tilt asa's dollar in light, turn asa's dollar, turn asa's dollar in sun, turn asa's dollar in light, let crow see asa's dollar, make asa's dollar shine, catch light with asa's dollar, hold asa's dollar in sun, hold asa's dollar in light, make crow see asa's dollar, show asa's dollar to bird, give asa's dollar to bird, offer asa's dollar to bird, toss asa's dollar to bird, throw asa's dollar to bird, hold up asa's dollar to bird, wave asa's dollar to bird, wave asa's dollar at bird, flash asa's dollar at bird, hold up asa's dollar at bird, shine asa's dollar at bird, throw asa's dollar at bird, toss asa's dollar at bird, show asa's dollar at bird, entice bird with asa's dollar, lure bird with asa's dollar, tempt bird with asa's dollar, bait bird with asa's dollar, attract bird with asa's dollar, bribe bird with asa's dollar, use asa's dollar on bird, let bird see asa's dollar, show bird asa's dollar, give bird asa's dollar, offer bird asa's dollar, entice bird, lure bird, tempt bird, bait bird, trade with bird, bribe bird]
+    when: [money>=1, not 1830.crow_traded]
+    do:
+      - money: -1
+      - set: 1830.crow_traded
+      - say: >-
+          You set Asa's silver dollar on the chopping block, where it catches the light, and step back. The
+          crow cocks its head, looks at the dollar, looks at you, and looks at
+          the dollar again. Then it drops down off the roof in one black swoop,
+          lets the brass thing fall from its beak onto the block to free it,
+          snatches up the dollar instead, and is back on the ridge before you
+          can blink. On the block lies a small brass key on a loop of greasy
+          string.
+    else:
+      - when: [1830.crow_traded]
+        say: The crow has what it wants, and so do you.
+      - when: [has:silver]
+        say: "{asa's} silver is spoken for. The crow will have to want something else."
+      - say: You've nothing shiny to offer it. The crow seems to know that.
+
+  - id: borrow_paddle
+    speaker: madeline
+    phrases: [ask for paddle, borrow paddle, ask madeline for paddle, ask woman for paddle, ask her for paddle, ask madeline for the paddle, ask for the paddle, ask to borrow paddle, can i borrow paddle, may i borrow paddle, can i borrow the paddle, may i borrow the paddle, ask for spare paddle, ask for father's paddle, ask for oar, borrow oar]
+    when: [here:madeline, not has:paddle]
+    do:
+      - give: paddle
+      - set: 1830.has_paddle
+      # Whichever she lends first, the paddle or the axe, she wants to know why.
+      - if:
+          when: [1830.madeline_told]
+          do:
+            - say: "\"That was my father's.\" She looks at it a moment, then lifts it down from the pegs and puts it in your hands. \"Bring it home.\""
+          else:
+            - say: "\"That was my father's.\" She makes no move to take it down. \"What do you want with it?\" You tell her about the split canoe and the rope, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"If it keeps that man off the ferry,\" she says at last, \"my father would want it on the water.\" She lifts it down from the pegs. \"Bring it home.\""
+            - set: 1830.madeline_told
+    else:
+      - when: [has:paddle]
+        say: You already have the paddle.
+      - say: There's nobody here to ask.
+
+  - id: make_paddle
+    phrases: [cut paddle, make paddle, carve paddle, split oak for paddle, chop paddle, make a paddle, cut a paddle, shape paddle, make paddle from oak, carve paddle from oak, cut paddle from oak, whittle paddle, carve a paddle, shape oak into paddle, make oar, cut oar, carve oar]
+    do:
+      - say: Carving a paddle out of firewood would take you the rest of the day, and these lengths are only two feet long anyway. Someone who lives on a river probably has a spare.
+
+  - id: chop_wood
+    phrases: [carve oak, use axe on oak, split oak, chop oak, cut oak, split oak with axe, shape oak, chop wood, cut wood, split wood, chop the wood, cut the wood, split the wood, chop log, chop logs, split log, split logs, chop the oak, split the oak, cut the oak, chop, use axe, use the axe, use axe on wood, use axe on block, use axe on log, chop firewood, chop a log, swing axe]
+    when: [has:axe]
+    do:
+      - say: You split a few lengths of oak and add them to the pile, while the boys watch, unimpressed. It's honest work, and it gets you nothing but a sore shoulder.
+    else:
+      - say: You'd need an axe for that, and the only one here is sunk in the block.
+
+  - id: borrow_axe
+    speaker: madeline
+    phrases: [ask for axe, borrow axe, ask madeline for axe, ask woman for axe, ask her for axe, ask madeline for the axe, ask to borrow axe, can i borrow axe, may i borrow axe, can i use axe, may i use axe, ask to use axe, ask madeline about axe, ask woman about axe]
+    when: [here:madeline, not has:axe]
+    do:
+      - set: 1830.axe_ok
+      - if:
+          when: [1830.madeline_told]
+          do:
+            - say: "\"Take it. Just bring it back.\""
+          else:
+            - say: "\"What do you want with an axe?\" You tell her you're helping her husband keep the ferry, and her eyes go down the path toward the river, where Rolette's man sits waiting to take the boat. \"Take it, then,\" she says at last. \"Just bring it back.\""
+            - set: 1830.madeline_told
+    else:
+      - when: [has:axe]
+        say: You already have it.
+      - say: There's nobody here to ask.
+
+  - id: return_paddle
+    speaker: madeline
+    phrases: [return paddle, give paddle to madeline, give madeline paddle, give madeline the paddle, give paddle back, give paddle back to madeline, give back paddle, return paddle to madeline, put paddle back, hang paddle up, hang up paddle, hang paddle on pegs, put paddle on pegs, put paddle back on pegs, give her paddle, give her the paddle, give paddle to woman, give paddle, return oar, give oar to madeline, bring paddle home, give father's paddle back]
+    when: [has:paddle, here:madeline]
+    do:
+      - take: paddle
+      - set: 1830.paddle_returned
+      - if:
+          when: [1830.rope_strung]
+          do:
+            - say: "{madeline} takes it and runs her hand along the blade, where the river has left it dark. \"So it's been on the water again,\" she says, and something in her face softens before she hangs it back on its pegs under the eaves."
+          else:
+            - say: "{madeline} hangs it back on its pegs under the eaves. \"Back so soon? It'll be here if you want it.\""
+    else:
+      - when: [not has:paddle]
+        say: You haven't got it.
+      - say: There's nobody here to give it back to.
+
+  - id: return_axe
+    phrases: [give axe to madeline, return axe, give madeline axe, put axe back, give back axe, give axe back, give axe back to madeline, return axe to madeline, give axe to woman, put axe in block, give her axe, give her the axe]
+    when: [has:axe, here:madeline]
+    do:
+      - take: axe
+      - clear: 1830.has_axe
+      - set: 1830.axe_returned
+      - say: You hand the axe back. {madeline} looks along the edge, finds it no worse than she lent it, and sinks it back in the block.
+    else:
+      - say: You haven't got it to give back.
+
+exits:
+  - names: [north, path, river, landing, ferry, back, down]
+    to: landing
+    peek: The path runs back north through the trees, down to the river and the ferry landing.
+    text: You head back down the path to the landing.
+  - names: [south, trail, wagon trail, peoria trail, camp, fire]
+    to: camp
+    peek: The wagon trail runs south through the oaks toward the smoke of a cook fire.
+    text: You follow the wagon ruts south through the oaks until you come to a camp.

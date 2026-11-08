@@ -1,0 +1,105 @@
+# The winning path, from the Walkthrough tab of the chapter 1 design doc.
+tests:
+  - name: winning path, 127 points
+    steps:
+      # Part 1: the museum to the water's edge
+      - {cmd: look, expect: [glass cases, founding panel, silent], score: 0}
+      - {cmd: talk to volunteer, expect: [familiar face, I'm Margaret]}
+      - {cmd: read panel, expect: [THE FOUNDING OF ROLETTE, ends a line short], score: 2}
+      - {cmd: look at crossword, expect: [seven down, john], score: 4}
+      - {cmd: ask margaret about seven down, expect: [Margaret says, seven letters]}
+      - {cmd: ask about the river, expect: [Rolette's Ferry, lose track of time]}
+      - {cmd: sign guestbook, expect: darker than you expected, score: 6}
+      - {cmd: look at clock, expect: "4:17"}
+      - {cmd: go outside, expect: [You thank Margaret, West Fifth Street], room: street}
+      - {cmd: look at pickup, expect: sticker}
+      - {cmd: peel sticker, expect: "DIXON'S FERRY DAYS", score: 8}
+      - {cmd: north, expect: Riverside walk, room: riverwalk}
+      - {cmd: read marker, expect: "ROLETTE'S FERRY"}
+      - {cmd: look at sanded line, expect: the cross, score: 10}
+      - {cmd: down, expect: "The water's edge", room: wateredge}
+      - {cmd: look at water, expect: [ridges, thicker]}
+      - {cmd: look at ridges, expect: [grooves, street fades]}
+      - {cmd: look at water, expect: [planks, city is simply gone, handle a canoe], score: 13}
+      - {cmd: answer, expect: [The ferry landing, 1830], score: 18, room: landing}
+      - {cmd: look, expect: [Sit a moment, world comes back, split and still draining], not: tar pot}
+      # Part 2: the high water and the rope
+      - {cmd: talk to man in buckskin, expect: [Joseph Ogee, River's up past the pole, Dixon], score: 21}
+      - {cmd: look at man in coat, expect: horse he means to take}
+      - {cmd: talk to man in coat, expect: [Galena, Rolette, hundred dollars in silver]}
+      - {cmd: talk to young man, expect: [Eli, slough], score: 23}
+      - {cmd: south, expect: "Ogee's cabin", room: cabin}
+      - {cmd: talk to woman, expect: Madeline, not: Take it}
+      - {cmd: ask madeline for axe, expect: [What do you want with an axe, Take it, then]}
+      - {cmd: take axe, expect: work the axe free, score: 24}
+      - {cmd: ask madeline for paddle, expect: That was my father's, score: 28}
+      - {cmd: south, expect: "Dixon's camp", room: camp}
+      - {cmd: talk to tall man, expect: [John Dixon, "Rolette's man", rope], not: hundred}
+      - {cmd: ask dixon about the lease, expect: [hundred in silver, paper on the governor]}
+      - {cmd: ask dixon for rope, expect: Dixon says}
+      - {cmd: north, room: cabin}
+      - {cmd: north, room: landing}
+      - {cmd: look at canoe, expect: tar pot}
+      - {cmd: tar canoe, expect: tar}
+      - {cmd: launch canoe, expect: [pay out the coil, north landing], room: northlanding}
+      - {cmd: tie rope to post, expect: "Dixon's rope"}
+      # Part 3: the slough
+      - {cmd: ride ferry, room: landing}
+      - {cmd: ask ogee for the pole, expect: [Ogee says, Bring her back whole]}
+      - {cmd: south, room: cabin}
+      - {cmd: south, room: camp}
+      - {cmd: south, expect: swearing, room: slough}
+      - {cmd: talk to big man, expect: [Asa, dollar in it]}
+      - {cmd: ask asa about galena, expect: pays in silver}
+      - {cmd: cut brush, expect: willow}
+      - {cmd: put brush under wheels, expect: Now the lever}
+      - {cmd: lever wagon with pole, expect: [silver dollar, shoe is gone], money: 1}
+      - {cmd: dig in mud, expect: forged iron}
+      # Part 4: the key, the deal
+      - {cmd: north, room: camp}
+      - {cmd: talk to young man, expect: [I'm James, lost the mail key]}
+      - {cmd: north, room: cabin}
+      - {cmd: look at crow, expect: winks in the light}
+      - {cmd: talk to boys, expect: [He's a thief, something shiny], not: shinier}
+      - {cmd: ask boys about the crow, expect: only up}
+      - {cmd: put dollar on chopping block, expect: small brass key, money: 0}
+      - {cmd: take key, expect: pick the key up}
+      - {cmd: give the paddle back to madeline, expect: been on the water again}
+      - {cmd: return axe, expect: You hand the axe back}
+      - {cmd: south, room: camp}
+      - {cmd: give key to james, expect: Father need never know, not: crow}
+      - {cmd: north, room: cabin}
+      - {cmd: north, room: landing}
+      - {cmd: talk to asa, expect: "What I need is a ferry"}
+      - {cmd: give shoe to ogee, expect: Smith made that}
+      - {cmd: tell asa about dixon, expect: [season of crossings, Take that up to Dixon], room: landing}
+      - {cmd: south, room: cabin}
+      - {cmd: south, room: camp}
+      - {cmd: give silver to dixon, expect: [season of crossings, signs the ferry over to Dixon on a lease, Take my arm], room: landing}
+      - {cmd: south, expect: fog is too thick, room: landing}
+      - {cmd: "take ogee's arm", expect: city sounds come back, room: wateredge}
+      # Part 5: home, noticing what changed (2 points each), Margaret last
+      - {cmd: look, expect: mist has lifted}
+      - {cmd: up, room: riverwalk}
+      - {cmd: read marker, score: 113}
+      - {cmd: look at statue}
+      - {cmd: read plaque, expect: Dixon, score: 114}
+      - {cmd: south, room: street}
+      - {cmd: look at sticker, score: 115}
+      - {cmd: in, room: museum}
+      - {cmd: look, expect: [pole shoe, ticks by the back door, brass token]}
+      - {cmd: read panel, expect: [took over the ferry, reads right now], score: 116}
+      - {cmd: look at pole shoe, expect: "wasn't there this morning", score: 117}
+      - {cmd: look at token, expect: [J.O., Joseph Ogee, I suppose], score: 118}
+      - {cmd: look at engraving, expect: "Somebody's filled that frame", score: 119}
+      - {cmd: look at clock, expect: all by itself, score: 120}
+      - {cmd: look at crossword, expect: tip of my pencil, score: 121}
+      - {cmd: look at sign, expect: before I knew why, score: 122}
+      - {cmd: look at token, not: "Joseph Ogee, I suppose", score: 122}
+      - {cmd: look at desk, expect: [DIXON'S FERRY, 1831, "Hasn't it?"], score: 123}
+      - {cmd: ask margaret about the desk, expect: [post office desk, nerve to try it]}
+      - {cmd: look at key, expect: [DIXON'S FERRY P.O., thirty-one years], not: next Saturday}
+      - {cmd: open drawer, expect: Not tonight, not: Next Saturday}
+      - {cmd: talk to margaret, expect: [DIXON, come back next Saturday], score: 127}
+      - {cmd: out, expect: [locks up behind you, "brass token, J.O.", The end of Chapter 1, "Final score: 127 of 127"]}
+      - {cmd: score, expect: Your score is 127 of 127}

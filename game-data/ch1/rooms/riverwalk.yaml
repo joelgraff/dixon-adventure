@@ -1,0 +1,174 @@
+id: riverwalk
+era: present
+name: Riverside walk
+sources: [S1, S4]
+picture: >-
+  Riverfront plaza at dusk, looking north across the river. Equestrian statue
+  at left on dark granite with two flagpoles and low fountains, a green
+  historical marker on a post at centre, a stone pavilion with a cupola at
+  right, a green railing along the water, wide steps going down at the far
+  right, a raft of mist lying on the river.
+
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The plaza is still nearly empty under the bronze [statue]. At the end of the [railing], the worn [stairway] leads down to the water."
+look: >-
+  The plaza was built for crowds, with pale paving and limestone walls
+  stepping down toward the water, but tonight you nearly have it to
+  yourself. A bronze [statue] of a man on a horse rises in the middle of it, with a green historical [marker] on a post nearby. A green iron [railing] follows the curve of the wall above the [river], which is wide and brown and slow, with a long raft of mist lying on it. At the far end of the railing a worn [stairway] goes down to the water. Behind you, [hennepin|Hennepin] runs back south through downtown.
+listen: You hear water against stone and, somewhere, a halyard clinking against a pole, though there are no boats anywhere.
+
+on_turn:
+  - when: [turns==3, not 1830.lease_dixon]
+    say: The mist on the water has crept toward the wall. Somewhere below the railing the river laps at the lowest steps, a sound you didn't notice a minute ago.
+  - when: [turns==6, not 1830.lease_dixon]
+    say: The evening has gone very quiet. Even the fountains seem to have stopped, and the only thing still moving is the river, slowly, past the foot of the stairs.
+
+nouns:
+  marker:
+    name: historical marker
+    key: true
+    aliases: [sign, historical marker, post, plaque on post, smaller type]
+    reveals: [sanded]
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          DIXON'S FERRY. "A ferry crossed the Rock River at about this spot by
+          1828, kept by Joseph Ogee. The settlement that grew on this bank took
+          its name from John Dixon, who took over the ferry in 1830." Near the
+          bottom, a line of smaller type reads: "Dixon's Ferry: the crossing
+          that named a town."
+      - when: [1830.lease_player]
+        text: >-
+          THE FERRY LANDING. "A ferry crossed the Rock River at about this spot
+          by 1828, kept by Joseph Ogee. In 1830 it passed to a newcomer whose
+          name was not recorded." Near the bottom, a line of smaller type has
+          been [sanded] away.
+      - text: >-
+          ROLETTE'S FERRY. "A ferry crossed the Rock River at about this spot
+          by 1828, kept by Joseph Ogee. In 1830 it passed to his creditor, the
+          trader Rolette, and the settlement kept the creditor's name." Near
+          the bottom, a line of smaller type has been [sanded] away, leaving a
+          pale smooth patch.
+    verbs:
+      touch:
+        - when: [1830.lease_dixon]
+          say: The paint is gritty with old salt, and unbroken all the way down.
+        - say: The paint is gritty with old salt, and you can feel exactly where the sanding stopped.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_marker]
+          do:
+              - set: present.noticed_marker
+
+  sanded:
+    name: sanded line
+    hidden: true
+    when: [not 1830.lease_dixon]
+    aliases: [sanded line, patch, pale patch, line, small type, type, lettering, letters]
+    on_look: [{set: present.marker_read}]
+    look: "A few letters survive at the edge of the patch: …the cross… Whatever the line said, someone cared enough to take it off, but not enough to repaint the sign."
+    verbs:
+      touch: The patch is as smooth as a pebble, and cooler than the paint around it.
+
+  statue:
+    name: statue
+    aliases: [horse, rider, bronze, monument, granite, flagpoles, flags, fountains, fountain, plaza]
+    reveals: [plaque]
+    look: A bronze rider on a palomino, nine feet of him, sits high on a block of dark granite between two flagpoles, with a bronze [plaque] set into the paving at his feet. Low fountains play in the plaza around him while the flags hang limp in the damp air.
+    verbs:
+      touch: The granite is cold and beaded with damp.
+      climb: It's a long way up, and it wouldn't be respectful anyway.
+
+  plaque:
+    name: statue plaque
+    hidden: true
+    aliases: [statue plaque, bronze plaque, dedication, begins the trail]
+    look: >-
+      The plaque is titled BEGINS THE TRAIL. Under the title it quotes Ronald Reagan, who lived here from 1920 to 1933: "It was in {town_in}
+      that I really found myself." The rest tells how he came back in 1950 to
+      ride a palomino in a parade, which is where the statue comes from, and
+      how he is said to have saved 77 lives as a lifeguard on the Rock River.
+      It was dedicated on August 14, 2009.
+    verbs:
+      touch: The raised letters are cool under your fingers and slightly gritty.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_plaque]
+          do:
+              - set: present.noticed_plaque
+
+  bench:
+    name: bench
+    aliases: [seat]
+    reveals: [plate]
+    look: A brass [plate] is screwed to the back of the bench. The slats are damp, though it hasn't rained.
+    verbs:
+      sit:
+        say: You sit for a while with a brass [plate] on the backrest pressing into your shoulders. The mist on the water doesn't move, and neither, you notice after a while, does anything else.
+        do: [{reveal: plate}]
+
+  plate:
+    name: brass plate
+    hidden: true
+    aliases: [brass plate, inscription]
+    look: "The plate reads FOR HARRY, WHO KNEW THE RIVER. 1931–2009. Below it, someone has scratched two words with a key or a nail: it remembers."
+
+  pavilion:
+    name: pavilion
+    aliases: [gazebo, shelter, roof, cupola, weathervane, picnic tables]
+    look: The pavilion is a square of stone piers under a dark shingled roof, with a little cupola and a weathervane on top. The picnic tables under it are empty tonight, and the weathervane doesn't turn.
+    verbs:
+      sit: You sit at one of the picnic tables for a minute. The wood is damp, and the sounds of the city seem a little farther off than they should.
+      climb: The roof is well out of reach.
+
+  railing:
+    name: railing
+    aliases: [rail, fence, wall, limestone wall]
+    reveals: [ringbolt]
+    look: The railing is painted iron, cold and a little wet. Past it the bank drops away to riprap and the water, and down at the base of the wall an old iron [ringbolt] is set into the stone. A little way along stands a stone [pavilion], with a [bench] facing the river.
+    verbs:
+      touch: The iron is cold and wet, and someone has scratched their initials into the paint.
+
+  ringbolt:
+    name: ringbolt
+    hidden: true
+    aliases: [ring, bolt, iron ring]
+    look: A rusted iron ring is set into the stone, worn bright on one side where rope used to run. It's older than the railing, and older than the walk.
+    verbs:
+      touch: You can't reach it from up here.
+
+  river:
+    name: river
+    aliases: [water, rock river, mist, bridge, far shore]
+    look: The river is broad and brown and slow. The mist lies on it in a single bank, as if something were keeping it there, so that the far shore is only mist. The [stairway] goes down to the water's edge, near where the marker says the old ferry crossed.
+    verbs:
+      touch: You can't reach it from the walk.
+      drink: You'd rather not, from up here or anywhere else.
+      smell: It smells of mud and iron and cut grass, with something older underneath.
+
+  stairway:
+    name: stairway
+    aliases: [stairs, steps, stair]
+    look: Wide concrete steps, worn hollow in the middle, curve down to the lower walkway beside the water. The lowest few vanish into the mist.
+    verbs:
+      climb: These stairs only go down from here.
+
+  hennepin:
+    name: Hennepin
+    aliases: [street, hennepin street, road, downtown]
+    look: Hennepin runs south from the riverfront through downtown and past the courthouse toward the Historic Center, an easy walk of four blocks.
+
+actions:
+  - id: jump_railing
+    phrases: [jump over railing, climb railing, climb over railing, jump railing, climb over the rail, jump in, jump in river]
+    do:
+      - death: railing
+
+exits:
+  - names: [south, street, hennepin, back, up, downtown, museum]
+    to: street
+    text: You walk back south along Hennepin, through downtown and past the courthouse, to the Historic Center's block.
+  - names: [down, stairway, stairs, steps, stair, north, water, bank, water's edge]
+    to: wateredge
+    peek: The worn steps curve down to the lower walk beside the water, the lowest of them lost in mist.
+    text: You go down the worn steps, one hand on the cold rail.

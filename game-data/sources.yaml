@@ -1,0 +1,79 @@
+# Sources and the claims ledger. Mirrors the Sources tab of the chapter 1
+# design doc. Quote facts from the county histories, never their wording:
+# they use dated racial terms for Ogee and his family.
+
+sources:
+  S1:
+    title: John Dixon, Lee County, Illinois (AHGP)
+    url: https://www.ahgp.org/ill/john-dixon-lee-county-illinois.html
+    supports: Ogee's family and debts, the Schellenger and Rolette mortgages, Dixon's lease, arrival and 1832 purchase, his mail contracts, James driving the mail.
+  S2:
+    title: Accounts from the books of John Dixon (AHGP)
+    url: https://www.ahgp.org/ill/accounts-from-the-books-of-john-dixon.html
+    supports: Ferry location, the cabin, 1830-31 rates and prices, the post office, Ogee's sons.
+  S3:
+    title: Dixon history (dixonil.com)
+    url: https://dixonil.com/history.htm
+    supports: The 1829 post office, "purchased Ogee's claim" in spring 1830, Fort Dixon.
+  S4:
+    title: Old trails of Lee County (AHGP)
+    url: https://www.ahgp.org/ill/old-trails-lee-county-illinois.html
+    supports: Kellogg's and Boles' trails, spring traffic to the mines, Ogee's pole ferry, Dixon's rope ferry, Dixon's loans to travelers.
+  S5:
+    title: Children of John and Rebecca Dixon (AHGP)
+    url: https://www.ahgp.org/ill/children-of-john-rebecca-dixon.html
+    supports: The Dixon children's names and birth years.
+  S6:
+    title: The Port of Galena (WVIK)
+    url: https://www.wvik.org/2022-12-23/the-port-of-galena
+    supports: Galena lead shipped by boat; the 1827 tonnage.
+  S7:
+    title: Read v. Wilson (Illinois Supreme Court, 1859)
+    url: https://law.counselstack.com/opinion/read-v-wilson-ill-1859
+    supports: A mortgagee's agent taking goods under a chattel mortgage.
+  S8:
+    title: Jean Joseph Rolette (Wikipedia)
+    url: https://en.wikipedia.org/wiki/Jean_Joseph_Rolette
+    supports: Rolette at Prairie du Chien, American Fur Company agent.
+
+  S9:
+    title: Portmanteau (luggage) (Wikipedia)
+    url: https://en.wikipedia.org/wiki/Portmanteau_(luggage)
+    supports: Locks on the portmanteaus carrying the principal mails, from an 1823 Congressional resolution.
+
+# status: record | disputed | guess | invented | needs-source
+claims:
+  C1:  {status: record, rooms: [landing, museum, riverwalk], sources: [S4], claim: "Ogee kept a ferry at the site from spring 1828, propelled by poles."}
+  C2:  {status: record, rooms: [landing, cabin], sources: [S1], claim: "Ogee was of French and Native ancestry; his wife Madeline was Potawatomi, daughter of the trader LaSallier, and her ties let him run the ferry unmolested."}
+  C3:  {status: record, rooms: [cabin], sources: [S2], claim: "Ogee had sons."}
+  C4:  {status: record, rooms: [landing], sources: [S1], claim: "Ogee sold a half interest to George Schellenger on Nov 21, 1829 for $700; on Jan 29, 1830 he owed $1,060, with $100 due in thirty days; the mortgage was assigned to Rolette."}
+  C5:  {status: record, rooms: [landing], sources: [S1], claim: "Ogee gave Rolette a chattel mortgage on Feb 10, 1830 for $258.02 and $84.35."}
+  C6:  {status: disputed, rooms: [landing, museum], sources: [S1, S8], claim: "Which Rolette held the notes: the county history says Laurent; Joseph Rolette was the American Fur Company's agent at Prairie du Chien. The game uses the surname only."}
+  C7:  {status: guess, rooms: [landing], sources: [S7], claim: "A mortgagee's agent could seize mortgaged goods, such as the boat, without a court (from an 1859 case)."}
+  C8:  {status: record, rooms: [camp, museum], sources: [S1], claim: "Dixon leased the ferry in March 1830 and arrived with his family on April 11, 1830; he bought it on Jan 27, 1832 for $550."}
+  C9:  {status: disputed, rooms: [museum], sources: [S3, S1], claim: "Dixon 'purchased Ogee's claim' in spring 1830 (conflicts with C8; the panel says 'took over', which fits both)."}
+  C10: {status: record, rooms: [landing, northlanding], sources: [S4], claim: "Dixon replaced Ogee's poling with a rope ferry in 1830."}
+  C11: {status: record, rooms: [camp], sources: [S1], claim: "Dixon held mail contracts, including Peoria-Galena at $900 a year; part of his pay came as an order on Governor Edwards."}
+  C12: {status: record, rooms: [camp], sources: [S4], claim: "Dixon lent money to travelers bound for the mines."}
+  C13: {status: record, rooms: [camp], sources: [S5], claim: "James P. Dixon was born March 6, 1811; John W. in 1816; Elijah in 1817; the Dixons had twelve children."}
+  C14: {status: record, rooms: [camp], sources: [S1], claim: "James P. Dixon did much of the mail driving."}
+  C15: {status: record, rooms: [landing, cabin, wateredge], sources: [S2], claim: "The ferry was at the foot of today's Peoria Avenue, on the south bank; one cabin, a family room on the west and a travelers' room with four beds on the east."}
+  C16: {status: record, rooms: [landing], sources: [S2], claim: "Rates in 1830-31: a man and horse 25 cents, a meal 25 cents, a night's lodging 25 cents, a wagon with four yoke of oxen and a horse $2.75."}
+  C17: {status: record, rooms: [landing, slough], sources: [S4], claim: "Spring traffic ran north to the mines; in March 1827 about 200 teams waited at the south bank, all bound for Galena."}
+  C18: {status: record, rooms: [landing, slough], sources: [S6], claim: "Galena's lead went out by boat; seven million pounds left by boat in 1827."}
+  C19: {status: record, rooms: [camp], sources: [S2, S3], claim: "A post office at Ogee's Ferry, first postmaster Gay; Dixon commissioned postmaster Sept 29, 1830; renamed Dixon's Ferry in 1834 (S3: shortly after Dixon arrived)."}
+  C20: {status: guess, rooms: [slough, landing], sources: [], claim: "Galena merchants would discount state paper for silver."}
+  C21: {status: invented, rooms: [landing, slough], sources: [], claim: "The agent, Asa, Eli, the slough and the mired wagon."}
+  C22: {status: needs-source, rooms: [museum, riverwalk], sources: [], claim: "The 'Begins the Trail' statue and plaque details; the Historic Center at 205 W. Fifth St.; the riverfront layout (from photos)."}
+  C23: {status: needs-source, rooms: [camp], sources: [], claim: "John Dixon was born in 1784, so in his mid-forties in 1830."}
+  C24: {status: invented, rooms: [wateredge, landing], sources: [], claim: "The player walking off the dock in the fog, Ogee's rescue in the canoe, the split canoe and lost paddle, and Ogee tarring the ferry's seams."}
+  C25: {status: needs-source, rooms: [landing], sources: [], claim: "Boat seams were caulked by packing oakum (old rope picked into fiber) and sealing it with hot pine tar or pitch, worked in with a swab."}
+  C26: {status: invented, rooms: [cabin], sources: [], claim: "A spare canoe paddle under the cabin eaves that belonged to Madeline's father."}
+  C27: {status: guess, rooms: [camp, landing], sources: [S1], claim: "The terms of the 1830 lease: that Dixon's first payment went to the overdue installment on Rolette's notes and the rent after it toward the rest. The record has the lease and the notes but not the terms."}
+  C28: {status: guess, rooms: [landing], sources: [], claim: "A Galena freighter paying a ferry a hundred dollars in advance for a season of crossings. No ferry rates for Dixon's crossing in 1830 are cited; the 1838 Staten Island ferry charged 12 1/2 cents a person."}
+  C29: {status: invented, rooms: [museum], sources: [], claim: "The museum desk was the Dixon's Ferry post office desk, used by John Dixon as postmaster from 1831; its drawer lock is older than the desk. Dixon's commission as postmaster (Sept 1830) is record, C19."}
+  C30: {status: record, rooms: [camp], sources: [S9], claim: "By 1823 the principal mails travelled in locked portmanteaus, opened only at distributing offices."}
+  C31: {status: invented, rooms: [cabin, camp, museum], sources: [], claim: "James Dixon losing the mail key to a crow at Ogee's cabin, and the key turning up with the post office desk."}
+  C32: {status: invented, rooms: [camp, cabin], sources: [], claim: "Dixon's lease included the cabin's east room for his family, and Rolette's agent was lodging there while the lease waited."}
+  C33: {status: invented, rooms: [landing, camp], sources: [], claim: "Rolette's agent giving Ogee until sundown, and standing on the ferry ready to take her when Dixon arrives with the silver."}
+  C34: {status: invented, rooms: [landing, camp], sources: [], claim: "James Dixon carrying the mail north over the new rope ferry the day it was strung, and Asa waiting to see the mail move before paying for a season of crossings."}

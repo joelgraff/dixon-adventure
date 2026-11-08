@@ -1,0 +1,535 @@
+id: museum
+era: present
+name: "{town} Historic Center"
+sources: [S1, S3, S4, S8]
+picture: >-
+  Small exhibit room seen from the entrance. Glass cases along the left wall,
+  a row of framed photos above them, the founding panel on the far wall with a
+  velvet pedestal beside it, a schoolhouse clock by a back door, the
+  volunteer's desk in the right foreground, amber light from a side window.
+
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The front room hums under its fluorescent lights. The founding [panel] fills the far wall."
+look: >-
+  The front room is quiet and a little too brightly lit, with fluorescent [lights] humming over a row of glass [cases] and a wall of framed [photos]. Behind you, the glass [door] to the street stands propped open. The founding [panel] takes up most of the far wall.
+listen:
+  - when: [1830.lease_dixon]
+    text: The lights hum. By the back door a clock ticks along a little behind the others, as though it had never stopped.
+  - text: The lights hum. By the back door, one clock is silent.
+
+nouns:
+  lights:
+    name: lights
+    aliases: [fluorescent lights, tubes, fluorescents, ceiling]
+    look: Long fluorescent tubes run across the ceiling, one of them flickering at the end of its run. Their hum is the loudest thing in the room.
+
+  panel:
+    name: founding panel
+    key: true
+    aliases: [exhibit, founding, display, wall panel, founding exhibit, paragraph]
+    on_look:
+      - {set: present.panel_read}
+      - if:
+          when: [1830.lease_dixon, not present.noticed_panel]
+          do:
+              - set: present.noticed_panel
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "{volunteer} glances up from the desk. \"It reads right now, doesn't it? I'd swear it ended a line short this morning.\""
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          THE FOUNDING OF DIXON. "Joseph Ogee kept a ferry here from about
+          1828." The paragraph runs the full length of the panel now. It ends: "In April 1830 John Dixon took over the ferry from Joseph Ogee,
+          and the settlement took his name."
+      - when: [1830.lease_player]
+        text: >-
+          THE FOUNDING OF THE LANDING. "Joseph Ogee kept a ferry here from
+          about 1828. The ferry passed to a newcomer whose name was not
+          recorded." After that, the story of the settlement simply stops.
+      - text: >-
+          THE FOUNDING OF ROLETTE. "Joseph Ogee kept a ferry here from about
+          1828. In 1830 it passed to his creditor, the trader Rolette, and the
+          crossing took his name." The paragraph ends a line short, as though
+          whoever wrote it hadn't finished the story.
+
+  pedestal:
+    name: pedestal
+    aliases: [plinth, stand, velvet, ring, faded ring]
+    reveals: [card]
+    room_line:
+      - when: [1830.lease_dixon, 1830.shoe_returned]
+        text: Beside it, on the [pedestal], sits an iron [poleshoe|pole shoe].
+      - text: Beside it stands a [pedestal] with a faded ring pressed into its velvet.
+    look:
+      - when: [1830.lease_dixon, 1830.shoe_returned]
+        text: On the velvet, where there was only a faded ring this morning, sits a corroded iron [poleshoe|pole shoe] from a river flatboat.
+      - text: >-
+          The pedestal is waist-high. Its velvet has a ring pressed into it, as if something heavy and round sat here for decades. A small
+          typed [card] is propped against its base.
+    verbs:
+      touch:
+        - when: [1830.lease_dixon, 1830.shoe_returned]
+          say: The iron is cold and rough with old rust.
+        - say: The velvet is cool and pressed down into a perfect ring, so whatever sat here must have sat here a very long time.
+      push: It doesn't budge, because it's bolted to the floor.
+
+  poleshoe:
+    name: pole shoe
+    when: [1830.lease_dixon, 1830.shoe_returned]
+    aliases: [shoe, pole shoe, iron shoe, iron]
+    look: >-
+      The shoe is a cone of forged iron, dented on one side. Its new card reads:
+      "Pole shoe from a river flatboat, c. 1830. Donor unknown." You know
+      exactly where the dent came from.
+    verbs:
+      take: It belongs to the museum now, and {volunteer} is watching.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, 1830.shoe_returned, not present.noticed_shoe]
+          do:
+              - set: present.noticed_shoe
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"That wasn't there this morning,\" {volunteer} says from the desk. \"Don't ask me where it came from, because I couldn't tell you.\""
+
+  card:
+    name: typed card
+    hidden: true
+    when: [{any: [not 1830.lease_dixon, not 1830.shoe_returned]}]
+    aliases: [label, note, typed card]
+    look: >-
+      The typed card, slightly crooked, reads: "Exhibit temporarily removed
+      for conservation." Below it, in pencil, someone has written and half
+      erased: "ask Margaret."
+
+  cases:
+    name: glass cases
+    aliases: [case, glass, glass cases, display case, arrowheads, pipe, ledger page]
+    reveals: [emptycase]
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          The cases hold arrowheads on cotton, a cracked clay pipe and a ledger
+          page too faded to read, each over a card that was typed rather than
+          printed. The last case in the row, which was empty this morning, now
+          holds a brass [token].
+      - text: >-
+          The cases hold arrowheads on cotton, a cracked clay pipe and a ledger
+          page too faded to read, each over a card that was typed rather than
+          printed. The last case in the row is an [emptycase|empty case], its
+          felt brushed and its glass wiped clean.
+    verbs:
+      open: The cases are locked, though the little brass keyholes are clean, as if someone opens them often.
+
+  emptycase:
+    name: empty case
+    hidden: true
+    when: [not 1830.lease_dixon]
+    aliases: [empty case, last case, bare case, empty]
+    look: The empty case has a card holder like the others and nothing in it, and yet somebody dusts it regularly all the same.
+
+  token:
+    name: brass token
+    when: [1830.lease_dixon]
+    aliases: [brass token, ferry token]
+    room_line: The last glass case holds a brass [token].
+    look: >-
+      The token is worn brass, stamped with a flatboat and the initials J.O. Its new card reads: "Ferry token, c. 1830. Donor unknown."
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_token]
+          do:
+              - set: present.noticed_token
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"J.O.,\" {volunteer} says, coming to look over your shoulder. \"Joseph Ogee, I suppose. I dust that case every Saturday, and it was empty last week. I'd stake my life on it.\""
+
+  photos:
+    name: photos
+    aliases: [photo, photographs, pictures, frames, frame, wall of photos, mats, engraving]
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          The photographs are mostly from the twentieth century: a parade on
+          Galena Avenue, the theatre marquee lit up at night, and a flooded
+          riverbank with men in rowboats. One of the last two frames, which was
+          empty this morning, now holds an engraving of a flatboat with a tall
+          man at its pole, cut from an old county atlas.
+      - text: >-
+          The photographs are mostly from the twentieth century: a parade on
+          Galena Avenue, the theatre marquee lit up at night, and a flooded
+          riverbank with men in rowboats. The last two frames in the row are
+          empty, with nothing in them but bare mats.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_engraving]
+          do:
+              - set: present.noticed_engraving
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"Somebody's filled that frame,\" {volunteer} says, \"and nobody told me. That's a tall man at the pole, isn't it?\""
+
+  clock:
+    name: schoolhouse clock
+    aliases: [schoolhouse clock, wall clock, back clock, tape, masking tape, back door]
+    room_line:
+      - when: [1830.lease_dixon]
+        text: A schoolhouse [clock] ticks by the back door, running a little behind.
+      - text: A schoolhouse [clock] hangs silent by the back door.
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          The schoolhouse clock by the back door is running. Its hands stand a
+          few minutes past four, it ticks a little behind the others, and the
+          masking tape that says DO NOT WIND has come loose at one end.
+      - text: >-
+          The schoolhouse clock by the back door has stopped at 4:17. Every
+          other clock in the building runs a little fast or slow, but this one has stopped dead. A strip of masking tape on the case reads DO NOT
+          WIND in someone's careful hand.
+    verbs:
+      touch: The wooden case is cool and slightly dusty.
+      take: It's bolted firmly to the wall.
+      open: You'd have to wind it, and the tape says not to.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_clock]
+          do:
+              - set: present.noticed_clock
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"It started again this afternoon, all by itself,\" {volunteer} says, not looking at it. \"I'm choosing not to think about it.\""
+
+  desk:
+    name: desk
+    aliases: [volunteer desk, table, chair, blotter]
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          The desk is tidy and older than everything around it, with the usual
+          [clutter] on top. The [guestbook] lies open at the corner nearest the
+          door. Below the blotter, the middle [drawer] has a small brass lock. A brass plate screwed to its side reads POST OFFICE, DIXON'S
+          FERRY, 1831. J. DIXON, P.M.
+      - text: >-
+          The desk is tidy and older than everything around it, with the usual [clutter] on top and the [guestbook] open at the corner nearest the door. A brass plate is screwed to its side, but somebody scratched it blank long ago.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_desk]
+          do:
+            - set: present.noticed_desk
+            - if:
+                when: [here:volunteer]
+                do:
+                  - say: "{volunteer} sees you reading the plate. \"It's always said that,\" she says, and then, less certainly, \"Hasn't it?\""
+    verbs:
+      sit: You glance at the chair, and {volunteer} looks at you over her glasses until you think better of it.
+
+  clutter:
+    name: desk clutter
+    aliases: [coffee, cup, coffee cup, mints, roll of mints, lanyard]
+    look: There's a lanyard, a roll of mints and a cold cup of coffee with a lipstick ring on the lid, all of it {volunteer's}.
+    verbs:
+      take: "It's {volunteer's} coffee and {volunteer's} mints and {volunteer's} lanyard, so you leave them be."
+      drink: It's cold, and besides, it's hers.
+
+  guestbook:
+    name: guestbook
+    key: true
+    aliases: [book, register, guest book, log, pen, chain]
+    pick:
+      count: 3
+      from:
+        - "“Lovely little museum! — D. & S., Rockford.”"
+        - "“Came for the Reagan boyhood home, stayed for the ferry. — Peoria.”"
+        - "“My great-grandfather is in the 1912 photo, third from left. — K. Novak.”"
+        - "“Cold in here. Good coffee, though.”"
+        - "“Ohio sends its regards.”"
+        - "“The little boy in the flood picture is my grandpa!”"
+        - "“Where is the thing that goes on the pedestal?”"
+        - "A child's drawing of a boat, signed with a crayon."
+        - "“Fog again today.” No name, just the date in pencil."
+      also:
+        - when: [present.returned]
+          from:
+            - "In a hurried hand: “The river is not where it was.” It has been crossed out."
+            - "“Does anyone else hear knocking down by the water?”"
+            - "“Ask Margaret about the labels.” Nobody has signed it."
+    look:
+      - when: [present.signed]
+        text: You page back through the recent entries. {picked} Your own name is there, in your own hand, under today's date.
+      - text: You page back through the recent entries. {picked} A pen on a bead chain hangs beside it, for anyone who wants to leave their name.
+    verbs:
+      sign:
+        - when: [present.signed]
+          say: You've already signed, and your name sits there a little smaller than you remember writing it.
+        - say: You take the pen on its chain and sign your name under the last line. The ink is darker than you expected.
+          do: [{set: present.signed}]
+      close: You flip the cover shut and then open it again, because it feels rude to hide it.
+
+  oldkey:
+    name: old brass key
+    when: [1830.lease_dixon]
+    aliases: [key, brass key, old key, tag, paper tag, mail key]
+    room_line:
+      - when: [1830.key_returned]
+        text: An old brass [oldkey|key] with a paper tag lies on the blotter.
+      - text: An old brass [oldkey|key] lies on the blotter.
+    look:
+      - when: [1830.key_returned]
+        text: On the blotter lies a small brass key, worn smooth, on a loop of string gone stiff with age. The paper tag, in faded ink, reads DIXON'S FERRY P.O.
+      - text: On the blotter lies a small brass key, worn smooth, with no tag and nothing to say where it came from.
+    verbs:
+      take: "{volunteer} puts a hand over it. \"That's the museum's, at least until we know what it opens.\""
+    on_look:
+      - if:
+          when: [not present.noticed_key]
+          do:
+            - set: present.noticed_key
+            - if:
+                when: [here:volunteer]
+                do:
+                  - say: "{volunteer} sees you looking. \"It was in the bottom of the clutter drawer this afternoon, under the staples, and I've cleaned out that drawer every spring for thirty-one years.\" She glances at the locked drawer and doesn't finish the thought."
+
+  drawer:
+    name: locked drawer
+    aliases: [middle drawer, lock, keyhole, drawers]
+    look: The middle drawer is shallow, with a small brass lock much older than the rest of the desk's hardware. Its keyhole is worn bright.
+    verbs:
+      open:
+        - when: [1830.lease_dixon]
+          text: "It's locked. The key is right there on the blotter, but {volunteer} puts her hand over it. \"Not tonight.\""
+        - text: It's locked. The other drawers slide out easily, full of staples and brochures, but this one won't move.
+      push: It doesn't budge at all.
+      search: The other drawers hold staples, brochures and a stapler, but this one is locked.
+
+  crossword:
+    name: crossword
+    key: true
+    aliases: [puzzle, grid, clue, clues, seven down, newspaper, margin]
+    on_look:
+      - {set: present.crossword_read}
+      - if:
+          when: [1830.lease_dixon, not present.noticed_crossword]
+          do:
+              - set: present.noticed_crossword
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"Dixon,\" {volunteer} says, tapping seven down. \"Five letters. It was on the tip of my pencil all week.\""
+    look:
+      - when: [1830.lease_dixon]
+        text: >-
+          The crossword is finished, with every square filled in neat pencil.
+          Seven down, five letters, "Founder of the ferry town," reads DIXON,
+          and the letters cross cleanly. In the margin, rubbed nearly out, is
+          the word john, written three times.
+      - when: [1830.lease_player]
+        text: The crossword has gone soft somehow. Half the squares are blank, and seven down has no clue at all, only a smudge where the clue used to be.
+      - text: >-
+          The newspaper crossword is nearly finished in neat pencil. Four
+          across, four letters, "Rock River ferryman," has been filled in with
+          OGEE, in ink. Seven down, five letters, "Founder of the ferry town,"
+          is blank, its squares rubbed raw from erasing. In the margin someone has written the same word over and over: john.
+    verbs:
+      touch: The paper has gone soft where the eraser has been at it. When {volunteer} glances over, you take your hand away.
+      take: "{volunteer's} hand comes down over it, politely but firmly."
+
+  sign:
+    name: hand-lettered sign
+    when: [present.returned]
+    aliases: [hand-lettered sign, labels sign]
+    room_line: A hand-lettered [sign] is taped to the front of the desk.
+    look: The sign says ASK ABOUT THE LATEST LABELS in marker, in {volunteer's} handwriting.
+    on_look:
+      - if:
+          when: [1830.lease_dixon, not present.noticed_sign]
+          do:
+              - set: present.noticed_sign
+              - if:
+                  when: [here:volunteer]
+                  do:
+                    - say: "\"I put that up this afternoon,\" {volunteer} says, \"before I knew why. I suppose somebody should ask.\""
+
+  window:
+    name: window
+    aliases: [view, pane, parking lot, light]
+    
+    look: Late light the color of weak tea comes through the window, which looks out on a parking lot, the back of a neighbor's garage and a power line with two crows on it. A thin haze sits low over the roofs.
+    verbs:
+      open: It's painted shut, and the sash hasn't moved in decades.
+      touch: The glass is cool and faintly damp on the outside.
+
+  door:
+    name: glass door
+    aliases: [glass door, entrance, front door, wedge]
+    look: A rubber wedge holds the glass door open on a warm, quiet street.
+    verbs:
+      close: "{volunteer} likes it open, so you leave it alone."
+
+  riverwalk:
+    name: riverwalk
+    hidden: true
+    key: true
+    aliases: [river walk, riverfront, river, walk]
+    look: The riverfront walk {volunteer} mentioned is four blocks north up Hennepin, out of sight from in here.
+
+npcs:
+  volunteer:
+    name: Margaret
+    unknown: a volunteer in a cardigan
+    ref: the volunteer
+    aliases: [margaret, volunteer, docent, woman, lady, name tag, nametag]
+    room_line:
+      - when: [present.returned]
+        text: "[volunteer] sits behind the [desk] by the entrance, a [guestbook] at her elbow, frowning across the room at the panel."
+      - text: "[volunteer] sits behind the [desk] by the entrance, a [guestbook] open at her elbow and a pencil moving slowly over a [crossword]."
+    look:
+      - when: [present.returned]
+        do: [{set: known.volunteer}]
+        text: "Her name tag says MARGARET. She's sixty or so, with reading glasses pushed up into grey hair. She's looking at the panel with her head tilted, the way you'd look at a picture hung slightly crooked."
+      - text: She's a woman of sixty or so in a cardigan, with reading glasses pushed up into grey hair and a name tag that says MARGARET. She works the crossword with the patience of long habit.
+        do: [{set: known.volunteer}]
+    talk:
+      - when: [not met.volunteer]
+        text: >-
+          "Oh, hello. Have you been in before? You have a familiar face." She
+          sets down her pencil. "I'm Margaret, and I'm here Saturdays, mostly.
+          Feel free to look around, and do sign the [guestbook] before you go."
+        do: [{set: [known.volunteer, met.volunteer]}]
+      - when: [1830.lease_dixon, not chapter1.done]
+        text: >-
+          "You were in earlier, weren't you?" She frowns past you at the wall.
+          "Funny. I could swear the labels weren't like that this morning, and
+          nobody's touched them." She taps the finished grid, where seven down
+          reads DIXON. "Well, that's one done. I have a feeling the next one
+          won't be so easy." She looks at the clock, which is ticking now, and
+          starts gathering her things. "Come back next Saturday, will you? We'll
+          try that old key in the drawer together." She nods at the room.
+          "Take your time. I'll be a few minutes yet."
+        do: [{set: chapter1.done}]
+      - when: [1830.lease_player]
+        text: >-
+          "Something's gone wrong," she says, before you can speak. "I think it
+          went wrong at the river. Nobody can name the man who had that ferry,
+          and it isn't right." She looks at you oddly. "If I were you I'd go
+          back down and look at the water again. I don't know why I said
+          that."
+      - when: [chapter1.done]
+        text: "{volunteer} has her coat on and her keys in her hand. \"Next Saturday,\" she says. \"I'll wait for you.\""
+      - text: "She glances up from the crossword and smiles. \"Mm? Is there anything I can help you with?\""
+    topics:
+      - keys: [fog, mist, haze, weather]
+        say: "\"It's been coming off the river all week, which is odd for the time of year. Some evenings you can't see the far side from the walk, though it usually burns off by morning.\""
+      - keys: [river, riverwalk, river walk, walk, outside, bank, marker]
+        do: [{reveal: riverwalk}]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"The riverwalk is the best of Dixon at this hour; it's up Hennepin, four blocks north. The marker there reads properly now, I'm told.\""
+          - text: >-
+              "The [riverwalk]? Go up Hennepin, four blocks north. There's a
+              marker there, Rolette's Ferry, and it's missing a line, if you
+              ask me. People say that if you watch the water long enough, you
+              lose track of time." She goes back to her pencil. "Silly, I
+              know."
+      - keys: [ogee, joseph, ferryman]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"Joseph Ogee kept the ferry before John Dixon took it over, and our panel gives him his due now. It's funny, but I'd have sworn it didn't.\""
+          - text: "\"Joseph Ogee kept the ferry, and the whole town started at his dock. Then his debts caught up with him, or so the story goes, and the panel stops short of whatever came after.\""
+      - keys: [dixon, john, founder, founding, panel, exhibit]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"John Dixon took over the ferry in 1830. Of course he did. Why did I ever think the panel ended anywhere else?\" She laughs, not quite convincingly."
+          - when: [1830.lease_player]
+            text: "\"Now it's a newcomer nobody can name, and that isn't right. It isn't right at all.\""
+          - text: "\"It ends mid-thought, doesn't it? Thirty-one years of Saturdays and I've never known what comes after. I keep writing a name in the margin, 'John', and then I can't think why.\""
+      - keys: [rolette, creditor, trader, debts]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"Rolette? He was a fur trader up at Prairie du Chien, I think. I can't imagine what he'd have to do with us.\""
+          - text: "\"He was the fur trader who held the ferryman's debts, the story goes, and he got the ferry and the town's name for his trouble. I've never warmed to him.\""
+      - keys: [crossword, puzzle, clue, seven, seven down, pencil, margin]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"Dixon, five letters. I couldn't get it all week, and look, it fits.\" She taps the grid."
+          - when: [1830.lease_player]
+            text: "\"The whole puzzle has gone to pieces, and seven down isn't even there any more.\""
+          - text: "\"Seven down: 'Founder of the ferry town,' five letters. It's on the tip of my pencil, and then it slides right off, and I keep writing the same name in the margin, John. Everyone would say Rolette, but that's seven letters.\""
+      - keys: [pedestal, card, conservation, removed, shoe]
+        say:
+          - when: [1830.lease_dixon, 1830.shoe_returned]
+            text: "\"That wasn't there this morning. It's an iron pole shoe off a flatboat, and I couldn't tell you where it came from.\" She doesn't sound as though she expects to be asked again."
+          - text: "\"It's been empty since before my time. The card says conservation, but I've never once seen anyone conserve anything.\" She smiles. \"I've never known what stood there, either.\""
+      - keys: [photo, photos, frames, frame, picture, pictures, engraving]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"One of the empty frames has an engraving in it now, and nobody told me.\""
+          - text: "\"Those last two came back from the framer's in 'ninety-eight with nothing in them, and nobody ever filled them.\""
+      - keys: [clock, time, wind]
+        say:
+          - when: [1830.lease_dixon]
+            # The refrain (see interaction-design.md, Prose): "still" because she may have said it already.
+            text: "\"It started again this afternoon, all by itself. I'm still choosing not to think about it.\""
+          - text: "\"That clock has been stopped since before I started here. The tape says not to wind it, so I don't.\""
+      - keys: [desk, drawer, lock, key, plate, provenance]
+        say:
+          - when: [1830.lease_dixon]
+            text: "\"That was the post office desk at Dixon's Ferry, if you can believe it. John Dixon sorted the mail on it.\" She touches the key on the blotter. \"And this turned up today. I haven't had the nerve to try it.\""
+          - text: "\"Nobody's quite sure where that desk came from. The board says the old county clerk's office, and the clerk's family says otherwise.\" She pats the locked drawer. \"And nobody's ever found the key to this one. Thirty-one years, and I still try it now and then. Silly, I know.\""
+      - keys: [case, cases, arrowheads, glass]
+        say: "\"They've been locked since 1998, and the key's with the board. I dust the empty one at the end every Saturday, out of habit.\""
+      - keys: [guestbook, book, sign, visitors]
+        say: "\"Everyone signs, even the ones who say they won't. Some of them write the oddest things.\""
+      - keys: [lincoln, black hawk, fort, war, militia, "1832"]
+        say: "\"The militia came through here in 1832, I'm told, Lincoln among them. They never fought a battle here; they just passed through.\""
+      - keys: [labels, label, changed, different, change]
+        say:
+          - when: [present.returned]
+            text: "She hesitates. \"I'd rather not say it out loud, but the labels have changed, and nobody's touched them. That's all. That's all I'm going to...\" She picks up her pencil and puts it down again."
+          - text: "\"The labels? They've been the same since the nineties.\""
+      - keys: [museum, center, historic center, building, hours, collection]
+        do: [{reveal: riverwalk}]
+        say: "\"It's small, but it's ours, and most people come for the founding panel. If you want the rest of {town}, the best of it is outside, along the [riverwalk].\""
+      - keys: [familiar, before, met, remember, face]
+        say: "\"I'd swear I've seen you somewhere before, in a photograph, maybe.\" She shakes her head. \"Never mind me.\""
+      - keys: [margaret, you, yourself, volunteer, saturdays]
+        say: "\"I've given it thirty-one years of Saturdays. Someone has to know where the stapler is.\""
+    fallback: "\"Hm, I couldn't tell you that. The library keeps the county histories, if you're curious.\""
+    social:
+      hello: "\"Hello, hello.\" She smiles over her glasses."
+      thanks: "\"Oh, you're very welcome. Nobody thanks the volunteers, or not often.\""
+      bye: "\"Watch out for the fog on your way. It comes up quick this time of year.\""
+      how: "\"I can't complain. A quiet Saturday, a crossword and someone to talk to make a good day.\""
+      sorry: "\"Don't mention it.\""
+    parting:
+      - when: [present.returned]
+        text: "\"Take care out there,\" {volunteer} says as you go, still watching the panel."
+      - text: "You thank {volunteer} and say you'll be back. \"Do come again,\" she says, pencil already moving. \"And watch out for the fog. It comes up quick.\""
+
+actions:
+  - id: close_up
+    phrases: [leave museum, go home, walk home, say goodnight, say good night, help margaret close up, close up, help close up]
+    when: [chapter1.done]
+    do:
+      - set: chapter1.ended
+      - say: >-
+          You hold the door while {volunteer} switches off the fluorescents one
+          bank at a time. She locks up behind you, tries the handle twice and tells you goodnight. Then she walks off up Fifth Street with her
+          coat collar turned up against the river damp. The street is quiet.
+          Behind you, in the dark front room, the schoolhouse clock is ticking,
+          and in the last glass case a streetlight finds the brass token, J.O.
+      - end: true
+    else:
+      - say: "{volunteer} is here till closing, and you've nowhere you need to be just yet."
+
+exits:
+  - names: [outside, out, door, street, leave, exit]
+    to: street
+    action: close_up           # once the chapter is done, leaving ends it
+    action_when: [chapter1.done]
+    text: You step through the propped door onto the sidewalk. Behind you, the hum of the fluorescents fades.

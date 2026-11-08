@@ -1,0 +1,16 @@
+{
+  "name": "dixon-game-data-tools",
+  "version": "1.0.0",
+  "description": "Validator for the Dixon scene-card data",
+  "scripts": {
+    "check": "node check.mjs",
+    "bump": "node bump.mjs",
+    "test": "node test.mjs",
+    "tour": "node tour.mjs"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "private": true,
+  "type": "module"
+}

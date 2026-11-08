@@ -1,0 +1,92 @@
+id: northlanding
+era: 1830
+name: The north landing, 1830
+sources: [S4]
+picture: >-
+  North-bank landing looking south across high brown water to Ogee's dock, the
+  waiting wagons and the cabin smoke. A single stout post at the water's edge,
+  an empty road behind climbing into the trees.
+
+# The return-visit description (see FORMAT.md, Rooms).
+brief: "The north bank is still only the [post], the empty [road] and the [river]."
+look: >-
+  The north landing is no more than a stout [post] at the water's edge, with
+  the Galena [road] climbing away north behind it into the trees, empty.
+  Across the [river], {ogee's} dock and the waiting wagons look small.
+listen: The river sounds louder from this side, and very faintly, from across the water, you can hear the oxen.
+
+nouns:
+  post:
+    name: post
+    key: true
+    aliases: [stout post, mooring post, stake]
+    room_line:
+      - when: [1830.rope_strung]
+        text: "{dixon's} [rope] runs taut from the post across the water."
+    look:
+      - when: [1830.rope_strung]
+        text: The post is stout oak, with {dixon's} rope made fast around it and humming faintly with the current.
+      - text: The post is stout oak and set deep, as if somebody always meant for something to be tied to it one day.
+
+  rope:
+    name: rope
+    when: [1830.rope_strung]
+    aliases: [line, hemp]
+    look: The rope runs from the post across the river to {ogee's} landing, taut and humming.
+
+  road:
+    name: Galena road
+    aliases: [galena road, road north, trees, woods]
+    look: The road to Galena and the diggings climbs north into oak and hickory, rutted and empty.
+
+  river:
+    name: river
+    aliases: [water, high water, rock river, south bank, dock, wagons]
+    look: The river is louder from this side. Across it you can see {ogee's} landing, the wagons, and a thread of smoke from the cabin.
+    verbs:
+      drink: You've had enough of the river for one day.
+
+  canoe:
+    name: canoe
+    when: [1830.canoe_across]
+    aliases: [dugout]
+    look: "{ogee's} canoe is pulled up on the gravel with its tarred seam holding. It has done its work."
+
+actions:
+  - id: tie_rope
+    phrases: [tie rope to post, tie rope, tie line to post, tie line, fasten rope, fasten line, make rope fast, make line fast, tie it, tie it off, tie off rope, knot rope, tie rope around post, tie rope to stake, wrap rope around post, use rope on post, put rope on post, tie rope on post, secure rope, secure rope to post, tie up rope, loop rope around post, fasten rope to post, tie rope to the post, tie off rope on post, make rope fast to post, make fast]
+    when: [has:rope, not 1830.rope_strung]
+    do:
+      - take: rope
+      - set: 1830.rope_strung
+      - say: >-
+          You make the rope fast around the post. Across the water {ogee} hauls
+          it taut. Before long the ferry comes over hand over hand along the
+          rope, with {ogee} at the line. "Well," he says as he lands. "Dixon's
+          rope, and it holds."
+    else:
+      - say: The rope is already tied off and holding.
+
+  - id: ride_ferry_back
+    phrases: [ride ferry, take ferry, board ferry, cross, cross on ferry, pull across, ride across, get on ferry, go back across]
+    when: [1830.rope_strung]
+    do:
+      - say: You ride back across on the rope, hand over hand with {ogee}.
+      - move: landing
+    else:
+      - say: There's no ferry on this side yet, so you'll have to make the rope fast first.
+
+  - id: paddle_back
+    phrases: [paddle back, launch canoe, paddle across, get in canoe, row back]
+    do:
+      - say: With that rope dragging, the current would take the canoe and you along with it. You'd do better to tie it off and let the ferry come to you.
+
+exits:
+  - names: [south, across, ferry, river, back, landing]
+    to: landing
+    when: [1830.rope_strung]
+    farewell: false
+    blocked: The canoe will never make it back against this current with the rope dragging, so make the rope fast first.
+    text: You ride back across on the rope, hand over hand with {ogee}.
+  - names: [north, road, galena, galena road]
+    blocked: The Galena road climbs away north, but your business is on the other bank.

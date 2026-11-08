@@ -1,0 +1,50 @@
+{
+  "skill": "dixon-parser",
+  "test_cases": [
+    {
+      "name": "start_lighthouse",
+      "input": "Start the lighthouse scene",
+      "assertions": ["Responds with location description including sensory details from the scene card", "Offers interactive objects or exits"]
+    },
+    {
+      "name": "examine_with_alias",
+      "input": "examine spyglass",
+      "assertions": ["Resolves spyglass alias to telescope", "Returns object description"]
+    },
+    {
+      "name": "examine_lantern_alias",
+      "input": "look at the light",
+      "assertions": ["Resolves the unique light alias to the lantern", "Returns the lantern description"]
+    },
+    {
+      "name": "resolve_small_typo",
+      "input": "examine lanter",
+      "assertions": ["Resolves the unique one-character typo to the lantern", "Returns the lantern description"]
+    },
+    {
+      "name": "examine_reveals_noun",
+      "input": "sign guestbook (before examining the desk)",
+      "assertions": ["Replies that the guestbook is not here", "After examining the desk, the guestbook resolves and signing succeeds"]
+    },
+    {
+      "name": "look_out_window",
+      "input": "look out the window",
+      "assertions": ["Resolves to the window", "Describes a parking lot and rooftops, not the river"]
+    },
+    {
+      "name": "ask_about_topic",
+      "input": "ask about the river",
+      "assertions": ["Margaret answers with the river walk and the marker", "No explicit instruction is given"]
+    },
+    {
+      "name": "fog_gates_ferry",
+      "input": "forward (at the water's edge before six turns)",
+      "assertions": ["Movement into 1830 is refused with a prose reason", "After six turns at the water's edge the voice calls and forward succeeds"]
+    },
+    {
+      "name": "design_new_card",
+      "input": "Create a scene card for the 1830 ferry landing",
+      "assertions": ["Produces a six-field scene card", "Uses period-appropriate details"]
+    }
+  ]
+}
