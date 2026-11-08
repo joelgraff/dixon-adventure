@@ -60,3 +60,31 @@ The starting present is a timeline where history went wrong. Open decisions are 
 - **Scope note:** for now, only the trip to 1830 and the return are built and polished. The rest are plans.
 - **4:17 (decided 2026-11-02):** an unexplained easter egg, the minute things broke. Stopped clocks in the broken present read 4:17 (phone in the fog, the museum's schoolhouse clock); each fixed era sets one running again. Never a puzzle, never tied to a specific historical event (no verified times). Built so far: the museum clock (stopped, then running) and the phone, which shows a live time after the repair. Later: a stopped courthouse, theatre or bridge clock per era.
 
+
+## Travelers, the fog and the desk (planning, 2026-11-08)
+Worked out in conversation after chapter 1's story review. **Decided** items are canon for later chapters; **OPEN** items still need a decision. Nothing here is built unless it says so.
+
+### Rules of time (keep these few and fixed)
+- **Decided: "not thinking about it" is what travelers say.** Crossing leaves you holding two histories, and the mind copes by not looking. The player already says it ("You decide not to think about that just yet", "…either"); Margaret has thirty-one years of it. Only people who have crossed notice changes; everyone else has only the current history.
+- **Decided: nothing comes back.** Clothes, possessions and money stay in the era. What you leave there becomes part of history.
+- **Decided: history is the only courier.** An object reaches a later era or the present only by surviving in the past. If something from one era is useful in another, it is brought forward through the museum (or the desk, below), never in your pocket.
+- **Proposed: the clue picks the era.** The fog takes you to wherever the thing you bring to the water came from (a ticket; it stays on the bank). This answers why Margaret never got back: what would take her was locked in the drawer, and the key was lost.
+- **Guard against sprawl:** each chapter has one break, one ticket, one desk scene and one step on the third traveler's trail.
+
+### The travelers
+- **Ogee's count (built):** "You're the third this year." Three travelers reached Ogee's spring of 1830, from different presents: Margaret (1995), a third traveler, and the player (2026).
+- **The third traveler (decided to exist; details OPEN):** "The last one had a thing like that" (the phone) means the most recent traveler before the player carried a smartphone, so they crossed between about 2010 and weeks ago. Not Margaret. Could be stuck in another era or chapter; an arc that can surface anywhere. Margaret may have met them and already forgotten. A candidate trace: the guestbook line "'Ask Margaret about the labels.' Nobody has signed it." **Note:** Ogee's goodbye (0.15.0) says "The last one walked out this way too… She held on tighter", so as built the third traveler is a woman; change the pronoun if not.
+- **Margaret (OPEN):** two shapes on the table.
+  - A (proposed): **one error in 1830** that reverberated. She was a traveler Ogee called for and couldn't carry the rope across; the town became Rolette. She could never get back (see "the clue picks the era"), took up volunteering, and has waited thirty-one years. The third traveler, trying to fix things, caused the later breaks.
+  - B: she was correcting someone else's mistakes (possibly the third traveler's). Harder to make work with a smartphone traveler, since their errors would have to predate 1995 in the town's history while their own present is later.
+  - Planted clues that fit either: the clock "stopped since before I started here"; DO NOT WIND "in someone's careful hand" and the sign "in Margaret's handwriting"; "ask Margaret" erased on the pedestal card; "john" in the crossword margin; "You have a familiar face."
+
+### The desk
+- **Decided: the desk appears in 1832** (Dixon's post office, from 1831), for continuity, and it must give something to the next chapter.
+- **Proposed: the desk is in every chapter.** Its history already runs post office (1831) → "the old county clerk's office" (the broken-present provenance) → museum. Its locked middle drawer is the one reliable courier between eras: what's locked in it in one era is there in the next. James's mail key opens it; in the broken present the key was never found, so the drawer stayed shut for thirty-one years. Who holds the key in each era is a thread of its own.
+- **OPEN: what's in the drawer after chapter 1.** Earlier idea: a letter held "until called for" at the post office, in Margaret's handwriting, pointing at the next era. Revisit once Margaret's shape is chosen.
+
+### Chapter 2
+- **Decided: 1832**, the Black Hawk War, with Dixon's Ferry as the army's staging point. Close enough to 1830 to carry its arcs on coherently.
+- **Carries over from 1830:** Dixon (postmaster; owns the ferry by Jan 1832, C8), James (the key on his buttonhole), Eli (militia age; "the war's coming back"), Asa (season of crossings), Ogee (pulls the rope), Madeline, the boys and the crow (still with Asa's silver dollar), the rope, the paddle, the canoe on the far bank, and the player as "the stranger the river sent", unchanged two years on.
+- **OPEN: the break.** Research Dixon's Ferry in May–June 1832 first (real Sauk and Potawatomi people and real violence are involved), then choose from two or three candidates grounded in the record.
