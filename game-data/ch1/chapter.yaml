@@ -3,8 +3,10 @@ title: "Chapter 1: Ogee's Ferry"
 start: museum
 max_score: 127
 
-# Every room file, in the order the browser loads them (it can't list folders).
-rooms: [museum, street, riverwalk, wateredge, landing, cabin, camp, northlanding, slough]
+# This chapter's own room files, in ch1/rooms/, in the order the browser loads
+# them (it can't list folders). The present-day rooms (the museum, the street,
+# the river walk, the water's edge) are shared by every chapter, in world/.
+rooms: [landing, cabin, camp, northlanding, slough]
 
 # Flags that score. Points are given the first time the flag is set and taken
 # back if a rewind clears it. Other flags need no declaration, but listing the
@@ -64,16 +66,6 @@ flags:
 # Score check: 13 present + 99 in 1830 + 4 at the end = 116, plus 11 for noticing
 # what changed in the present after the repair = 127.
 
-vars:
-  town:
-    - {when: [1830.lease_dixon], text: Dixon}
-    - {when: [1830.lease_player], text: Landing}
-    - {text: Rolette}
-  town_in:                 # "It was in {town_in} that I really found myself"
-    - {when: [1830.lease_dixon], text: Dixon}
-    - {when: [1830.lease_player], text: the Landing}
-    - {text: Rolette}
-
 start_items: [phone]
 start_money: 0
 
@@ -87,31 +79,6 @@ money_item:
     take: It's already in your pocket.
 
 items:
-  phone:
-    name: phone
-    aliases: [cell, cellphone, mobile, tin, tin case, case, flashlight, camera, light]
-    verbs:
-      show:
-        - when: [era:1830]
-          text: There's nobody here to show it to, which is probably for the best.
-        - text: Nobody here needs to see your phone.
-      light:
-        - when: [era:1830]
-          text: The light comes on, startlingly white against the grey, and you shut it off again fast. Nobody saw, as far as you can tell.
-        - text: The flashlight comes on, but nothing here needs lighting, so you turn it off again.
-      photograph: You take a picture, and maybe later you'll find out whether it came out.
-      call:
-        - when: [era:1830]
-          text: There are no bars, and in 1830 there is nobody to call anyway.
-        - text: You can't think of anyone you need to call right now.
-    look:
-      - when: [era:1830]
-        text: It looks like a flat tin case, the kind a man keeps tobacco in, but when you open it, it's your phone, which came through the river better than you did. There are no bars and the clock is stuck at 4:17, but the battery reads 61 percent and the assistant still opens, so you could ask it for help. To anyone watching, you suspect, it would look like a great deal more than a tin.
-      - when: [in:wateredge, turns>=2, not 1830.lease_dixon]
-        text: The screen has gone dim and the bars are gone. The clock reads 4:17, and it doesn't change while you watch it.
-      - when: [1830.lease_dixon]
-        text: The battery is at 58 percent with a full signal. The clock reads 4:21, and while you watch, it turns over to 4:22.
-      - text: The battery is at 61 percent with a full signal, and there's nothing new.
   rope:
     era: 1830
     name: coil of rope
@@ -183,9 +150,6 @@ deaths:
     helped.
   swim: >-
     The river in April is colder than it looks, and it looks very cold.
-  railing: >-
-    You swing a leg over the railing for a better look, and the riprap turns
-    out to be exactly as hard as it looked from up there.
 
 # Actions that work in several rooms.
 # The deal, in two steps the player plays: Asa buys a season of crossings
@@ -275,17 +239,6 @@ actions:
       - move: wateredge
     else:
       - say: There's nobody to follow just now.
-
-  - id: go_to_museum
-    phrases: [go to museum, go back to museum, return to museum, museum, go to historic center, walk to museum, go to margaret]
-    when: [present.returned, {any: [in:wateredge, in:riverwalk]}, not present.planks]
-    do:
-      - say: You make your way back to the Historic Center, with the river walk and Hennepin passing in a blur of ordinary evening.
-      - move: museum
-    else:
-      - when: [era:1830]
-        say: The museum is a hundred and ninety-odd years off, give or take a fog.
-      - say: The Historic Center is back along Hennepin; you'll have to walk it.
 
   - id: swim
     phrases: [swim, swim across, wade, wade in, cross river, swim river, wade across, jump in river, dive in]

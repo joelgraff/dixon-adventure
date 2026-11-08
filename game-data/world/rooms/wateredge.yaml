@@ -184,7 +184,7 @@ nouns:
 actions:
   - id: answer_voice
     phrases: [answer, answer voice, answer him, answer man, call, call back, call out, shout, shout back, reply, respond, hello, hallo, yes, here, over here, i can, talk to voice, talk to man, go to voice, follow voice, follow sound, walk out, walk toward voice, go toward voice, head toward voice, walk to voice, walk out on planks, walk along planks, walk onto planks, go out on planks, go along planks, walk on planks, follow planks, walk into fog, go into fog, walk into mist, go into mist, help him, help man, wave]
-    when: [present.voice]
+    when: [chapter:ch1, present.voice]
     do:
       - if:
           when: [1830.lease_player]

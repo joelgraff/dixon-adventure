@@ -7,7 +7,8 @@ the art brief for the picture that may later replace it.
 The game page is `play.html` (engine: `play.js`). It loads these
 files over HTTP, so open it through GitHub Pages or a local server, not as a
 file. Test URLs: `play.html?fresh` starts over, `?scene=landing` starts in a
-room, `?seed=1` makes random picks repeatable.
+room, `?seed=1` makes random picks repeatable, `?chapters=ch1,ch2` plays draft
+chapters and `?chapter=ch2` starts in one (see Chapters).
 
 Run the checker after every change, and the playthrough tests before pushing:
 
@@ -17,8 +18,8 @@ npm install playwright && npx playwright install chromium   # once
 node test.mjs              # all tests; node test.mjs wrong   runs matching ones
 ```
 
-Test scripts live in `ch1/tests/`; see the top of `tools/test.mjs` for their
-format.
+Test scripts live in each chapter's `tests/` folder (`ch1/tests/`,
+`ch2/tests/`); see the top of `tools/test.mjs` for their format.
 
 The guided tour players see in the game (`tour`, or Settings > Take the tour)
 is data: the `tour` list in game.yaml, one step per part of the screen.
@@ -36,11 +37,16 @@ forgets, run `git config core.hooksPath .githooks` once in your clone.
 ```
 game-data/
   FORMAT.md            this file
-  game.yaml            verbs, narrator defaults, meta commands (all chapters)
+  game.yaml            verbs, narrator defaults, meta commands, the chapter list
   sources.yaml         sources (S1, S2...) and the claims ledger (C1, C2...)
+  world/
+    world.yaml         what every chapter shares: items, deaths, vars, actions
+    rooms/<room>.yaml  the present-day rooms (museum, street, river walk, water's edge)
   ch1/
     chapter.yaml       flags and score, items, variables, deaths, chapter-wide actions
-    rooms/<room>.yaml  one file per room
+    rooms/<room>.yaml  the chapter's own rooms (its past era)
+    tests/             its test scripts
+  ch2/                 a draft (not in game.yaml's chapters yet)
   tools/check.mjs      validator
 ```
 
@@ -90,7 +96,8 @@ A list; every entry must hold. (YAML reads a leading `!` as a tag, so negation i
 | `has:rope` | the player carries the item |
 | `here:ogee` | that NPC is visible in the current room |
 | `in:landing` | the player is in that room |
-| `era:1830` | the current room belongs to that era |
+| `era:1830` | the current room belongs to that era (`era:present`, or `era:past` for any year) |
+| `chapter:ch1` | the player is in that chapter (for the shared rooms; see Chapters) |
 | `money>=100` | compare `money`, `score`, `turns` (turns in this room) or `n` (a number typed in the command) with `>= <= == > <` |
 | `{any: [a, b]}` | at least one of the nested conditions holds |
 
@@ -107,9 +114,9 @@ A list of one-key maps, run in order.
 | `say: text` | print a line (text variants allowed) |
 | `move: room` | go to a room (no farewell lines) |
 | `death: id` | show that death and the Restore / Restart / Retry prompt |
-| `end: true` | show the chapter's `ending` screen; from then on only meta commands work |
-| `leave_behind: 1830` | drop every 1830 item and all money (the fog lets nothing through) |
-| `rewind: 1830` | clear every `1830.` flag and 1830 item, set money to 0, take back their points |
+| `end: true` | show the chapter's `ending` screen; from then on only meta commands (and `continue`) work |
+| `leave_behind: 1830` | drop every item of that era and all money (the fog lets nothing through) |
+| `rewind: 1830` | clear every flag and item of that era (`1830.`), set money to 0, take back their points |
 | `if: {when: [...], do: [...], else: [...]}` | conditional effects (`else` optional) |
 | `describe: true` | print the room description again, as `look` would |
 
@@ -117,7 +124,8 @@ A list of one-key maps, run in order.
 score; the points are given the first time the flag is set, and taken back if
 a rewind clears it.
 
-Flag prefixes: `present.` (the present day), `1830.` (cleared by a rewind),
+Flag prefixes: `present.` (the present day), `1830.`, `1832.` (an era's; cleared by a rewind of that era),
+`chapter1.` (how a chapter went),
 `known.` (names the player has learned; never cleared), `met.` (the person
 has introduced themselves; never cleared), `heard.` (a name the
 player has been told but whose owner they haven't met, e.g. `heard.dixon` once
@@ -145,7 +153,7 @@ the first `talk` variant, `when: [not met.<id>]`, and its `do` sets both
 
 ```yaml
 id: landing
-era: 1830                  # present | 1830
+era: 1830                  # present, or the year (1830, 1832)
 name: The ferry landing, 1830
 sources: [S1, S2, S4]      # ids from sources.yaml, for the histories panel
 picture: >-                # art brief for the later picture
@@ -293,6 +301,7 @@ several rooms (following Ogee home, swimming).
 ## Chapter
 
 `chapter.yaml` holds the chapter's id and title, the start room, `max_score`,
+its own `rooms`, `assumes` and `intro` (see Chapters),
 `money_item` (how the silver in your pocket looks and answers to verbs; it is
 something you carry whenever `money` is above 0),
 the scoring flags, `vars`, `items` (an item with `era: 1830` is removed by a
@@ -308,6 +317,48 @@ npcs:
         room: landing
       - room: slough
 ```
+
+## Chapters
+
+`game.yaml` lists the chapters players can reach, in order:
+`chapters: [ch1]`. A chapter folder that isn't listed is a draft: the checker
+and the tests still cover it, and `?chapters=ch1,ch2` in the address plays it.
+
+**The shared world.** The present-day rooms are the same place in every
+chapter, so they live once, in `world/rooms/`, listed in `world/world.yaml`
+(`rooms: [museum, ...]`). `world.yaml` also holds what they need from a
+chapter: the phone (`items`), the railing (`deaths`), `{town}` (`vars`) and the
+walk back to the museum (`actions`). Each chapter is laid over it: maps
+(`items`, `deaths`, `vars`, `npcs`, `flags`) are merged, the chapter's entries
+winning; lists (`actions`, `hints`) are joined, the chapter's first. A
+chapter's own rooms are its past era, in `chN/rooms/`; their ids must not
+clash with a shared room's, but two chapters may each have a `landing`.
+
+Something in a shared room that belongs to one chapter (chapter 1's closing
+up, the voice in the fog that leads to the 1830 landing) is guarded with
+`chapter:ch1` in its `when`. The checker checks a guarded part only with that
+chapter.
+
+**Going on.** When a chapter's `ending` holds and another chapter follows,
+the ending adds game.yaml's `next_chapter` line ("Type continue to go on to
+..."), and `continue` starts the next one: its `title` and `intro`, then its
+`start` room. Flags, points already earned and what's in your pockets carry
+over (the fog has already left the past's things behind); the score shown is
+the new chapter's. The finished chapter's own rooms are forgotten, sidebar
+notes and all; the shared rooms are remembered.
+
+**Starting partway.** `?chapter=ch2` starts that chapter fresh. Its
+`assumes` list is the flags the chapters before it would have left set, so the
+present-day rooms read as they should:
+
+```yaml
+assumes: [present.returned, 1830.lease_dixon, chapter1.done, chapter1.ended]
+intro: A week goes by. ...      # shown once, when the chapter begins
+```
+
+**Saves** record the chapter they were made in (`dixon.save`, `dixon.auto`;
+saves from before 0.17.0, under `dixon.ch1.*`, are moved over as chapter 1).
+A save from a chapter the page doesn't play is refused.
 
 ## Sources
 
@@ -355,8 +406,9 @@ ending:
 
 An action with `end: true` shows the title and the final score. After that,
 every command except help, save, restore, restart, version, tour and score gets
-`blocked`. In chapter 1, leaving the museum after Margaret's closing talk runs
-`close_up`, which ends the game.
+`blocked`, followed by the next chapter's line when there is one (see
+Chapters). In chapter 1, leaving the museum after Margaret's closing talk runs
+`close_up`, which ends the chapter.
 
 An exit can run an action instead of moving: `action: <id>` runs while
 `action_when` holds (or the exit's `when`, if the exit has no `to`), and

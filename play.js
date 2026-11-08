@@ -7,11 +7,15 @@ const params = new URLSearchParams(location.search);
 const $ = id => document.getElementById(id);
 const L = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
 const EFFECTS = ['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'end', 'if'];
-const SAVE_KEY = 'dixon.ch1.save';
-const AUTO_KEY = 'dixon.ch1.auto';
+const SAVE_KEY = 'dixon.save';
+const AUTO_KEY = 'dixon.auto';
+const OLD_KEYS = { [SAVE_KEY]: 'dixon.ch1.save', [AUTO_KEY]: 'dixon.ch1.auto' };   // before 0.17.0
 const SETTINGS_KEY = 'dixon.settings';
 
-let G, CH, SRC, ROOMS;           // game, chapter, sources, rooms
+let G, CH, SRC, ROOMS;           // game, current chapter (world merged in), sources, its rooms
+let WORLD;                       // world/world.yaml: what every chapter shares
+let CHAPTERS = {};               // id -> {def, rooms}, every chapter that is reachable
+let ORDER = [];                  // the reachable chapters, in order
 let S;                           // live state
 let snapshot = null;             // state before the current command (for Retry)
 let halted = false;              // a death stops the rest of a command
@@ -52,12 +56,16 @@ function editDistance(a, b) {
 }
 
 // ------------------------------------------------------------------- state
-function freshState() {
-  return {
-    room: CH.start, flags: new Set(), items: [...L(CH.start_items)], money: CH.start_money || 0,
+function freshState(chapter = ORDER[0]) {
+  useChapter(chapter);
+  const s = {
+    chapter, room: CH.start, flags: new Set(), items: [...L(CH.start_items)], money: CH.start_money || 0,
     turns: 0, scored: new Set(), found: new Set(), notes: {}, parted: new Set(), spoke: new Set(), visited: [CH.start], n: null,
     lines: {},                   // room id -> its description parts as last shown (see describe)
   };
+  // Starting partway through (?chapter=ch2): what the earlier chapters would have left behind.
+  for (const f of L(CH.assumes)) s.flags.add(f);
+  return s;
 }
 const SET_FIELDS = ['flags', 'scored', 'found', 'parted', 'spoke'];
 function serialize(s) {
@@ -80,6 +88,7 @@ function deserialize(o) {
   delete s._compat;
   for (const f of SET_FIELDS) s[f] = new Set(o[f] || []);
   s.lines = o.lines || {};
+  s.chapter = o.chapter || 'ch1';   // saves from before 0.17.0 were all chapter 1
   // Before 0.12.2 an introduction was keyed on `known.<id>`; now it is keyed
   // on `met.<id>`. Anyone an older save already knows has been met, so they
   // don't introduce themselves a second time.
@@ -87,6 +96,8 @@ function deserialize(o) {
   return s;
 }
 const clone = s => deserialize(JSON.parse(JSON.stringify(serialize(s))));
+// A saved game can be loaded only if its chapter is one this page plays.
+const playable = saved => !!CHAPTERS[saved.chapter || 'ch1'];
 const room = () => ROOMS[S.room];
 
 // -------------------------------------------------------------- conditions
@@ -104,11 +115,15 @@ function cond(c) {
   } else if (t.startsWith('has:')) r = S.items.includes(t.slice(4));
   else if (t.startsWith('here:')) r = npcHere(t.slice(5));
   else if (t.startsWith('in:')) r = S.room === t.slice(3);
+  else if (t === 'era:past') r = isPast();
   else if (t.startsWith('era:')) r = String(room().era) === t.slice(4);
+  else if (t.startsWith('chapter:')) r = S.chapter === t.slice(8);
   else r = S.flags.has(t);
   return neg ? !r : r;
 }
 const ok = when => L(when).every(cond);
+// Any room that isn't the present day is in the past (1830, 1832, ...).
+const isPast = (r = room()) => String(r.era) !== 'present';
 
 // Variant selection: returns {text, do} for the first entry that holds.
 function pick(v) {
@@ -134,12 +149,14 @@ function setFlag(f) {
   const d = CH.flags && CH.flags[f];
   if (d && d.score && !S.scored.has(f)) S.scored.add(f);
 }
-function rewind() {
-  for (const f of [...S.flags]) if (f.startsWith('1830.')) S.flags.delete(f);
-  for (const f of [...S.scored]) if (f.startsWith('1830.')) S.scored.delete(f);
-  S.items = S.items.filter(i => String((CH.items[i] || {}).era) !== '1830');
+// Unmakes everything done in one era: its flags, points, items and silver.
+function rewind(era) {
+  era = String(era);
+  for (const f of [...S.flags]) if (f.startsWith(`${era}.`)) S.flags.delete(f);
+  for (const f of [...S.scored]) if (f.startsWith(`${era}.`)) S.scored.delete(f);
+  S.items = S.items.filter(i => String((CH.items[i] || {}).era) !== era);
   S.money = 0;
-  for (const k of [...S.found]) if (String((ROOMS[k.split(':')[0]] || {}).era) === '1830') S.found.delete(k);
+  for (const k of [...S.found]) if (String((ROOMS[k.split(':')[0]] || {}).era) === era) S.found.delete(k);
 }
 
 // ----------------------------------------------------------------- effects
@@ -158,7 +175,7 @@ function run(list) {
       case 'say': show(v, { speaker }); break;
       case 'move': arrive(v); break;
       case 'death': die(v); break;
-      case 'rewind': rewind(); break;
+      case 'rewind': rewind(v); break;
       // Nothing from the past comes back through the fog: its items and silver stay there.
       case 'leave_behind': S.items = S.items.filter(i => String((CH.items[i] || {}).era) !== String(v)); S.money = 0; break;
       case 'describe': describe(); break;
@@ -166,7 +183,7 @@ function run(list) {
       case 'end':
         say((CH.ending || {}).title || 'The End', { cls: 'death', raw: true });
         meta(`Final score: ${score()} of ${CH.max_score}.`);
-        meta((CH.ending || {}).blocked || 'Type restart to play again.');
+        endingNote();
         break;
       case 'if': run(ok(v.when) ? v.do : v.else); break;
       default: break;
@@ -191,7 +208,8 @@ function show(v, opts = {}) {
 // someone can see breaks that: the first time, whoever saw goes cold until you
 // leave the room; the second time, `veil.again` runs (the fog takes you back).
 const veilVerb = canon => !!CH.veil && L(CH.veil.verbs).includes(canon);
-const spooked = id => S.flags.has(`1830.spooked.${id}`);
+const spookFlag = id => `${room().era}.spooked.${id}`;
+const spooked = id => S.flags.has(spookFlag(id));
 function cold(id) {
   if (!spooked(id)) return false;
   const c = (CH.veil || {}).cold || {};
@@ -200,7 +218,7 @@ function cold(id) {
 }
 function veil(canon, rest) {
   const V = CH.veil;
-  if (!veilVerb(canon) || String(room().era) !== '1830' || !S.items.includes(V.item)) return false;
+  if (!veilVerb(canon) || !isPast() || !S.items.includes(V.item)) return false;
   let [thing, toWho] = rest.split(/\s+(?:to|at)\s+/);
   const m = !toWho && thing.match(/^(.+?)\s+(?:the\s+|my\s+|your\s+)?(\S+)$/);
   if (m && canon === 'show') { const r = resolve(m[2]); if (r && r.one && r.one.id === V.item) [toWho, thing] = [m[1], m[2]]; }
@@ -216,7 +234,7 @@ function veil(canon, rest) {
   if (!watched.length) { show(V.exempt_text); return true; }
   if (S.flags.has(V.warned)) { run(V.again); return true; }
   S.flags.add(V.warned);
-  for (const id of watched) S.flags.add(`1830.spooked.${id}`);
+  for (const id of watched) S.flags.add(spookFlag(id));
   const who = watched.includes(target) ? target : watched[0];
   const rx = V.react || {};
   if (!show(rx[who]) && !show(rx.default)) say(`${cap(npcName(who))} goes very still.`);
@@ -471,7 +489,7 @@ function describe(brief = false) {
     }
     parts.push(presentLine(still, 'still here'), presentLine(now, 'here'));
   } else parts = Object.values(lines);
-  if (String(r.era) === '1830' && CH.fog_lock && ok(CH.fog_lock.when) && CH.fog_lock.room_line) parts.push(CH.fog_lock.room_line);
+  if (isPast(r) && CH.fog_lock && ok(CH.fog_lock.when) && CH.fog_lock.room_line) parts.push(CH.fog_lock.room_line);
   say(parts.filter(Boolean).join(' '));
   run(e.do);
 }
@@ -492,7 +510,7 @@ function arrive(id, text) {
   S.turns = 0;
   S.parted = new Set();
   S.spoke = new Set();
-  for (const f of [...S.flags]) if (f.startsWith('1830.spooked.')) S.flags.delete(f);
+  for (const f of [...S.flags]) if (/^[^.]+\.spooked\./.test(f)) S.flags.delete(f);
   if (!S.visited.includes(id)) S.visited.push(id);
   say(textOf(room().name), { cls: 'heading' });
   describe(true);
@@ -531,7 +549,7 @@ function moveExit(t) {
   return findExit(t);
 }
 function fogLocked() {
-  return String(room().era) === '1830' && CH.fog_lock && ok(CH.fog_lock.when);
+  return isPast() && CH.fog_lock && ok(CH.fog_lock.when);
 }
 function go(exit) {
   if (fogLocked()) return say(CH.fog_lock.blocked);
@@ -602,6 +620,7 @@ function answerPending(input) {
   if (/^retry$/.test(t)) {
     pending = null;
     S = clone(snapshot);
+    useChapter(S.chapter);
     meta(G.death_screen.retry_note);
     say(textOf(room().name), { cls: 'heading' });
     return describe();
@@ -610,6 +629,7 @@ function answerPending(input) {
     const saved = store.get(SAVE_KEY);
     if (!saved) return meta('There is no saved game. Retry or Restart?');
     if (!compatible(saved)) return meta(`That save is from ${saved._version ? `version ${saved._version}` : 'an earlier build'}, which this version can't load. Retry or Restart?`);
+    if (!playable(saved)) return meta('That save is from a chapter this page doesn\'t play. Retry or Restart?');
     pending = null;
     return restore(saved);
   }
@@ -624,6 +644,7 @@ function restart() {
 }
 function restore(saved) {
   S = deserialize(saved);
+  useChapter(S.chapter);
   meta('Game restored.');
   say(textOf(room().name), { cls: 'heading' });
   describe();
@@ -841,8 +862,12 @@ function handle(t) {
   // 0. a room may hold the player still for a turn (dazed, pinned, listening)
   const hold = L(room().hold).find(e => ok(e.when));
   if (hold && !HOLD_FREE.some(k => isMeta(t, k))) { if (hold.say) show(hold.say); run(hold.do); return; }
-  // once the chapter has ended, only meta commands still work
-  if (CH.ending && ok(CH.ending.when) && !HOLD_FREE.some(k => isMeta(t, k))) return meta(CH.ending.blocked);
+  // once the chapter has ended, only meta commands still work, and continue
+  // goes on to the next chapter if there is one
+  if (CH.ending && ok(CH.ending.when)) {
+    if (isMeta(t, 'continue') && nextChapterId()) { untimed = true; return nextChapter(); }
+    if (!HOLD_FREE.some(k => isMeta(t, k))) return endingNote();
+  }
   // 1. puzzle actions (room first, then chapter-wide)
   const act = matchAction(t);
   if (act) return doAction(act);
@@ -859,6 +884,7 @@ function handle(t) {
     const s = store.get(SAVE_KEY);
     if (!s) return meta('There is no saved game.');
     if (!compatible(s)) return meta(`That save is from ${s._version ? `version ${s._version}` : 'an earlier build'}, which this version can't load.`);
+    if (!playable(s)) return meta('That save is from a chapter this page doesn\'t play.');
     return restore(s);
   }
   if (isMeta(t, 'version')) return meta(`Dixon ${G.version}, ${CH.title}.`);
@@ -895,6 +921,7 @@ function handle(t) {
 function status() {
   $('place').textContent = render(textOf(room().name)).replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
   $('score').textContent = `Score: ${score()} of ${CH.max_score}`;
+  $('about').textContent = `Dixon ${G.version} · ${CH.title} · saves: format ${G.save_compat}`;
 }
 // The inventory panel: what you carry and any silver; click an item to look at it.
 function renderInventory() {
@@ -1085,6 +1112,54 @@ function wireUI() {
   });
 }
 
+// --------------------------------------------------------------- chapters
+// The present-day world (world/) is shared; each chapter lays its own
+// chapter.yaml and rooms over it. Maps are merged with the chapter winning;
+// lists are joined, the chapter's first.
+function mergeChapter(world, ch) {
+  const out = { ...world, ...ch };
+  for (const k of ['items', 'deaths', 'vars', 'npcs', 'flags']) out[k] = { ...(world[k] || {}), ...(ch[k] || {}) };
+  for (const k of ['actions', 'hints']) out[k] = [...L(ch[k]), ...L(world[k])];
+  out.rooms = [...L(world.rooms), ...L(ch.rooms)];
+  return out;
+}
+function useChapter(id) {
+  CH = CHAPTERS[id].def;
+  ROOMS = CHAPTERS[id].rooms;
+}
+const nextChapterId = () => ORDER[ORDER.indexOf(S.chapter) + 1] || null;
+// After a chapter's ending: its own blocked line, and how to go on if there's more.
+function endingNote() {
+  meta((CH.ending || {}).blocked || 'Type restart to play again.');
+  const next = nextChapterId();
+  if (next && G.next_chapter) meta(G.next_chapter.replace('{title}', CHAPTERS[next].def.title));
+}
+// Going on to the next chapter: flags, points and what's in your pockets carry
+// over; the finished chapter's own rooms are forgotten (the next chapter may
+// reuse their ids for the same places in another year); the shared rooms are
+// remembered.
+function nextChapter() {
+  const next = nextChapterId();
+  const shared = new Set(L(WORLD.rooms));
+  for (const k of Object.keys(S.notes)) if (!shared.has(k)) delete S.notes[k];
+  for (const k of Object.keys(S.lines)) if (!shared.has(k)) delete S.lines[k];
+  S.found = new Set([...S.found].filter(k => shared.has(k.split(':')[0])));
+  S.visited = S.visited.filter(id => shared.has(id));
+  S.chapter = next;
+  useChapter(next);
+  S.items = S.items.filter(i => CH.items[i]);
+  S.room = CH.start;
+  S.turns = 0;
+  S.parted = new Set();
+  S.spoke = new Set();
+  S.lastNpc = null;
+  if (!S.visited.includes(S.room)) S.visited.push(S.room);
+  say(CH.title, { cls: 'chapter', raw: true });
+  show(CH.intro);
+  say(textOf(room().name), { cls: 'heading' });
+  describe();
+}
+
 async function loadYaml(p) {
   const r = await fetch(DATA + p, { cache: 'no-cache' });
   if (!r.ok) throw new Error(`Could not load ${p} (${r.status})`);
@@ -1092,17 +1167,33 @@ async function loadYaml(p) {
 }
 async function boot() {
   try {
-    [G, SRC, CH] = await Promise.all([loadYaml('game.yaml'), loadYaml('sources.yaml'), loadYaml('ch1/chapter.yaml')]);
-    ROOMS = {};
-    await Promise.all(L(CH.rooms).map(async id => { ROOMS[id] = await loadYaml(`ch1/rooms/${id}.yaml`); }));
+    [G, SRC, WORLD] = await Promise.all([loadYaml('game.yaml'), loadYaml('sources.yaml'), loadYaml('world/world.yaml')]);
+    // ?chapters=ch1,ch2 plays chapters that aren't listed yet (drafts).
+    ORDER = params.has('chapters') ? params.get('chapters').split(',').map(c => c.trim()).filter(Boolean) : L(G.chapters);
+    const shared = {};
+    await Promise.all(L(WORLD.rooms).map(async id => { shared[id] = await loadYaml(`world/rooms/${id}.yaml`); }));
+    await Promise.all(ORDER.map(async id => {
+      const def = await loadYaml(`${id}/chapter.yaml`);
+      const rooms = { ...shared };
+      await Promise.all(L(def.rooms).map(async r => { rooms[r] = await loadYaml(`${id}/rooms/${r}.yaml`); }));
+      CHAPTERS[id] = { def: mergeChapter(WORLD, def), rooms };
+    }));
   } catch (e) {
     $('output').innerHTML = `<p class="death">${esc(e.message)}</p><p class="meta">The game data didn't load. If you opened this file directly, serve the docs folder over HTTP instead.</p>`;
     return;
   }
   Object.assign(settings, G.settings || {}, store.get(SETTINGS_KEY) || {});
+  // Saves from before 0.17.0 were kept under chapter 1's keys.
+  for (const [k, old] of Object.entries(OLD_KEYS)) {
+    if (!store.get(k) && store.get(old)) store.set(k, { ...store.get(old), chapter: 'ch1' });
+    store.del(old);
+  }
   if (params.has('fresh')) { store.del(AUTO_KEY); store.del(SAVE_KEY); }
   wireUI();
-  let auto = !params.has('scene') && store.get(AUTO_KEY);
+  // ?chapter=ch2 starts that chapter fresh, as if the ones before it were done.
+  const startAt = params.has('chapter') && CHAPTERS[params.get('chapter')] ? params.get('chapter') : null;
+  let auto = !params.has('scene') && !startAt && store.get(AUTO_KEY);
+  if (auto && !playable(auto)) auto = null;
   if (auto && !compatible(auto)) {
     notice('Updated', `Dixon has been updated to version ${G.version}. Your game in progress came from ${auto._version ? `version ${auto._version}` : 'an earlier build'} and can't be carried over, so this is a fresh start.`);
     store.del(AUTO_KEY);
@@ -1110,9 +1201,10 @@ async function boot() {
   }
   if (auto) {
     S = deserialize(auto);
+    useChapter(S.chapter);
     notice('Welcome back', `You are where you left off (version ${G.version}). Type restart to begin again.`);
   } else {
-    S = freshState();
+    S = freshState(startAt || ORDER[0]);
     if (!store.get('dixon.seen') && G.tour_offer) {
       notice('New here?', G.tour_offer, { text: 'Take the tour', onClick: () => startTour() });
       store.set('dixon.seen', true);
@@ -1120,7 +1212,6 @@ async function boot() {
     if (params.has('scene') && ROOMS[params.get('scene')]) { S.room = params.get('scene'); S.visited = [S.room]; }
   }
   $('version').textContent = `v${G.version}`;
-  $('about').textContent = `Dixon ${G.version} · ${CH.title} · saves: format ${G.save_compat}`;
   document.title = `Dixon ${G.version}`;
   applySettings();
   say(textOf(room().name), { cls: 'heading' });
@@ -1137,6 +1228,7 @@ async function boot() {
     tourStep: n => tourStep(n),
     get touring() { return tour ? tour.i : null; },
     exitFor: t => { const e = moveExit(norm(t)); return e ? (e.to || '(blocked)') : null; },
+    get chapter() { return S.chapter; },
     setup({ room: r, flags = [], items = [], money } = {}) {
       if (r) { S.room = r; S.turns = 0; if (!S.visited.includes(r)) S.visited.push(r); }
       flags.forEach(setFlag);

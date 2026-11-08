@@ -1,0 +1,25 @@
+# DRAFT. Chapter 2 is being designed (skill/references/chapter2-outline.md).
+# It is not in game.yaml's chapters list, so players can't reach it; play it
+# with ?chapters=ch1,ch2 (from the end of chapter 1, type continue) or
+# ?chapters=ch1,ch2&chapter=ch2 (straight in). For now it is only the shared
+# present-day rooms, a week after chapter 1.
+id: ch2
+title: "Chapter 2: Dixon's Ferry"
+start: museum
+max_score: 0
+
+# This chapter's own room files, in ch2/rooms/. None yet: the 1832 rooms come
+# with the chapter.
+rooms: []
+
+# Started directly (?chapter=ch2), the game takes these as done: chapter 1
+# played through to its proper end.
+assumes: [present.returned, 1830.lease_dixon, 1830.key_returned, 1830.shoe_returned, chapter1.done, chapter1.ended]
+
+# Shown once, when the chapter begins.
+intro: A week goes by. On Saturday afternoon you are back on West Fifth Street, and the door of the Historic Center is propped open again.
+
+flags: {}
+
+hints:
+  - text: Chapter 2 is still being written. For now there is only the museum and the walk to the river, a week after chapter 1.

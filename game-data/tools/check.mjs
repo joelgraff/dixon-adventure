@@ -7,10 +7,12 @@ import yaml from 'js-yaml';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
-const errors = [];
-const warnings = [];
-const err = (where, msg) => errors.push(`${where}: ${msg}`);
-const warn = (where, msg) => warnings.push(`${where}: ${msg}`);
+// The shared present-day rooms are checked once per chapter, so the same
+// message can come up more than once: keep each one once.
+const errors = new Set();
+const warnings = new Set();
+const err = (where, msg) => errors.add(`${where}: ${msg}`);
+const warn = (where, msg) => warnings.add(`${where}: ${msg}`);
 
 function load(file) {
   try {
@@ -21,31 +23,61 @@ function load(file) {
   }
 }
 
+const asList = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
 const game = load(path.join(root, 'game.yaml')) || {};
 const src = load(path.join(root, 'sources.yaml')) || {};
-const chapterDirs = fs.readdirSync(root).filter(d => /^ch\d+$/.test(d));
+const world = load(path.join(root, 'world', 'world.yaml')) || {};
+// The listed chapters in order, then any drafts (chapter folders not listed yet).
+const allDirs = fs.readdirSync(root).filter(d => /^ch\d+$/.test(d)).sort((a, b) => Number(a.slice(2)) - Number(b.slice(2)));
+const listed = (game.chapters || []).map(String);
+for (const c of listed) if (!allDirs.includes(c)) err('game.yaml', `chapters lists ${c}, but there is no ${c}/ folder`);
+const chapterDirs = [...listed.filter(c => allDirs.includes(c)), ...allDirs.filter(c => !listed.includes(c))];
+const ERA_RE = /^(present|\d{4})$/;
+const allRooms = {};             // every room in the game, shared and per chapter
+const flagUse = [];              // per chapter, in order: {ch, set, read, declared, assumes}
+
+// What every chapter shares (see FORMAT.md, Chapters): maps merged with the
+// chapter winning, lists joined with the chapter's first.
+function mergeChapter(w, ch) {
+  const out = { ...w, ...ch };
+  for (const k of ['items', 'deaths', 'vars', 'npcs', 'flags']) out[k] = { ...(w[k] || {}), ...(ch[k] || {}) };
+  for (const k of ['actions', 'hints']) out[k] = [...asList(ch[k]), ...asList(w[k])];
+  return out;
+}
+function loadRooms(dir, label, manifest, owner) {
+  const rooms = {};
+  if (!fs.existsSync(dir)) return rooms;
+  for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.yaml')).sort()) {
+    const r = load(path.join(dir, f));
+    if (!r) continue;
+    const id = path.basename(f, '.yaml');
+    if (r.id !== id) err(`${label}/${f}`, `id "${r.id}" does not match the file name`);
+    rooms[id] = r;
+  }
+  for (const id of Object.keys(rooms)) if (!manifest.includes(id)) err(owner, `room file ${id}.yaml is missing from the rooms list`);
+  for (const id of manifest) if (!rooms[id]) err(owner, `rooms lists ${id}, but there is no ${id}.yaml in ${label}`);
+  return rooms;
+}
+const worldRooms = loadRooms(path.join(root, 'world', 'rooms'), 'world/rooms', asList(world.rooms), 'world/world.yaml');
+const roomFile = {};             // room id -> its file, for messages
+for (const id of Object.keys(worldRooms)) roomFile[id] = `world/rooms/${id}.yaml`;
 
 const COND_RE = /^(money|score|turns|n)\s*(>=|<=|==|>|<)\s*(-?\d+)$/;
 const EFFECTS = new Set(['set', 'clear', 'give', 'take', 'money', 'reveal', 'say', 'move', 'death', 'rewind', 'leave_behind', 'describe', 'end', 'if']);
 const BUILTIN_VARS = new Set(['money', 'score', 'max_score', 'picked', 'n']);
-const asList = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]);
 
 for (const ch of chapterDirs) {
   const chDir = path.join(root, ch);
-  const chapter = load(path.join(chDir, 'chapter.yaml')) || {};
-  const roomDir = path.join(chDir, 'rooms');
-  const rooms = {};
-  for (const f of fs.readdirSync(roomDir).filter(f => f.endsWith('.yaml')).sort()) {
-    const r = load(path.join(roomDir, f));
-    if (!r) continue;
-    const id = path.basename(f, '.yaml');
-    if (r.id !== id) err(`${ch}/rooms/${f}`, `id "${r.id}" does not match the file name`);
-    rooms[id] = r;
+  const own = load(path.join(chDir, 'chapter.yaml')) || {};
+  const chapter = mergeChapter(world, own);
+  const ownRooms = loadRooms(path.join(chDir, 'rooms'), `${ch}/rooms`, asList(own.rooms), `${ch}/chapter.yaml`);
+  for (const id of Object.keys(ownRooms)) {
+    if (worldRooms[id]) err(`${ch}/rooms/${id}.yaml`, `has the same id as a shared room in world/rooms`);
+    roomFile[id] = roomFile[id] && !roomFile[id].startsWith('world/') ? roomFile[id] : `${ch}/rooms/${id}.yaml`;
+    allRooms[id] = allRooms[id] || ownRooms[id];
   }
-
-  const manifest = asList(chapter.rooms);
-  for (const id of Object.keys(rooms)) if (!manifest.includes(id)) err(`${ch}/chapter.yaml`, `room file ${id}.yaml is missing from the rooms list`);
-  for (const id of manifest) if (!rooms[id]) err(`${ch}/chapter.yaml`, `rooms lists ${id}, but there is no ${id}.yaml`);
+  const rooms = { ...worldRooms, ...ownRooms };
+  const fileOf = rid => (worldRooms[rid] ? `world/rooms/${rid}.yaml` : `${ch}/rooms/${rid}.yaml`);
   const items = chapter.items || {};
   const deaths = chapter.deaths || {};
   const chapterNpcs = chapter.npcs || {};
@@ -81,7 +113,8 @@ for (const ch of chapterDirs) {
     if (kind === 'has') { if (!items[val]) err(where, `has: unknown item "${val}"`); return; }
     if (kind === 'here') { if (!allNpcIds.has(val)) err(where, `here: unknown NPC "${val}"`); return; }
     if (kind === 'in') { if (!rooms[val]) err(where, `in: unknown room "${val}"`); return; }
-    if (kind === 'era') { if (!['present', '1830'].includes(val)) err(where, `era: unknown era "${val}"`); return; }
+    if (kind === 'era') { if (val !== 'past' && !ERA_RE.test(val)) err(where, `era: should be present, past or a year, not "${val}"`); return; }
+    if (kind === 'chapter') { if (!allDirs.includes(val)) err(where, `chapter: unknown chapter "${val}"`); return; }
     if (kind) return err(where, `unknown condition "${t}"`);
     if (!/^[a-z0-9_]+\.[a-z0-9_]+$/.test(t)) return err(where, `flag name "${t}" should look like prefix.name`);
     if (!flagsRead.has(t)) flagsRead.set(t, where);
@@ -103,7 +136,7 @@ for (const ch of chapterDirs) {
       const r = rooms[rid];
       asList(v).forEach(n => { if (!r || !(r.nouns || {})[n]) err(where, `reveal: no noun "${n}" in room ${rid}`); });
     }
-    if ((k === 'rewind' || k === 'leave_behind') && String(v) !== '1830') err(where, `${k}: unknown era ${v}`);
+    if ((k === 'rewind' || k === 'leave_behind') && !/^\d{4}$/.test(String(v))) err(where, `${k}: expected a year, got ${v}`);
     if (k === 'if') {
       asList(v.when).forEach(c => checkCond(c, where));
       asList(v.do).forEach(x => checkEffect(x, where, rid));
@@ -125,6 +158,8 @@ for (const ch of chapterDirs) {
       return;
     }
     if (node && typeof node === 'object') {
+      // something only another chapter can reach (`chapter:ch1`) is checked with that chapter
+      if (asList(node.when).some(c => typeof c === 'string' && /^chapter:/.test(c.trim()) && c.trim().slice(8) !== ch)) return;
       for (const [k, v] of Object.entries(node)) {
         const w = `${where}.${k}`;
         if (k === 'when') asList(v).forEach(c => checkCond(c, w));
@@ -207,11 +242,11 @@ for (const ch of chapterDirs) {
 
   // ---- rooms ---------------------------------------------------------------
   for (const [rid, r] of Object.entries(rooms)) {
-    const where = `${ch}/rooms/${rid}.yaml`;
+    const where = fileOf(rid);
     counts.rooms++;
     for (const f of ['era', 'name', 'look', 'picture', 'exits']) if (r[f] === undefined) err(where, `missing ${f}`);
     if (r.brief === undefined) warn(where, `no brief: return visits will repeat the whole description`);
-    if (!['present', '1830'].includes(String(r.era))) err(where, `era must be present or 1830`);
+    if (!ERA_RE.test(String(r.era))) err(where, `era must be present or a year (1830)`);
     for (const s of asList(r.sources)) if (!(src.sources || {})[s]) err(where, `unknown source ${s}`);
     const labels = labelsFor(rid);
     walk(r, where, rid, (s, w) => checkMarkup(s, w, labels));
@@ -287,7 +322,7 @@ for (const ch of chapterDirs) {
   for (const [rid, r] of Object.entries(rooms)) {
     for (const a of asList(r.actions)) for (const p of asList(a.phrases)) {
       const key = `${rid}|${p}`;
-      if (roomPhrases[key]) warn(`${ch}/rooms/${rid}.yaml`, `phrase "${p}" used by both ${roomPhrases[key]} and ${a.id}`);
+      if (roomPhrases[key]) warn(fileOf(rid), `phrase "${p}" used by both ${roomPhrases[key]} and ${a.id}`);
       roomPhrases[key] = a.id;
     }
   }
@@ -296,29 +331,53 @@ for (const ch of chapterDirs) {
   const scored = Object.entries(chapter.flags || {}).filter(([, f]) => f && f.score);
   const total = scored.reduce((s, [, f]) => s + f.score, 0);
   if (total !== chapter.max_score) err(chWhere, `scoring flags add up to ${total}, but max_score is ${chapter.max_score}`);
-  for (const [f] of scored) if (!flagsSet.has(f)) err(chWhere, `scoring flag ${f} is never set`);
+  // `assumes`: the flags a chapter takes for granted when started directly
+  // (?chapter=ch2), as if the chapters before it had been played.
+  for (const f of asList(own.assumes)) {
+    checkCond(f, `${chWhere} assumes`);
+    if (!flagsSet.has(f)) flagsSet.set(f, `${chWhere} assumes`);
+  }
+  if (own.intro !== undefined) walk({ intro: own.intro }, chWhere, null, (s, w) => checkMarkup(s, w, null));
 
-  // flags read but never set (known.* names are set by talk; they still need a set)
-  for (const [f, w] of flagsRead) if (!flagsSet.has(f)) err(w, `flag ${f} is read but never set anywhere`);
+  // Flags carry over from one chapter to the next, so whether a flag is ever
+  // set or read is worked out across chapters below.
+  flagUse.push({ ch, chWhere, set: flagsSet, read: flagsRead, declared: chapter.flags || {}, scored });
+  console.log(`${ch}${listed.includes(ch) ? '' : ' (draft)'}: ${counts.rooms} rooms, ${counts.nouns} nouns, ${counts.npcs} NPCs, ${counts.topics} topics, ${counts.actions} actions, ${counts.phrases} phrasings`);
+  console.log(`${ch}: score ${total}/${chapter.max_score} across ${scored.length} scoring flags; ${flagsSet.size} flags set in all`);
+  if (todos.length) console.log(`${ch}: ${todos.length} TODO lines:\n  ${todos.join('\n  ')}`);
+}
+
+// ---- flags across chapters ---------------------------------------------------
+// A flag a chapter reads must be set in that chapter or an earlier one (or
+// assumed). A flag set anywhere should be read somewhere or declared.
+{
+  const setSoFar = new Set();
+  const readAnywhere = new Set(flagUse.flatMap(u => [...u.read.keys()]));
+  const declaredAnywhere = new Set(flagUse.flatMap(u => Object.keys(u.declared)));
+  for (const u of flagUse) {
+    for (const f of u.set.keys()) setSoFar.add(f);
+    for (const [f] of u.scored) if (!u.set.has(f)) err(u.chWhere, `scoring flag ${f} is never set`);
+    // known.* names are set by talk; they still need a set
+    for (const [f, w] of u.read) if (!setSoFar.has(f)) err(w, `flag ${f} is read but never set in this chapter or an earlier one`);
+  }
   // seen.* and known.* are read by the runtime (names and "a" / "the"), not by the data
-  for (const [f, w] of flagsSet) if (!flagsRead.has(f) && !/^(seen|known)\./.test(f) && !(chapter.flags || {})[f]) warn(w, `flag ${f} is set but never read and not declared in chapter.yaml`);
+  for (const u of flagUse) for (const [f, w] of u.set) if (!readAnywhere.has(f) && !/^(seen|known)\./.test(f) && !declaredAnywhere.has(f)) warn(w, `flag ${f} is set but never read and not declared in a chapter.yaml`);
+}
 
-  // sources and claims
+// ---- sources and claims, against every room in the game ---------------------
+{
+  const every = { ...allRooms, ...worldRooms };
   for (const [cid, c] of Object.entries(src.claims || {})) {
     for (const s of asList(c.sources)) if (!(src.sources || {})[s]) err(`sources.yaml ${cid}`, `unknown source ${s}`);
     for (const rid of asList(c.rooms)) {
-      if (!rooms[rid]) { err(`sources.yaml ${cid}`, `unknown room ${rid}`); continue; }
-      const listed = new Set(asList(rooms[rid].sources));
-      for (const s of asList(c.sources)) if (!listed.has(s)) warn(`${ch}/rooms/${rid}.yaml`, `claim ${cid} cites ${s}, which is missing from this room's sources`);
+      if (!every[rid]) { err(`sources.yaml ${cid}`, `unknown room ${rid}`); continue; }
+      const roomSources = new Set(asList(every[rid].sources));
+      for (const s of asList(c.sources)) if (!roomSources.has(s)) warn(roomFile[rid], `claim ${cid} cites ${s}, which is missing from this room's sources`);
     }
     if (!['record', 'disputed', 'guess', 'invented', 'needs-source'].includes(c.status)) err(`sources.yaml ${cid}`, `unknown status ${c.status}`);
   }
-
   const st = Object.values(src.claims || {}).reduce((m, c) => ((m[c.status] = (m[c.status] || 0) + 1), m), {});
-  console.log(`${ch}: ${counts.rooms} rooms, ${counts.nouns} nouns, ${counts.npcs} NPCs, ${counts.topics} topics, ${counts.actions} actions, ${counts.phrases} phrasings`);
-  console.log(`${ch}: score ${total}/${chapter.max_score} across ${scored.length} scoring flags; ${flagsSet.size} flags set in all`);
   console.log(`claims: ${Object.entries(st).map(([k, v]) => `${v} ${k}`).join(', ')}`);
-  if (todos.length) console.log(`${ch}: ${todos.length} TODO lines:\n  ${todos.join('\n  ')}`);
 }
 
 // Version: game.yaml, play.html's ?v= and the newest changelog entry must agree.
@@ -335,9 +394,9 @@ for (const ch of chapterDirs) {
   console.log(`version ${gv}, save_compat ${game.save_compat}`);
 }
 
-if (warnings.length) console.log(`\n${warnings.length} warning(s):\n  ${warnings.join('\n  ')}`);
-if (errors.length) {
-  console.log(`\n${errors.length} error(s):\n  ${errors.join('\n  ')}`);
+if (warnings.size) console.log(`\n${warnings.size} warning(s):\n  ${[...warnings].join('\n  ')}`);
+if (errors.size) {
+  console.log(`\n${errors.size} error(s):\n  ${[...errors].join('\n  ')}`);
   process.exit(1);
 }
 console.log('\nOK');

@@ -16,8 +16,10 @@
 //           room: landing
 //           money: 0
 //           turns: 2                    # turns spent in this room (on_turn's clock)
+//           chapter: ch2                # the chapter being played
 //         - click: "#tour-next"         # click a page element (times: 3 repeats it)
 //           visible: "#tour-card"       # also hidden:, and shows: {selector: words}
+//   fresh: false / storage: {key: value}   # optional, per test: keep or seed saved data
 //   phrases: true                      # instead of steps: every room action's
 //                                      # phrasings must reach that action
 import fs from 'node:fs';
@@ -58,12 +60,15 @@ const asList = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v :
 let passed = 0;
 let failed = 0;
 
-async function openGame(extra = '') {
+// `storage` seeds the browser's saved data before the page loads (to test old
+// saves); `fresh: false` keeps it instead of starting clean.
+async function openGame(extra = '', { fresh = true, storage = null } = {}) {
   const context = await browser.newContext();
+  if (storage) await context.addInitScript(s => { if (!sessionStorage.getItem('seeded')) { for (const [k, v] of Object.entries(s)) localStorage.setItem(k, JSON.stringify(v)); sessionStorage.setItem('seeded', '1'); } }, storage);
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  await page.goto(`${base}?fresh&seed=1${extra ? `&${extra.replace(/^\?/, '')}` : ''}`);
+  await page.goto(`${base}?${fresh ? 'fresh&' : ''}seed=1${extra ? `&${extra.replace(/^\?/, '')}` : ''}`);
   await page.waitForFunction(() => window.dixon, null, { timeout: 10000 });
   return { page, context, errors };
 }
@@ -71,7 +76,7 @@ const outputCount = page => page.evaluate(() => document.querySelectorAll('#outp
 const outputSince = (page, n) => page.evaluate(k => [...document.querySelectorAll('#output p')].slice(k).map(p => p.innerText).join('\n'), n);
 
 async function runSteps(t, file) {
-  const { page, context, errors } = await openGame(t.url);
+  const { page, context, errors } = await openGame(t.url, { fresh: t.fresh !== false, storage: t.storage });
   const label = `${file} › ${t.name}`;
   try {
     for (const [i, step] of asList(t.steps).entries()) {
@@ -94,7 +99,8 @@ async function runSteps(t, file) {
       const fail = msg => { throw new Error(`step ${i + 1} "${step.cmd}": ${msg}\n    reply: ${reply.split('\n').slice(1).join(' | ').slice(0, 400)}`); };
       for (const e of asList(step.expect)) if (!low.includes(String(e).toLowerCase())) fail(`expected "${e}"`);
       for (const e of asList(step.not)) if (low.includes(String(e).toLowerCase())) fail(`did not expect "${e}"`);
-      const st = await page.evaluate(() => ({ score: window.dixon.score(), room: window.dixon.state.room, money: window.dixon.state.money, turns: window.dixon.state.turns }));
+      const st = await page.evaluate(() => ({ score: window.dixon.score(), room: window.dixon.state.room, money: window.dixon.state.money, turns: window.dixon.state.turns, chapter: window.dixon.chapter }));
+      if (step.chapter !== undefined && st.chapter !== step.chapter) fail(`chapter ${st.chapter}, expected ${step.chapter}`);
       if (step.score !== undefined && st.score !== step.score) fail(`score ${st.score}, expected ${step.score}`);
       if (step.room !== undefined && st.room !== step.room) fail(`room ${st.room}, expected ${step.room}`);
       if (step.money !== undefined && st.money !== step.money) fail(`money ${st.money}, expected ${step.money}`);
@@ -112,13 +118,30 @@ async function runSteps(t, file) {
   }
 }
 
-async function runPhrases(ch, file) {
+// A chapter's rooms: the shared present-day rooms (world/rooms) and its own.
+function chapterRooms(ch) {
+  const world = yaml.load(fs.readFileSync(path.join(dataRoot, 'world', 'world.yaml'), 'utf8'));
   const chapter = yaml.load(fs.readFileSync(path.join(dataRoot, ch, 'chapter.yaml'), 'utf8'));
-  const { page, context } = await openGame();
+  return [
+    ...asList(world.rooms).map(id => [id, path.join(dataRoot, 'world', 'rooms', `${id}.yaml`)]),
+    ...asList(chapter.rooms).map(id => [id, path.join(dataRoot, ch, 'rooms', `${id}.yaml`)]),
+  ];
+}
+// The address that plays chapter `ch`: drafts need ?chapters= to be reachable.
+function chapterUrl(ch) {
+  const listed = asList(yaml.load(fs.readFileSync(path.join(dataRoot, 'game.yaml'), 'utf8')).chapters).map(String);
+  if (listed[0] === ch) return '';
+  const order = listed.includes(ch) ? listed : [...listed, ch];
+  return `chapters=${order.join(',')}&chapter=${ch}`;
+}
+
+async function runPhrases(ch, file) {
+  const rooms = chapterRooms(ch);
+  const { page, context } = await openGame(chapterUrl(ch));
   const problems = [];
   let count = 0;
-  for (const rid of asList(chapter.rooms)) {
-    const room = yaml.load(fs.readFileSync(path.join(dataRoot, ch, 'rooms', `${rid}.yaml`), 'utf8'));
+  for (const [rid, file] of rooms) {
+    const room = yaml.load(fs.readFileSync(file, 'utf8'));
     await page.evaluate(r => window.dixon.setup({ room: r }), rid);
     for (const a of asList(room.actions)) {
       for (const p of asList(a.phrases)) {
@@ -131,8 +154,8 @@ async function runPhrases(ch, file) {
   }
   // Every exit, by every one of its names, in several common shapes.
   let exits = 0;
-  for (const rid of asList(chapter.rooms)) {
-    const room = yaml.load(fs.readFileSync(path.join(dataRoot, ch, 'rooms', `${rid}.yaml`), 'utf8'));
+  for (const [rid, file] of rooms) {
+    const room = yaml.load(fs.readFileSync(file, 'utf8'));
     await page.evaluate(r => window.dixon.setup({ room: r }), rid);
     const actionPhrases = new Set(asList(room.actions).flatMap(a => asList(a.phrases)).map(p => String(p).toLowerCase()));
     for (const e of asList(room.exits)) {

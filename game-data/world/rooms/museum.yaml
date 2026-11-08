@@ -514,7 +514,7 @@ npcs:
 actions:
   - id: close_up
     phrases: [leave museum, go home, walk home, say goodnight, say good night, help margaret close up, close up, help close up]
-    when: [chapter1.done]
+    when: [chapter:ch1, chapter1.done]
     do:
       - set: chapter1.ended
       - say: >-
@@ -530,6 +530,6 @@ actions:
 exits:
   - names: [outside, out, door, street, leave, exit]
     to: street
-    action: close_up           # once the chapter is done, leaving ends it
-    action_when: [chapter1.done]
+    action: close_up           # once chapter 1 is done, leaving ends it
+    action_when: [chapter:ch1, chapter1.done]
     text: You step through the propped door onto the sidewalk. Behind you, the hum of the fluorescents fades.

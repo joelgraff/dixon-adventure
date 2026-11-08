@@ -17,6 +17,9 @@ push. The version shows in the top bar of play.html, in Settings, and with the
   It updates game.yaml, the `?v=` in play.html and this file together, and the
   checker fails if they ever disagree.
 
+## 0.17.0 (2026-11-08)
+- The engine now plays chapters. The present-day rooms (the museum, the street, the river walk and the water's edge) are shared by every chapter, and when a chapter ends and another follows, typing continue goes on to it with everything you did carried over. Saves remember their chapter; saves from earlier versions still load. Nothing changes in play yet: chapter 2 is a draft that only the developer address reaches.
+
 ## 0.16.0 (2026-11-07)
 - Earlier text fades back: when you type a command, everything already on screen dims, so the newest reply is the only bright text, even when one command sets off two replies. On by default; Settings > Dim earlier text turns it off.
 

@@ -3,12 +3,17 @@
 
 # Release version (see CHANGELOG.md for the rules). Bump it, the ?v= in
 # play.html and the changelog together; the checker verifies they match.
-version: 0.16.0
+version: 0.17.0
 # Bump when a change would break saved games (renamed or removed flags,
 # items or rooms). Saves from another save_compat are refused, not loaded.
 save_compat: 2
 
 input_limit: 40            # SCI-era input buffer
+
+# The chapters players can reach, in order. A chapter folder that isn't listed
+# here (a draft) is still checked and tested, but only reachable with
+# ?chapters=ch1,ch2 in the address (see FORMAT.md, Chapters).
+chapters: [ch1]
 
 # Canonical verbs and the words that map to them. Multi-word synonyms are
 # matched before single words.
@@ -86,8 +91,12 @@ meta:
   look_around: [look, l, look around]
   version: [version, about]
   tour: [tour, tutorial, guide, show me around]
+  # only after a chapter's ending, and only if another chapter follows
+  continue: [continue, next chapter, go on, next, keep playing]
 
 score_line: "Your score is {score} of {max_score}."
+# After a chapter's ending, when another chapter follows.
+next_chapter: "Type continue to go on to {title}."
 
 death_screen:
   title: "You have died."

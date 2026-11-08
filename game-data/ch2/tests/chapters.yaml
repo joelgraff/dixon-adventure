@@ -1,0 +1,53 @@
+# Moving between chapters (0.17.0): the engine side, tested on the chapter 2
+# draft. See FORMAT.md, Chapters.
+tests:
+  - name: after chapter 1's ending, continue goes on to chapter 2, carrying the flags
+    url: chapters=ch1,ch2&scene=museum
+    steps:
+      - setup: {flags: [present.returned, 1830.lease_dixon, 1830.key_returned, chapter1.done, known.volunteer, met.volunteer], items: [phone, key]}
+      - {cmd: out, expect: [locks up behind you, The end of Chapter 1, "Type continue to go on to Chapter 2: Dixon's Ferry"], chapter: ch1}
+      - {cmd: look, expect: [chapter 1 is over, Type continue], chapter: ch1}
+      - {cmd: continue, expect: ["Chapter 2: Dixon's Ferry", A week goes by, Dixon Historic Center], not: [The end of Chapter 1], chapter: ch2, room: museum, score: 0}
+      - {cmd: inventory, expect: phone, not: brass key}
+      - {cmd: read panel, expect: took over the ferry}
+      - {cmd: help, expect: still being written}
+      - {cmd: out, room: street, not: The end of Chapter 1, chapter: ch2}
+      - {cmd: score, expect: 0 of 0}
+
+  - name: with only chapter 1 listed, the ending offers nothing more
+    url: scene=museum
+    steps:
+      - setup: {flags: [present.returned, 1830.lease_dixon, chapter1.done, known.volunteer, met.volunteer]}
+      - {cmd: out, expect: The end of Chapter 1, not: Type continue}
+      - {cmd: continue, expect: chapter 1 is over, not: Type continue, chapter: ch1}
+
+  - name: a draft chapter can be started directly, with what came before assumed
+    url: chapters=ch1,ch2&chapter=ch2
+    steps:
+      - {cmd: look, expect: [founding panel, pole shoe], chapter: ch2, room: museum, score: 0}
+      - {cmd: read panel, expect: took over the ferry}
+      - {cmd: help, expect: still being written}
+      - {cmd: version, expect: "Chapter 2: Dixon's Ferry"}
+
+  - name: a save made in chapter 2 restores into chapter 2, after a restart into chapter 1
+    url: chapters=ch1,ch2&chapter=ch2
+    steps:
+      - {cmd: save, expect: Game saved}
+      - {cmd: restart, expect: Restart from the beginning}
+      - {cmd: "yes", expect: Rolette Historic Center, chapter: ch1, room: museum}
+      - {cmd: restore, expect: Game restored, chapter: ch2, room: museum}
+      - {cmd: help, expect: still being written}
+
+  - name: a chapter 2 save can't be restored where chapter 2 isn't playable
+    fresh: false
+    storage:
+      dixon.save: {chapter: ch2, room: museum, flags: [present.returned], items: [phone], money: 0, turns: 0, scored: [], found: [], notes: {}, parted: [], spoke: [], visited: [museum], n: null, lines: {}, _version: "0.17.0", _compat: 2}
+    steps:
+      - {cmd: restore, expect: "a chapter this page doesn't play", not: Game restored, chapter: ch1}
+
+  - name: a save from before chapters (dixon.ch1.save) still restores
+    fresh: false
+    storage:
+      dixon.ch1.save: {room: riverwalk, flags: [present.panel_read], items: [phone], money: 0, turns: 0, scored: [present.panel_read], found: [], notes: {}, parted: [], spoke: [], visited: [museum, street, riverwalk], n: null, lines: {}, _version: "0.16.0", _compat: 2}
+    steps:
+      - {cmd: restore, expect: [Game restored, Riverside walk], chapter: ch1, room: riverwalk, score: 2}
