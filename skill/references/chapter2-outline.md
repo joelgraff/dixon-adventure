@@ -59,6 +59,7 @@ repair, before chapter 2's): candidates
   book, the war book, doesn't exist.
 - Margaret's "the militia came through here in 1832, Lincoln among them" turns
   into something vaguer.
+- *Decided: both the statue and the account book.*
 
 **The drawer's object (the ticket).** Seemingly random, chosen once the scenes
 exist. Candidates that would turn out to matter:
@@ -66,7 +67,7 @@ exist. Candidates that would turn out to matter:
   "2 pr. mittens for sons" on Ogee's account; it would come to mean the Dixon
   children);
 - a blue glass trade bead (Crane's account: blue cloth, beads);
-- a scorched iron hinge from a ferry (if option 2, the burning ferry, comes in).
+- ~~a scorched iron hinge from a ferry~~ (ruled out).
 
 **Margaret in chapter 2.** The account book in the museum case has "cash to
 Margaret to go to Fort $2". She reads it out, laughs at seeing her own name,
@@ -87,8 +88,8 @@ and then stops laughing. Her rising awareness starts here.
 - **Returning from 1830:** Asa (hauling to Galena: the family could ride with
   his wagons), Eli (militia age; Stillman's battalion rides out from the ferry
   on May 13), the crow with Asa's dollar, Madeline's paddle under the eaves.
-  Ogee sold the ferry in January 1832; whether he and Madeline are still about
-  is open.
+  Ogee sold the ferry in January 1832; *decided: he and Madeline are still
+  about.*
 - **Cameos:** the army arrives about May 10-12 (Governor Reynolds, Whiteside,
   Captain Lincoln's company camped a mile west).
 
@@ -98,11 +99,20 @@ the ferry burns (Bogardus's boat did; Madeline said nobody would burn this
 one). Rebuilding the crossing before the army arrives reuses chapter 1's
 skills and objects.
 
+## Decided 2026-11-08 (second round)
+- **Present-day wrongness: both.** The Lincoln statue is missing and Dixon's
+  account book stops in April 1832.
+- **The drawer object:** not the hinge. The mitten and the bead are still
+  candidates.
+- **Ogee and Madeline are at the ferry in 1832.** (Ogee sold the ferry to
+  Dixon in January 1832; why they are still about is for the scenes to say.)
+
 ## Open questions
-1. The fog rule for travelers ("settled" moment) and whether the traveler is
-   stuck.
-2. What the player can do about the children, if anything, without breaking
-   the record again.
-3. The present-day wrongness (statue, account book, or both).
-4. The drawer object.
-5. Where Ogee and Madeline are in 1832.
+1. **The fog rule and the traveler.** Is she at the ferry when the player
+   arrives (stuck, or glimpsed leaving), or gone before the player comes? Her
+   ending depends on it; see the options discussed 2026-11-08 in
+   future-hooks.md.
+2. **The children.** Either nothing the player does can save them, or the
+   player can save them without breaking Dixon's record, and that becomes a
+   complication in a later era. Undecided.
+3. **The drawer object:** the mitten or the bead (or something else).

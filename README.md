@@ -5,7 +5,8 @@ the present day at the Dixon Historic Center, where the founding panel ends a
 line short, and the fog at the river takes you back to put history right.
 Chapter 1 is Ogee's ferry in the spring of 1830.
 
-Play it by opening `play.html` (`index.html` redirects there). Everything
+**Play it at <https://joelgraff.github.io/dixon-adventure/>**, or open
+`play.html` locally (`index.html` redirects there). Everything
 runs in the browser; the game is the data in `game-data/`.
 
 ## Layout
