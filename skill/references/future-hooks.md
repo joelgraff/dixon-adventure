@@ -88,3 +88,8 @@ Worked out in conversation after chapter 1's story review. **Decided** items are
 - **Decided: 1832**, the Black Hawk War, with Dixon's Ferry as the army's staging point. Close enough to 1830 to carry its arcs on coherently.
 - **Carries over from 1830:** Dixon (postmaster; owns the ferry by Jan 1832, C8), James (the key on his buttonhole), Eli (militia age; "the war's coming back"), Asa (season of crossings), Ogee (pulls the rope), Madeline, the boys and the crow (still with Asa's silver dollar), the rope, the paddle, the canoe on the far bank, and the player as "the stranger the river sent", unchanged two years on.
 - **OPEN: the break.** Research Dixon's Ferry in May–June 1832 first (real Sauk and Potawatomi people and real violence are involved), then choose from two or three candidates grounded in the record.
+
+### Chapter 2 break (decided 2026-11-08)
+- **Option 1: Dixon leaves.** On record he nearly did: warned of Black Hawk's band, he "would have abandoned his home, and sought safety elsewhere" but for the Winnebago chief Pachinka (Crane)'s assurance (Lee County 1881). The third traveler tips him the other way. Details and the conflicting accounts are in research-1832.md.
+- **Option 2 (the ferry burns) is held in reserve** as a mid-chapter set piece if the chapter needs breaking up. Option 3 (a message never gets through) is dropped.
+- A repair may cost something real (*City on the Edge of Forever*), but chapter 2 doesn't depend on it.
