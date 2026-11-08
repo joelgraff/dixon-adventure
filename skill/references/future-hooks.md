@@ -68,6 +68,7 @@ Worked out in conversation after chapter 1's story review. **Decided** items are
 - **Decided: "not thinking about it" is what travelers say.** Crossing leaves you holding two histories, and the mind copes by not looking. The player already says it ("You decide not to think about that just yet", "…either"); Margaret has thirty-one years of it. Only people who have crossed notice changes; everyone else has only the current history.
 - **Decided: nothing comes back.** Clothes, possessions and money stay in the era. What you leave there becomes part of history.
 - **Decided: history is the only courier.** An object reaches a later era or the present only by surviving in the past. If something from one era is useful in another, it is brought forward through the museum (or the desk, below), never in your pocket.
+- **Decided (2026-11-08): the fog takes a traveler home once the moment is decided**, right or wrong. Chapter 1's wrong fix already works this way; it is why the third traveler is gone from 1832 before the player arrives.
 - **Proposed: the clue picks the era.** The fog takes you to wherever the thing you bring to the water came from (a ticket; it stays on the bank). This answers why Margaret never got back: what would take her was locked in the drawer, and the key was lost.
 - **Guard against sprawl:** each chapter has one break, one ticket, one desk scene and one step on the third traveler's trail.
 
