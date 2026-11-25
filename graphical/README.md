@@ -14,7 +14,11 @@ don't bump the game version.
   limited 32-color, and modern pixel with smooth light and fog).
 - **Art pipeline:** model or block out the scene in Blender, render it, shrink
   it to 320×180, lock it to the palette with an ordered dither, then touch it
-  up by hand. Free asset packs are for reference, and placeholder shapes are
+  up by hand. **No dithering:** on a sharp digital screen at this scale it
+  reads as noise rather than as a blended color, and on anything that moves it
+  shimmers. (Dithering worked on CRTs because they blurred neighboring
+  pixels together.) Use flat palette colors, and add in-between colors to
+  the palette where a gradient needs them. Free asset packs are for reference, and placeholder shapes are
   fine while the mechanics come together.
 - **Platform:** the browser, a plain `<canvas>`, no library to start (Phaser
   later only if the effects get painful).

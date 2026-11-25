@@ -82,8 +82,8 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
     <div class="modes" role="group" aria-label="Dither pattern">
       <button type="button" data-dither="blue" aria-pressed="false">Blue noise</button>
       <button type="button" data-dither="light" aria-pressed="false">Light</button>
-      <button type="button" data-dither="sparse" aria-pressed="true">Sparse</button>
-      <button type="button" data-dither="off" aria-pressed="false">Off</button>
+      <button type="button" data-dither="sparse" aria-pressed="false">Sparse</button>
+      <button type="button" data-dither="off" aria-pressed="true">Off</button>
     </div>
   </div>
   <div class="bar">
@@ -182,7 +182,7 @@ function blueNoise(n){
 }
 const BLUE=blueNoise(64);
 const PATTERNS={blue:{mult:1},light:{mult:.5},sparse:{mult:.25},off:{mult:0}};
-let pattern='sparse';
+let pattern='off';
 
 function nearest(pal,r,gg,bb,plain){
   let best=0,bd=1e9;
@@ -409,7 +409,7 @@ function setPattern(p){
 }
 document.querySelectorAll('.modes button[data-dither]').forEach(bt=>bt.addEventListener('click',()=>setPattern(bt.dataset.dither)));
 let savedP=null; try{savedP=localStorage.getItem('landing-dither');}catch(_){}
-setPattern(PATTERNS[savedP]?savedP:'sparse');
+setPattern(PATTERNS[savedP]?savedP:'off');
 let saved=null; try{saved=localStorage.getItem('landing-style');}catch(_){}
 setMode(PAL[saved]?saved:'lim');
 
