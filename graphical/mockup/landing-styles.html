@@ -80,9 +80,9 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
       <button type="button" id="m-mod" data-mode="mod" aria-pressed="false">3 · Modern pixel</button>
     </div>
     <div class="modes" role="group" aria-label="Dither pattern">
-      <button type="button" data-dither="grid" aria-pressed="false">4×4 grid</button>
       <button type="button" data-dither="blue" aria-pressed="false">Blue noise</button>
-      <button type="button" data-dither="light" aria-pressed="true">Light</button>
+      <button type="button" data-dither="light" aria-pressed="false">Light</button>
+      <button type="button" data-dither="sparse" aria-pressed="true">Sparse</button>
       <button type="button" data-dither="off" aria-pressed="false">Off</button>
     </div>
   </div>
@@ -118,7 +118,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
 
   <section class="notes">
     <h2>How this was made</h2>
-    <p>The scene is drawn with plain canvas shapes in full color at 320×180, then every pixel is snapped to the palette through a dither pattern you can switch above. The 4×4 grid is the classic ordered dither and shows its crosshatch; blue noise scatters the same dots with no repeating pattern; light uses blue noise at half strength, so only true in-between colors get dithered. That is the same pipeline you'd run on a Blender render: render, shrink, lock to the palette, touch up by hand.</p>
+    <p>The scene is drawn with plain canvas shapes in full color at 320×180, then every pixel is snapped to the palette through a blue-noise dither, which scatters its dots with no repeating pattern. The buttons set how much: full, light (half strength), sparse (a quarter, so only the colors right between two palette colors get dots) or off. Anything that moves is never dithered, only snapped to flat palette colors: a fixed dither pattern shimmers when something slides through it. That is the same pipeline you'd run on a Blender render: render, shrink, lock to the palette, touch up by hand.</p>
     <p>The scene is drawn in layers, back to front: the sky, far bank and river; the moving water, mist and the passing branch; the ferry; the near bank with the wagons, canoe and dock; then the people and the tar pot, sorted by where their feet touch the ground, so whoever stands further back is drawn first; then smoke; then the framing trees.</p>
     <p>The walking uses a walk-area polygon, a single waypoint at the foot of the dock so you don't cut through the water, and depth scaling so you shrink as you walk out toward the river. That is roughly milestone one.</p>
   </section>
@@ -131,7 +131,13 @@ const stage=document.getElementById('stage');
 const pix=document.getElementById('pix'), pctx=pix.getContext('2d');
 const fx=document.getElementById('fx'), f=fx.getContext('2d');
 const work=document.createElement('canvas'); work.width=W; work.height=H;
-const g=work.getContext('2d',{willReadFrequently:true});
+const out=work.getContext('2d',{willReadFrequently:true});
+// Moving things are drawn on their own layers so they can skip the dither:
+// a fixed dither pattern shimmers ("crawls") when something slides through it.
+const abC=document.createElement('canvas'); abC.width=W; abC.height=H; const abx=abC.getContext('2d',{willReadFrequently:true});
+const afC=document.createElement('canvas'); afC.width=W; afC.height=H; const afx=afC.getContext('2d',{willReadFrequently:true});
+let g=abx;
+const STILL=new Uint8Array(W*H);
 const base=document.createElement('canvas'); base.width=W; base.height=H;
 const b=base.getContext('2d');
 const front=document.createElement('canvas'); front.width=W; front.height=H;
@@ -159,7 +165,6 @@ CACHE.ega=new Uint8Array(32768).fill(255);
 CACHE.lim=new Uint8Array(32768).fill(255);
 CACHE.mod=CACHE.lim;
 const DITHER={ega:44,lim:16,mod:9};
-const BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v=>(v+.5)/16-.5);
 // Blue noise: a 64x64 threshold map with no visible pattern, made with a
 // simple void-filling pass (each new dot goes in the emptiest spot left).
 function blueNoise(n){
@@ -176,8 +181,8 @@ function blueNoise(n){
   return rank;
 }
 const BLUE=blueNoise(64);
-const PATTERNS={grid:{label:'4×4 grid',mult:1},blue:{label:'Blue noise',mult:1},light:{label:'Light',mult:.5},off:{label:'Off',mult:0}};
-let pattern='light';
+const PATTERNS={blue:{mult:1},light:{mult:.5},sparse:{mult:.25},off:{mult:0}};
+let pattern='sparse';
 
 function nearest(pal,r,gg,bb,plain){
   let best=0,bd=1e9;
@@ -186,9 +191,9 @@ function nearest(pal,r,gg,bb,plain){
   return best;
 }
 function quantize(img,mode){
-  const d=img.data,pal=RGB[mode],cache=CACHE[mode],s=DITHER[mode]*PATTERNS[pattern].mult,ega=mode==='ega',grid=pattern==='grid';
+  const d=img.data,pal=RGB[mode],cache=CACHE[mode],s=DITHER[mode]*PATTERNS[pattern].mult,ega=mode==='ega';
   for(let y=0;y<H;y++){for(let x=0;x<W;x++){
-    const i=(y*W+x)*4, t=(grid?BAYER[(y&3)*4+(x&3)]:BLUE[(y&63)*64+(x&63)])*s;
+    const i=(y*W+x)*4, t=BLUE[(y&63)*64+(x&63)]*s*STILL[y*W+x];
     let r=d[i],gg=d[i+1],bb=d[i+2];
     if(ega){const l=(r+gg+bb)/3; r=(l+(r-l)*1.9)*.86; gg=(l+(gg-l)*1.9)*.86; bb=(l+(bb-l)*1.9)*.86;}
     r+=t; gg+=t; bb+=t;
@@ -294,6 +299,16 @@ function drawBase(){
     ell(fr,W-r()*50,r()*24,5+r()*6,4+r()*5,['#1c2a22','#24382a','#1a2420'][r()*3|0]);}
 }
 drawBase();
+const MIDA=new Uint8Array(W*H), FRONTA=new Uint8Array(W*H);
+{const md=m.getImageData(0,0,W,H).data, fd=fr.getImageData(0,0,W,H).data;
+ for(let i=0;i<W*H;i++){MIDA[i]=md[i*4+3];FRONTA[i]=fd[i*4+3];}}
+// 1 where the final pixel comes from a still layer, 0 where something moving shows
+function buildStill(){
+  const A=abx.getImageData(0,0,W,H).data, F=afx.getImageData(0,0,W,H).data;
+  for(let i=0;i<W*H;i++){
+    const moving=FRONTA[i]<255&&(F[i*4+3]>0||(A[i*4+3]>0&&MIDA[i]<255));
+    STILL[i]=moving?0:1;}
+}
 function drawAgent(c){
   // man in a dark coat seated on a crate, right
   c.fillStyle='#6b5232'; c.fillRect(266,140,15,10); line(c,266,145,281,145,'#4a3622',1);
@@ -394,7 +409,7 @@ function setPattern(p){
 }
 document.querySelectorAll('.modes button[data-dither]').forEach(bt=>bt.addEventListener('click',()=>setPattern(bt.dataset.dither)));
 let savedP=null; try{savedP=localStorage.getItem('landing-dither');}catch(_){}
-setPattern(PATTERNS[savedP]?savedP:'light');
+setPattern(PATTERNS[savedP]?savedP:'sparse');
 let saved=null; try{saved=localStorage.getItem('landing-style');}catch(_){}
 setMode(PAL[saved]?saved:'lim');
 
@@ -409,7 +424,7 @@ function frame(now){
     if(dist<=sp){hero.x=tx;hero.y=ty;hero.path.shift();if(!hero.path.length&&hero.pending){const p=hero.pending;hero.pending=null;p();}}
     else{hero.x+=dx/dist*sp;hero.y+=dy/dist*sp*.9;hero.moving=true;if(Math.abs(dx)>.5)hero.dir=dx<0?-1:1;hero.phase+=dt*11;}}
 
-  g.drawImage(base,0,0);
+  out.drawImage(base,0,0); abx.clearRect(0,0,W,H); g=abx;
   // water streaks drifting west (left)
   for(const s of streaks){const span=W+40;const x=((s.x-T*s.sp)%span+span)%span-20; g.fillStyle=s.c; g.fillRect(x|0,s.y,s.len|0,1);}
   // sun glints under the sun
@@ -425,7 +440,7 @@ function frame(now){
   line(g,184,95+bob,254,93+bob+roll,'#b88d5c',1);
   for(let k=1;k<6;k++){const xx=184+k*12; line(g,xx-2,95+bob,xx-4,104+bob,'#5a4430',.7);}
   // the near bank, wagons, canoe and dock cover the water behind them
-  g.drawImage(mid,0,0);
+  out.drawImage(abC,0,0); out.drawImage(mid,0,0); afx.clearRect(0,0,W,H); g=afx;
   // foam on the upstream side and at the pilings
   for(let i=0;i<6;i++){if(Math.sin(T*5+i*2.1)>0){g.fillStyle='#d8d2c2';g.fillRect(256+i%3,101+bob+(i%2)*3|0,2,1);g.fillRect(176+i%2,111+(i%3),1,1);g.fillRect(143-i%2,111+(i%3),1,1);}}
   // lines from the ferry to the dock posts
@@ -450,9 +465,9 @@ function frame(now){
   smokeT+=ad; while(smokeT>.14){smokeT-=.14; smoke.push({x:172+ar()*2,y:107,vx:-3-ar()*4,vy:-7-ar()*3,life:0});}
   smoke=smoke.filter(p=>(p.life+=ad)<3.2);
   for(const p of smoke){p.x+=p.vx*ad;p.y+=p.vy*ad;p.vx-=1.2*ad; const a=.55*(1-p.life/3.2); ell(g,p.x,p.y,1+p.life*1.3,1+p.life*1.1,'rgba(156,150,138,'+a.toFixed(3)+')');}
-  g.drawImage(front,0,0);
+  out.drawImage(afC,0,0); out.drawImage(front,0,0);
 
-  const img=g.getImageData(0,0,W,H); quantize(img,mode); pctx.putImageData(img,0,0);
+  const img=out.getImageData(0,0,W,H); buildStill(); quantize(img,mode); pctx.putImageData(img,0,0);
 
   if(mode==='mod'){
     f.clearRect(0,0,fx.width,fx.height);
