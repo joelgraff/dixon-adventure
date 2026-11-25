@@ -52,6 +52,7 @@ The mock-up does all four (look for `WALK`, `clampIn`, `walkTo`, `scaleAt` and
 
 ## Running
 
-The mock-up is a single page, so open it in a browser. Once pushed to the
-default branch, GitHub Pages serves it at
-`https://joelgraff.github.io/dixon-adventure/graphical/mockup/landing-styles.html`.
+Everything here is plain HTML, so open any page in a browser. GitHub Pages
+serves `main` as it is, so whatever is on `main` is live at
+<https://joelgraff.github.io/dixon-adventure/graphical/>. For now that page
+forwards to the mock-up; once milestone 1 exists, it should become the game.
