@@ -22,6 +22,8 @@ runs in the browser; the game is the data in `game-data/`.
 - `skill/`: design notes: the story spine, the museum, interaction design,
   planted hooks for later chapters (`skill/references/future-hooks.md`),
   research and the chapter 2 outline.
+- `graphical/`: the graphical version in progress (plan, milestones and an
+  art-style mock-up of the 1830 landing). It doesn't change the text game.
 - `archive/sierra-parser/`: early design notes.
 - `prototype.html`: the old prototype, kept for reference.
 
