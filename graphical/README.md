@@ -53,6 +53,11 @@ The mock-up does all four (look for `WALK`, `clampIn`, `walkTo`, `scaleAt` and
 - **The engine's seams:** `play.js` probably mixes "run this command" with
   "print this text". Separating them is what lets both front ends share it.
 - **Music and sound:** later.
+- **CRT filter (to try sometime):** an optional setting with a slight blur,
+  scanlines and a soft glow, for the look of an old 14-inch monitor. It's a
+  final pass over the finished frame, so it can be added at any point. If it
+  ever goes in, dithering becomes worth revisiting, since that's what a CRT
+  blends.
 
 ## Running
 
