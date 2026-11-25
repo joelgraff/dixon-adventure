@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ferry Landing Style Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Spectral:ital,wght@0,400;0,600;1,400&family=VT323&display=swap">
+<style>
+/* Layout: one column; the 320x180 scene is the hero, style switch above, three style cards below. Single dark look, chosen on purpose. */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+:root{
+  --bg:#14161b; --panel:#1c1f26; --line:#2d313b; --fg:#e9e3d5; --muted:#a39d90; --accent:#e39a4a;
+  --ega-red:#aa0000;
+  --pixel:"Silkscreen", ui-monospace, "Courier New", monospace;
+  --body:"Spectral", Georgia, "Times New Roman", serif;
+  --ega:"VT323", ui-monospace, "Courier New", monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+main{max-width:1000px;margin:0 auto;display:grid;gap:22px}
+.eyebrow{font-family:var(--pixel);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin:0}
+h1{font-family:var(--pixel);font-weight:400;font-size:clamp(22px,4vw,34px);line-height:1.15;margin:6px 0 10px;text-wrap:balance}
+.lede{max-width:65ch;color:var(--muted);margin:0}
+.lede b{color:var(--fg);font-weight:600}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.modes{display:flex;flex-wrap:wrap;gap:8px}
+.modes button{font-family:var(--pixel);font-size:12px;background:var(--panel);color:var(--fg);border:1px solid var(--line);padding:9px 14px;cursor:pointer;border-radius:2px}
+.modes button[aria-pressed="true"]{background:var(--accent);color:#1a1208;border-color:var(--accent)}
+.modes button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.swatches{display:flex;flex-wrap:wrap;gap:2px;max-width:100%}
+.swatches span{width:12px;height:12px;display:block}
+.stage{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;background:#000;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#pix{image-rendering:pixelated;image-rendering:crisp-edges}
+#fx{pointer-events:none;mix-blend-mode:screen}
+.vignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 12vw rgba(0,0,0,.55)}
+.hover{position:absolute;top:2.5%;left:0;right:0;text-align:center;pointer-events:none;font-family:var(--pixel);font-size:clamp(9px,1.4vw,13px);color:#f4eee0;text-shadow:1px 1px 0 #000,-1px 1px 0 #000;letter-spacing:.04em}
+.stage.ega .hover{font-family:var(--ega);font-size:clamp(14px,2.4vw,22px);color:#ffff55}
+.box{position:absolute;left:4%;right:4%;bottom:5%;padding:12px 16px;max-height:70%;overflow:auto;pointer-events:none}
+.box .who{display:block;font-family:var(--pixel);font-size:clamp(9px,1.3vw,11px);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.box .hint{display:block;margin-top:6px;font-size:.8em;opacity:.7;font-style:italic}
+.stage.ega .box{background:#fff;color:#000;border:4px double var(--ega-red);font-family:var(--ega);font-size:clamp(15px,2.5vw,24px);line-height:1.12;border-radius:0}
+.stage.ega .box .who{color:var(--ega-red);font-family:var(--ega);font-size:1em}
+.stage.ega .box .hint{font-style:normal}
+.stage:not(.ega) .box{background:rgba(22,17,12,.88);color:#f1e6cf;border:1px solid rgba(227,154,74,.55);font-family:var(--body);font-size:clamp(13px,1.85vw,17px);line-height:1.45;border-radius:2px}
+.stage:not(.ega) .box .who{color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);padding:16px 18px;display:grid;gap:8px;align-content:start;min-width:0;cursor:pointer}
+.card[aria-current="true"]{border-color:var(--accent)}
+.card h2{font-family:var(--pixel);font-weight:400;font-size:14px;margin:0;color:var(--fg)}
+.card .cost{font-family:var(--pixel);font-size:10px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.card p{margin:0;font-size:15px;color:var(--muted)}
+.card p b{color:var(--fg);font-weight:600}
+.notes{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:8px;max-width:70ch}
+.notes h2{font-family:var(--pixel);font-weight:400;font-size:13px;margin:0}
+.notes p{margin:0;font-size:15px;color:var(--muted)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var(--fg)}
+@media (max-width:520px){ .box{left:2%;right:2%;bottom:3%;padding:8px 10px} }
+</style>
+</head>
+<body>
+
+<main>
+  <header>
+    <p class="eyebrow">Dixon · Chapter 1 · art direction</p>
+    <h1>The ferry landing, 1830</h1>
+    <p class="lede">One room drawn three ways so you can choose a look by eye. <b>Click the ground to walk</b>, and click the dock, the ferry, the canoe or the people to read the real text from <code>landing.yaml</code>. Switch styles with the buttons or the keys 1, 2 and 3.</p>
+  </header>
+
+  <div class="bar">
+    <div class="modes" role="group" aria-label="Art style">
+      <button type="button" id="m-ega" data-mode="ega" aria-pressed="false">1 · EGA 16</button>
+      <button type="button" id="m-lim" data-mode="lim" aria-pressed="true">2 · Limited 32</button>
+      <button type="button" id="m-mod" data-mode="mod" aria-pressed="false">3 · Modern pixel</button>
+    </div>
+    <div class="swatches" id="swatches" aria-label="Palette"></div>
+  </div>
+
+  <div class="stage" id="stage">
+    <canvas id="pix" width="320" height="180" aria-label="Pixel-art scene of the 1830 ferry landing on the Rock River"></canvas>
+    <canvas id="fx" width="1280" height="720" aria-hidden="true"></canvas>
+    <div class="vignette" id="vig" hidden></div>
+    <div class="hover" id="hover" aria-live="polite"></div>
+    <div class="box" id="box"><span class="who" id="who"></span><span id="txt"></span><span class="hint">Click to continue.</span></div>
+  </div>
+
+  <section class="cards" aria-label="What each style costs">
+    <article class="card" data-mode="ega">
+      <h2>EGA 16</h2>
+      <span class="cost">Least art work · strongest retro</span>
+      <p>The fixed sixteen colors of King's Quest I–III. You can't blend colors, so the sky, the fog and the smoke break into checkerboard dithering. <b>Flat shapes and hard edges</b> are all you draw, which suits someone who isn't an artist, but it can read as crude next to anything made this decade. This one is converted automatically, which is its worst case: EGA artists chose every color by hand.</p>
+    </article>
+    <article class="card" data-mode="lim">
+      <h2>Limited 32</h2>
+      <span class="cost">Moderate art work · pixel-locked effects</span>
+      <p>A <b>hand-picked 32-color palette</b> made for this river at dusk. Fog and smoke are pixels too, snapped to the same colors. This is the discipline that makes a Blender render look drawn rather than filtered, and it is the look many current pixel adventures settle on.</p>
+    </article>
+    <article class="card" data-mode="mod">
+      <h2>Modern pixel</h2>
+      <span class="cost">Same art · more code</span>
+      <p>The same 32-color pixels, with <b>smooth light and fog drawn on top</b> at full resolution: the fire glows, the sun warms the haze, the mist drifts soft. The atmosphere comes from code rather than drawing, so it adds mood without adding art. The cost is compositing code and care that the effects don't smear the pixels.</p>
+    </article>
+  </section>
+
+  <section class="notes">
+    <h2>How this was made</h2>
+    <p>The scene is drawn with plain canvas shapes in full color at 320×180, then every pixel is snapped to the palette with a 4×4 ordered dither. That is the same pipeline you'd run on a Blender render: render, shrink, lock to the palette, touch up by hand.</p>
+    <p>The walking uses a walk-area polygon, a single waypoint at the foot of the dock so you don't cut through the water, and depth scaling so you shrink as you walk out toward the river. That is roughly milestone one.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+const W=320,H=180,K=4;
+const stage=document.getElementById('stage');
+const pix=document.getElementById('pix'), pctx=pix.getContext('2d');
+const fx=document.getElementById('fx'), f=fx.getContext('2d');
+const work=document.createElement('canvas'); work.width=W; work.height=H;
+const g=work.getContext('2d',{willReadFrequently:true});
+const base=document.createElement('canvas'); base.width=W; base.height=H;
+const b=base.getContext('2d');
+const front=document.createElement('canvas'); front.width=W; front.height=H;
+const fr=front.getContext('2d');
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const hex=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+
+/* ---------- palettes ---------- */
+const PAL={
+  ega:['#000000','#0000aa','#00aa00','#00aaaa','#aa0000','#aa00aa','#aa5500','#aaaaaa','#555555','#5555ff','#55ff55','#55ffff','#ff5555','#ff55ff','#ffff55','#ffffff'],
+  lim:['#121216','#2b3048','#3e4a6b','#5e6f8f','#8d97a8','#c9b8a6','#e8c8a0','#f2dcb4',
+       '#1c2a22','#24382a','#34502f','#4c6b38','#6f8a48',
+       '#2a1e18','#3d2b20','#5a3e2a','#7a5636','#9a7046','#b88d5c','#5b4a36','#6e5c40','#857152',
+       '#3a3a40','#6a6660','#9c968a','#d8d2c2','#f4eee0',
+       '#7a2e1e','#b84a26','#e07a30','#f2b44a','#ffe08a']
+};
+PAL.mod=PAL.lim;
+const RGB={}, CACHE={};
+for(const k in PAL){RGB[k]=PAL[k].map(hex);}
+CACHE.ega=new Uint8Array(32768).fill(255);
+CACHE.lim=new Uint8Array(32768).fill(255);
+CACHE.mod=CACHE.lim;
+const DITHER={ega:44,lim:16,mod:9};
+const BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v=>(v+.5)/16-.5);
+
+function nearest(pal,r,gg,bb,plain){
+  let best=0,bd=1e9;
+  for(let i=0;i<pal.length;i++){const p=pal[i];const dr=r-p[0],dg=gg-p[1],db=bb-p[2];
+    const d=plain?dr*dr+dg*dg+db*db:dr*dr*2+dg*dg*4+db*db*3; if(d<bd){bd=d;best=i;}}
+  return best;
+}
+function quantize(img,mode){
+  const d=img.data,pal=RGB[mode],cache=CACHE[mode],s=DITHER[mode],ega=mode==='ega';
+  for(let y=0;y<H;y++){for(let x=0;x<W;x++){
+    const i=(y*W+x)*4, t=BAYER[(y&3)*4+(x&3)]*s;
+    let r=d[i],gg=d[i+1],bb=d[i+2];
+    if(ega){const l=(r+gg+bb)/3; r=(l+(r-l)*1.9)*.86; gg=(l+(gg-l)*1.9)*.86; bb=(l+(bb-l)*1.9)*.86;}
+    r+=t; gg+=t; bb+=t;
+    r=r<0?0:r>255?255:r; gg=gg<0?0:gg>255?255:gg; bb=bb<0?0:bb>255?255:bb;
+    const key=((r>>3)<<10)|((gg>>3)<<5)|(bb>>3);
+    let idx=cache[key];
+    if(idx===255){idx=nearest(pal,(r>>3)*8+4,(gg>>3)*8+4,(bb>>3)*8+4,ega);cache[key]=idx;}
+    const p=pal[idx]; d[i]=p[0];d[i+1]=p[1];d[i+2]=p[2];d[i+3]=255;
+  }}
+}
+
+/* ---------- drawing helpers ---------- */
+function ell(c,x,y,rx,ry,col){c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill();}
+function poly(c,pts,col){c.fillStyle=col;c.beginPath();c.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)c.lineTo(pts[i][0],pts[i][1]);c.closePath();c.fill();}
+function line(c,x1,y1,x2,y2,col,w){c.strokeStyle=col;c.lineWidth=w||1;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();}
+
+function wagon(c,x,gy,s){
+  // wheels behind
+  c.lineWidth=1.3*s;
+  for(const wx of [x+7*s,x+33*s]){c.strokeStyle='#2a1e14';c.beginPath();c.arc(wx,gy-5*s,5*s,0,Math.PI*2);c.stroke();
+    line(c,wx-4*s,gy-5*s,wx+4*s,gy-5*s,'#3a2a1c',.8*s);line(c,wx,gy-9*s,wx,gy-1*s,'#3a2a1c',.8*s);}
+  c.fillStyle='#5e4128';c.fillRect(x,gy-13*s,40*s,6*s);
+  c.fillStyle='#43301e';c.fillRect(x,gy-8*s,40*s,1.5*s);
+  // bonnet
+  c.fillStyle='#d8cfba';c.beginPath();c.moveTo(x+1*s,gy-13*s);
+  c.bezierCurveTo(x-1*s,gy-30*s,x+41*s,gy-30*s,x+39*s,gy-13*s);c.closePath();c.fill();
+  c.fillStyle='rgba(120,100,80,.35)';c.beginPath();c.moveTo(x+20*s,gy-13*s);
+  c.bezierCurveTo(x+24*s,gy-28*s,x+41*s,gy-30*s,x+39*s,gy-13*s);c.closePath();c.fill();
+  for(let k=1;k<4;k++){const hx=x+k*10*s;line(c,hx,gy-13*s,hx+(k-2)*1.5*s,gy-25.5*s,'#a89c84',.8*s);}
+}
+function ox(c,x,gy,s,col){
+  for(const lx of [-6,-3,4,7])line(c,x+lx*s,gy-6*s,x+lx*s,gy,'#2a1e14',1.3*s);
+  ell(c,x,gy-8*s,9*s,4.5*s,col);
+  ell(c,x+9.5*s,gy-9*s,3.2*s,2.6*s,col);
+  line(c,x+10*s,gy-11*s,x+13*s,gy-13*s,'#e0d6c0',.8*s);
+  line(c,x+9*s,gy-11*s,x+7*s,gy-13.5*s,'#e0d6c0',.8*s);
+}
+
+/* ---------- static background ---------- */
+let shoreY=[];
+function drawBase(){
+  const r=rng(7);
+  // sky
+  let sg=b.createLinearGradient(0,0,0,52); sg.addColorStop(0,'#45547a'); sg.addColorStop(.55,'#a8919a'); sg.addColorStop(1,'#efc994');
+  b.fillStyle=sg; b.fillRect(0,0,W,62);
+  let sun=b.createRadialGradient(58,30,1,58,30,46); sun.addColorStop(0,'rgba(255,246,214,1)'); sun.addColorStop(.1,'rgba(255,232,170,.95)'); sun.addColorStop(.35,'rgba(255,205,150,.35)'); sun.addColorStop(1,'rgba(255,200,140,0)');
+  b.fillStyle=sun; b.fillRect(0,0,160,62);
+  for(let i=0;i<7;i++){ell(b,20+r()*290,8+r()*20,14+r()*30,1.2+r()*1.2,'rgba(236,206,184,.55)');}
+  // far treeline: back layer then front layer
+  for(let x=-6;x<W+6;x+=3){const top=33+5*Math.sin(x*.045)+r()*6;
+    ell(b,x,top+6,4+r()*4,6+r()*3,['#3c5146','#465c4c','#38493f'][r()*3|0]);}
+  b.fillStyle='#34463a'; b.fillRect(0,40,W,20);
+  for(let x=-6;x<W+6;x+=2.5){const top=40+4*Math.sin(x*.07+1)+r()*5;
+    ell(b,x,top+5,3+r()*4,5+r()*3,['#24382a','#2a3f2e','#1f3025','#34502f'][r()*4|0]);}
+  b.fillStyle='#22352a'; b.fillRect(0,48,W,12);
+  // Galena road climbing into the trees from the post
+  poly(b,[[211,60],[219,60],[229,45],[226,45]],'#8a7458');
+  for(let i=0;i<5;i++)ell(b,222+i*3,44-r()*3,3,4,'#24382a');
+  // far shore and the lone post
+  b.fillStyle='#4a3a2a'; b.fillRect(0,58,W,3);
+  b.fillStyle='#2a1e16'; b.fillRect(212,49,3,11);
+  // river
+  let rg=b.createLinearGradient(0,60,0,120); rg.addColorStop(0,'#8a7a66'); rg.addColorStop(.2,'#6e5e4a'); rg.addColorStop(1,'#4a3c2c');
+  b.fillStyle=rg; b.fillRect(0,60,W,62);
+  b.fillStyle='rgba(236,196,150,.28)'; b.fillRect(0,61,W,4);
+  // near bank
+  shoreY=[];
+  b.fillStyle='#a8946e'; b.beginPath(); b.moveTo(0,H);
+  for(let x=0;x<=W;x+=4){const y=116+3*Math.sin(x*.03)+r()*2.5+(x<90?-(90-x)*.06:0); shoreY.push([x,y]); b.lineTo(x,y);}
+  b.lineTo(W,H); b.closePath(); b.fill();
+  b.strokeStyle='#5a4632'; b.lineWidth=4; b.beginPath(); shoreY.forEach((p,i)=>i?b.lineTo(p[0],p[1]):b.moveTo(p[0],p[1])); b.stroke();
+  for(let i=0;i<1600;i++){const x=r()*W,y=112+r()*68; b.fillStyle=['#bba57c','#857152','#6e5c40','#9c8864'][r()*4|0]; b.fillRect(x|0,y|0,1,1);}
+  // path climbing south, off the bottom
+  poly(b,[[58,180],[98,180],[92,165],[82,151],[72,151],[64,165]],'rgba(176,150,110,.75)');
+  // foreground darkening and grass
+  let fg=b.createLinearGradient(0,150,0,180); fg.addColorStop(0,'rgba(40,44,26,0)'); fg.addColorStop(1,'rgba(36,42,24,.7)');
+  b.fillStyle=fg; b.fillRect(0,150,W,30);
+  for(let i=0;i<120;i++){const x=r()<.5?r()*60:260+r()*60, y=160+r()*20; line(b,x,y,x+(r()-.5)*2,y-3-r()*4,['#4c6b38','#34502f','#6f8a48'][r()*3|0],1);}
+  // wagons and oxen at the head of the landing
+  wagon(b,30,118,.85); wagon(b,6,128,1);
+  ox(b,84,120,.9,'#5a3e2a'); ox(b,90,124,.95,'#4a3424');
+  // dozing teamster against a wheel
+  ell(b,44,129,6,2.2,'#4b4a52'); ell(b,38,127.5,2,2,'#c8a080'); poly(b,[[35,126],[41,126],[40,124],[36,124]],'#6e5c40');
+  // canoe on its side in the gravel, split and draining
+  ell(b,116,133,20,2.5,'rgba(50,38,26,.6)');
+  poly(b,[[96,128],[102,124],[132,123],[137,127],[132,131],[100,132]],'#3b2a1c');
+  line(b,100,125.5,133,124.5,'#7a5636',1);
+  b.strokeStyle='#120c08'; b.lineWidth=1; b.beginPath(); b.moveTo(104,129); b.lineTo(110,127); b.lineTo(114,129); b.lineTo(120,127); b.lineTo(126,128.5); b.stroke();
+  // dock
+  poly(b,[[149,88],[169,88],[182,128],[136,128]],'#7a6246');
+  for(let k=0;k<14;k++){const t=k/13, y=88+40*Math.pow(t,1.25), xl=149-13*((y-88)/40), xr=169+13*((y-88)/40); line(b,xl,y,xr,y,'#5a4430',.8);}
+  line(b,136,128,149,88,'#3d2b20',1.2); line(b,182,128,169,88,'#3d2b20',1.2);
+  for(const [px,py,h] of [[147,79,13],[169,79,13],[142,104,9],[175,104,9]]){
+    b.fillStyle='#3a2a1c'; b.fillRect(px,py,3,h);
+    b.fillStyle='#4c6b38'; for(let j=0;j<4;j++) b.fillRect(px,py+h-2-j*2,3,1);
+  }
+  // setting pole leaning on the end post
+  line(b,173,62,170,92,'#b89a6a',1.4); b.fillStyle='#55555c'; b.fillRect(169,90,2,3);
+  // man in a dark coat seated on a crate, right
+  b.fillStyle='#6b5232'; b.fillRect(266,140,15,10); line(b,266,145,281,145,'#4a3622',1);
+  b.fillStyle='#2c2c34'; b.fillRect(266,138,4,11); b.fillRect(275,138,4,11);
+  b.fillStyle='#36363e'; b.fillRect(267,123,11,17);
+  b.fillStyle='#4a3a28'; b.fillRect(267,137,11,3);
+  ell(b,272.5,119.5,3,3.3,'#c8a080');
+  b.fillStyle='#16161a'; b.fillRect(269,113,8,4); b.fillRect(267,116.5,12,1.5);
+  // framing trees, on the front layer so nothing moving draws over them
+  fr.fillStyle='#1c1a16'; fr.fillRect(0,0,9,H); fr.fillRect(309,0,11,H);
+  for(let i=0;i<40;i++){ell(fr,r()*46,r()*26,5+r()*6,4+r()*5,['#1c2a22','#24382a','#1a2420'][r()*3|0]);
+    ell(fr,W-r()*50,r()*24,5+r()*6,4+r()*5,['#1c2a22','#24382a','#1a2420'][r()*3|0]);}
+}
+drawBase();
+
+/* ---------- ambient state ---------- */
+const ar=rng(99);
+const streaks=[]; for(let i=0;i<90;i++){const y=61+ar()*56; const depth=(y-60)/58;
+  streaks.push({y:y|0,x:ar()*(W+40),len:3+ar()*(6+14*depth),sp:6+depth*22+ar()*5,c:ar()<.55?'#a08060':'#4e3a28'});}
+const fogs=[]; for(let i=0;i<14;i++)fogs.push({x:ar()*W*1.6,y:62+ar()*40,rx:16+ar()*30,ry:1.5+ar()*2.5,sp:2+ar()*3,a:.14+ar()*.14});
+let smoke=[], smokeT=0;
+
+/* ---------- walking ---------- */
+const WALK=[[34,176],[28,160],[44,146],[70,140],[96,138],[136,134],[141,126],[152,98],[163,98],[167,126],[182,130],[214,132],[256,140],[262,154],[300,158],[302,176]];
+const DOCKFOOT=[154,128];
+function inside(x,y){let c=false;for(let i=0,j=WALK.length-1;i<WALK.length;j=i++){const [xi,yi]=WALK[i],[xj,yj]=WALK[j];
+  if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c;}return c;}
+function clampIn(x,y){if(inside(x,y))return [x,y];let best=null,bd=1e9;
+  for(let i=0,j=WALK.length-1;i<WALK.length;j=i++){const [ax,ay]=WALK[j],[bx,by]=WALK[i];const dx=bx-ax,dy=by-ay;
+    let t=((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy);t=Math.max(0,Math.min(1,t));const px=ax+t*dx,py=ay+t*dy,d=(px-x)**2+(py-y)**2;
+    if(d<bd){bd=d;best=[px,py];}}
+  // nudge toward the inside
+  for(let s=0;s<6;s++){const nx=best[0]+(160-best[0])*.02*s, ny=best[1]+(150-best[1])*.02*s; if(inside(nx,ny))return [nx,ny];}
+  return best;}
+function segInside(a,c){for(let i=1;i<20;i++){const t=i/20;if(!inside(a[0]+(c[0]-a[0])*t,a[1]+(c[1]-a[1])*t))return false;}return true;}
+const scaleAt=y=>Math.max(.42,Math.min(1,.45+.55*(y-90)/86));
+const hero={x:112,y:156,path:[],dir:1,phase:0,moving:false,pending:null};
+function walkTo(x,y,then){const tgt=clampIn(x,y);const here=[hero.x,hero.y];
+  hero.path=segInside(here,tgt)?[tgt]:[DOCKFOOT,tgt];hero.pending=then||null;}
+function drawHero(c){
+  const s=scaleAt(hero.y),u=26*s/26,x=hero.x,y=hero.y,sw=hero.moving?Math.sin(hero.phase)*3*u:0;
+  ell(c,x,y,5*u,1.6*u,'rgba(0,0,0,.35)');
+  c.fillStyle='#2e3a55'; c.fillRect(x-3*u+sw*.4,y-10*u,2.6*u,10*u); c.fillRect(x+.4*u-sw*.4,y-10*u,2.6*u,10*u);
+  c.fillStyle='#1a1a1a'; c.fillRect(x-3.4*u+sw*.4,y-1.5*u,3.2*u,1.5*u); c.fillRect(x+.2*u-sw*.4,y-1.5*u,3.2*u,1.5*u);
+  c.fillStyle='#b84a26'; c.fillRect(x-4*u,y-19.5*u,8*u,10.5*u);
+  c.fillStyle='#8f3820'; c.fillRect(x-5*u-sw*.3,y-18.5*u,1.6*u,8*u); c.fillRect(x+3.4*u+sw*.3,y-18.5*u,1.6*u,8*u);
+  c.fillStyle='#d6a882'; c.fillRect(x-2.5*u,y-25.5*u,5*u,6*u);
+  c.fillStyle='#3a2a1c'; c.fillRect(x-2.7*u,y-26*u,5.4*u,2.2*u); c.fillRect(x+(hero.dir<0?1.4:-2.7)*u,y-25*u,1.3*u,3*u);
+}
+
+/* ---------- hotspots (text from game-data/ch1/rooms/landing.yaml) ---------- */
+const HOT=[
+ {id:'agent',r:[262,110,22,40],stand:[254,150],name:'a man in a dark coat',text:"His coat is well made and muddy to the knee. He watches the ferryman the way a man watches a horse he means to take."},
+ {id:'ogee',r:[164,84,16,22],stand:[158,104],name:'a man in a buckskin shirt',text:"A man in a buckskin shirt stands at the ferry's lines, holding her against the current with his whole weight."},
+ {id:'tarpot',r:[166,104,12,12],stand:[161,116],name:'tar pot',text:"An iron pot of pine tar bubbles over a small fire on the dock beside the ferry, where the ferryman was doing her seams, and it smells like a shipyard. A swab stands up in it, with a hank of oakum beside it, just where he dropped them when he ran for the canoe."},
+ {id:'pole',r:[166,60,10,32],stand:[158,100],name:'setting pole',text:"The ferryman's setting pole is a long shaft of ash, worn smooth where the hands go. The iron shoe on its foot has been polished bright on the side that bears against the riverbed."},
+ {id:'canoe',r:[94,119,46,16],stand:[116,142],name:'canoe',text:"This is the dugout that fished you out of the river. It split along one seam when it struck the piling, and its paddle went on toward St. Louis without it. Patched, it would carry one person and a coil of rope."},
+ {id:'ferry',r:[178,88,84,26],stand:[172,130],name:'ferry',text:"This is the ferryman's flatboat, broad and low and big enough for a wagon and its team. She was built to be poled, but right now the river runs deeper than any pole is long. On the dock beside her, a tar pot smokes over a small fire."},
+ {id:'wagons',r:[2,92,104,40],stand:[62,144],name:'wagons',text:"Four ox-drawn wagons stand loaded with flour, tools and kegs for the Galena diggings, with a gap in the line where a fifth ought to be. Their teamsters doze in the shade."},
+ {id:'dock',r:[134,86,50,44],stand:[154,118],name:'dock',text:"The dock is rough planks on posts with its edges half under water. Four green bands mark the pilings below it, one above another, where the river has stood in other springs. One piling has a fresh pale gouge at the waterline."},
+ {id:'northbank',r:[0,28,320,33],stand:[157,100],name:'north bank',text:"The north bank is empty except for a stout post at the water's edge and the Galena road climbing away into the trees."},
+ {id:'river',r:[0,60,320,60],stand:null,name:'river',text:"The Rock River runs brown and high and fast with the spring, carrying whole branches past the end of the dock. Nobody is going to pole anything across it."},
+ {id:'path',r:[56,150,44,30],stand:null,name:'path',text:"A worn path climbs south from the landing toward woodsmoke and a clearing."}
+];
+const hit=(x,y)=>HOT.find(h=>x>=h.r[0]&&x<h.r[0]+h.r[2]&&y>=h.r[1]&&y<h.r[1]+h.r[3]);
+
+/* ---------- UI ---------- */
+const box=document.getElementById('box'),who=document.getElementById('who'),txt=document.getElementById('txt'),hover=document.getElementById('hover');
+function say(name,text){who.textContent=name;txt.textContent=text;box.hidden=false;}
+say('The ferry landing, 1830',"The river is the loudest thing here, running high and brown past a rough plank dock. Across it the north bank is empty but for a lone post. A worn path climbs the slope behind you toward woodsmoke.");
+function toScene(e){const rc=stage.getBoundingClientRect();return [(e.clientX-rc.left)/rc.width*W,(e.clientY-rc.top)/rc.height*H];}
+stage.addEventListener('click',e=>{
+  if(!box.hidden){box.hidden=true;return;}
+  const [x,y]=toScene(e); const h=hit(x,y);
+  if(h){const st=h.stand||[x,y]; hero.dir=(h.r[0]+h.r[2]/2)<hero.x?-1:1;
+    walkTo(st[0],st[1],()=>{hero.dir=(h.r[0]+h.r[2]/2)<hero.x?-1:1; say(h.name,h.text);});}
+  else walkTo(x,y);
+});
+stage.addEventListener('pointermove',e=>{const [x,y]=toScene(e);const h=hit(x,y);hover.textContent=h?h.name:'';});
+stage.addEventListener('pointerleave',()=>{hover.textContent='';});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){box.hidden=true;}
+  const m={'1':'ega','2':'lim','3':'mod'}[e.key]; if(m&&!(e.target instanceof HTMLInputElement))setMode(m);
+});
+
+let mode='lim';
+const sw=document.getElementById('swatches'),vig=document.getElementById('vig');
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.modes button').forEach(bt=>bt.setAttribute('aria-pressed',String(bt.dataset.mode===m)));
+  document.querySelectorAll('.card').forEach(cd=>cd.setAttribute('aria-current',String(cd.dataset.mode===m)));
+  stage.classList.toggle('ega',m==='ega');
+  fx.style.display=m==='mod'?'block':'none'; vig.hidden=m!=='mod';
+  pix.style.filter=m==='mod'?'saturate(1.08) contrast(1.04)':'none';
+  sw.innerHTML=''; PAL[m].forEach(c=>{const s=document.createElement('span');s.style.background=c;s.title=c;sw.appendChild(s);});
+  try{localStorage.setItem('landing-style',m);}catch(_){}
+}
+document.querySelectorAll('.modes button, .card').forEach(el=>el.addEventListener('click',()=>setMode(el.dataset.mode)));
+let saved=null; try{saved=localStorage.getItem('landing-style');}catch(_){}
+setMode(PAL[saved]?saved:'lim');
+
+/* ---------- frame ---------- */
+let last=performance.now(), T=0;
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000); last=now; const ad=reduce?dt*.35:dt; T+=ad;
+  // hero
+  hero.moving=false;
+  if(hero.path.length){const [tx,ty]=hero.path[0];const dx=tx-hero.x,dy=ty-hero.y,dist=Math.hypot(dx,dy);
+    const sp=46*scaleAt(hero.y)*dt;
+    if(dist<=sp){hero.x=tx;hero.y=ty;hero.path.shift();if(!hero.path.length&&hero.pending){const p=hero.pending;hero.pending=null;p();}}
+    else{hero.x+=dx/dist*sp;hero.y+=dy/dist*sp*.9;hero.moving=true;if(Math.abs(dx)>.5)hero.dir=dx<0?-1:1;hero.phase+=dt*11;}}
+
+  g.drawImage(base,0,0);
+  // water streaks drifting west (left)
+  for(const s of streaks){const span=W+40;const x=((s.x-T*s.sp)%span+span)%span-20; g.fillStyle=s.c; g.fillRect(x|0,s.y,s.len|0,1);}
+  // sun glints under the sun
+  for(let i=0;i<8;i++){const y=62+i*2.3, ph=Math.sin(T*3+i*1.7); if(ph>.2){g.fillStyle='#f2dcb4'; g.fillRect(50+((i*7+ (T*4|0))%14),y|0,2+(ph*3|0),1);}}
+  // pixel fog for the two pixel-locked styles
+  if(mode!=='mod'){for(const fo of fogs){const span=W*1.6;const x=((fo.x-T*fo.sp)%span+span)%span-W*.3; ell(g,x,fo.y,fo.rx,fo.ry,'rgba(222,214,204,'+fo.a+')');}}
+  // a branch going downstream every nine seconds
+  const bt=(T%9)/9, bx=W+12-bt*(W+40); line(g,bx,86,bx+10,84,'#2a1e14',1.2); line(g,bx+4,85,bx+6,81,'#2a1e14',1);
+  // ferry, bobbing
+  const bob=Math.sin(T*2.1)*1.1, roll=Math.sin(T*1.6)*.6;
+  poly(g,[[180,104+bob],[258,101+bob+roll],[256,108+bob+roll],[182,111+bob]],'#3e2c1e');
+  poly(g,[[184,95+bob],[254,93+bob+roll],[258,101+bob+roll],[180,104+bob]],'#7c6448');
+  line(g,184,95+bob,254,93+bob+roll,'#b88d5c',1);
+  for(let k=1;k<6;k++){const xx=184+k*12; line(g,xx-2,95+bob,xx-4,104+bob,'#5a4430',.7);}
+  // foam on the upstream side and at the pilings
+  for(let i=0;i<6;i++){if(Math.sin(T*5+i*2.1)>0){g.fillStyle='#d8d2c2';g.fillRect(256+i%3,101+bob+(i%2)*3|0,2,1);g.fillRect(176+i%2,111+(i%3),1,1);g.fillRect(143-i%2,111+(i%3),1,1);}}
+  // lines from the ferry to the dock posts
+  line(g,183,97+bob,171,82,'#cbb894',.8); line(g,183,106+bob,177,106,'#cbb894',.8);
+  // the ferryman at the lines, leaning back against the current
+  const lean=Math.sin(T*2.1)*.8;
+  g.fillStyle='#3d2b20'; g.fillRect(166+lean*.3,96,2.2,8); g.fillRect(169+lean*.3,96,2.2,8);
+  g.fillStyle='#a07a4e'; g.fillRect(165.5+lean,87,6,10);
+  line(g,171+lean,90,183,97+bob,'#a07a4e',1.4);
+  ell(g,168.5+lean,84.5,2.4,2.6,'#b98a66'); g.fillStyle='#1c1612'; g.fillRect(166+lean,82,5,1.8);
+  // tar pot fire and smoke
+  const fl=Math.sin(T*17)+Math.sin(T*23);
+  g.fillStyle='#e07a30'; g.fillRect(169,113,7,2); g.fillStyle=fl>0?'#ffe08a':'#f2b44a'; g.fillRect(170+(fl>1?1:0),112,3,2);
+  ell(g,172.5,110.5,4,3,'#151515'); g.fillStyle='#2a2a2a'; g.fillRect(168.5,108.5,8,1);
+  smokeT+=ad; while(smokeT>.14){smokeT-=.14; smoke.push({x:172+ar()*2,y:107,vx:-3-ar()*4,vy:-7-ar()*3,life:0});}
+  smoke=smoke.filter(p=>(p.life+=ad)<3.2);
+  for(const p of smoke){p.x+=p.vx*ad;p.y+=p.vy*ad;p.vx-=1.2*ad; const a=.55*(1-p.life/3.2); ell(g,p.x,p.y,1+p.life*1.3,1+p.life*1.1,'rgba(156,150,138,'+a.toFixed(3)+')');}
+  drawHero(g);
+  g.drawImage(front,0,0);
+
+  const img=g.getImageData(0,0,W,H); quantize(img,mode); pctx.putImageData(img,0,0);
+
+  if(mode==='mod'){
+    f.clearRect(0,0,fx.width,fx.height);
+    let gr=f.createRadialGradient(58*K,30*K,0,58*K,30*K,130*K); gr.addColorStop(0,'rgba(255,196,120,.42)'); gr.addColorStop(.4,'rgba(230,150,90,.14)'); gr.addColorStop(1,'rgba(0,0,0,0)');
+    f.fillStyle=gr; f.fillRect(0,0,fx.width,fx.height);
+    // sun path on the water
+    let sp=f.createLinearGradient(0,60*K,0,118*K); sp.addColorStop(0,'rgba(255,210,150,.16)'); sp.addColorStop(1,'rgba(255,210,150,0)');
+    f.fillStyle=sp; f.beginPath(); f.moveTo(52*K,60*K); f.lineTo(64*K,60*K); f.lineTo(78*K,118*K); f.lineTo(40*K,118*K); f.fill();
+    // fire light
+    const rad=(30+fl*2.5)*K; let fg=f.createRadialGradient(172*K,111*K,0,172*K,111*K,rad);
+    fg.addColorStop(0,'rgba(255,150,60,.55)'); fg.addColorStop(.35,'rgba(255,110,40,.18)'); fg.addColorStop(1,'rgba(0,0,0,0)');
+    f.fillStyle=fg; f.fillRect(0,0,fx.width,fx.height);
+    // soft drifting mist
+    for(const fo of fogs){const span=W*1.6;const x=((fo.x-T*fo.sp)%span+span)%span-W*.3;
+      f.save(); f.translate(x*K,fo.y*K); f.scale(1,fo.ry/fo.rx*1.6);
+      let mg=f.createRadialGradient(0,0,0,0,0,fo.rx*K*1.2); mg.addColorStop(0,'rgba(150,145,140,'+(fo.a*.9)+')'); mg.addColorStop(1,'rgba(0,0,0,0)');
+      f.fillStyle=mg; f.beginPath(); f.arc(0,0,fo.rx*K*1.2,0,Math.PI*2); f.fill(); f.restore();}
+    // pixel-sized glints that twinkle
+    for(let i=0;i<14;i++){const gx=((i*53+17)%300)+10, gy=64+((i*29)%50), a=Math.max(0,Math.sin(T*2.4+i*1.9));
+      if(a>.6){f.fillStyle='rgba(255,236,190,'+((a-.6)*1.6).toFixed(2)+')'; f.fillRect(gx*K,gy*K,K,K);}}
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
