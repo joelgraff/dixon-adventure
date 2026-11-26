@@ -2,6 +2,8 @@
 
     python3 graphical/tools/pixelate.py sprites/player/walk --heights 26,36,50
 
+It also writes index.json, listing every size in the folder.
+
 For each height (the character's height in game pixels) it writes
 sprites/player/walk/h26/sheet.png, a 4x enlarged preview.png to look at, and
 sheet.json, which tells the game the frame size, the anchor (the point
@@ -198,6 +200,12 @@ def main():
         with open(os.path.join(out_dir, "sheet.json"), "w") as fh_:
             json.dump(info, fh_, indent=2)
         print(f"pixelate: {height}px tall -> {out_dir} ({fw}x{fh} frames, {len(colors)} colors)")
+
+    # List every size that exists in this folder, so the game knows what it can load.
+    heights = sorted(int(n[1:]) for n in os.listdir(a.folder)
+                     if re.fullmatch(r"h\d+", n) and os.path.exists(os.path.join(a.folder, n, "sheet.json")))
+    with open(os.path.join(a.folder, "index.json"), "w") as fh_:
+        json.dump({"heights": heights}, fh_)
 
 
 main()

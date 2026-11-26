@@ -126,6 +126,7 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
     <p>The resolution buttons redraw the same shapes with 1.5 or 2 times as many pixels each way. Only the edges, the water lines and the gravel get finer here, because the shapes stay the same. Real art at a higher resolution would also carry more detail, and drawing that detail is the extra work.</p>
     <p>The scene is drawn with plain canvas shapes in full color, then every pixel is snapped to the palette through a blue-noise dither, which scatters its dots with no repeating pattern. The buttons set how much: full, light (half strength), sparse (a quarter, so only the colors right between two palette colors get dots) or off. Anything that moves is never dithered, only snapped to flat palette colors: a fixed dither pattern shimmers when something slides through it. That is the same pipeline you'd run on a Blender render: render, shrink, lock to the palette, touch up by hand.</p>
     <p>The scene is drawn in layers, back to front: the sky, far bank and river; the moving water, mist and the passing branch; the ferry; the near bank with the wagons, canoe and dock; then the people and the tar pot, sorted by where their feet touch the ground, so whoever stands further back is drawn first; then smoke; then the framing trees.</p>
+    <p>The character is the first sprite from the Blender pipeline: an MPFB body walked by Mixamo, rendered by <code>graphical/tools/render_sprites.py</code> and shrunk by <code>pixelate.py</code> to 26, 36 and 50 pixels tall. The page draws whichever size is closest to what the resolution and the depth call for, so it switches size as you walk out onto the dock.</p>
     <p>The walking uses a walk-area polygon, a single waypoint at the foot of the dock so you don't cut through the water, and depth scaling so you shrink as you walk out toward the river. That is roughly milestone one.</p>
   </section>
 </main>
@@ -356,7 +357,48 @@ function clampIn(x,y){if(inside(x,y))return [x,y];let best=null,bd=1e9;
   return best;}
 function segInside(a,c){for(let i=1;i<20;i++){const t=i/20;if(!inside(a[0]+(c[0]-a[0])*t,a[1]+(c[1]-a[1])*t))return false;}return true;}
 const scaleAt=y=>Math.max(.42,Math.min(1,.45+.55*(y-90)/86));
-const hero={x:112,y:156,path:[],dir:1,phase:0,moving:false,pending:null};
+const hero={x:112,y:156,path:[],dir:1,phase:0,moving:false,pending:null,face:'front',dist:0};
+
+/* ---------- the player's sprite (made by graphical/tools) ---------- */
+// The sheets listed in index.json (26, 36 and 50 pixels tall, and any other
+// sizes pixelate.py made). Each frame the closest one to the
+// height the character should have (resolution x depth) is drawn, pixel for
+// pixel, with its anchor (the point between the feet) on the hero's position.
+// If the sheets can't load, the hand-drawn figure below stands in.
+const SHEETS=[];
+(async function loadSheets(){
+  for(const base of ['../sprites/player/walk/','sprites/player/walk/']){
+    try{
+      const ir=await fetch(base+'index.json'); if(!ir.ok)throw new Error(ir.status);
+      const {heights}=await ir.json();
+      const got=await Promise.allSettled(heights.map(async h=>{
+        const r=await fetch(base+'h'+h+'/sheet.json'); if(!r.ok)throw new Error(r.status);
+        const info=await r.json(); const img=new Image(); img.src=base+'h'+h+'/sheet.png';
+        await img.decode(); return {h,info,img};
+      }));
+      SHEETS.push(...got.filter(x=>x.status==='fulfilled').map(x=>x.value));
+      if(SHEETS.length)return;
+    }catch(_){}
+  }
+})();
+const STRIDE=47;  // scene units walked per full cycle at the front of the room; tuned by eye
+function drawHeroSprite(c){
+  if(!SHEETS.length)return false;
+  const s=scaleAt(hero.y), want=26*R*s;
+  const sh=SHEETS.reduce((a,b)=>Math.abs(b.h-want)<Math.abs(a.h-want)?b:a);
+  const {info,img}=sh, flip=hero.face==='left';
+  const row=info.rows[flip?'right':hero.face]??0;
+  const col=hero.moving?Math.floor(hero.dist/STRIDE*info.frames)%info.frames:0;
+  const fw=info.frame_width, fh=info.frame_height, [ax,ay]=info.anchor;
+  // one sheet pixel = one real pixel = 1/R scene units, snapped to the pixel grid
+  const px=Math.round(hero.x*R)/R, py=Math.round(hero.y*R)/R;
+  ell(c,px,py,5*s,1.6*s,'rgba(0,0,0,.35)');
+  c.save();
+  c.translate(px,py); if(flip)c.scale(-1,1);
+  c.drawImage(img,col*fw,row*fh,fw,fh,-ax/R,-ay/R,fw/R,fh/R);
+  c.restore();
+  return true;
+}
 function walkTo(x,y,then){const tgt=clampIn(x,y);const here=[hero.x,hero.y];
   hero.path=segInside(here,tgt)?[tgt]:[DOCKFOOT,tgt];hero.pending=then||null;}
 function drawHero(c){
@@ -446,7 +488,9 @@ function frame(now){
   if(hero.path.length){const [tx,ty]=hero.path[0];const dx=tx-hero.x,dy=ty-hero.y,dist=Math.hypot(dx,dy);
     const sp=46*scaleAt(hero.y)*dt;
     if(dist<=sp){hero.x=tx;hero.y=ty;hero.path.shift();if(!hero.path.length&&hero.pending){const p=hero.pending;hero.pending=null;p();}}
-    else{hero.x+=dx/dist*sp;hero.y+=dy/dist*sp*.9;hero.moving=true;if(Math.abs(dx)>.5)hero.dir=dx<0?-1:1;hero.phase+=dt*11;}}
+    else{hero.x+=dx/dist*sp;hero.y+=dy/dist*sp*.9;hero.moving=true;if(Math.abs(dx)>.5)hero.dir=dx<0?-1:1;hero.phase+=dt*11;
+      hero.face=Math.abs(dy)>Math.abs(dx)*1.2?(dy>0?'front':'back'):(dx<0?'left':'right');
+      hero.dist+=sp/scaleAt(hero.y);}}
 
   out.drawImage(base,0,0); abx.clearRect(0,0,W,H); g=abx;
   // water streaks drifting west (left)
@@ -482,7 +526,7 @@ function frame(now){
       g.fillStyle='#e07a30'; g.fillRect(169,113,7,2); g.fillStyle=fl>0?'#ffe08a':'#f2b44a'; g.fillRect(170+(fl>1?1:0),112,3,2);
       ell(g,172.5,110.5,4,3,'#151515'); g.fillStyle='#2a2a2a'; g.fillRect(168.5,108.5,8,1);}},
     {y:150,draw(){drawAgent(g);}},
-    {y:hero.y,draw(){drawHero(g);}}
+    {y:hero.y,draw(){if(!drawHeroSprite(g))drawHero(g);}}
   ].sort((p,q)=>p.y-q.y);
   for(const sp of sprites)sp.draw();
   // smoke rises over everything except the framing trees
