@@ -68,6 +68,10 @@ direction), `h26/preview.png` (the same, 4× bigger, to look at) and
   "rows": { "right": 0, "front": 1, "back": 2 }, "frames": 8, "fps": 6 }
 ```
 
+For the game, make every size the character can appear at, so there is
+always one within a pixel of the right height as it walks toward or away from
+you: `--heights 12-52`. It takes a few seconds and each sheet is small.
+
 The `anchor` is the point between the feet: the game puts that pixel on the
 spot where the character stands.
 

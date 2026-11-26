@@ -5,18 +5,23 @@
 It also writes index.json, listing every size in the folder.
 
 For each height (the character's height in game pixels) it writes
-sprites/player/walk/h26/sheet.png, a 4x enlarged preview.png to look at, and
+sprites/player/walk/h26/sheet.png, a 4x enlarged preview.png to look at
+(when you ask for five sizes or fewer, or pass --preview), and
 sheet.json, which tells the game the frame size, the anchor (the point
 between the feet that gets placed on the ground) and which row holds which
 direction.
 
 Options:
-    --heights LIST     character heights in pixels (default: 26,36,50)
+    --heights LIST     character heights in pixels (default: 26,36,50). Ranges
+                       work too: 12-52 is every size from 12 to 52, and
+                       12-52:2 is every second one
     --palette FILE     snap to these colors (one #rrggbb per line); without it,
                        the script picks the best --colors colors for this character
     --colors N         how many colors to pick when there's no palette (default: 16)
     --outline COLOR    a 1-pixel outline, as #rrggbb, or "none" (default: #1b1612)
     --alpha N          how solid a pixel must be to stay, 0-255 (default: 128)
+    --preview          write preview.png for every size (it's written anyway
+                       when you ask for five sizes or fewer)
 
 Needs Pillow: pip install pillow
 """
@@ -37,8 +42,18 @@ def parse_args():
     p.add_argument("--colors", type=int, default=16)
     p.add_argument("--outline", default="#1b1612")
     p.add_argument("--alpha", type=int, default=128)
+    p.add_argument("--preview", action="store_true")
     a = p.parse_args()
-    a.heights = [int(h) for h in a.heights.split(",") if h.strip()]
+    heights = set()
+    for part in a.heights.split(","):
+        part = part.strip()
+        m = re.fullmatch(r"(\d+)-(\d+)(?::(\d+))?", part)
+        if m:  # a range: 12-52 (every size) or 12-52:2 (every second size)
+            lo, hi, step = int(m.group(1)), int(m.group(2)), int(m.group(3) or 1)
+            heights.update(range(lo, hi + 1, step))
+        elif part:
+            heights.add(int(part))
+    a.heights = sorted(heights)
     return a
 
 
@@ -185,7 +200,8 @@ def main():
         out_dir = os.path.join(a.folder, f"h{height}")
         os.makedirs(out_dir, exist_ok=True)
         sheet.save(os.path.join(out_dir, "sheet.png"))
-        sheet.resize((sheet.width * 4, sheet.height * 4), Image.NEAREST).save(os.path.join(out_dir, "preview.png"))
+        if a.preview or len(a.heights) <= 5:
+            sheet.resize((sheet.width * 4, sheet.height * 4), Image.NEAREST).save(os.path.join(out_dir, "preview.png"))
         info = {
             "image": "sheet.png",
             "frame_width": fw,
