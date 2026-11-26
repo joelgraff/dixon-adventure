@@ -1,0 +1,35 @@
+{
+  "image": "sheet.png",
+  "frame_width": 67,
+  "frame_height": 109,
+  "anchor": [
+    34,
+    100
+  ],
+  "rows": {
+    "right": 0,
+    "front": 1,
+    "back": 2
+  },
+  "frames": 8,
+  "fps": 7.74,
+  "character_height": 97,
+  "colors": [
+    "#393634",
+    "#babdbd",
+    "#797a7b",
+    "#565556",
+    "#9c9e9f",
+    "#474444",
+    "#8a8c8d",
+    "#676868",
+    "#b0b2b3",
+    "#413e3c",
+    "#4e4c4d",
+    "#707172",
+    "#5f5e5f",
+    "#828384",
+    "#939596",
+    "#a5a7a8"
+  ]
+}
