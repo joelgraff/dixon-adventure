@@ -87,6 +87,11 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
     </div>
   </div>
   <div class="bar">
+    <div class="modes" role="group" aria-label="Resolution">
+      <button type="button" data-res="1" aria-pressed="true">320×180</button>
+      <button type="button" data-res="1.5" aria-pressed="false">480×270</button>
+      <button type="button" data-res="2" aria-pressed="false">640×360</button>
+    </div>
     <div class="swatches" id="swatches" aria-label="Palette"></div>
   </div>
 
@@ -118,7 +123,8 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
 
   <section class="notes">
     <h2>How this was made</h2>
-    <p>The scene is drawn with plain canvas shapes in full color at 320×180, then every pixel is snapped to the palette through a blue-noise dither, which scatters its dots with no repeating pattern. The buttons set how much: full, light (half strength), sparse (a quarter, so only the colors right between two palette colors get dots) or off. Anything that moves is never dithered, only snapped to flat palette colors: a fixed dither pattern shimmers when something slides through it. That is the same pipeline you'd run on a Blender render: render, shrink, lock to the palette, touch up by hand.</p>
+    <p>The resolution buttons redraw the same shapes with 1.5 or 2 times as many pixels each way. Only the edges, the water lines and the gravel get finer here, because the shapes stay the same. Real art at a higher resolution would also carry more detail, and drawing that detail is the extra work.</p>
+    <p>The scene is drawn with plain canvas shapes in full color, then every pixel is snapped to the palette through a blue-noise dither, which scatters its dots with no repeating pattern. The buttons set how much: full, light (half strength), sparse (a quarter, so only the colors right between two palette colors get dots) or off. Anything that moves is never dithered, only snapped to flat palette colors: a fixed dither pattern shimmers when something slides through it. That is the same pipeline you'd run on a Blender render: render, shrink, lock to the palette, touch up by hand.</p>
     <p>The scene is drawn in layers, back to front: the sky, far bank and river; the moving water, mist and the passing branch; the ferry; the near bank with the wagons, canoe and dock; then the people and the tar pot, sorted by where their feet touch the ground, so whoever stands further back is drawn first; then smoke; then the framing trees.</p>
     <p>The walking uses a walk-area polygon, a single waypoint at the foot of the dock so you don't cut through the water, and depth scaling so you shrink as you walk out toward the river. That is roughly milestone one.</p>
   </section>
@@ -126,7 +132,8 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var
 
 <script>
 (function(){
-const W=320,H=180,K=4;
+const W=320,H=180,K=4;  // W and H are scene units; R is pixels per scene unit
+let R=1,PW=W,PH=H;
 const stage=document.getElementById('stage');
 const pix=document.getElementById('pix'), pctx=pix.getContext('2d');
 const fx=document.getElementById('fx'), f=fx.getContext('2d');
@@ -137,7 +144,7 @@ const out=work.getContext('2d',{willReadFrequently:true});
 const abC=document.createElement('canvas'); abC.width=W; abC.height=H; const abx=abC.getContext('2d',{willReadFrequently:true});
 const afC=document.createElement('canvas'); afC.width=W; afC.height=H; const afx=afC.getContext('2d',{willReadFrequently:true});
 let g=abx;
-const STILL=new Uint8Array(W*H);
+let STILL=new Uint8Array(W*H);
 const base=document.createElement('canvas'); base.width=W; base.height=H;
 const b=base.getContext('2d');
 const front=document.createElement('canvas'); front.width=W; front.height=H;
@@ -192,8 +199,8 @@ function nearest(pal,r,gg,bb,plain){
 }
 function quantize(img,mode){
   const d=img.data,pal=RGB[mode],cache=CACHE[mode],s=DITHER[mode]*PATTERNS[pattern].mult,ega=mode==='ega';
-  for(let y=0;y<H;y++){for(let x=0;x<W;x++){
-    const i=(y*W+x)*4, t=BLUE[(y&63)*64+(x&63)]*s*STILL[y*W+x];
+  for(let y=0;y<PH;y++){for(let x=0;x<PW;x++){
+    const i=(y*PW+x)*4, t=BLUE[(y&63)*64+(x&63)]*s*STILL[y*PW+x];
     let r=d[i],gg=d[i+1],bb=d[i+2];
     if(ega){const l=(r+gg+bb)/3; r=(l+(r-l)*1.9)*.86; gg=(l+(gg-l)*1.9)*.86; bb=(l+(bb-l)*1.9)*.86;}
     r+=t; gg+=t; bb+=t;
@@ -266,7 +273,7 @@ function drawBase(){
   for(let x=0;x<=W;x+=4){const y=116+3*Math.sin(x*.03)+r()*2.5+(x<90?-(90-x)*.06:0); shoreY.push([x,y]); m.lineTo(x,y);}
   m.lineTo(W,H); m.closePath(); m.fill();
   m.strokeStyle='#5a4632'; m.lineWidth=4; m.beginPath(); shoreY.forEach((p,i)=>i?m.lineTo(p[0],p[1]):m.moveTo(p[0],p[1])); m.stroke();
-  for(let i=0;i<1600;i++){const x=r()*W,y=112+r()*68; m.fillStyle=['#bba57c','#857152','#6e5c40','#9c8864'][r()*4|0]; m.fillRect(x|0,y|0,1,1);}
+  for(let i=0;i<1600;i++){const x=r()*W,y=112+r()*68; m.fillStyle=['#bba57c','#857152','#6e5c40','#9c8864'][r()*4|0]; m.fillRect(Math.round(x*R)/R,Math.round(y*R)/R,1/R,1/R);}
   // path climbing south, off the bottom
   poly(m,[[58,180],[98,180],[92,165],[82,151],[72,151],[64,165]],'rgba(176,150,110,.75)');
   // foreground darkening and grass
@@ -298,14 +305,23 @@ function drawBase(){
   for(let i=0;i<40;i++){ell(fr,r()*46,r()*26,5+r()*6,4+r()*5,['#1c2a22','#24382a','#1a2420'][r()*3|0]);
     ell(fr,W-r()*50,r()*24,5+r()*6,4+r()*5,['#1c2a22','#24382a','#1a2420'][r()*3|0]);}
 }
-drawBase();
-const MIDA=new Uint8Array(W*H), FRONTA=new Uint8Array(W*H);
-{const md=m.getImageData(0,0,W,H).data, fd=fr.getImageData(0,0,W,H).data;
- for(let i=0;i<W*H;i++){MIDA[i]=md[i*4+3];FRONTA[i]=fd[i*4+3];}}
+// Resolution: every canvas gets R pixels per scene unit, and the drawing code
+// keeps working in scene units (320x180) through a scale transform.
+let MIDA,FRONTA;
+function setRes(r){
+  R=r; PW=Math.round(W*R); PH=Math.round(H*R);
+  for(const c of [pix,work,base,front,mid,abC,afC]){c.width=PW;c.height=PH;}
+  for(const c of [b,m,fr,abx,afx])c.setTransform(R,0,0,R,0,0);
+  STILL=new Uint8Array(PW*PH); MIDA=new Uint8Array(PW*PH); FRONTA=new Uint8Array(PW*PH);
+  drawBase();
+  const md=m.getImageData(0,0,PW,PH).data, fd=fr.getImageData(0,0,PW,PH).data;
+  for(let i=0;i<PW*PH;i++){MIDA[i]=md[i*4+3];FRONTA[i]=fd[i*4+3];}
+}
+setRes(1);
 // 1 where the final pixel comes from a still layer, 0 where something moving shows
 function buildStill(){
-  const A=abx.getImageData(0,0,W,H).data, F=afx.getImageData(0,0,W,H).data;
-  for(let i=0;i<W*H;i++){
+  const A=abx.getImageData(0,0,PW,PH).data, F=afx.getImageData(0,0,PW,PH).data;
+  for(let i=0;i<PW*PH;i++){
     const moving=FRONTA[i]<255&&(F[i*4+3]>0||(A[i*4+3]>0&&MIDA[i]<255));
     STILL[i]=moving?0:1;}
 }
@@ -410,6 +426,14 @@ function setPattern(p){
 document.querySelectorAll('.modes button[data-dither]').forEach(bt=>bt.addEventListener('click',()=>setPattern(bt.dataset.dither)));
 let savedP=null; try{savedP=localStorage.getItem('landing-dither');}catch(_){}
 setPattern(PATTERNS[savedP]?savedP:'off');
+function pickRes(r){
+  setRes(r);
+  document.querySelectorAll('.modes button[data-res]').forEach(bt=>bt.setAttribute('aria-pressed',String(+bt.dataset.res===r)));
+  try{localStorage.setItem('landing-res',String(r));}catch(_){}
+}
+document.querySelectorAll('.modes button[data-res]').forEach(bt=>bt.addEventListener('click',()=>pickRes(+bt.dataset.res)));
+let savedR=null; try{savedR=+localStorage.getItem('landing-res');}catch(_){}
+pickRes([1,1.5,2].includes(savedR)?savedR:1);
 let saved=null; try{saved=localStorage.getItem('landing-style');}catch(_){}
 setMode(PAL[saved]?saved:'lim');
 
@@ -426,7 +450,7 @@ function frame(now){
 
   out.drawImage(base,0,0); abx.clearRect(0,0,W,H); g=abx;
   // water streaks drifting west (left)
-  for(const s of streaks){const span=W+40;const x=((s.x-T*s.sp)%span+span)%span-20; g.fillStyle=s.c; g.fillRect(x|0,s.y,s.len|0,1);}
+  for(const s of streaks){const span=W+40;const x=((s.x-T*s.sp)%span+span)%span-20; g.fillStyle=s.c; g.fillRect(x|0,s.y,s.len|0,1/R);}
   // sun glints under the sun
   for(let i=0;i<8;i++){const y=62+i*2.3, ph=Math.sin(T*3+i*1.7); if(ph>.2){g.fillStyle='#f2dcb4'; g.fillRect(50+((i*7+ (T*4|0))%14),y|0,2+(ph*3|0),1);}}
   // pixel fog for the two pixel-locked styles
@@ -467,7 +491,7 @@ function frame(now){
   for(const p of smoke){p.x+=p.vx*ad;p.y+=p.vy*ad;p.vx-=1.2*ad; const a=.55*(1-p.life/3.2); ell(g,p.x,p.y,1+p.life*1.3,1+p.life*1.1,'rgba(156,150,138,'+a.toFixed(3)+')');}
   out.drawImage(afC,0,0); out.drawImage(front,0,0);
 
-  const img=out.getImageData(0,0,W,H); buildStill(); quantize(img,mode); pctx.putImageData(img,0,0);
+  const img=out.getImageData(0,0,PW,PH); buildStill(); quantize(img,mode); pctx.putImageData(img,0,0);
 
   if(mode==='mod'){
     f.clearRect(0,0,fx.width,fx.height);
@@ -487,7 +511,7 @@ function frame(now){
       f.fillStyle=mg; f.beginPath(); f.arc(0,0,fo.rx*K*1.2,0,Math.PI*2); f.fill(); f.restore();}
     // pixel-sized glints that twinkle
     for(let i=0;i<14;i++){const gx=((i*53+17)%300)+10, gy=64+((i*29)%50), a=Math.max(0,Math.sin(T*2.4+i*1.9));
-      if(a>.6){f.fillStyle='rgba(255,236,190,'+((a-.6)*1.6).toFixed(2)+')'; f.fillRect(gx*K,gy*K,K,K);}}
+      if(a>.6){f.fillStyle='rgba(255,236,190,'+((a-.6)*1.6).toFixed(2)+')'; f.fillRect(gx*K,gy*K,K/R,K/R);}}
   }
   requestAnimationFrame(frame);
 }
