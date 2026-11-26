@@ -32,6 +32,14 @@ don't bump the game version.
   sometimes shows the words you could have typed, and typing earns bonus
   points and richer answers. You can finish the game without typing.
 
+## Characters
+
+Characters are made in Blender and rendered to sprites: an MPFB body and
+clothes, rigged and animated in Mixamo, rendered by `tools/render_sprites.py`
+and shrunk by `tools/pixelate.py`. The steps are in `tools/README.md`. The
+first character's walk, pixelated at 26, 36 and 50 pixels tall, is what
+decides the game's resolution.
+
 ## Milestone 1: walk around one room
 
 1. A canvas at 320×180, scaled up with `image-rendering: pixelated`, and a

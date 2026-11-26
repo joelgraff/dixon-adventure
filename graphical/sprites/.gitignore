@@ -1,0 +1,6 @@
+# Raw renders from render_sprites.py are large; only the pixelated sheets
+# (h26/, h36/, ...) and meta.json are committed.
+*/*/front/
+*/*/back/
+*/*/left/
+*/*/right/
