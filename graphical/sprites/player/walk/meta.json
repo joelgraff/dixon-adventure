@@ -1,0 +1,18 @@
+{
+  "name": "walk",
+  "action": "mixamo.com",
+  "directions": [
+    "right",
+    "front",
+    "back"
+  ],
+  "frames": 8,
+  "size": 512,
+  "elevation": 20.0,
+  "anchor": [
+    257.18,
+    442.56
+  ],
+  "character_height_px": 410.3,
+  "cycle_seconds": 1.0333
+}
