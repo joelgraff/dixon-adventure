@@ -40,6 +40,14 @@ and shrunk by `tools/pixelate.py`. The steps are in `tools/README.md`. The
 first character's walk, pixelated at 26, 36 and 50 pixels tall, is what
 decides the game's resolution.
 
+**Character scale (decided):** people are big, in the scene's own
+perspective: about 0.48 times their distance below the horizon line. In the
+landing that is about 57 pixels tall at the front of the room at 320×180
+(114 at 640×360), shrinking to about 19 at the far end of the dock. Sprites
+are pixelated at every height the room needs (`--heights 12-120`), and the
+game draws the one closest to the right size. Each room's horizon and scale
+should be set from its own background, so people fit the scenery.
+
 ## Milestone 1: walk around one room
 
 1. A canvas at 320×180, scaled up with `image-rendering: pixelated`, and a
