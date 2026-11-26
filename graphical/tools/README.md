@@ -51,6 +51,7 @@ Useful options (after the `--`):
 | `--directions right,front,back` | those three | The game mirrors `right` to get `left` |
 | `--light flat` | `studio` | No shading at all, only flat color |
 | `--action NAME` | the armature's | Pick an action when the file has several |
+| `--turn 3` | 0 | Turn the character a few more degrees if it still isn't square to the camera |
 
 ## 3. Pixelate
 

@@ -17,6 +17,8 @@ Everything after the lone "--" belongs to this script:
     --size PX          size of each rendered frame (default: 512)
     --light studio|flat   soft shading or none at all (default: studio)
     --color material|texture  flat material colors, or image textures (default: material)
+    --turn DEG         extra turn, in degrees, if a character still isn't square
+                       to the camera (positive turns it to its left)
 
 The frames come out big and smooth. pixelate.py shrinks them to the game's
 size. Each material renders as one flat color: its Base Color (Material
@@ -53,6 +55,7 @@ def parse_args():
     p.add_argument("--size", type=int, default=512)
     p.add_argument("--light", choices=["studio", "flat"], default="studio")
     p.add_argument("--color", choices=["material", "texture"], default="material")
+    p.add_argument("--turn", type=float, default=0.0)
     a = p.parse_args(argv)
     a.directions = [d.strip() for d in a.directions.split(",") if d.strip()]
     for d in a.directions:
@@ -100,17 +103,21 @@ def character_meshes(scene, arm):
 
 
 def facing_angle(arm):
-    """Which way the character faces, from where its left and right bones sit."""
+    """Which way the character faces, from where its left and right bones sit.
+
+    It reads the rest pose (the symmetric pose the skeleton was built in), not
+    the animation: mid-stride, one arm and leg are forward, which would skew
+    the answer by several degrees."""
     left, right = [], []
-    for pb in arm.pose.bones:
-        n = pb.name
+    for bone in arm.data.bones:
+        n = bone.name
         side = None
         if "Left" in n or n.endswith((".L", "_L", ".l", "_l")):
             side = left
         elif "Right" in n or n.endswith((".R", "_R", ".r", "_r")):
             side = right
         if side is not None:
-            side.append(arm.matrix_world @ pb.head)
+            side.append(arm.matrix_world @ bone.head_local)
     if not left or not right:
         print("render_sprites: can't tell left from right on this rig; assuming it faces the camera")
         return FACING["front"]
@@ -225,7 +232,7 @@ def main():
     base_facing = facing_angle(arm)
 
     def turn(direction):
-        rz = Matrix.Rotation(FACING[direction] - base_facing, 4, "Z")
+        rz = Matrix.Rotation(FACING[direction] - base_facing + math.radians(a.turn), 4, "Z")
         arm.matrix_world = Matrix.Translation(pivot) @ rz @ Matrix.Translation(-pivot) @ base_matrix
 
     # The camera looks north (+Y) and down by the elevation angle.
