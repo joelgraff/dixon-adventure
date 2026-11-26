@@ -30,6 +30,7 @@ import json
 import os
 import re
 import sys
+import time
 
 from PIL import Image, ImageChops
 
@@ -221,7 +222,9 @@ def main():
     heights = sorted(int(n[1:]) for n in os.listdir(a.folder)
                      if re.fullmatch(r"h\d+", n) and os.path.exists(os.path.join(a.folder, n, "sheet.json")))
     with open(os.path.join(a.folder, "index.json"), "w") as fh_:
-        json.dump({"heights": heights}, fh_)
+        # "version" changes on every run, so browsers fetch the new sheets
+        # instead of reusing old ones from their cache.
+        json.dump({"heights": heights, "version": int(time.time())}, fh_)
 
 
 main()
