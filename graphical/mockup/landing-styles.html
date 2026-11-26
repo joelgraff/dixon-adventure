@@ -356,7 +356,14 @@ function clampIn(x,y){if(inside(x,y))return [x,y];let best=null,bd=1e9;
   for(let s=0;s<6;s++){const nx=best[0]+(160-best[0])*.02*s, ny=best[1]+(150-best[1])*.02*s; if(inside(nx,ny))return [nx,ny];}
   return best;}
 function segInside(a,c){for(let i=1;i<20;i++){const t=i/20;if(!inside(a[0]+(c[0]-a[0])*t,a[1]+(c[1]-a[1])*t))return false;}return true;}
-const scaleAt=y=>Math.max(.42,Math.min(1,.45+.55*(y-90)/86));
+// Perspective, measured from the scene itself: the dock narrows toward a
+// horizon at about y=58 (the far shore), and the people drawn into the scene
+// (the ferryman, the man on the crate) are about 0.48 times their distance
+// below that line. personHeight(y) is how tall a person standing at y is, in
+// scene pixels; scaleAt(y) is that relative to the 26-pixel hand-drawn figure.
+const HORIZON=58, PERSON_K=.48;
+const personHeight=y=>PERSON_K*(y-HORIZON);
+const scaleAt=y=>personHeight(y)/26;
 const hero={x:112,y:156,path:[],dir:1,phase:0,moving:false,pending:null,face:'front',dist:0};
 
 /* ---------- the player's sprite (made by graphical/tools) ---------- */
@@ -386,7 +393,7 @@ const SHEETS=[];
 const STRIDE=47;  // scene units walked per full cycle at the front of the room; tuned by eye
 function drawHeroSprite(c){
   if(!SHEETS.length)return false;
-  const s=scaleAt(hero.y), want=26*R*s;
+  const s=scaleAt(hero.y), want=personHeight(hero.y)*R;
   const sh=SHEETS.reduce((a,b)=>Math.abs(b.h-want)<Math.abs(a.h-want)?b:a);
   const {info,img}=sh, flip=hero.face==='left';
   const row=info.rows[flip?'right':hero.face]??0;
