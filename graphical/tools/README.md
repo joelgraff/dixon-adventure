@@ -70,7 +70,9 @@ direction), `h26/preview.png` (the same, 4× bigger, to look at) and
 
 For the game, make every size the character can appear at, so there is
 always one within a pixel of the right height as it walks toward or away from
-you: `--heights 12-52`. It takes a few seconds and each sheet is small.
+you: `--heights 12-120` for the landing mock-up, whose foreground needs about
+57 pixels at 320×180 and 114 at 640×360. It takes about ten seconds, and all
+the sheets together are about 2 MB.
 
 The `anchor` is the point between the feet: the game puts that pixel on the
 spot where the character stands.
